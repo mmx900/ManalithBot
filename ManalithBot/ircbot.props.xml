@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<entry key="org.manalith.ircbot.bot.name">NICK</entry>
+<entry key="org.manalith.ircbot.bot.name">testbot</entry>
 <entry key="org.manalith.ircbot.bot.verbose">true</entry>
-<entry key="org.manalith.ircbot.bot.server">SERVER</entry>
-<entry key="org.manalith.ircbot.bot.server.port">6667</entry>
+<entry key="org.manalith.ircbot.bot.server">ddos.hanirc.org</entry>
+<entry key="org.manalith.ircbot.bot.server.port">8080</entry>
 <entry key="org.manalith.ircbot.bot.server.encoding">CP949</entry>
-<entry key="org.manalith.ircbot.bot.server.channels">#CHANNEL,#CHANNEL2</entry>
+<entry key="org.manalith.ircbot.bot.server.channels">#pircbottest</entry>
 <entry key="org.manalith.ircbot.bot.plugin.google.key">KEY</entry>
 <entry key="org.manalith.ircbot.bot.plugin.relay.name">NICK</entry>
 <entry key="org.manalith.ircbot.bot.plugin.relay.verbose">true</entry>

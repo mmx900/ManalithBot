@@ -7,7 +7,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.hsqldb.Server;
+// import org.hsqldb.Server;
 
 public class BotMain {
 	public static ManalithBot BOT; // FIXME 플러그인이 메시지 전송을 위해 봇 인스턴스를 호출하는 경로
@@ -57,6 +57,7 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
+		bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
