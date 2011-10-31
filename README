@@ -1,0 +1,8 @@
+
+2011. 10. 31
+CER ( Currency Exchange Rate ) is added.
+ - Requirement
+   > sqlitejdbc-v056.jar : JDBC SQLite 커넥터 사용하기 위한 파일. 컴파일 할때 필요.
+   > currency.db : 2011.10.31 일자 환율 정보 저장된 파일. 바이트코드 실행 루트에 있어야 함.
+   > LatestUpdateddateandtime.prop : 최종 갱신된 날짜와 시간, 회차가 저장된 프로퍼티. 바이트코드 실행 루트에 있어야 함.
+   > get.html dateandtime.html : 프로퍼티 파일과 DB저장을 위해 임시로 받아둔 웹페이지 (삭제해도 무방)
