@@ -1,5 +1,4 @@
-package tv.myhome.darkcircle.Calc;
-
+package org.manalith.ircbot.plugin.Calc;
 //import java.util.Scanner;
 
 public class CalcMain {

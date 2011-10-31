@@ -1,10 +1,12 @@
-package tv.myhome.darkcircle.Calc;
-import tv.myhome.darkcircle.Calc.Exceptions.EmptyTokenStreamException;
-import tv.myhome.darkcircle.Calc.Exceptions.TokenAnalysisException;
+package org.manalith.ircbot.plugin.Calc;
+import org.manalith.ircbot.plugin.Calc.Exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.TokenAnalysisException;
 
 public class CalcRunner {
-	public static void run ( String expr )
+	public static String run ( String expr )
 	{
+		
+		String result = "";
 		// Token analysis phase
 		TokenArray tArray = new TokenArray();
 		CalcTokenAnalyzer cta = new CalcTokenAnalyzer( expr );
@@ -24,9 +26,8 @@ public class CalcRunner {
 		}
 		catch ( TokenAnalysisException e )
 		{
-			System.out.println(" === Parse Error! === ");
-			System.out.println( e.getMessage() );
-			System.exit(0);
+			result = " === Parse Error! === " + e.getMessage();
+			return result;
 		}
 		/*
 		catch ( NotImplementedException ie )
@@ -46,15 +47,16 @@ public class CalcRunner {
 			
 			// Computation phase
 			if ( ptu.getResultType().equals("Integer") )
-				System.out.println(" => " +  ptu.getIntResult() );
+				result = " => " +  ptu.getIntResult();
 			else
-				System.out.println(" => " + ptu.getFpResult() );
+				result = " => " + ptu.getFpResult();
 		}
 		catch ( Exception e )
 		{
-			System.out.println ( " === Computation Error! === ");
-			System.out.println ( e.getMessage() );
-			System.exit(0);
+			result = "Computation Error! : " + e.getMessage();
+			return result;
 		}
+		
+		return result;
 	}
 }

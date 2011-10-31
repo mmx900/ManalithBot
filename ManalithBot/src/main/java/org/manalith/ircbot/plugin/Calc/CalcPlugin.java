@@ -1,6 +1,6 @@
 package org.manalith.ircbot.plugin.Calc;
 
-import org.jibble.pircbot.User;
+// import org.jibble.pircbot.User;
 import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;

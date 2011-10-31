@@ -1,4 +1,4 @@
-package tv.myhome.darkcircle.Calc;
+package org.manalith.ircbot.plugin.Calc;
 // ParseTreeUnit.java 
 //
 // This class can return a result of computation using user input expression.
@@ -6,8 +6,8 @@ package tv.myhome.darkcircle.Calc;
 // This program can be distributed under the terms of GNU GPL v2 or later.
 // darkcircle.0426@gmail.com
 
-import tv.myhome.darkcircle.Calc.Exceptions.InvalidOperatorUseException;
-import tv.myhome.darkcircle.Calc.Exceptions.NotImplementedException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidOperatorUseException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.NotImplementedException;
 
 public class ParseTreeUnit {
 	protected TokenUnit node;

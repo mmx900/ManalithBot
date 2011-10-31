@@ -1,4 +1,4 @@
-package tv.myhome.darkcircle.Calc;
+package org.manalith.ircbot.plugin.Calc;
 // TokenSubtype.java 
 //
 // This enumeration means token subtype ID

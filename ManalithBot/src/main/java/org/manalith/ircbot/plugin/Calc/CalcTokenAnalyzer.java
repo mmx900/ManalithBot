@@ -1,4 +1,4 @@
-package tv.myhome.darkcircle.Calc;
+package org.manalith.ircbot.plugin.Calc;
 // CalcTokenAnalyzer.java 
 //
 // This class is for generating token stream array from user input string.
@@ -9,8 +9,8 @@ package tv.myhome.darkcircle.Calc;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import tv.myhome.darkcircle.Calc.Exceptions.EmptyTokenStreamException;
-import tv.myhome.darkcircle.Calc.Exceptions.TokenAnalysisException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.TokenAnalysisException;
 
 
 public class CalcTokenAnalyzer {

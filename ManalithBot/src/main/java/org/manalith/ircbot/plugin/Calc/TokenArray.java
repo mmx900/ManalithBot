@@ -1,4 +1,4 @@
-package tv.myhome.darkcircle.Calc;
+package org.manalith.ircbot.plugin.Calc;
 // TokenArray.java 
 //
 // This class can store many TokenUnit elements.
