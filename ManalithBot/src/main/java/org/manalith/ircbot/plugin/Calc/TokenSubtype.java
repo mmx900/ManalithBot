@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.Calc;
+package tv.myhome.darkcircle.Calc;
 // TokenSubtype.java 
 //
 // This enumeration means token subtype ID
@@ -21,6 +21,7 @@ public enum TokenSubtype {
 	Divide,
 	Modulus,
 	Power,
+	Factorial,
 	Left_Parenthesis,
 	Righ_Parenthesis,
 	Sine,
@@ -32,5 +33,6 @@ public enum TokenSubtype {
 	ToBin,
 	ToOct,
 	ToDec,
-	ToHex
+	ToHex,
+	Sqrt
 }

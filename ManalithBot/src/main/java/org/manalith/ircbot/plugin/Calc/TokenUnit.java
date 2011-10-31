@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.Calc;
+package tv.myhome.darkcircle.Calc;
 // TokenUnit.java 
 //
 // TokenUnit can have "a Token string", token type information and token subtype information.

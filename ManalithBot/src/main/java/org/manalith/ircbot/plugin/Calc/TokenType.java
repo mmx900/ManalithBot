@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.Calc;
+package tv.myhome.darkcircle.Calc;
 // TokenType.java 
 //
 // This enumeration means token type ID
@@ -14,4 +14,5 @@ public enum TokenType {
 	Parents,
 	TriangleFunc,
 	BaseConvFunc,
+	MathematFunc
 };

@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.Calc;
+package tv.myhome.darkcircle.Calc;
 // ParseTreeUnit.java 
 //
 // This class can return a result of computation using user input expression.
@@ -6,8 +6,8 @@ package org.manalith.ircbot.plugin.Calc;
 // This program can be distributed under the terms of GNU GPL v2 or later.
 // darkcircle.0426@gmail.com
 
-import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidOperatorUseException;
-import org.manalith.ircbot.plugin.Calc.Exceptions.NotImplementedException;
+import tv.myhome.darkcircle.Calc.Exceptions.InvalidOperatorUseException;
+import tv.myhome.darkcircle.Calc.Exceptions.NotImplementedException;
 
 public class ParseTreeUnit {
 	protected TokenUnit node;
@@ -100,6 +100,12 @@ public class ParseTreeUnit {
 			right.preorder();
 	}
 	
+	public int Factorial ( int n )
+	{
+		if ( n == 1 ) return n ;
+		else return n * Factorial ( n - 1 );
+	}
+	
 	public String getResultType()
 	{
 		String leftStr = "";
@@ -110,7 +116,8 @@ public class ParseTreeUnit {
 		if ( right != null )
 			rightStr = right.getResultType();
 		
-		if ( node.getTokenType() == TokenType.TriangleFunc )
+		if ( node.getTokenType() == TokenType.TriangleFunc 
+				|| node.getTokenSubtype() == TokenSubtype.Sqrt )
 			return "FlPoint";
 		else if ( node.getTokenType() == TokenType.Integer ||
 				node.getTokenType() == TokenType.FlPoint )
@@ -127,6 +134,7 @@ public class ParseTreeUnit {
 				return "FlPoint";
 		}
 	}
+	
 	public String getIntResult() throws NotImplementedException
 	{
 		String result = "";
@@ -220,6 +228,8 @@ public class ParseTreeUnit {
 			}
 			else if ( opval == TokenSubtype.Power.hashCode() )
 				result = Integer.toString((int)Math.pow((double)leftVal, (double)rightVal));
+			else if ( opval == TokenSubtype.Factorial.hashCode() )
+				result = Integer.toString(this.Factorial(leftVal));
 		}
 		
 		if ( node.getTokenType() == TokenType.BaseConvFunc )
@@ -287,8 +297,6 @@ public class ParseTreeUnit {
 		
 		return result;
 	}
-	
-	
 	
 	public String getFpResult() throws InvalidOperatorUseException
 	{
@@ -391,6 +399,17 @@ public class ParseTreeUnit {
 				throw new InvalidOperatorUseException();
 			else if ( opval == TokenSubtype.Power.hashCode() )
 				result = Double.toString(Math.pow((double)leftVal, (double)rightVal));
+			else if ( opval == TokenSubtype.Factorial.hashCode() )
+			{
+				if ( left.getNode().getTokenType() == TokenType.Integer )
+				{
+					result = Double.toString(Double.parseDouble(Integer.toString(this.Factorial(Integer.parseInt(left.getNode().getTokenString())))));
+				}
+				else
+				{
+					throw new InvalidOperatorUseException();
+				}
+			}
 		}
 		else if ( node.getTokenType() == TokenType.TriangleFunc )
 		{
@@ -413,6 +432,20 @@ public class ParseTreeUnit {
 				result = Double.toString(Math.acos(rightVal / 180.0 * Math.PI));
 			else if ( funcval == TokenSubtype.ArcTangent.hashCode() )
 				result = Double.toString(Math.atan(rightVal / 180.0 * Math.PI));
+		}
+		else if ( node.getTokenType() == TokenType.MathematFunc )
+		{
+			if ( right != null )
+			{
+				rightVal = Double.parseDouble(right.getFpResult());
+			}
+			
+			int funcval = node.getTokenSubtype().hashCode();
+			
+			if ( funcval == TokenSubtype.Sqrt.hashCode() )
+			{
+				result = Double.toString(Math.sqrt(rightVal));
+			}
 		}
 		
 		else if ( node.getTokenType() == TokenType.BaseConvFunc )
