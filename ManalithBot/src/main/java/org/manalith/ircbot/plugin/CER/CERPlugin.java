@@ -82,7 +82,9 @@ public class CERPlugin implements IBotPlugin {
 			try 
 			{
 				ConvertedCommand = ta.convertToCLICommandString();
-				String result = CERRunner.run(ConvertedCommand);
+				CERRunner runner = new CERRunner ( ConvertedCommand );
+				
+				String result = runner.run();
 				if ( result.equals("Help!") )
 				{
 					BotMain.BOT.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());

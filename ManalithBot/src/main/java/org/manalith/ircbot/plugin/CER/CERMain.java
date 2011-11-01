@@ -20,7 +20,7 @@ public class CERMain {
 				/// Update database for listing money exchange information
 				/// if time is expired.
 	
-				String propFilename = "LatestUpdatedDatetime.prop";
+				String propFilename = "plugin/CER/data/LatestUpdatedDatetime.prop";
 				RemoteLocalDatetimeChecker check = new RemoteLocalDatetimeChecker(
 						"http://info.finance.naver.com/marketindex/exchangeMain.nhn",
 						propFilename );

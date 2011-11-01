@@ -107,7 +107,7 @@ public class RemoteLocalDatetimeChecker {
 	{
 		DateTimeRound result = new DateTimeRound();
 		
-		String filename = "dateandtime.html";
+		String filename = "org/manalith/ircbot/plugin/CER/data/dateandtime.html";
 		Downloader d = new Downloader ();
 		d.setUrl (this.getRemoteAddress() );
 		d.setLocalFilename(filename);

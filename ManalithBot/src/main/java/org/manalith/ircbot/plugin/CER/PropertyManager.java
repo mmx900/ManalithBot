@@ -7,20 +7,37 @@ import java.io.FileNotFoundException;
 
 public class PropertyManager {
 	
+	private String path;
 	private String filename;
 	private Properties prop;
 	
 	public PropertyManager ( )
 	{
+		this.setPath ( "" );
 		this.setFilename ( "" );
 		this.setProp ( null );
 	}
 	public PropertyManager ( String newFilename )
 	{
+		this.setPath ( "" );
+		this.setFilename ( newFilename );
+		this.setProp ( null );
+	}
+	public PropertyManager ( String newPath, String newFilename )
+	{
+		this.setPath ( newPath );
 		this.setFilename ( newFilename );
 		this.setProp ( null );
 	}
 	
+	public void setPath ( String newPath )
+	{
+		this.path = newPath;
+	}
+	public String getPath ( )
+	{
+		return this.path;
+	}
 	public void setFilename ( String newFilename )
 	{
 		this.filename = newFilename;
@@ -45,7 +62,7 @@ public class PropertyManager {
 	
 	public void loadProperties ( ) throws IOException
 	{
-		PropFileReadWriter fr = new PropFileReadWriter ( this.getFilename() );
+		PropFileReadWriter fr = new PropFileReadWriter ( this.getPath() + this.getFilename() );
 		this.setProp(fr.bringUpPropertyFromFile());
 		
 		if ( this.getProp() == null )
@@ -53,7 +70,7 @@ public class PropertyManager {
 	}
 	public void storeProperties ( ) throws FileNotFoundException, IOException
 	{
-		PropFileReadWriter fw = new PropFileReadWriter ( this.getFilename() );
+		PropFileReadWriter fw = new PropFileReadWriter ( this.getPath() + this.getFilename() );
 		fw.pushUpPropertyToFile(this.getProp());
 	}
 	
