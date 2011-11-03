@@ -80,6 +80,11 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.6.6.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

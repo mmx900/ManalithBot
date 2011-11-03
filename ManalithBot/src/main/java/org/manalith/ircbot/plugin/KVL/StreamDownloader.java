@@ -1,32 +1,30 @@
 //
-// Downloader.java
+// StreamTokenAnalyzer.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
 // which is derived from the license of Manalith bot.
-package org.manalith.ircbot.plugin.CER;
+
+package org.manalith.ircbot.plugin.KVL;
 
 import java.net.URL;
 import java.net.URLConnection;
-import java.io.File;
+import java.nio.CharBuffer;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.FileOutputStream;
 
-public class Downloader {	
+
+public class StreamDownloader {	
 	private String Url;
-	private String LocalFilename;
 	private URLConnection urlConn = null;
 	
-	public Downloader ()
+	public StreamDownloader ()
 	{
-		Url = "";
-		LocalFilename = "";
+		this.setUrl( "" );
 	}
-	public Downloader (String newUrl, String newLocalFilename)
+	public StreamDownloader (String newUrl)
 	{
 		this.setUrl(newUrl);
-		this.setLocalFilename(newLocalFilename);
 	}
 	
 	public void setUrl (String newUrl)
@@ -38,15 +36,7 @@ public class Downloader {
 		return this.Url;
 	}
 	
-	public void setLocalFilename (String newLocalFilename)
-	{
-		this.LocalFilename = newLocalFilename;
-	}
-	public String getLocalFilename ()
-	{
-		return this.LocalFilename;
-	}
-	
+
 	private void setUrlConnection ()
 	{
 		String protocol = "";
@@ -87,19 +77,16 @@ public class Downloader {
 		}
 	}
 	
-	public void downloadDataFile ()
+	public String downloadDataStream () throws IOException
 	{
+		String result = "";
 		this.setUrlConnection();
 		
 		InputStreamReader isr = null;
-		File f = null;
-		OutputStreamWriter osw = null;
 		
 		try
 		{
-			isr = new InputStreamReader(urlConn.getInputStream(),"EUC-KR");
-			f = new File(this.getLocalFilename());
-			osw = new OutputStreamWriter(new FileOutputStream(f),"UTF8");
+			isr = new InputStreamReader(urlConn.getInputStream(),"UTF8");
 		}
 		catch ( Exception e )
 		{
@@ -109,19 +96,14 @@ public class Downloader {
 		char[] buf = new char[1024];
 		int len = 0;
 		
-		try
+		while( ( len = isr.read(buf, 0, 1024) ) != -1)
 		{
-			while( ( len = isr.read(buf, 0, 1024) ) != -1)
-			{
-				osw.write(buf, 0, len);
-			}
+			result += CharBuffer.wrap(buf, 0, len).toString();
+		}
 			
-			isr.close();
-			osw.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+		isr.close();
+
+		
+		return result;
 	}
 }

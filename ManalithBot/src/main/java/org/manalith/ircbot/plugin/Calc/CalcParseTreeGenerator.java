@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This class is for generating parse tree from token stream which is made by CalcTokenAnalyzer.
 //
-// This program can be distributed under the terms of GNU GPL v2 or later.
+// This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
 import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidSequenceTokenException;
