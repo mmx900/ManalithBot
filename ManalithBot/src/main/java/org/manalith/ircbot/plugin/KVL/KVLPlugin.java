@@ -9,7 +9,7 @@ public class KVLPlugin implements IBotPlugin {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "커널최신버전";
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class KVLPlugin implements IBotPlugin {
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
-		return null;
+		return "!kernel (latest[default]|all|help)";
 	}
 
 	@Override
