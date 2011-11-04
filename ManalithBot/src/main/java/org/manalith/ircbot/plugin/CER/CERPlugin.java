@@ -1,6 +1,9 @@
-/**
- * 
- */
+//
+// CERPlugin.java
+// darkcircle dot 0426 at gmail dot com
+//
+// This source can be distributed under the terms of GNU General Public License version 3
+// which is derived from the license of Manalith bot.
 package org.manalith.ircbot.plugin.CER;
 
 import org.manalith.ircbot.BotMain;
@@ -82,7 +85,9 @@ public class CERPlugin implements IBotPlugin {
 			try 
 			{
 				ConvertedCommand = ta.convertToCLICommandString();
-				String result = CERRunner.run(ConvertedCommand);
+				CERRunner runner = new CERRunner ( ConvertedCommand );
+				
+				String result = runner.run();
 				if ( result.equals("Help!") )
 				{
 					BotMain.BOT.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());

@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This class is for generating token stream array from user input string.
 //
-// This program can be distributed under the terms of GNU GPL v2 or later.
+// This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
 import java.util.regex.Pattern;
@@ -49,7 +49,7 @@ public class CalcTokenAnalyzer {
 		Pattern fpoint = Pattern.compile("(-?[0-9]+)(\\.[0-9]+)?(([Ee](-?[1-9][0-9]*))|f)?");
 		
 		// Regex pattern for recognizing operator
-		Pattern operat = Pattern.compile("\\+|\\-|\\*|\\/|\\%|\\^");
+		Pattern operat = Pattern.compile("\\+|\\-|\\*|\\/|\\%|\\^|\\!");
 		
 		// Regex patterns for recognizing parenthesis to change priority of calculation
 		Pattern lparen = Pattern.compile("\\(");
@@ -58,6 +58,7 @@ public class CalcTokenAnalyzer {
 		// Regex patterns for recognizing parentheses to preprocess for the function
 		Pattern triangleFunc = Pattern.compile("sin|cos|tan|arcsin|arccos|arctan");
 		Pattern convertBase = Pattern.compile("to(bin|oct|dec|hex)");
+		Pattern mathematFunc = Pattern.compile("sqrt");
 		
 		Matcher bin_match = binary.matcher(tokenString);
 		Matcher oct_match = octal.matcher(tokenString);
@@ -73,6 +74,7 @@ public class CalcTokenAnalyzer {
 		
 		Matcher triFunc_match = triangleFunc.matcher(tokenString);
 		Matcher convBase_match = convertBase.matcher(tokenString);
+		Matcher mathemat_match = mathematFunc.matcher(tokenString);
 		
 		if ( ( bin_match.matches() || oct_match.matches() ) || ( dec_match.matches() || hex_match.matches() ) )
 			type = TokenType.Integer;
@@ -86,6 +88,8 @@ public class CalcTokenAnalyzer {
 			type = TokenType.TriangleFunc;
 		else if ( convBase_match.matches() )
 			type = TokenType.BaseConvFunc;
+		else if ( mathemat_match.matches() )
+			type = TokenType.MathematFunc;
 		return type;
 	}
 	public TokenSubtype getTokenSubtype (String tokenString, TokenType type)
@@ -158,6 +162,8 @@ public class CalcTokenAnalyzer {
 				result = TokenSubtype.Modulus;
 			else if ( tokenString.equals("^") )
 				result = TokenSubtype.Power;
+			else if ( tokenString.equals("!") )
+				result = TokenSubtype.Factorial;
 			else 
 				result = TokenSubtype.Unknown;
 		}
@@ -207,6 +213,13 @@ public class CalcTokenAnalyzer {
 			else if ( tokenString.equals("tohex") )
 			{
 				result = TokenSubtype.ToHex;
+			}
+		}
+		else if ( type.equals(TokenType.MathematFunc) )
+		{
+			if ( tokenString.equals("sqrt") )
+			{
+				result = TokenSubtype.Sqrt;
 			}
 		}
 		else

@@ -1,40 +1,50 @@
 //
-// CERTableTokenAnalyzer.java
+// KVLTableTokenAnalyzer.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
 // which is derived from the license of Manalith bot.
-package org.manalith.ircbot.plugin.CER;
+
+package org.manalith.ircbot.plugin.KVL;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import org.manalith.ircbot.plugin.CER.Exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.KVL.Exceptions.EmptyTokenStreamException;
 
-public class CERTableTokenAnalyzer extends TokenAnalyzer{
+
+public class KVLTableTokenAnalyzer extends TokenAnalyzer{
 	
-	public CERTableTokenAnalyzer ()
+	public KVLTableTokenAnalyzer ()
 	{
 		super ();
+	}
+	
+	public KVLTableTokenAnalyzer ( String newData )
+	{
+		this.setTokenStringData( newData );
 	}
 	
 	public TokenType getTokenType(String tokenString)
 	{
 		TokenType result = TokenType.Unknown;
 		
-		Pattern tbody_pattern = Pattern.compile("\\<[\\/]?tbody\\>");
-		Pattern tr_pattern = Pattern.compile("\\<[\\/]?tr\\>");
-		Pattern td_pattern = Pattern.compile("\\<[\\/]?td(\\s(class)(\\=)(\\\")[a-zA-Z]+(\\\"))?\\>");
+		Pattern table_pattern = Pattern.compile("\\<[\\/]?table((\\s)(id|style|class)\\=\\\"(\\s|\\S)+\\\")*\\>"); 
+		// Pattern tbody_pattern = Pattern.compile("\\<[\\/]?tbody\\>");
+		Pattern tr_pattern = Pattern.compile("\\<[\\/]?tr((\\s)align\\=\\\"(\\s|\\S)+\\\")?\\>");
+		Pattern td_pattern = Pattern.compile("\\<[\\/]?td(\\s)?\\>");
+		// Pattern strong_pattern = Pattern.compile("\\<[\\/]?strong\\>");
 		//Pattern a_pattern = Pattern.compile("\\<[\\/]?a((\\s)(href|target|onclick|name)\\=\\\"(\\s|\\S)+\\\")*\\>");
 		
-		Matcher tbody_match = tbody_pattern.matcher(tokenString);
+		Matcher table_match = table_pattern.matcher(tokenString);
 		Matcher tr_match = tr_pattern.matcher(tokenString);
 		Matcher td_match = td_pattern.matcher(tokenString);
+		//Matcher strong_match = strong_pattern.matcher(tokenString);
 		//Matcher a_match = a_pattern.matcher(tokenString);
 		
-		if ( tbody_match.matches() )
+		if ( table_match.matches() )
 		{
-			result = TokenType.TBody;
+			result = TokenType.Table;
 		}
 		else if ( tr_match.matches() )
 		{
@@ -52,12 +62,12 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 		TokenSubtype result;
 		int hashCode = currentType.hashCode();
 		
-		if ( hashCode == TokenType.TBody.hashCode() )
+		if ( hashCode == TokenType.Table.hashCode() )
 		{
 			if ( tokenString.charAt(1) == '/' )
-				result = TokenSubtype.TBodyClose;
+				result = TokenSubtype.TableClose;
 			else
-				result = TokenSubtype.TBobyOpen;
+				result = TokenSubtype.TableOpen;
 		}
 		else if ( hashCode == TokenType.TR.hashCode() )
 		{
@@ -73,6 +83,15 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 			else
 				result = TokenSubtype.TDOpen;
 		}
+		/*
+		else if ( hashCode == TokenType.STRONG.hashCode() )
+		{
+			if ( tokenString.charAt(1) == '/')
+				result = TokenSubtype.StrongClose;
+			else
+				result = TokenSubtype.StrongOpen;
+		}
+		*/
 		else if ( hashCode == TokenType.TextString.hashCode() )
 			result = TokenSubtype.TextString;
 		else
@@ -90,7 +109,7 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 		TokenArray result = new TokenArray();
 		TokenType currentTokenType = TokenType.Unknown;
 		TokenSubtype currentTokenSubtype = TokenSubtype.Unknown;
-		boolean inBoundOfTBody = false;
+		boolean inBoundOfTable = false;
 		
 		int len = this.data.length();
 		if ( len == 0 )
@@ -106,7 +125,7 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 			tempchar = this.data.substring(i, i+1);
 			i++;
 
-			if ( ( tempchar.equals("\t")  || tempchar.equals("\n") ) || tempchar.equals("\r"))
+			if ( ( tempchar.equals("\t")  || tempchar.equals("\n") ) || ( tempchar.equals("\r") || tempchar.equals(" ") ) )
 			{
 				continue;
 			}
@@ -133,7 +152,7 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 				currentTokenType = TokenType.TextString;
 				currentTokenSubtype = this.getTokenSubtype ( tokenString, currentTokenType );
 				
-				if ( inBoundOfTBody )
+				if ( inBoundOfTable )
 				{
 					result.addElement(tokenString, currentTokenType, currentTokenSubtype);
 					tokenString = "";
@@ -172,9 +191,25 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 				
 				currentTokenSubtype = this.getTokenSubtype(tokenString, currentTokenType);
 				
-				if ( currentTokenSubtype == TokenSubtype.TBobyOpen )
-					inBoundOfTBody = true;
-				else if ( currentTokenSubtype == TokenSubtype.TBodyClose )
+				if ( currentTokenSubtype == TokenSubtype.TableOpen )
+				{
+					if ( tokenString.length() != 7 )
+					{
+						// <table ...>
+						String [] CheckTableOption = tokenString.substring(1, tokenString.length() - 1).split("\\s");
+						for ( int l = 1 ; l < CheckTableOption.length ; l++ )
+						{
+							String [] KeyVal = CheckTableOption[l].split("\\=");
+							if ( KeyVal[0].equals("class") && KeyVal[1].substring(1, KeyVal[1].length() - 1).equals("kver") )
+							{
+								// class="kval"
+								inBoundOfTable = true;
+							}
+						}
+						
+					}
+				}
+				else if ( currentTokenSubtype == TokenSubtype.TableClose && inBoundOfTable )
 				{
 					TokenUnit newTokenUnit = new TokenUnit (tokenString, currentTokenType, currentTokenSubtype);
 					result.addElement(newTokenUnit);
@@ -182,7 +217,7 @@ public class CERTableTokenAnalyzer extends TokenAnalyzer{
 				}
 				
 				TokenUnit newTokenUnit = new TokenUnit (tokenString, currentTokenType, currentTokenSubtype);
-				if ( inBoundOfTBody )
+				if ( inBoundOfTable )
 					result.addElement(newTokenUnit);
 				
 				tokenString = "";

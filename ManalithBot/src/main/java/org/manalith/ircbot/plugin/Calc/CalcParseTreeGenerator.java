@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This class is for generating parse tree from token stream which is made by CalcTokenAnalyzer.
 //
-// This program can be distributed under the terms of GNU GPL v2 or later.
+// This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
 import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidSequenceTokenException;
@@ -166,7 +166,15 @@ public class CalcParseTreeGenerator {
 					if ( i == size )
 						throw new InvalidSequenceTokenException("Missing operand.");
 					
-					arg1 = sArray.getToken(i++);
+					if ( op.getTokenSubtype() == TokenSubtype.Factorial )
+					{
+						TokenUnit zero = new TokenUnit (TokenType.Integer, TokenSubtype.Decimal, "0");
+						arg1 = zero;
+					}
+					else
+					{
+						arg1 = sArray.getToken(i++);
+					}
 					
 					pstu_root.setNode( op );
 					pstu_root.setLeftLeapNode( arg0 );
@@ -208,7 +216,7 @@ public class CalcParseTreeGenerator {
 						}
 					}
 					// arg1.getTokenType() == TokenType.TriangleFunc
-					else if ( arg1.getTokenType() == TokenType.TriangleFunc )
+					else if ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.MathematFunc )
 					{
 						TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
 						ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -266,7 +274,8 @@ public class CalcParseTreeGenerator {
 						throw new InvalidSequenceTokenException("Missing operand.");
 					}
 				}
-				else if ( arg0.getTokenType() == TokenType.TriangleFunc || arg0.getTokenType() == TokenType.BaseConvFunc )
+				else if ( ( arg0.getTokenType() == TokenType.TriangleFunc || arg0.getTokenType() == TokenType.BaseConvFunc )
+						|| arg0.getTokenType() == TokenType.MathematFunc )
 				{
 					pstu_root.setNode( arg0 );
 					TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
@@ -319,10 +328,16 @@ public class CalcParseTreeGenerator {
 				if ( op.getTokenType() != TokenType.Operatr )
 					throw new InvalidSequenceTokenException("Missing operator.");
 				
-				if ( i == size )
+				if ( i == size && op.getTokenSubtype() != TokenSubtype.Factorial )
 					throw new InvalidSequenceTokenException("Missing operand.");
 				
-				arg1 = sArray.getToken(i++); // can be integer, floating point, left parenthesis, or function 
+				if ( op.getTokenSubtype() != TokenSubtype.Factorial )
+					arg1 = sArray.getToken(i++); // can be integer, floating point, left parenthesis, or function
+				else 
+				{
+					TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
+					arg1 = zero;
+				}
 				
 				if ( pstu_root.getNode().getTokenType() == TokenType.BaseConvFunc )
 				{
@@ -330,13 +345,63 @@ public class CalcParseTreeGenerator {
 				}
 				
 				// The most priority
-				if ( ( ( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Power || pstu_root.getNode().getTokenSubtype() == TokenSubtype.Modulus ) ||
+				if ( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Factorial )
+				{
+					ParseTreeUnit newSubtree = new ParseTreeUnit();
+					
+					newSubtree.setNode(op);
+					newSubtree.addLeftSubtree(pstu_root);
+					
+					if ( arg1.getTokenType() == TokenType.Integer || arg1.getTokenType() == TokenType.FlPoint )
+					{
+						newSubtree.setRightLeapNode(arg1);
+						pstu_root = newSubtree;
+					}
+					else if ( arg1.getTokenType() == TokenType.Parents && arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis )
+					{
+						TokenArray subArray2 = new TokenArray();
+						int skipPairofParentheses = 0;
+						
+						while ( true )
+						{
+							TokenUnit temp = new TokenUnit();
+							temp = sArray.getToken(i);
+							
+							if ( temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis )
+								skipPairofParentheses++;
+							if ( temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis )
+								skipPairofParentheses--;
+							
+							if ( skipPairofParentheses == -1 )
+							{
+								i++;
+								break;
+							}
+							
+							subArray2.addToken(temp);
+							i++;
+						}
+						
+						if ( subArray2.getSize() == 1 )
+						{
+							newSubtree.setRightLeapNode( subArray2.getToken( 0 ) );
+						}
+						else
+						{
+							newSubtree.addRightSubtree( generateParseTree( subArray2 ) );
+						}
+						
+						pstu_root = newSubtree;
+					}
+				}
+				else if ( ( ( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Power || pstu_root.getNode().getTokenSubtype() == TokenSubtype.Modulus ) ||
 						( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Times || pstu_root.getNode().getTokenSubtype() == TokenSubtype.Divide ) ) ||
 						pstu_root.getNode().getTokenType() == TokenType.TriangleFunc )
 				{
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 					
-					if ( op.getTokenSubtype() == TokenSubtype.Power )
+
+					if ( op.getTokenSubtype() == TokenSubtype.Power || op.getTokenSubtype() == TokenSubtype.Factorial )
 					{
 						newSubtree.setNode( op );
 						newSubtree.addLeftSubtree( pstu_root.getRightSubtree() );
@@ -346,7 +411,7 @@ public class CalcParseTreeGenerator {
 							newSubtree.setRightLeapNode(arg1);
 							pstu_root.addRightSubtree(newSubtree);
 						}
-						else if ( arg1.getTokenType() == TokenType.Parents || arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis )
+						else if ( arg1.getTokenType() == TokenType.Parents && arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis )
 						{
 							TokenArray subArray2 = new TokenArray();
 							int skipPairofParentheses = 0;
@@ -380,7 +445,8 @@ public class CalcParseTreeGenerator {
 								newSubtree.addRightSubtree( generateParseTree( subArray2 ) );
 							}
 						}
-						else if ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.BaseConvFunc )
+						else if ( ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.BaseConvFunc )
+								|| arg1.getTokenType() == TokenType.MathematFunc )
 						{
 							TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -480,7 +546,7 @@ public class CalcParseTreeGenerator {
 							
 							pstu_root = newSubtree;
 						}
-						else if ( arg1.getTokenType() == TokenType.TriangleFunc )
+						else if ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.MathematFunc )
 						{
 							TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -544,8 +610,10 @@ public class CalcParseTreeGenerator {
 				{
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 					
+					
 					if ( ( op.getTokenSubtype() == TokenSubtype.Power || op.getTokenSubtype() == TokenSubtype.Modulus ) ||
-							( op.getTokenSubtype() == TokenSubtype.Times || op.getTokenSubtype() == TokenSubtype.Divide ) )
+							( op.getTokenSubtype() == TokenSubtype.Times || op.getTokenSubtype() == TokenSubtype.Divide ) ||
+							op.getTokenSubtype() == TokenSubtype.Factorial )
 					{
 						newSubtree.setNode( op );
 						newSubtree.addLeftSubtree(pstu_root.getRightSubtree());
@@ -589,7 +657,7 @@ public class CalcParseTreeGenerator {
 								newSubtree.addRightSubtree( generateParseTree( subArray2 ) );
 							}
 						}
-						else if ( arg1.getTokenType() == TokenType.TriangleFunc )
+						else if ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.MathematFunc )
 						{
 							TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -692,7 +760,7 @@ public class CalcParseTreeGenerator {
 							}
 							pstu_root = newSubtree;
 						}
-						else if ( arg1.getTokenType() == TokenType.TriangleFunc )
+						else if ( arg1.getTokenType() == TokenType.TriangleFunc || arg1.getTokenType() == TokenType.MathematFunc )
 						{
 							TokenUnit zero = new TokenUnit ( TokenType.Integer, TokenSubtype.Decimal, "0" );
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();

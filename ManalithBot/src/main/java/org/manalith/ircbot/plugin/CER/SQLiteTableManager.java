@@ -1,3 +1,10 @@
+//
+// SQLiteTableManager.java
+// darkcircle dot 0426 at gmail dot com
+//
+// This source can be distributed under the terms of GNU General Public License version 3
+// which is derived from the license of Manalith bot.
+
 package org.manalith.ircbot.plugin.CER;
 
 import java.sql.DriverManager;
@@ -15,17 +22,46 @@ public class SQLiteTableManager {
 	private Connection conn;
 	private Statement stat;
 	
-	public SQLiteTableManager ( ) throws SQLException, ClassNotFoundException
+	private String path;
+	private String filename;
+	
+	public SQLiteTableManager ( String newFilename ) throws SQLException,ClassNotFoundException
 	{
+		this.setPath ( "" );
+		this.setFilename ( newFilename );
 		this.initJDBCSQLite();
+	}
+	public SQLiteTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
+	{
+		this.setPath ( newPath );
+		this.setFilename ( newFilename );
+		this.initJDBCSQLite();
+	}
+	
+	private void setPath ( String newPath )
+	{
+		this.path = newPath;
+	}
+	private String getPath ( )
+	{
+		return this.path;
+	}
+	private void setFilename ( String newFilename )
+	{
+		this.filename = newFilename;
+	}
+	private String getFilename ( )
+	{
+		return this.filename;
 	}
 	
 	private void initJDBCSQLite ( ) throws SQLException, ClassNotFoundException
 	{
 		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:sqlite:currency.db");
+		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath() + this.getFilename() );
 		stat = conn.createStatement();
 	}
+	
 	private void initCurrencyRateTable () throws SQLException
 	{
 		stat.executeUpdate("drop table if exists CurrencyRate");

@@ -1,45 +1,54 @@
+//
+// CalcRunner.java
+// darkcircle dot 0426 at gmail dot com
+//
+// This source can be distributed under the terms of GNU General Public License version 3
+// which is derived from the license of Manalith bot.
+
 package org.manalith.ircbot.plugin.Calc;
 import org.manalith.ircbot.plugin.Calc.Exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.Calc.Exceptions.TokenAnalysisException;
 
 public class CalcRunner {
-	public static String run ( String expr )// throws EmptyTokenStreamException, TokenAnalysisException, Exception
+	public static String run ( String expr )
 	{
+		
 		String result = "";
 		// Token analysis phase
 		TokenArray tArray = new TokenArray();
 		CalcTokenAnalyzer cta = new CalcTokenAnalyzer( expr );
 		
-		
-		
-		//*
 		try 
 		{
-			tArray = cta.getTokenArray();	
+			tArray = cta.getTokenArray();
+			/*
+			int asize = tArray.getSize();
+			for ( int i = 0 ; i < asize ; i++ )
+				System.out.println(tArray.getToken(i));
+			//*/	
 		}
 		catch ( EmptyTokenStreamException ets )
 		{
-			return "입력한 식이 없습니다.";
+			System.out.println("input expression is empty string.");
 		}
 		catch ( TokenAnalysisException e )
 		{
-			result += "Parse Error! : ";
-			result += e.getMessage();
+			result = " === Parse Error! === " + e.getMessage();
 			return result;
 		}
 		/*
 		catch ( NotImplementedException ie )
 		{
-			System.out.println("There is not implemented keyword.");
+			System.out.println("There is a keyword which is not implemented.");
 		}
-		//*/
+		*/
 		
+		ParseTreeUnit ptu = null;
 		
-		
-		//*
 		try
 		{
-			ParseTreeUnit ptu = CalcParseTreeGenerator.generateParseTree( tArray );
+			// Parse tree generation phase
+			ptu = CalcParseTreeGenerator.generateParseTree( tArray );
 			// ptu.preorder();
 			// System.out.println("Result type : " + ptu.getResultType());
 			
@@ -48,12 +57,11 @@ public class CalcRunner {
 				result = " => " +  ptu.getIntResult();
 			else
 				result = " => " + ptu.getFpResult();
-			
 		}
 		catch ( Exception e )
 		{
-			result = "Computation Error! : ";
-			result += e.getMessage();
+			result = "Computation Error! : " + e.getMessage();
+			return result;
 		}
 		
 		return result;
