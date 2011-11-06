@@ -4,13 +4,10 @@
 //
 // This source can be distributed under the terms of GNU General Public License version 3
 // which is derived from the license of Manalith bot.
-//
-// This is abstract class for CommandTokenAnalyzer CERTableTokenAnalyzer, and NoticeETTokenAnalyzer. 
-//
 
-package org.manalith.ircbot.plugin.CER;
+package org.manalith.ircbot.plugin.KVL;
 
-import org.manalith.ircbot.plugin.CER.Exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.KVL.Exceptions.EmptyTokenStreamException;
 
 
 public abstract class TokenAnalyzer {

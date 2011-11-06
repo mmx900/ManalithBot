@@ -1,3 +1,10 @@
+//
+// CERInfoProvider.java
+// darkcircle dot 0426 at gmail dot com
+//
+// This source can be distributed under the terms of GNU General Public License version 3
+// which is derived from the license of Manalith bot.
+
 package org.manalith.ircbot.plugin.CER;
 
 import org.manalith.ircbot.plugin.CER.Exceptions.EmptyTokenStreamException;
@@ -13,6 +20,7 @@ import java.util.Properties;
 public class CERInfoProvider {
 	
 	private String command;
+	private String path;
 	
 	public CERInfoProvider ( )
 	{
@@ -21,6 +29,12 @@ public class CERInfoProvider {
 	public CERInfoProvider ( String newCommand )
 	{
 		this.setCommand ( newCommand );
+		this.setPath ( "" );
+	}
+	public CERInfoProvider ( String newPath, String newCommand )
+	{
+		this.setCommand( newCommand );
+		this.setPath ( newPath );
 	}
 	
 	public void setCommand ( String newCommand )
@@ -31,7 +45,15 @@ public class CERInfoProvider {
 	{
 		return this.command;
 	}
-
+	public void setPath ( String newPath )
+	{
+		this.path = newPath;
+	}
+	public String getPath ( )
+	{
+		return this.path;
+	}
+	
 	public String commandInterpreter ( ) throws EmptyTokenStreamException, InvalidArgumentException, IOException,
 											SQLException, ClassNotFoundException, FileNotSpecifiedException, URLNotSpecifiedException
 	{
@@ -88,7 +110,7 @@ public class CERInfoProvider {
 			}
 			else if ( i == 1 )
 			{
-				if ( TokenSubTSequence[0] == TokenSubtype.CommandShow)
+				if ( TokenSubTSequence[0] == TokenSubtype.CommandShow )
 				{
 					if ( tu.getTokenType() != TokenType.CurrencyName )
 						throw new InvalidArgumentException("Invalid option. [ " + tu.getTokenString() + " ]");
@@ -258,7 +280,7 @@ public class CERInfoProvider {
 		String result = "";
 		String [] month = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 		
-		PropertyManager pm = new PropertyManager ( "LatestUpdatedDatetime.prop" );
+		PropertyManager pm = new PropertyManager ( this.getPath(), "LatestUpdatedDatetime.prop" );
 		pm.loadProperties();
 		
 		String dt = pm.getValue("date");
@@ -291,7 +313,7 @@ public class CERInfoProvider {
 										FileNotSpecifiedException, URLNotSpecifiedException
 	{
 		
-		String propFilename = "LatestUpdatedDatetime.prop";	
+		String propFilename = this.getPath() + "LatestUpdatedDatetime.prop";	
 		RemoteLocalDatetimeChecker check = new RemoteLocalDatetimeChecker(
 				"http://info.finance.naver.com/marketindex/exchangeMain.nhn",
 				propFilename );
@@ -332,14 +354,14 @@ public class CERInfoProvider {
 		pm.storeProperties();
 		
 		// update Current Exchange Rate Table.
-		CERTableUpdater updater = new CERTableUpdater ( "http://info.finance.naver.com/marketindex/exchangeList.nhn" );
+		CERTableUpdater updater = new CERTableUpdater ( this.getPath(), "http://info.finance.naver.com/marketindex/exchangeList.nhn" );
 		updater.update();
 	}
 	private String showCurrencyRate ( String CurrencyUnit, String FieldId ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
 		
-		SQLiteTableManager sqlManager = new SQLiteTableManager();
+		SQLiteTableManager sqlManager = new SQLiteTableManager( this.getPath(), "currency.db" );
 		String [] data = sqlManager.selectDataFromTable( FieldId.toString() , CurrencyUnit.toString() );
 		if ( FieldId.equals("*") )
 			FieldId = "country_name,currency_unit,central_rate,cash_buy,cash_cell,remittance_send,remittance_recv,exchan_comm_rate,dollar_exc_rate";
@@ -393,7 +415,7 @@ public class CERInfoProvider {
 	private String convertFrom ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -410,7 +432,7 @@ public class CERInfoProvider {
 	private String convertTo ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -427,7 +449,7 @@ public class CERInfoProvider {
 	private String buyCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_buy";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -444,7 +466,7 @@ public class CERInfoProvider {
 	private String cellCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_cell";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -461,7 +483,7 @@ public class CERInfoProvider {
 	private String recvRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_recv";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -478,7 +500,7 @@ public class CERInfoProvider {
 	private String sendRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager();
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_send";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();

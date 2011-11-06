@@ -1,3 +1,9 @@
+//
+// CERTableUpdater.java
+// darkcircle dot 0426 at gmail dot com
+//
+// This source can be distributed under the terms of GNU General Public License version 3
+// which is derived from the license of Manalith bot.package org.manalith.ircbot.plugin.CER;
 package org.manalith.ircbot.plugin.CER;
 
 import org.manalith.ircbot.plugin.CER.Exceptions.EmptyTokenStreamException;
@@ -12,6 +18,7 @@ import java.sql.SQLException;
 public class CERTableUpdater {
 	
 	private Downloader d;
+	private String LocalPath;
 	private String LocalFilename;
 	private String RemoteURL;
 	
@@ -22,7 +29,7 @@ public class CERTableUpdater {
 	
 	public CERTableUpdater ()
 	{
-		this.setLocalFilename ( "get.html" );
+		this.setLocalFilename ( "org/manalith/ircbot/plugin/CER/data/get.html" );
 		this.setRemoteURL( "" );
 		
 		d = null;
@@ -34,6 +41,20 @@ public class CERTableUpdater {
 	}
 	public CERTableUpdater ( String newRemoteURL )
 	{
+		this.setLocalPath( "" );
+		this.setLocalFilename ( "get.html" );
+		this.setRemoteURL( newRemoteURL );
+		
+		d = null;
+		
+		// tArray = null;
+		tokenAnalyzer = null;
+		
+		sqlman = null;
+	}
+	public CERTableUpdater ( String newLocalPath, String newRemoteURL )
+	{
+		this.setLocalPath ( newLocalPath );
 		this.setLocalFilename ( "get.html" );
 		this.setRemoteURL( newRemoteURL );
 		
@@ -45,6 +66,14 @@ public class CERTableUpdater {
 		sqlman = null;
 	}
 	
+	private void setLocalPath ( String newLocalPath )
+	{
+		this.LocalPath = newLocalPath;
+	}
+	private String getLocalPath ( )
+	{
+		return this.LocalPath;
+	}
 	private void setLocalFilename ( String newLocalFilename )
 	{
 		this.LocalFilename = newLocalFilename;
@@ -72,11 +101,11 @@ public class CERTableUpdater {
 	{
 		d = new Downloader ();
 		d.setUrl ( this.getRemoteURL() );
-		d.setLocalFilename( this.getLocalFilename() );
+		d.setLocalFilename( this.getLocalPath() + this.getLocalFilename() );
 	}
 	private void initTokenAnalyzer ( ) throws FileNotSpecifiedException, FileNotFoundException, IOException
 	{
-		StreamFileReader fr = new StreamFileReader ( this.getLocalFilename() );
+		StreamFileReader fr = new StreamFileReader ( this.getLocalPath() + this.getLocalFilename() );
 		String data = fr.bringUpStreamFromFile ();
 		
 		/// separate tokenstream into each token unit.
@@ -87,7 +116,7 @@ public class CERTableUpdater {
 	}
 	private void initSQLiteTable ( ) throws SQLException, ClassNotFoundException
 	{
-		sqlman = new SQLiteTableManager();
+		sqlman = new SQLiteTableManager( this.getLocalPath(), "currency.db" );
 	}
 	
 	public void update() throws URLNotSpecifiedException, FileNotSpecifiedException, FileNotFoundException, 

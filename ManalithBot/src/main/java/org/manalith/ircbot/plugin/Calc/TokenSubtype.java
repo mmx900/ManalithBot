@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This enumeration means token subtype ID
 //
-// This program can be distributed under the terms of GNU GPL v2 or later.
+// This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
 public enum TokenSubtype {
@@ -21,6 +21,7 @@ public enum TokenSubtype {
 	Divide,
 	Modulus,
 	Power,
+	Factorial,
 	Left_Parenthesis,
 	Righ_Parenthesis,
 	Sine,
@@ -32,5 +33,6 @@ public enum TokenSubtype {
 	ToBin,
 	ToOct,
 	ToDec,
-	ToHex
+	ToHex,
+	Sqrt
 }
