@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This class is for generating parse tree from token stream which is made by CalcTokenAnalyzer.
 //
-// This program can be distributed under the terms of GNU GPL v3 or later.
+// This program can be distributed under the terms of GNU GPL v2 or later.
 // darkcircle.0426@gmail.com
 
 import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidSequenceTokenException;
@@ -159,11 +159,17 @@ public class CalcParseTreeGenerator {
 				}
 				else if ( arg0.getTokenType() == TokenType.Integer || arg0.getTokenType() == TokenType.FlPoint )
 				{
+					if ( size == 1 ) 
+					{
+						pstu_root.setNode(arg0);
+						break;
+					}
+					
 					op = sArray.getToken(i++);
 					if ( op.getTokenType() != TokenType.Operatr )
 						throw new InvalidSequenceTokenException("Missing operator.");
 					
-					if ( i == size )
+					if ( i == size && op.getTokenSubtype() != TokenSubtype.Factorial )
 						throw new InvalidSequenceTokenException("Missing operand.");
 					
 					if ( op.getTokenSubtype() == TokenSubtype.Factorial )

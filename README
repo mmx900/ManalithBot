@@ -1,18 +1,18 @@
 
 2011. 10. 31
-CER ( Currency Exchange Rate ) is added.
+CER ( Currency Exchange Rate ) is added. ( -> darkcircle )
  - Requirement
    > sqlitejdbc-v056.jar : JDBC SQLite 커넥터 사용하기 위한 파일. 컴파일 할때 필요.
      -> http://files.zentus.com/sqlitejdbc/sqlitejdbc-v056.jar 에서 받았음.
    > 그놈 채널에 봇 입장전 테스트 채널에서 !cer fupdate를 실행. (프로퍼티, DB 갱신 및 준비)
    > LatestUpdatedDatetime.prop과 currency.db는 클래스 경로 루트상에 있어야 함.
 
-Calc is updated
+Calc is updated ( -> darkcircle )
  > factorial operator is added.
  > sqrt function is added.
 
 2011. 11. 01
-CER ( Currency Exchange Rate ) is updated
+CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
  - Requirement
   > (2011. 10. 31일자 첫번째 요구사항 삭제)
   > Maven 에서 org.xerial.sqlite-jdbc.3.7.2 를 받아야 됨. 
@@ -20,3 +20,16 @@ CER ( Currency Exchange Rate ) is updated
   > 그놈 채널에 봇 입장 전 테스트 채널에서 !cer fupdate를 실행. 
     ( 프로퍼티, DB 갱신 및 준비 : org/manalith/ircbot/plugin/CER/data 에 저장됨 )
   > (2011. 10. 31일자 세번째 요구사항 삭제)
+
+2011. 11. 05
+KVL ( Kernel Version List ) is added ( -> darkcircle )
+
+2011. 11. 06
+CER ( Currency Exchance Rate ) is updated
+ - NPE 유발 코드 제거됨. ( -> mmx900 ) 
+
+
+2011. 11. 07
+Calc is updated ( -> darkcircle )
+ > 인자가 하나밖에 없을 때의 문제 수정
+ > 팩토리얼 연산 문제 수정
