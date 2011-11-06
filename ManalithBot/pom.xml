@@ -85,6 +85,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zentus</groupId>
+			<artifactId>sqlitejdbc</artifactId>
+			<version>v056</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
