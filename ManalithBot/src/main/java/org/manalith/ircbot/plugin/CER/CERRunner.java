@@ -71,19 +71,11 @@ public class CERRunner {
 	
 	private String checkFullDataPath ( )
 	{
-		String result = "";
-		
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		String path = loader.getResource("").getPath();
-
-		//System.out.println(path);
-		//*
-		result = path + "org/manalith/ircbot/plugin/CER/data/";
-		File realpath = new File ( result );
+		File realpath = new File ( "org/manalith/ircbot/plugin/CER/data/" );
 		if ( !realpath.exists() )
 			realpath.mkdirs();
 		
-		return result;
+		return realpath.getAbsolutePath();
 	}
 	private String checkUpdate ( String realpath )
 	{
