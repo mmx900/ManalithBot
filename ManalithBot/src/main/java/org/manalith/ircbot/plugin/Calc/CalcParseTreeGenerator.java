@@ -1,9 +1,10 @@
 package org.manalith.ircbot.plugin.Calc;
+
 // CalcParseTreeGenerator.java 
 //
 // This class is for generating parse tree from token stream which is made by CalcTokenAnalyzer.
 //
-// This program can be distributed under the terms of GNU GPL v2 or later.
+// This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
 import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidSequenceTokenException;
@@ -402,7 +403,7 @@ public class CalcParseTreeGenerator {
 				}
 				else if ( ( ( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Power || pstu_root.getNode().getTokenSubtype() == TokenSubtype.Modulus ) ||
 						( pstu_root.getNode().getTokenSubtype() == TokenSubtype.Times || pstu_root.getNode().getTokenSubtype() == TokenSubtype.Divide ) ) ||
-						pstu_root.getNode().getTokenType() == TokenType.TriangleFunc )
+						( pstu_root.getNode().getTokenType() == TokenType.TriangleFunc || pstu_root.getNode().getTokenType() == TokenType.MathematFunc ) )
 				{
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 					
