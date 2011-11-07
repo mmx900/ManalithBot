@@ -1,4 +1,5 @@
-package tv.myhome.darkcircle.Calc;
+package org.manalith.ircbot.plugin.Calc;
+
 // CalcParseTreeGenerator.java 
 //
 // This class is for generating parse tree from token stream which is made by CalcTokenAnalyzer.
@@ -6,8 +7,8 @@ package tv.myhome.darkcircle.Calc;
 // This program can be distributed under the terms of GNU GPL v3 or later.
 // darkcircle.0426@gmail.com
 
-import tv.myhome.darkcircle.Calc.Exceptions.InvalidSequenceTokenException;
-import tv.myhome.darkcircle.Calc.Exceptions.ParenthesesMismatchException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.InvalidSequenceTokenException;
+import org.manalith.ircbot.plugin.Calc.Exceptions.ParenthesesMismatchException;
 
 public class CalcParseTreeGenerator {
 	
