@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.Calc;
 //
 // This class is for generating token stream array from user input string.
 //
-// This program can be distributed under the terms of GNU GPL v3 or later.
+// This program can be distributed under the terms of GNU GPL v2 or later.
 // darkcircle.0426@gmail.com
 
 import java.util.regex.Pattern;
@@ -344,44 +344,37 @@ public class CalcTokenAnalyzer {
 			}
 			else if ( i == 1 )
 			{
-				if ( tokenStream.length() == 2 && this.getTokenType(temp) == TokenType.Unknown )
+				
+				checkedType = this.getTokenType(temp);
+				
+				if ( currentType != checkedType )
 				{
-					return null;
-				}
-				else
-				{
-					checkedType = this.getTokenType(temp);
-					
-					if ( currentType != checkedType )
+					if ( checkedType == TokenType.Unknown )
 					{
-						if ( checkedType == TokenType.Unknown )
-						{
-							temp = temp.substring( 0, temp.length() - 1 );
-							
-							// if selected string is empty.
-							if ( temp.equals("") )
-								throw new TokenAnalysisException();
-							
-							TokenSubtype tsType = this.getTokenSubtype( temp, currentType );
-							
-							// if selected string is unknown type of token.
-							if ( currentType == TokenType.Unknown && tsType == TokenSubtype.Unknown )
-								throw new TokenAnalysisException();
-							
-							TokenUnit newUnit = new TokenUnit( currentType, tsType, temp );
-							result.addToken( newUnit );
+						temp = temp.substring( 0, temp.length() - 1 );
 						
-							currentType = TokenType.Unknown;
-							temp = "";
+						// if selected string is empty.
+						if ( temp.equals("") )
+							throw new TokenAnalysisException();
 						
-							i--;
-						}
-						else
-						{
-							currentType = checkedType;
-						}
-					}
+						TokenSubtype tsType = this.getTokenSubtype( temp, currentType );
+						
+						// if selected string is unknown type of token.
+						if ( currentType == TokenType.Unknown && tsType == TokenSubtype.Unknown )
+							throw new TokenAnalysisException();
+						
+						TokenUnit newUnit = new TokenUnit( currentType, tsType, temp );
+						result.addToken( newUnit );
 					
+						currentType = TokenType.Unknown;
+						temp = "";
+					
+						i--;
+					}
+					else
+					{
+						currentType = checkedType;
+					}
 				}
 			}
 			else 
