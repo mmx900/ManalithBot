@@ -1,5 +1,5 @@
 //
-// SQLiteTableManager.java
+// HSQLDBTableManager.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 //import org.sqlite.*;
 
-public class SQLiteTableManager {
+public class HSQLDBTableManager {
 	
 	private Connection conn;
 	private Statement stat;
@@ -25,13 +25,13 @@ public class SQLiteTableManager {
 	private String path;
 	private String filename;
 	
-	public SQLiteTableManager ( String newFilename ) throws SQLException,ClassNotFoundException
+	public HSQLDBTableManager ( String newFilename ) throws SQLException,ClassNotFoundException
 	{
 		this.setPath ( "" );
 		this.setFilename ( newFilename );
 		this.initJDBCSQLite();
 	}
-	public SQLiteTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
+	public HSQLDBTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
 	{
 		this.setPath ( newPath );
 		this.setFilename ( newFilename );
@@ -58,18 +58,18 @@ public class SQLiteTableManager {
 	private void initJDBCSQLite ( ) throws SQLException, ClassNotFoundException
 	{
 		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath() + this.getFilename() );
+		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath() + this.getFilename() );
 		stat = conn.createStatement();
 	}
 	
 	private void initCurrencyRateTable () throws SQLException
 	{
 		stat.executeUpdate("drop table if exists CurrencyRate");
-		stat.executeUpdate("vacuum");
+		//stat.executeUpdate("vacuum");
 		
 		String fields = "";
-		fields += "country_name VARCHAR NOT NULL ,";
-		fields += "currency_name VARCHAR NOT NULL ,";
+		fields += "country_name VARCHAR(15) NOT NULL ,";
+		fields += "currency_name VARCHAR(3) NOT NULL ,";
 		fields += "currency_unit INT NOT NULL ,";
 		fields += "central_rate REAL NOT NULL ,";
 		fields += "cash_buy REAL NOT NULL ,";

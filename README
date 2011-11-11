@@ -33,3 +33,4 @@ CER ( Currency Exchance Rate ) is updated
 Calc is updated ( -> darkcircle )
  > 인자가 하나밖에 없을 때의 문제 수정
  > 팩토리얼 연산 문제 수정
+ > sqrt computation problem is fixed

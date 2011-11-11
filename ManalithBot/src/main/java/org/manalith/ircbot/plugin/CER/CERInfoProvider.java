@@ -361,7 +361,7 @@ public class CERInfoProvider {
 	{
 		String result = "";
 		
-		SQLiteTableManager sqlManager = new SQLiteTableManager( this.getPath(), "currency.db" );
+		HSQLDBTableManager sqlManager = new HSQLDBTableManager( this.getPath(), "currency.db" );
 		String [] data = sqlManager.selectDataFromTable( FieldId.toString() , CurrencyUnit.toString() );
 		if ( FieldId.equals("*") )
 			FieldId = "country_name,currency_unit,central_rate,cash_buy,cash_cell,remittance_send,remittance_recv,exchan_comm_rate,dollar_exc_rate";
@@ -415,7 +415,7 @@ public class CERInfoProvider {
 	private String convertFrom ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -432,7 +432,7 @@ public class CERInfoProvider {
 	private String convertTo ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -449,7 +449,7 @@ public class CERInfoProvider {
 	private String buyCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_buy";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -466,7 +466,7 @@ public class CERInfoProvider {
 	private String cellCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_cell";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -483,7 +483,7 @@ public class CERInfoProvider {
 	private String recvRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_recv";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -500,7 +500,7 @@ public class CERInfoProvider {
 	private String sendRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_send";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
