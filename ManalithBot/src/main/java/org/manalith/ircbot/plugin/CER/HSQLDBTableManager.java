@@ -14,8 +14,9 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
+// import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
-//import org.sqlite.*;
 
 public class HSQLDBTableManager {
 	
@@ -29,13 +30,13 @@ public class HSQLDBTableManager {
 	{
 		this.setPath ( "" );
 		this.setFilename ( newFilename );
-		this.initJDBCSQLite();
+		this.initJDBCDriverHSQLDB();
 	}
 	public HSQLDBTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
 	{
 		this.setPath ( newPath );
 		this.setFilename ( newFilename );
-		this.initJDBCSQLite();
+		this.initJDBCDriverHSQLDB();
 	}
 	
 	private void setPath ( String newPath )
@@ -55,10 +56,11 @@ public class HSQLDBTableManager {
 		return this.filename;
 	}
 	
-	private void initJDBCSQLite ( ) throws SQLException, ClassNotFoundException
+	private void initJDBCDriverHSQLDB ( ) throws SQLException, ClassNotFoundException
 	{
-		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath() + this.getFilename() );
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
+	
+		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath() + this.getFilename());
 		stat = conn.createStatement();
 	}
 	
