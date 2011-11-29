@@ -1,5 +1,5 @@
 //
-// HSQLDBTableManager.java
+// SQLiteTableManager.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
@@ -14,11 +14,8 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
-// import java.util.logging.Logger;
-import org.apache.log4j.Logger;
 
-
-public class HSQLDBTableManager {
+public class SQLiteTableManager {
 	
 	private Connection conn;
 	private Statement stat;
@@ -26,17 +23,17 @@ public class HSQLDBTableManager {
 	private String path;
 	private String filename;
 	
-	public HSQLDBTableManager ( String newFilename ) throws SQLException,ClassNotFoundException
+	public SQLiteTableManager ( String newFilename ) throws SQLException,ClassNotFoundException
 	{
 		this.setPath ( "" );
 		this.setFilename ( newFilename );
-		this.initJDBCDriverHSQLDB();
+		this.initJDBCDriverSQLite();
 	}
-	public HSQLDBTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
+	public SQLiteTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
 	{
 		this.setPath ( newPath );
 		this.setFilename ( newFilename );
-		this.initJDBCDriverHSQLDB();
+		this.initJDBCDriverSQLite();
 	}
 	
 	private void setPath ( String newPath )
@@ -56,22 +53,22 @@ public class HSQLDBTableManager {
 		return this.filename;
 	}
 	
-	private void initJDBCDriverHSQLDB ( ) throws SQLException, ClassNotFoundException
+	private void initJDBCDriverSQLite ( ) throws SQLException, ClassNotFoundException
 	{
-		Class.forName("org.hsqldb.jdbc.JDBCDriver");
-	
-		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath() + this.getFilename());
+		Class.forName("org.sqlite.JDBC");
+		
+		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath() + this.getFilename());
 		stat = conn.createStatement();
 	}
 	
 	private void initCurrencyRateTable () throws SQLException
 	{
 		stat.executeUpdate("drop table if exists CurrencyRate");
-		//stat.executeUpdate("vacuum");
+		stat.executeUpdate("vacuum");
 		
 		String fields = "";
-		fields += "country_name VARCHAR(15) NOT NULL ,";
-		fields += "currency_name VARCHAR(3) NOT NULL ,";
+		fields += "country_name VARCHAR NOT NULL ,";
+		fields += "currency_name VARCHAR NOT NULL ,";
 		fields += "currency_unit INT NOT NULL ,";
 		fields += "central_rate REAL NOT NULL ,";
 		fields += "cash_buy REAL NOT NULL ,";
@@ -254,6 +251,7 @@ public class HSQLDBTableManager {
 	
 	public void close () throws SQLException
 	{
+		stat.executeUpdate("SHUTDOWN;");
 		conn.close();
 	}
 }

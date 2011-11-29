@@ -25,7 +25,7 @@ public class CERTableUpdater {
 	// private HTMLTokenArray tArray;
 	private CERTableTokenAnalyzer tokenAnalyzer;
 	
-	private HSQLDBTableManager sqlman;
+	private SQLiteTableManager sqlman;
 	
 	public CERTableUpdater ()
 	{
@@ -116,7 +116,7 @@ public class CERTableUpdater {
 	}
 	private void initSQLiteTable ( ) throws SQLException, ClassNotFoundException
 	{
-		sqlman = new HSQLDBTableManager( this.getLocalPath(), "currency.db" );
+		sqlman = new SQLiteTableManager( this.getLocalPath(), "currency.db" );
 	}
 	
 	public void update() throws URLNotSpecifiedException, FileNotSpecifiedException, FileNotFoundException, 

@@ -104,10 +104,6 @@ public class CERMessageTokenAnalyzer {
 			{
 				result = TokenSubtype.CommandLatestRound;
 			}
-			else if ( tokenstring.equals("fupdate"))
-			{
-				result = TokenSubtype.CommandForceUpdate;
-			}
 			else if ( tokenstring.equals("help"))
 				result = TokenSubtype.CommandHelp;
 		}
@@ -236,10 +232,6 @@ public class CERMessageTokenAnalyzer {
 					else if ( curTokenSubtype == TokenSubtype.CommandLatestRound )
 					{
 						result += "--latestround";
-					}
-					else if ( curTokenSubtype == TokenSubtype.CommandForceUpdate )
-					{
-						result += "--forceupdate";
 					}
 					else if ( curTokenSubtype == TokenSubtype.CommandHelp ) 
 					{

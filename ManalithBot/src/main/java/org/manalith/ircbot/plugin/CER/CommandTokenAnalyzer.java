@@ -106,7 +106,6 @@ public class CommandTokenAnalyzer extends TokenAnalyzer {
 			{
 				result = TokenSubtype.CommandRecvRemittance;
 			}
-			
 			else 
 			{
 				result = TokenSubtype.Unknown;

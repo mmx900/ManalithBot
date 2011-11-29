@@ -14,8 +14,6 @@ import org.manalith.ircbot.plugin.CER.Exceptions.URLNotSpecifiedException;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.GregorianCalendar;
-import java.util.Properties;
 
 public class CERInfoProvider {
 	
@@ -85,8 +83,7 @@ public class CERInfoProvider {
 			{
 				if( tu.getTokenType() != TokenType.Command ) 
 					throw new InvalidArgumentException("Invalid command.");
-				else if ( ( tu.getTokenSubtype() == TokenSubtype.CommandHelp || tu.getTokenSubtype() == TokenSubtype.CommandLatestRound )
-						|| tu.getTokenSubtype() == TokenSubtype.CommandForceUpdate )
+				else if ( tu.getTokenSubtype() == TokenSubtype.CommandHelp || tu.getTokenSubtype() == TokenSubtype.CommandLatestRound )
 				{
 					if ( len > 1 ) throw new InvalidArgumentException("Unnecessary argument specified.");
 				}
@@ -159,12 +156,6 @@ public class CERInfoProvider {
 		else if ( TokenSubTSequence[i] == TokenSubtype.CommandLatestRound )
 		{
 			result = this.showLatestRound();
-		}
-		else if ( TokenSubTSequence[i] == TokenSubtype.CommandForceUpdate )
-		{
-			this.forceupdate();
-			result = "Information table is updated, now! ";
-			result += this.showLatestRound();
 		}
 		else if ( TokenSubTSequence[i] == TokenSubtype.CommandShow )
 		{
@@ -309,59 +300,11 @@ public class CERInfoProvider {
 		}
 		return result;
 	}
-	private void forceupdate ( ) throws EmptyTokenStreamException, IOException, ClassNotFoundException, SQLException,
-										FileNotSpecifiedException, URLNotSpecifiedException
-	{
-		
-		String propFilename = this.getPath() + "LatestUpdatedDatetime.prop";	
-		RemoteLocalDatetimeChecker check = new RemoteLocalDatetimeChecker(
-				"http://info.finance.naver.com/marketindex/exchangeMain.nhn",
-				propFilename );
-		DateTimeRound remote = check.checkLatestNoticeDateandTime();
-		
-		// set properties using the value.
-		PropertyManager pm = new PropertyManager ( propFilename );
-		try
-		{
-			pm.loadProperties();
-		}
-		catch ( IOException e )
-		{
-			pm.setProp(new Properties());
-			pm.setValue("date", "");
-			pm.setValue("round", "0" );
-			
-			pm.storeProperties();
-		}
-		
-		String date = Integer.toString(remote.getCalendar().get(GregorianCalendar.YEAR));
-		date += ".";
-		date += Integer.toString(remote.getCalendar().get(GregorianCalendar.MONTH));
-		date += ".";
-		date += Integer.toString(remote.getCalendar().get(GregorianCalendar.DAY_OF_MONTH));
-		date += " ";			
-		date += Integer.toString(remote.getCalendar().get(GregorianCalendar.HOUR_OF_DAY));
-		date += ":";
-		date += Integer.toString(remote.getCalendar().get(GregorianCalendar.MINUTE));
-		pm.setValue("date", date);
-		
-		String round = Integer.toString(remote.getRoundVal());
-		while ( round.length() < 3 )
-			round = "0" + round;
-		pm.setValue("round", round);
-		
-		// commit into prop file.
-		pm.storeProperties();
-		
-		// update Current Exchange Rate Table.
-		CERTableUpdater updater = new CERTableUpdater ( this.getPath(), "http://info.finance.naver.com/marketindex/exchangeList.nhn" );
-		updater.update();
-	}
 	private String showCurrencyRate ( String CurrencyUnit, String FieldId ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
 		
-		HSQLDBTableManager sqlManager = new HSQLDBTableManager( this.getPath(), "currency.db" );
+		SQLiteTableManager sqlManager = new SQLiteTableManager( this.getPath(), "currency.db" );
 		String [] data = sqlManager.selectDataFromTable( FieldId.toString() , CurrencyUnit.toString() );
 		if ( FieldId.equals("*") )
 			FieldId = "country_name,currency_unit,central_rate,cash_buy,cash_cell,remittance_send,remittance_recv,exchan_comm_rate,dollar_exc_rate";
@@ -415,7 +358,7 @@ public class CERInfoProvider {
 	private String convertFrom ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -432,7 +375,7 @@ public class CERInfoProvider {
 	private String convertTo ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -449,7 +392,7 @@ public class CERInfoProvider {
 	private String buyCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_buy";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -466,7 +409,7 @@ public class CERInfoProvider {
 	private String cellCash ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,cash_cell";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -483,7 +426,7 @@ public class CERInfoProvider {
 	private String recvRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_recv";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -500,7 +443,7 @@ public class CERInfoProvider {
 	private String sendRemittance ( String CurrencyUnit, String value ) throws SQLException, ClassNotFoundException
 	{
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(), "currency.db");
+		SQLiteTableManager sqlman = new SQLiteTableManager(this.getPath(), "currency.db");
 		String field = "country_name,currency_unit,remittance_send";
 		String [] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();

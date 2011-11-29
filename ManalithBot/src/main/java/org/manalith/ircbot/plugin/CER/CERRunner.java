@@ -39,8 +39,7 @@ public class CERRunner {
 		String realpath = this.checkFullDataPath ( );
 		
 		result = this.checkUpdate(realpath);
-		if ( result.length() != 0 )
-			return result;
+
 		
 		CERInfoProvider cip = new CERInfoProvider ( realpath, this.getArgs() );
 
@@ -71,22 +70,30 @@ public class CERRunner {
 	
 	private String checkFullDataPath ( )
 	{
-		File realpath = new File ( "org/manalith/ircbot/plugin/CER/data/" );
+		String result = "";
+		
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		String path = loader.getResource("").getPath();
+
+		//System.out.println(path);
+		//*
+		result = path + "org/manalith/ircbot/plugin/CER/data/";
+		File realpath = new File ( result );
 		if ( !realpath.exists() )
 			realpath.mkdirs();
 		
-		return realpath.getAbsolutePath();
+		return result;
 	}
 	private String checkUpdate ( String realpath )
 	{
 		String result = "";
-		GregorianCalendar now = new GregorianCalendar();
-		int thishour = now.get(GregorianCalendar.HOUR_OF_DAY);
-		int thisday = now.get(GregorianCalendar.DAY_OF_WEEK);
+		//GregorianCalendar now = new GregorianCalendar();
+		//int thishour = now.get(GregorianCalendar.HOUR_OF_DAY);
+		//int thisday = now.get(GregorianCalendar.DAY_OF_WEEK);
 		
 		// if now is in trading time.
-		if ( ( thisday != GregorianCalendar.SUNDAY && thisday != GregorianCalendar.SATURDAY ) && ( thishour > 9 && thishour < 18 ) )
-		{
+		//if ( ( thisday != GregorianCalendar.SUNDAY && thisday != GregorianCalendar.SATURDAY ) && ( thishour > 9 && thishour < 18 ) )
+		//{
 			try
 			{
 				/// Update database for listing money exchange information
@@ -136,7 +143,7 @@ public class CERRunner {
 				result = e.getMessage();
 				return result;
 			}
-		}
+		//}
 		return result;
 	}
 }
