@@ -39,3 +39,8 @@ Calc is updated ( -> darkcircle )
 CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
  > Database engine is changed
    - SQLite -> HSQLDB
+
+2011. 11. 29
+CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
+ > Database engine is set back due to logger problem
+   - HSQLDB -> SQLite
