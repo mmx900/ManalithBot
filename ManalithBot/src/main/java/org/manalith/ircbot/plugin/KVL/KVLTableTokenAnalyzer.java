@@ -150,7 +150,7 @@ public class KVLTableTokenAnalyzer extends TokenAnalyzer{
 				}
 				
 				currentTokenType = TokenType.TextString;
-				currentTokenSubtype = this.getTokenSubtype ( tokenString, currentTokenType );
+				currentTokenSubtype = TokenSubtype.TextString;
 				
 				if ( inBoundOfTable )
 				{

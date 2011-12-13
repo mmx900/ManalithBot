@@ -15,8 +15,6 @@ import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
 
-//import org.sqlite.*;
-
 public class SQLiteTableManager {
 	
 	private Connection conn;
@@ -29,13 +27,13 @@ public class SQLiteTableManager {
 	{
 		this.setPath ( "" );
 		this.setFilename ( newFilename );
-		this.initJDBCSQLite();
+		this.initJDBCDriverSQLite();
 	}
 	public SQLiteTableManager ( String newPath, String newFilename ) throws SQLException, ClassNotFoundException
 	{
 		this.setPath ( newPath );
 		this.setFilename ( newFilename );
-		this.initJDBCSQLite();
+		this.initJDBCDriverSQLite();
 	}
 	
 	private void setPath ( String newPath )
@@ -55,10 +53,11 @@ public class SQLiteTableManager {
 		return this.filename;
 	}
 	
-	private void initJDBCSQLite ( ) throws SQLException, ClassNotFoundException
+	private void initJDBCDriverSQLite ( ) throws SQLException, ClassNotFoundException
 	{
 		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath() + this.getFilename() );
+		
+		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath() + this.getFilename());
 		stat = conn.createStatement();
 	}
 	
@@ -252,6 +251,7 @@ public class SQLiteTableManager {
 	
 	public void close () throws SQLException
 	{
+		stat.executeUpdate("SHUTDOWN;");
 		conn.close();
 	}
 }
