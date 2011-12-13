@@ -116,7 +116,7 @@ public class CERRunner {
 					
 					String date = Integer.toString(remote.getCalendar().get(GregorianCalendar.YEAR));
 					date += ".";
-					date += Integer.toString(remote.getCalendar().get(GregorianCalendar.MONTH));
+					date += Integer.toString(remote.getCalendar().get(GregorianCalendar.MONTH) + 1);
 					date += ".";
 					date += Integer.toString(remote.getCalendar().get(GregorianCalendar.DAY_OF_MONTH));
 					date += " ";			

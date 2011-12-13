@@ -10,7 +10,7 @@ package org.manalith.ircbot.plugin.KVL;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import org.manalith.ircbot.plugin.KVL.Exceptions.EmptyTokenStreamException;
+import tv.myhome.darkcircle.KVL.Exceptions.EmptyTokenStreamException;
 
 
 public class KVLTableTokenAnalyzer extends TokenAnalyzer{
@@ -150,7 +150,7 @@ public class KVLTableTokenAnalyzer extends TokenAnalyzer{
 				}
 				
 				currentTokenType = TokenType.TextString;
-				currentTokenSubtype = this.getTokenSubtype ( tokenString, currentTokenType );
+				currentTokenSubtype = TokenSubtype.TextString;
 				
 				if ( inBoundOfTable )
 				{

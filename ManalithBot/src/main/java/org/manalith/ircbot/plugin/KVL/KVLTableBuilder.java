@@ -8,7 +8,9 @@
 package org.manalith.ircbot.plugin.KVL;
 
 public class KVLTableBuilder {
-	TokenArray array;
+	
+	private TokenArray array;
+	
 	public KVLTableBuilder ()
 	{
 		this.setArray ( null );

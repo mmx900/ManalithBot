@@ -88,7 +88,7 @@ public class RemoteLocalDatetimeChecker {
 			int hour = Integer.parseInt(hhmm[0]);
 			int minute = Integer.parseInt(hhmm[1]);
 			
-			GregorianCalendar tCalendar = new GregorianCalendar(year, month, date, hour, minute);
+			GregorianCalendar tCalendar = new GregorianCalendar(year, month - 1, date, hour, minute);
 			tCalendar.set(GregorianCalendar.ZONE_OFFSET, 32400000);
 			tCalendar.set(GregorianCalendar.ERA, 1);
 			tCalendar.set(GregorianCalendar.DST_OFFSET, 0);
@@ -160,7 +160,7 @@ public class RemoteLocalDatetimeChecker {
 					int hour = Integer.parseInt(time[0]);
 					int minute = Integer.parseInt(time[1]);
 					
-					GregorianCalendar tCalendar = new GregorianCalendar ( year, month, day, hour, minute );
+					GregorianCalendar tCalendar = new GregorianCalendar ( year, month - 1, day, hour, minute );
 					tCalendar.set(GregorianCalendar.ZONE_OFFSET, 32400000);
 					tCalendar.set(GregorianCalendar.ERA, 1);
 					tCalendar.set(GregorianCalendar.DST_OFFSET, 0);
