@@ -2,13 +2,13 @@ package org.manalith.ircbot.plugin;
 
 import java.io.File;
 
-import org.manalith.ircbot.BotMain;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
-	protected BotMain bot;
+	protected ManalithBot bot;
 
-	public AbstractBotPlugin(BotMain bot) {
+	public AbstractBotPlugin(ManalithBot bot) {
 		this.bot = bot;
 	}
 

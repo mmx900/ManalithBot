@@ -57,9 +57,9 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-		bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(new BotMain()));
-		bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(new BotMain()));
-		bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(new BotMain()));
+		bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
