@@ -6,14 +6,15 @@
 // which is derived from the license of Manalith bot.
 package org.manalith.ircbot.plugin.CER;
 
-import java.io.File;
 import java.util.GregorianCalendar;
+import java.io.File;
 
 import org.manalith.ircbot.plugin.CER.Exceptions.EmptyTokenStreamException;
 
 public class CERRunner {
 	
 	private String args;
+	private String dataPath;
 	
 	public CERRunner ( )
 	{
@@ -22,6 +23,16 @@ public class CERRunner {
 	public CERRunner ( String newArgs )
 	{
 		this.setArgs( newArgs );
+	}
+	public CERRunner ( String newDataPath, String newArgs )
+	{
+		this.setDataPath(newDataPath);
+		File path = new File(this.getDataPath());
+		
+		if ( !path.exists() )
+			path.mkdirs();
+		
+		this.setArgs(newArgs);
 	}
 	
 	public void setArgs ( String newArgs )
@@ -33,15 +44,23 @@ public class CERRunner {
 		return this.args;
 	}
 	
+	public void setDataPath ( String newDataPath )
+	{
+		this.dataPath = newDataPath;
+	}
+	private String getDataPath ( )
+	{
+		return this.dataPath;
+	}
+	
 	public String run ( )
 	{
 		String result = "";
-		String realpath = this.checkFullDataPath ( );
 		
-		result = this.checkUpdate(realpath);
+		result = this.checkUpdate(this.getDataPath());
 
 		
-		CERInfoProvider cip = new CERInfoProvider ( realpath, this.getArgs() );
+		CERInfoProvider cip = new CERInfoProvider ( this.getDataPath(), this.getArgs() );
 
 		try
 		{
@@ -68,22 +87,6 @@ public class CERRunner {
 		return result;
 	}
 	
-	private String checkFullDataPath ( )
-	{
-		String result = "";
-		
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		String path = loader.getResource("").getPath();
-
-		//System.out.println(path);
-		//*
-		result = path + "org/manalith/ircbot/plugin/CER/data/";
-		File realpath = new File ( result );
-		if ( !realpath.exists() )
-			realpath.mkdirs();
-		
-		return result;
-	}
 	private String checkUpdate ( String realpath )
 	{
 		String result = "";
@@ -134,7 +137,7 @@ public class CERRunner {
 					pm.storeProperties();
 					
 					// update Current Exchange Rate Table.
-					CERTableUpdater updater = new CERTableUpdater ( "http://info.finance.naver.com/marketindex/exchangeList.nhn" );
+					CERTableUpdater updater = new CERTableUpdater ( this.getDataPath(), "http://info.finance.naver.com/marketindex/exchangeList.nhn" );
 					updater.update();
 				}
 			}
