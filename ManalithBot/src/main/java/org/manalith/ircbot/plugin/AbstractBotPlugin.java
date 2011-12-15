@@ -1,13 +1,25 @@
 package org.manalith.ircbot.plugin;
 
+import java.io.File;
+
 import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
 	protected BotMain bot;
-	
-	public AbstractBotPlugin(BotMain bot){
+
+	public AbstractBotPlugin(BotMain bot) {
 		this.bot = bot;
+	}
+
+	public String getResourcePath() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(System.getProperty("user.dir"));
+		builder.append(File.separator);
+		builder.append("data");
+		builder.append(File.separator);
+		builder.append(getClass().getName());
+		return builder.toString();
 	}
 
 	public String getHelp() {
