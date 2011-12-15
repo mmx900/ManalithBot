@@ -7,16 +7,15 @@
 package org.manalith.ircbot.plugin.CER;
 
 import org.manalith.ircbot.BotMain;
-import org.manalith.ircbot.plugin.IBotPlugin;
+import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.plugin.CER.Exceptions.InvalidArgumentException;
 
-public class CERPlugin implements IBotPlugin {
+public class CERPlugin extends AbstractBotPlugin {
 
-	/**
-	 * 
-	 */
-	public CERPlugin() {
+
+	public CERPlugin(BotMain bot) {
+		super(bot);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -84,7 +83,7 @@ public class CERPlugin implements IBotPlugin {
 			try 
 			{
 				ConvertedCommand = ta.convertToCLICommandString();
-				CERRunner runner = new CERRunner ( ConvertedCommand );
+				CERRunner runner = new CERRunner ( this.getResourcePath(), ConvertedCommand );
 				
 				String result = runner.run();
 				if ( result.equals("Help!") )

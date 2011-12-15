@@ -2,16 +2,17 @@ package org.manalith.ircbot.plugin.Calc;
 
 // import org.jibble.pircbot.User;
 import org.manalith.ircbot.BotMain;
-import org.manalith.ircbot.plugin.IBotPlugin;
+import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class CalcPlugin implements IBotPlugin {
+public class CalcPlugin extends AbstractBotPlugin {
 
-	public CalcPlugin ( )
-	{
-		super();
-	}
 	
+	public CalcPlugin(BotMain bot) {
+		super(bot);
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getName() {
 		return "뒷북 계산기";
 	}
