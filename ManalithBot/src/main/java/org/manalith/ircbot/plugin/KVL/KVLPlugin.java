@@ -1,10 +1,15 @@
 package org.manalith.ircbot.plugin.KVL;
 
 import org.manalith.ircbot.BotMain;
-import org.manalith.ircbot.plugin.IBotPlugin;
+import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class KVLPlugin implements IBotPlugin {
+public class KVLPlugin extends AbstractBotPlugin {
+
+	public KVLPlugin(BotMain bot) {
+		super(bot);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String getName() {
