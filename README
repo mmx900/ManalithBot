@@ -25,7 +25,7 @@ CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
 KVL ( Kernel Version List ) is added ( -> darkcircle )
 
 2011. 11. 06
-CER ( Currency Exchance Rate ) is updated
+CER ( Currency Exchange Rate ) is updated
  - NPE 유발 코드 제거됨. ( -> mmx900 ) 
 
 
@@ -33,3 +33,14 @@ CER ( Currency Exchance Rate ) is updated
 Calc is updated ( -> darkcircle )
  > 인자가 하나밖에 없을 때의 문제 수정
  > 팩토리얼 연산 문제 수정
+ > sqrt computation problem is fixed
+
+2011. 11. 12
+CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
+ > Database engine is changed
+   - SQLite -> HSQLDB
+
+2011. 11. 29
+CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
+ > Database engine is set back due to logger problem
+   - HSQLDB -> SQLite

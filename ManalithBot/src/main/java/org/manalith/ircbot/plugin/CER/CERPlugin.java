@@ -71,7 +71,6 @@ public class CERPlugin implements IBotPlugin {
 		String [] command = msg.split("\\s");
 		if ( command[0].equals("!cer") )
 		{
-			
 			String mergedcmd = "";
 			for ( int i = 1; i < command.length ; i++ )
 			{
@@ -102,10 +101,7 @@ public class CERPlugin implements IBotPlugin {
 			{
 				BotMain.BOT.sendLoggedMessage(channel, ae.getMessage());
 			}
-			
-			
 		}
-		
 	}
 
 	/* (non-Javadoc)
