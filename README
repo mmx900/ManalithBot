@@ -44,3 +44,18 @@ CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
 CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
  > Database engine is set back due to logger problem
    - HSQLDB -> SQLite
+
+2011. 12. 16
+Calc is updated ( -> darkcircle )
+ > CalcPlugin's parent object is changed to AbstractBotPlugin
+
+KVL is updated ( -> darkcircle )
+ > KVLTokenAnalyzer's token analyzing problem is fixed
+   ( TextString's subtype was Unknown : FIXED )
+ > KVLPlugin's parent object is changed to AbstractBotPlugin
+
+CER is updated ( -> darkcircle )
+ > Datapath problem is fixed by using getResourcePath()
+   which is a brand new method from AbstractBotPlugin
+ > CERPlugin's parent object is changed to AbstractBotPlugin
+
