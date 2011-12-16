@@ -1,12 +1,13 @@
 package org.manalith.ircbot.plugin.KVL;
 
 import org.manalith.ircbot.BotMain;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class KVLPlugin extends AbstractBotPlugin {
 
-	public KVLPlugin(BotMain bot) {
+	public KVLPlugin(ManalithBot bot) {
 		super(bot);
 		// TODO Auto-generated constructor stub
 	}

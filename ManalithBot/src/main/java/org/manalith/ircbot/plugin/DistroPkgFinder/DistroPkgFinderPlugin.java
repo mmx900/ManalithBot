@@ -1,12 +1,13 @@
 package org.manalith.ircbot.plugin.DistroPkgFinder;
 
 import org.manalith.ircbot.BotMain;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 
-	public DistroPkgFinderPlugin(BotMain bot) {
+	public DistroPkgFinderPlugin(ManalithBot bot) {
 		super(bot);
 		// TODO Auto-generated constructor stub
 	}

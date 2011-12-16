@@ -7,14 +7,15 @@
 package org.manalith.ircbot.plugin.CER;
 
 import org.manalith.ircbot.BotMain;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.plugin.CER.Exceptions.InvalidArgumentException;
+import org.manalith.ircbot.resources.MessageEvent;
 
 public class CERPlugin extends AbstractBotPlugin {
 
 
-	public CERPlugin(BotMain bot) {
+	public CERPlugin(ManalithBot bot) {
 		super(bot);
 		// TODO Auto-generated constructor stub
 	}
