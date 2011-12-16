@@ -58,4 +58,6 @@ CER is updated ( -> darkcircle )
  > Datapath problem is fixed by using getResourcePath()
    which is a brand new method from AbstractBotPlugin
  > CERPlugin's parent object is changed to AbstractBotPlugin
-
+ 
+DistroPkgFinder comes as new feature! ( -> darkcircle )
+ > Debian, Ubuntu, Fedora is supported to find a package we want to know ( !deb, !ubu, !fed )
