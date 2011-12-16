@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.KVL;
 
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -31,13 +30,6 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void onMessage(MessageEvent event) {
 		// TODO Auto-generated method stub
 		String msg = event.getMessage();
@@ -49,29 +41,17 @@ public class KVLPlugin extends AbstractBotPlugin {
 		{
 			if ( command.length >= 3 )
 			{
-				BotMain.BOT.sendLoggedMessage(channel, "Too many arguments!");
+				bot.sendLoggedMessage(channel, "Too many arguments!");
 				return;
 			}
 			
 			KVLRunner runner = new KVLRunner();
 			
 			if ( command.length >= 2 )
-				BotMain.BOT.sendLoggedMessage(channel, runner.run( command[1] ));
+				bot.sendLoggedMessage(channel, runner.run( command[1] ));
 			else
-				BotMain.BOT.sendLoggedMessage(channel, runner.run( "" ));
+				bot.sendLoggedMessage(channel, runner.run( "" ));
 		}
-	}
-
-	@Override
-	public void onPart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onQuit() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

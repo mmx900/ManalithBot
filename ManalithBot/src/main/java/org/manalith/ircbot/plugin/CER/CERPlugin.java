@@ -6,7 +6,6 @@
 // which is derived from the license of Manalith bot.
 package org.manalith.ircbot.plugin.CER;
 
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.plugin.CER.Exceptions.InvalidArgumentException;
@@ -89,35 +88,19 @@ public class CERPlugin extends AbstractBotPlugin {
 				String result = runner.run();
 				if ( result.equals("Help!") )
 				{
-					BotMain.BOT.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());
-					BotMain.BOT.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart2());
+					bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());
+					bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart2());
 				}
 				else
 				{
-					BotMain.BOT.sendLoggedMessage(channel, result);
+					bot.sendLoggedMessage(channel, result);
 				}
 			}
 			catch( InvalidArgumentException ae )
 			{
-				BotMain.BOT.sendLoggedMessage(channel, ae.getMessage());
+				bot.sendLoggedMessage(channel, ae.getMessage());
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#onPart()
-	 */
-	public void onPart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#onQuit()
-	 */
-	public void onQuit() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

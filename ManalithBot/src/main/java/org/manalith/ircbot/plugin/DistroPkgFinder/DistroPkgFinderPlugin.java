@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.DistroPkgFinder;
 
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -35,22 +34,22 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		
 		if ( (command[0].equals("!deb") || command[0].equals("!ubu") || command[0].equals("!fed")) && command.length > 2 )
 		{
-			BotMain.BOT.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
+			bot.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
 		}
 		else if ( command[0].equals("!deb") )
 		{
 			DebianPkgFinderRunner runner = new DebianPkgFinderRunner ( command[1] );
-			BotMain.BOT.sendLoggedMessage(channel, runner.run());
+			bot.sendLoggedMessage(channel, runner.run());
 		}
 		else if ( command[0].equals("!ubu") )
 		{
 			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner ( command[1] );
-			BotMain.BOT.sendLoggedMessage(channel, runner.run());
+			bot.sendLoggedMessage(channel, runner.run());
 		}
 		else if ( command[0].equals("!fed") )
 		{
 			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner ( command[1] );
-			BotMain.BOT.sendLoggedMessage(channel, runner.run());
+			bot.sendLoggedMessage(channel, runner.run());
 		}
 
 	}
