@@ -19,6 +19,7 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 		builder.append("data");
 		builder.append(File.separator);
 		builder.append(getClass().getName());
+		builder.append(File.separator);
 		return builder.toString();
 	}
 
