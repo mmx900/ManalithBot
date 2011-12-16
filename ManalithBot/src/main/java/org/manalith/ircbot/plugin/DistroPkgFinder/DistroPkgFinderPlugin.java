@@ -9,7 +9,6 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 
 	public DistroPkgFinderPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -29,18 +28,12 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name)";
 	}
 	
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-	}
-	
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String message = event.getMessage();
 		String channel = event.getChannel();
 		String [] command = message.split("\\s");
 		
-		if ( command.length > 2 )
+		if ( (command[0].equals("!deb") || command[0].equals("!ubu") || command[0].equals("!fed")) && command.length > 2 )
 		{
 			BotMain.BOT.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
 		}
@@ -59,16 +52,6 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner ( command[1] );
 			BotMain.BOT.sendLoggedMessage(channel, runner.run());
 		}
-
-	}
-	
-	public void onPart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onQuit() {
-		// TODO Auto-generated method stub
 
 	}
 }
