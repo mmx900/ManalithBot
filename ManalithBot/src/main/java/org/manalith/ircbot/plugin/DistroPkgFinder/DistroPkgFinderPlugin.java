@@ -13,13 +13,13 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "뒷북 디스트로 패키지 검색";
+		return "뒷북 패키지 검색";
 	}
 
 	@Override
 	public String getNamespace() {
 		// TODO Auto-generated method stub
-		return null;
+		return "deb|ubu|fed";
 	}
 	
 	public String getHelp () 
