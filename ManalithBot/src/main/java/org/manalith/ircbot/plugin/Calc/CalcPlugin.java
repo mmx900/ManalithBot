@@ -20,11 +20,11 @@ public class CalcPlugin extends AbstractBotPlugin {
 
 	public String getNamespace() {
 		// TODO Auto-generated method stub
-		return null;
+		return "eval";
 	}
 
 	public String getHelp() {
-		return "!계산 (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
+		return "!eval (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 
 	public void onJoin(String channel, String sender, String login,

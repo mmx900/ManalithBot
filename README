@@ -61,3 +61,14 @@ CER is updated ( -> darkcircle )
  
 DistroPkgFinder comes as new feature! ( -> darkcircle )
  > Debian, Ubuntu, Fedora is supported to find a package we want to know ( !deb, !ubu, !fed )
+
+2011. 12. 17
+
+DistroPkgFinder's bug is fixed ( -> setzer )
+ > DistroPkgFinder's three or more word imprudent rejection problem is fixed
+
+AbstractBotPlugin is modified ( -> setzer )
+ > Separator is added at the end of ResourcePath
+
+weather plugin is added ( -> setzer )
+ > This is derivering weather information using google API

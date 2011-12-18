@@ -33,7 +33,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 */
 	public String getNamespace() {
 		// TODO Auto-generated method stub
-		return null;
+		return "cer";
 	}
 
 	/* (non-Javadoc)
