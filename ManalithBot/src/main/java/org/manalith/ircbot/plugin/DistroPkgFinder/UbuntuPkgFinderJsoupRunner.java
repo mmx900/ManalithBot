@@ -90,7 +90,8 @@ public class UbuntuPkgFinderJsoupRunner {
 			result += version + " : ";
 			
 			description = latestElement.toString().split("\\<br\\s\\/>")[0].split("\\:")[1].trim();
-			description = description.substring(0,description.indexOf("["));
+			int a = description.indexOf("[");
+			if ( a != -1) description = description.substring(0,a);
 			
 			result += description;
 
