@@ -73,6 +73,7 @@ public class DebianPkgFinderJsoupRunner {
 			result = pkgname + "-";
 			Elements ExactHits = doc.select("#psearchres").select("ul").get(0).select("li");
 			int elemCnt = ExactHits.size();
+			if ( ExactHits.get(elemCnt - 1).select("a").text().contains("experimental")) elemCnt--;
 			Element latestElement = ExactHits.get(elemCnt - 1);
 
 			String [] verSplit = latestElement.toString().split("\\<br\\s\\/>")[1].split("\\:");
