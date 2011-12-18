@@ -19,12 +19,12 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	@Override
 	public String getNamespace() {
 		// TODO Auto-generated method stub
-		return "deb|ubu|fed";
+		return "deb|ubu|fed|gen";
 	}
 	
 	public String getHelp () 
 	{
-		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name)";
+		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name)";
 	}
 	
 	public void onMessage(MessageEvent event) {
@@ -32,7 +32,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		String [] command = message.split("\\s");
 		
-		if ( (command[0].equals("!deb") || command[0].equals("!ubu") || command[0].equals("!fed")) && command.length > 2 )
+		if ( (command[0].equals("!deb") || command[0].equals("!ubu") || command[0].equals("!fed") || command[0].equals("!gen") ) && command.length > 2 )
 		{
 			bot.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
 		}
@@ -49,6 +49,11 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		else if ( command[0].equals("!fed") )
 		{
 			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner ( command[1] );
+			bot.sendLoggedMessage(channel, runner.run());
+		}
+		else if ( command[0].equals("!gen") )
+		{
+			GentooPkgFinderJsoupRunner runner = new GentooPkgFinderJsoupRunner ( command[1] );
 			bot.sendLoggedMessage(channel, runner.run());
 		}
 
