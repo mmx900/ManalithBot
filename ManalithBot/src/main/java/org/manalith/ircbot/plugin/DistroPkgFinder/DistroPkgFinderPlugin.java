@@ -38,7 +38,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		}
 		else if ( command[0].equals("!deb") )
 		{
-			DebianPkgFinderRunner runner = new DebianPkgFinderRunner ( command[1] );
+			DebianPkgFinderJsoupRunner runner = new DebianPkgFinderJsoupRunner ( command[1] );
 			bot.sendLoggedMessage(channel, runner.run());
 		}
 		else if ( command[0].equals("!ubu") )
