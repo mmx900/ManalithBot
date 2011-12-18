@@ -43,7 +43,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		}
 		else if ( command[0].equals("!ubu") )
 		{
-			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner ( command[1] );
+			UbuntuPkgFinderJsoupRunner runner = new UbuntuPkgFinderJsoupRunner ( command[1] );
 			bot.sendLoggedMessage(channel, runner.run());
 		}
 		else if ( command[0].equals("!fed") )
