@@ -72,3 +72,11 @@ AbstractBotPlugin is modified ( -> setzer )
 
 weather plugin is added ( -> setzer )
  > This is derivering weather information using google API
+
+Gentoo Distro's package searching feature is added
+ > DistroPkgFinder->GentooPkgFinderJsoupRunner
+
+2011. 12. 24
+
+CER is fully implemented again
+ > Complicating command grammar is changed
