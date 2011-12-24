@@ -60,7 +60,8 @@ public class BotMain {
 		bot.addPlugin(new org.manalith.ircbot.plugin.DistroPkgFinder.DistroPkgFinderPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
+		// bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.newCER.newCERPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());

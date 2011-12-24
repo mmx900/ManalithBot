@@ -1,5 +1,5 @@
 //
-// CERPlugin.java
+// newCERPlugin.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
