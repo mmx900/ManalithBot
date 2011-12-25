@@ -11,13 +11,11 @@ public class KVLPlugin extends AbstractBotPlugin {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return "커널 최신버전";
 	}
 
-	@Override
 	public String getNamespace() {
 		// TODO Auto-generated method stub
 		return "kernel";
