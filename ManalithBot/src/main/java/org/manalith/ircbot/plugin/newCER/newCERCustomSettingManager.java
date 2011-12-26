@@ -88,8 +88,8 @@ public class newCERCustomSettingManager extends TokenAnalyzer {
 			chkCode = this.validateToken(this.analysisTokenStream());
 			if ( chkCode != -1 )
 			{
-				result = "알 수 없는 통화단위 : " + this.getCurrencyArgString().split("\\,")[chkCode];
-				result += ", ex) !cer USD, JPY, HKD (각 외환 단위는 콤마로 구분합니다)";
+				result = "알 수 없는 화폐 단위 : " + this.getCurrencyArgString().split("\\,")[chkCode];
+				result += ", ex) !cer USD, JPY, HKD (각 화폐 단위는 콤마로 구분합니다)";
 				return result;
 			}
 			
@@ -111,19 +111,19 @@ public class newCERCustomSettingManager extends TokenAnalyzer {
 			}
 			else if ( this.indexOfContained( userlist, this.getUserNick() ) != -1 )
 			{
-				result += "이미 설정이 등록되어 있습니다. 새로운 설정으로 저장합니다. ";
+				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
 			}
 			
 			customsetlist.setValue(this.getChannel().substring(1) + "." + this.getUserNick(), this.getCurrencyArgString());
 			customsetlist.storeProperties();
 			
-			result += this.getChannel().substring(1) + "채널의 " + this.getUserNick() + "님이 조회할 기본환율 화폐는 " + this.getCurrencyArgString() + "입니다.";
+			result += this.getChannel() + "의 " + this.getUserNick() + "님이 조회할 기본화폐 환율은 " + this.getCurrencyArgString() + "입니다.";
 			
 			
 		}
 		catch ( EmptyTokenStreamException e )
 		{
-			result = "지정한 화폐단위가 없습니댜";
+			result = "지정한 화폐 단위가 없습니댜";
 		}
 		catch ( IOException ioe )
 		{
