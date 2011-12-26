@@ -144,14 +144,14 @@ public class CERInfoProvider {
 	
 	public static String getIRCHelpMessagePart1 ( )
 	{
-		String result = "!cer ( help | lastround ) | !cer ( buycash | cellcash | sendremit | recvremit ) [Amount] [Currency_Unit] | !cer ( show | \"\" ) [Currency_Unit] ";
-		result += "[FieldAbbr] | !cer ( conv | \"\" ) ( [Amount] | [Amount] [Currency_Unit(1)] [Current_Unit(2)] | (1) [Currency_Unit(1)] [Current_Unit(2)] | [Amount] KRW [Currency_Unit(2)] )";
+		String result = "!curex ( help | lastround ) | !cer ( buycash | cellcash | sendremit | recvremit ) [Amount] [Currency_Unit] | !cer ( show | \"\" ) [Currency_Unit] ";
+		result += "[FieldAbbr] | !cer ( conv | \"\" ) ( [Amount] : KRW to USD | [Amount] [Currency_Unit(1)] [Current_Unit(2)] | [Currency_Unit(1)] [Current_Unit(2)] : | [Amount] [Currency_Unit(2)] )";
 		
 		return result;
 	}
 	public static String getIRCHelpMessagePart2 ( )
 	{
-		return "help : 도움말, lastround : 최종갱신회차, buycash : 현찰매수, cellcash : 현찰매도, sendremit : 송금보냄, recvremit : 송금받음, show : 환율보이기, conv : 환율계산";
+		return "help: 도움말, lastround: 최종갱신회차, buycash: 현찰매수, cellcash: 현찰매도, sendremit: 송금보냄, recvremit: 송금받음, show: 환율보이기, conv: 환율계산";
 	}
 	public static String getIRCHelpMessagePart3 ( )
 	{

@@ -92,9 +92,21 @@ public class PropertyManager {
 	public String[] getKeyList ()
 	{
 		Set<String> ss = this.getProp().stringPropertyNames();
-		String [] result = new String[ss.size()];
-		result = (String [])ss.toArray();
-		
-		return result;
+		if ( ss.size() == 0 ) return null;
+		else
+		{ 
+			String [] result = new String[ss.size()];
+			Object [] o = ss.toArray();
+			
+			for ( int i = 0 ; i < ss.size() ; i++ )
+			{
+				result[i] = (String)o[i];
+			}
+			return result;
+		}
+	}
+	public void removeKeyValue ( String key )
+	{
+		this.getProp().remove(key);
 	}
 }
