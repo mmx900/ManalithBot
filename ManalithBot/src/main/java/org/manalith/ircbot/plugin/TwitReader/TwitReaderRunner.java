@@ -1,101 +1,175 @@
 package org.manalith.ircbot.plugin.TwitReader;
 
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONTokener;
 import org.json.JSONObject;
 
-import org.manalith.ircbot.plugin.TwitReader.Exceptions.URLDoesntSpecifiedException;
+import org.manalith.ircbot.plugin.TwitReader.Exceptions.StrDoesntSpecifiedException;
+import org.manalith.ircbot.plugin.TwitReader.Exceptions.UnknownTypeOfStringException;
 
 public class TwitReaderRunner 
 {
-	private String url;
+	private String str;
+	private enum StrType 
+	{
+		TwitURL,
+		UserURL,
+		ScrName,
+		Unknown
+	}
 			
 	public TwitReaderRunner ( )
 	{
-		this.setURL("");
+		this.setStr("");
 	}
-	public TwitReaderRunner ( String newURL )
+	public TwitReaderRunner ( String newStr )
 	{
-		this.setURL(newURL);
+		this.setStr(newStr);
 	}
 	
-	private void setURL ( String newURL )
+	private void setStr ( String newStr )
 	{
-		this.url = newURL;
+		this.str = newStr;
 	}
-	private String getURL ( )
+	private String getStr ( )
 	{
-		return this.url;
+		return this.str;
 	}
 	
-	public String[] run () 
+	public String/*[]*/ run () 
 	{
 
-		String [] result = null;
+		String /*[]*/ result = "";
 		
 		try
 		{
-			if ( !this.validateTwitterURL() )
-			{
-				result = new String[1];
-				result[0] = "잘못된 URL입니다";
-				return result;
-			}
+			result = getText ( this.validateTwitterStr() );
 		}
-		catch ( URLDoesntSpecifiedException e )
+		catch ( StrDoesntSpecifiedException e )
 		{
-			result = new String[1];
-			result[0] = "URL이 비었습니다";
+			//result = new String[1];
+			//result[0]
+			result= "문자열이 없습니다";
 			return result;
 		}
-		
-		// url has no problem
-		
-		try
+		catch ( UnknownTypeOfStringException ue )
 		{
-			JSONObject obj = new JSONObject ( new JSONTokener ( (new StreamDownloader(this.getJSONURL())).downloadDataStream() ) );
-			
-			String written_by = obj.getJSONObject("user").getString("name");
-			String written_datetime = obj.getString("created_at");
-			String Creating_Source = obj.getString("source");
-			String body = obj.getString("text");
-			
-			result = new String[2];
-			result[0] = "작성자 : " + written_by + ", 작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : " + Creating_Source.replaceAll( "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>", "");
-			result[1] = "본문 : " + body;
+			result = "알 수 없는 형식의 문자열입니다";
 		}
-		catch ( Exception e )
-		{
-			result = new String[1];
-			result[0] = e.getMessage();
-			return result;
-		}
+		// */
 		
+		System.out.println(result);
 		return result;		
 	}
 	
-	private boolean validateTwitterURL ( ) throws URLDoesntSpecifiedException
-	{		
-		if ( this.getURL().equals("") )
-			throw new URLDoesntSpecifiedException();
+	private String getText ( StrType type ) 
+	{
+		String result = "";
 		
-		Pattern twitter_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/(\\S)+\\/status\\/[0-9]+");
-		Matcher twitter_url_pattern_matcher = twitter_url_pattern.matcher(this.getURL());
+		if ( type == StrType.TwitURL )
+		{	
+			try
+			{
+				JSONObject obj = new JSONObject ( new JSONTokener ( (new StreamDownloader(this.getJSONURL(type))).downloadDataStream() ) );
+				
+				/*
+				String written_by = obj.getJSONObject("user").getString("name");
+				String written_datetime = obj.getString("created_at");
+				String Creating_Source = obj.getString("source");
+				*/
+				String body = obj.getString("text");
+				
+				//result = new String[2];
+				//result[0] = "작성자 : " + written_by + ", 작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : " + Creating_Source.replaceAll( "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>", "");
+				result/*[1]*/ = "본문 : " + body;
+			}
+			catch ( Exception e )
+			{
+				// result = new String[1];
+				result/*[0]*/ = e.getMessage();
+				return result;
+			}
+		}
+		else if ( type == StrType.UserURL || type == StrType.ScrName )
+		{
+			try
+			{
+				JSONArray arr = new JSONArray ( new JSONTokener ( ( new StreamDownloader(this.getJSONURL(type)) ).downloadDataStream() ) );
+				JSONObject obj = arr.getJSONObject(0);
+					
+				String written_datetime = obj.getString("created_at");
+				String body = obj.getString("text");
+				
+				result = "작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 본문 : " + body;
+			}
+			catch ( NullPointerException e )
+			{
+				result = "페이지가 존재하지 않습니다";
+			}
+			catch ( IOException ie )
+			{
+				result = ie.getMessage();
+			}
+			catch ( JSONException je )
+			{
+				result = je.getMessage();
+			}
+		}
+		return result;
+	}
+
+	private StrType validateTwitterStr ( ) throws StrDoesntSpecifiedException, UnknownTypeOfStringException
+	{
+		StrType result = StrType.Unknown;
 		
-		return twitter_url_pattern_matcher.matches();
+		if ( this.getStr().equals("") )
+			throw new StrDoesntSpecifiedException();
+		
+		Pattern twit_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/(\\S)+\\/status\\/[0-9]+");
+		Matcher twit_url_pattern_matcher = twit_url_pattern.matcher(this.getStr());
+		
+		Pattern user_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?(\\S)+(\\/)?");
+		Matcher user_url_pattern_matcher = user_url_pattern.matcher(this.getStr());
+		
+		Pattern user_scrname_pattern = Pattern.compile("[a-zA-Z0-9\\_]{1,15}");
+		Matcher user_scrname_pattern_matcher = user_scrname_pattern.matcher(this.getStr());
+		
+		if ( twit_url_pattern_matcher.matches() )				result = StrType.TwitURL;
+		else if ( user_url_pattern_matcher.matches() )		result = StrType.UserURL;
+		else if ( user_scrname_pattern_matcher.matches() )	result = StrType.ScrName;
+		
+		if ( result == StrType.Unknown )						throw new UnknownTypeOfStringException();
+		
+		return result;
 	}
 	
-	private String getJSONURL ( )
+	private String getJSONURL ( StrType type )
 	{
-		String [] split_url = this.getURL().split("\\/");
-		String twit_id = split_url[split_url.length - 1];
-		String json_requrl = "https://api.twitter.com/1/statuses/show.json?id=" + twit_id + "&include_entities=false";
+		String json_requrl = "";
+		
+		if ( type == StrType.TwitURL )
+		{
+			String [] split_url = this.getStr().split("\\/");
+			String twit_id = split_url[split_url.length - 1];
+			json_requrl = "https://api.twitter.com/1/statuses/show.json?id=" + twit_id + "&include_entities=false";
+		}		
+		else if ( type == StrType.ScrName )
+			json_requrl = "https://api.twitter.com/1/statuses/user_timeline.json?include_entities=false&include_rts=true&screen_name=" + this.getStr() + "&count=1";
+		else if ( type == StrType.UserURL )
+		{
+			String [] userurl = this.getStr().split("\\/");
+			String scrname = userurl[userurl.length - 1];
+			json_requrl = "https://api.twitter.com/1/statuses/user_timeline.json?include_entities=false&include_rts=true&screen_name=" + scrname + "&count=1";
+		}
 		
 		return json_requrl;
 	}
@@ -191,7 +265,6 @@ public class TwitReaderRunner
 
 		return result;
 	}
-	
 	private int indexOf ( String [] str, String value )
 	{
 		int result = -1;

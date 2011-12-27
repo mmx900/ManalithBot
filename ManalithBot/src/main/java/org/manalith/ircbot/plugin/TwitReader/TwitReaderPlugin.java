@@ -49,14 +49,15 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 			else
 			{
 				TwitReaderRunner runner = new TwitReaderRunner ( command[1] );
-				String [] result = runner.run();
-				
+				String /*[]*/ result = runner.run();
+				/*
 				int length = result.length;
 				
 				for ( int i = 0 ; i < length ; i++ )
-				{
-					bot.sendLoggedMessage(channel, result[i] );
-				}
+				{*/
+					bot.sendLoggedMessage(channel, result/*[i]*/ );
+				//}
+				
 			}
 		}
 	}

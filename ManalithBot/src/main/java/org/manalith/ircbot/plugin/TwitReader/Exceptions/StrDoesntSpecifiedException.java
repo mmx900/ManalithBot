@@ -1,10 +1,10 @@
 package org.manalith.ircbot.plugin.TwitReader.Exceptions;
 
-public class URLDoesntSpecifiedException extends Exception {
+public class StrDoesntSpecifiedException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public URLDoesntSpecifiedException ( )
+	public StrDoesntSpecifiedException ( )
 	{
 		super ( "URL does not specified");
 	}
