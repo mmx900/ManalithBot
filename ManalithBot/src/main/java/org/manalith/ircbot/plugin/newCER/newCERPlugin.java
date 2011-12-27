@@ -69,7 +69,8 @@ public class newCERPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		
 		String [] command = msg.split("\\s");
-		if ( command[0].substring(0,6).equals("!curex") )
+		if ( command[0].length() < 6 ) return;
+		else if ( command[0].substring(0,6).equals("!curex") )
 		{
 			String [] subcmd = command[0].split("\\:");
 			if ( !subcmd[0].equals("!curex") ) return;

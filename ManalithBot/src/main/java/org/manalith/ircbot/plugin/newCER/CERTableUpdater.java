@@ -105,7 +105,8 @@ public class CERTableUpdater {
 	
 	public void update() throws IOException, SQLException, ClassNotFoundException, FileDoesntSpecifiedException
 	{
-		if ( this.checkLocalLastRoundExpired() )
+		boolean data = this.checkLocalLastRoundExpired();
+		if ( data )
 		{
 			this.updateLastRound();
 			this.updateDataTable();
