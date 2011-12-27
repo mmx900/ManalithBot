@@ -134,10 +134,10 @@ public class TwitReaderRunner
 		if ( this.getStr().equals("") )
 			throw new StrDoesntSpecifiedException();
 		
-		Pattern twit_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/(\\S)+\\/status\\/[0-9]+");
+		Pattern twit_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+");
 		Matcher twit_url_pattern_matcher = twit_url_pattern.matcher(this.getStr());
 		
-		Pattern user_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?(\\S)+(\\/)?");
+		Pattern user_url_pattern = Pattern.compile("http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}");
 		Matcher user_url_pattern_matcher = user_url_pattern.matcher(this.getStr());
 		
 		Pattern user_scrname_pattern = Pattern.compile("[a-zA-Z0-9\\_]{1,15}");
