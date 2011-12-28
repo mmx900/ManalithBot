@@ -69,7 +69,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 						.attr("data");
 
 				return "[" + keyword + "] " + condition + ". 온도 :" + temp
-						+ ", " + humidity + ", " + wind_condition;
+						+ "℃, " + humidity + ", " + wind_condition;
 			} else {
 				return "[" + keyword
 						+ "] 지명을 찾을 수 없습니다. 영문 지명이 정확한지 다시 확인해주세요.";
