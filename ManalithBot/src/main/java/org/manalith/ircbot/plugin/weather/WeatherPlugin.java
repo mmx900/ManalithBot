@@ -68,7 +68,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 				String wind_condition = conditions.select("wind_condition")
 						.attr("data");
 
-				return "[" + keyword + "] " + condition + ". 온도 :" + temp
+				return "[" + keyword + "] " + condition + ". 온도: " + temp
 						+ "℃, " + humidity + ", " + wind_condition;
 			} else {
 				return "[" + keyword
