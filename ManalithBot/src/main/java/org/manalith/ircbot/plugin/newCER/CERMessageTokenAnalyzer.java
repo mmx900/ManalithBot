@@ -385,6 +385,8 @@ public class CERMessageTokenAnalyzer {
 		{
 			if ( len == 1 )
 			{
+				if ( arrTokenSubtype[i] == TokenSubtype.Unknown )
+					throw new InvalidArgumentException("알 수 없는 통화단위");
 				result += "--show " + tokens[i++] + " cr";
 				return result;
 			}
@@ -392,11 +394,16 @@ public class CERMessageTokenAnalyzer {
 			{
 				if ( arrTokenType[i+1] == TokenType.IRCFieldAbbr )
 				{
+					if ( arrTokenSubtype[i+1] == TokenSubtype.Unknown )
+						throw new InvalidArgumentException("알 수 없는 필드약자");
 					result += "--show " + tokens[i] + " " + tokens[i+1];
 					return result;
 				}
 				else if ( arrTokenType[i+1] == TokenType.IRCCurrencyUnit )
 				{
+					if ( arrTokenSubtype[i+1] == TokenSubtype.Unknown )
+						throw new InvalidArgumentException("알 수 없는 통화단위");
+					
 					result += "--convert 1 " + tokens[i] + " " + tokens[i+1];
 					return result;
 				}

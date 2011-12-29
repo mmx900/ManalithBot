@@ -25,14 +25,25 @@ public class WaitBDBotPlugin extends AbstractBotPlugin {
 	
 	public void onMessage(MessageEvent event)
 	{
-		String channel = event.getChannel(); 
+		String channel = event.getChannel();
+		String sender = event.getSender();
+		String message = event.getMessage();
 		User[] users = BotMain.BOT.getUsers(channel);
+
 		
 		for(User u : users){
 			if(u.getNick().equals("뒷북요정")){
 				bot.sendLoggedMessage(channel, "후다닥 =3");
 				System.exit(0);
 			}
+		}
+		
+		String [] messages = message.split("\\t");
+		
+		if ( sender.equals("뒷북요정") && messages[0].trim().equals("(먼산)") ) 
+		{
+			bot.sendLoggedMessage(channel, "후다닥 =3");
+			System.exit(0);
 		}
 	}
 	

@@ -81,8 +81,9 @@ public class TwitReaderRunner
 			{
 				JSONObject obj = new JSONObject ( new JSONTokener ( (new StreamDownloader(this.getJSONURL(type))).downloadDataStream() ) );
 				
-				/*
+				
 				String written_by = obj.getJSONObject("user").getString("name");
+				/*
 				String written_datetime = obj.getString("created_at");
 				String Creating_Source = obj.getString("source");
 				*/
@@ -90,7 +91,7 @@ public class TwitReaderRunner
 				
 				//result = new String[2];
 				//result[0] = "작성자 : " + written_by + ", 작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : " + Creating_Source.replaceAll( "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>", "");
-				result/*[1]*/ = "본문 : " + body;
+				result/*[1]*/ = "작성자 : " + written_by + ", 본문 : " + body;
 			}
 			catch ( Exception e )
 			{

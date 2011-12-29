@@ -23,7 +23,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public String getNamespace() {
-		return NAMESPACE;
+		return NAMESPACE.substring(1);
 	}
 
 	public String getHelp() {
