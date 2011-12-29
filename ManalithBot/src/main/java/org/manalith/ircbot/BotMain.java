@@ -58,9 +58,11 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-		//bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.WaitBDBot.WaitBDBotPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.WaitBDBot.WaitBDBotPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.TwitReader.TwitReaderPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.NvidiaDriverNews.NvidiaDriverNewsPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.DistroPkgFinder.DistroPkgFinderPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
@@ -77,7 +79,7 @@ public class BotMain {
 		//bot.addPlugin(new org.manalith.ircbot.plugin.relay.RelayPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.setzer.SetzerPlugin());
 
-		//bot.changeNick("앞북요정");
+		bot.changeNick("앞북요정");
 		final StringTokenizer st = new StringTokenizer(
 				config.getDefaultChannels(), ",");
 		while (st.hasMoreTokens())
