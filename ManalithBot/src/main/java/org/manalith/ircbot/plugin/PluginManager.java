@@ -41,17 +41,20 @@ public class PluginManager{
 		return list;
 	}
 	
-	public String getPluginInfo(){
+	public String getPluginInfo()
+	{
 		StringBuilder sb = new StringBuilder();
 		String name = "";
 		int i = 0;									// To make well-formed message
 		for(IBotPlugin p : list){
-			if ( i != 0 ) 	sb.append(", "); // To make well-formed message
-			else				i++;				//
-			
 			name = p.getName();
 			if ( name != null )
+			{
+				if ( i != 0 ) 	sb.append(", "); // To make well-formed message
+				else				i++;				//
+			
 				sb.append( name + "(" + p.getNamespace() + ")");
+			}
 		}
 		
 		return sb.toString();
