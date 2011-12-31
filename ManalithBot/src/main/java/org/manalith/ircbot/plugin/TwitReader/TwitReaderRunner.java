@@ -67,7 +67,7 @@ public class TwitReaderRunner
 		}
 		// */
 		
-		System.out.println(result);
+		// System.out.println(result);
 		return result;		
 	}
 	
@@ -105,12 +105,19 @@ public class TwitReaderRunner
 			try
 			{
 				JSONArray arr = new JSONArray ( new JSONTokener ( ( new StreamDownloader(this.getJSONURL(type)) ).downloadDataStream() ) );
-				JSONObject obj = arr.getJSONObject(0);
+				if ( arr.length() == 0 )
+				{
+					result = "게시물이 존재하지 않습니다";
+				}
+				else
+				{
+					JSONObject obj = arr.getJSONObject(0);
 					
-				String written_datetime = obj.getString("created_at");
-				String body = obj.getString("text");
+					String written_datetime = obj.getString("created_at");
+					String body = obj.getString("text");
 				
-				result = "작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 본문 : " + body;
+					result = "작성시각 : " + getDateTimeinKoreanFormat(written_datetime) + ", 본문 : " + body;
+				}
 			}
 			catch ( NullPointerException e )
 			{
