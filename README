@@ -72,3 +72,33 @@ AbstractBotPlugin is modified ( -> setzer )
 
 weather plugin is added ( -> setzer )
  > This is derivering weather information using google API
+
+Gentoo Distro's package searching feature is added ( -> darkcircle )
+ > DistroPkgFinder->GentooPkgFinderJsoupRunner
+
+2011. 12. 24
+
+CER is fully implemented again ( -> darkcircle )
+ > Complicating command grammar is changed
+
+2011. 12. 25
+
+fdbot is added ( -> darkcircle )
+ > This module is for bot waiting original bot
+
+WaitBDBot is added ( -> darkcircle )
+ > This module is for bot waiting original bot. if original bot joined in the channel, this module will terminate itself
+
+2011. 12. 27
+
+TwitReader is added ( -> darkcircle )
+ > This module helps to show text of twitter's article
+  ex ) !twit https://twitter.com/#!/somebody/status/xxxxxxxxxxxxxxxxxxxxx
+       => 작성자: ... 작성시각: ... 작성 클라이언트: ...
+	      본문: ...
+
+newCER command is changed to "!curex"
+
+Custom setting feature is added to newCER
+ > !curex:sub [list_of_comma_separated_currency_unit] : set a custom view for yourself
+ > !curex:unsub : remove your custom view

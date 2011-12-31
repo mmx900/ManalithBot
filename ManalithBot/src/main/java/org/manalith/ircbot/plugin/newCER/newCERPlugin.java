@@ -4,17 +4,16 @@
 //
 // This source can be distributed under the terms of GNU General Public License version 3
 // which is derived from the license of Manalith bot.
-package org.manalith.ircbot.plugin.CER;
+package org.manalith.ircbot.plugin.newCER;
 
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.plugin.CER.Exceptions.InvalidArgumentException;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class CERPlugin extends AbstractBotPlugin {
+public class newCERPlugin extends AbstractBotPlugin {
 
 
-	public CERPlugin(ManalithBot bot) {
+	public newCERPlugin(ManalithBot bot) {
 		super(bot);
 		// TODO Auto-generated constructor stub
 	}
@@ -33,21 +32,23 @@ public class CERPlugin extends AbstractBotPlugin {
 	 */
 	public String getNamespace() {
 		// TODO Auto-generated method stub
-		return "cer";
+		return "curex";
 	}
 
 	/* (non-Javadoc)
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		String result = "!cer ( [Option] [Currency_Unit] [FieldAbbr/Amount] ) [Option] : show, lastround, convfrom, convto, buycash, cellcash, sendremit, recvremit ";
+		/*
+		String result = "!curex ( [Option] [Currency_Unit] [FieldAbbr/Amount] ) [Option] : show, lastround, convfrom, convto, buycash, cellcash, sendremit, recvremit ";
 		result += "[Currency_Unit] : USD:U.S, EUR:Europe, JPY:Japan, CNY:China, HKD:HongKong, TWD:Taiwan, GBP:Great Britain, CAD:Canada, CHF:Switzerland, SEK:Sweden, ";
 		result += "AUD:Australia, NZD:NewZealand, ISL:Israel, DKK:Denmark, NOK:Norway, SAR:Saudi Arabia, KWD:Kuweit, BHD:Bahrain, AED:United of Arab Emirates, ";
 		result += "JOD:Jordan, EGP:Egypt, THB:Thailand, SGD:Singapore, MYR:Malaysia, IDR:Indonesia, BND:Brunei, INR:India, PKR:Pakistan, BDT:Bangladesh, PHP:Philippine, ";
 		result += "MXN:Mexico, BRL:Brazil, VND:Vietnam, ZAR:Republic of South Africa, RUB:Russia, HUF:Hungary, PLN:Poland ";
 		result += "[FieldAbbr] (show 명령에만 해당) 모두보기, 매매기준, 현찰매수, 현찰매도, 송금보냄, 송금받음, 환수수료, 대미환산 ";
 		result += "[Amount] 금액";
-		return result;
+		*/
+		return "(null)";
 	}
 
 	/* (non-Javadoc)
@@ -68,39 +69,67 @@ public class CERPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		
 		String [] command = msg.split("\\s");
-		if ( command[0].equals("!cer") )
+		if ( command[0].length() < 6 ) return;
+		else if ( command[0].substring(0,6).equals("!curex") )
 		{
-			String mergedcmd = "";
-			for ( int i = 1; i < command.length ; i++ )
+			String [] subcmd = command[0].split("\\:");
+			if ( !subcmd[0].equals("!curex") ) return;
+			else
 			{
-				mergedcmd += command[i];
-				if ( i != command.length - 1 ) mergedcmd += " ";
-			}
-			
-			CERMessageTokenAnalyzer ta = new CERMessageTokenAnalyzer ( mergedcmd );
-			String ConvertedCommand = "";
-		
-			try 
-			{
-				ConvertedCommand = ta.convertToCLICommandString();
-				CERRunner runner = new CERRunner ( this.getResourcePath(), ConvertedCommand );
-				
-				String result = runner.run();
-				if ( result.equals("Help!") )
+				if ( subcmd.length == 1 )
 				{
-					bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());
-					bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart2());
+					String mergedcmd = "";
+					for ( int i = 1; i < command.length ; i++ )
+					{
+						mergedcmd += command[i];
+						if ( i != command.length - 1 ) mergedcmd += " ";
+					}
+					
+					try 
+					{
+						newCERRunner runner = new newCERRunner ( event.getSender(), this.getResourcePath(), mergedcmd );
+						
+						String result = runner.run();
+						if ( result.equals("Help!") )
+						{
+							bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart1());
+							bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart2());
+							bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart3());
+							bot.sendLoggedMessage(channel, CERInfoProvider.getIRCHelpMessagePart4());
+						}
+						else
+						{
+							bot.sendLoggedMessage(channel, result);
+						}
+					}
+					catch( Exception e )
+					{
+						bot.sendLoggedMessage(channel, e.getMessage());
+					}
 				}
+				else if ( subcmd.length > 2) return;
 				else
 				{
-					bot.sendLoggedMessage(channel, result);
+					// remerge strings separated by space.
+					String userNick = event.getSender();
+					
+					String arg = "";
+					for ( int i = 1; i < command.length ; i++ )	
+					{
+						if ( command[i].equals(" ") ) continue;
+						arg += command[i];
+					}
+						
+					
+					newCERCustomSettingManager csMan = new newCERCustomSettingManager ( this.getResourcePath(), channel, userNick, arg );
+					
+					if ( subcmd[1].equals("sub") )
+						bot.sendLoggedMessage(channel, csMan.addUserSetting() );
+					else if ( subcmd[1].equals("unsub") )
+						bot.sendLoggedMessage(channel, csMan.removeUserSetting() );
+					else 	return;
 				}
-			}
-			catch( InvalidArgumentException ae )
-			{
-				bot.sendLoggedMessage(channel, ae.getMessage());
 			}
 		}
 	}
-
 }

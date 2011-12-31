@@ -21,7 +21,7 @@ public class CERMessageTokenAnalyzer {
 	}
 	public CERMessageTokenAnalyzer ( String newTokenString )
 	{
-		this.setTokenString ( newTokenString) ;
+		this.setTokenString ( newTokenString ) ;
 	}
 	
 	public void setTokenString ( String newTokenString )
