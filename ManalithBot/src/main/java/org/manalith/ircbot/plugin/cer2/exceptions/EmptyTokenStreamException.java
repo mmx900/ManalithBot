@@ -8,14 +8,10 @@
 package org.manalith.ircbot.plugin.cer2.exceptions;
 
 public class EmptyTokenStreamException extends Exception {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1;
 
-	public EmptyTokenStreamException ()
-	{
+	public EmptyTokenStreamException() {
 		super("Token stream is empty");
 	}
-	
+
 }

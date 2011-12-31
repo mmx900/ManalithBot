@@ -9,24 +9,5 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 
 public enum TokenType {
 	// under 7 elements are for debian page
-	Table,
-	TBody,
-	Th,
-	Tr,
-	Td,
-	Img,
-	Div,
-	Dl,
-	Dt,
-	H2,
-	H3,
-	Ul,
-	Li,
-	Br,
-	A,
-	P,
-	Select,
-	Option,
-	TextString,
-	Unknown
+	Table, TBody, Th, Tr, Td, Img, Div, Dl, Dt, H2, H3, Ul, Li, Br, A, P, Select, Option, TextString, Unknown
 }

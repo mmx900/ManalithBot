@@ -8,24 +8,5 @@
 package org.manalith.ircbot.plugin.kvl;
 
 public enum TokenSubtype {
-	TableOpen,
-	TableClose,
-	TBobyOpen,
-	TBodyClose,
-	TROpen,
-	TRClose,
-	TDOpen,
-	TDClose,
-	DivOpen,
-	DivClose,
-	SpanOpen,
-	SpanClose,
-	EMOpen,
-	EMClose,
-	StrongOpen,
-	StrongClose,
-	TextString,
-	AmountNatural,
-	AmountFp,
-	Unknown,
+	TableOpen, TableClose, TBobyOpen, TBodyClose, TROpen, TRClose, TDOpen, TDClose, DivOpen, DivClose, SpanOpen, SpanClose, EMOpen, EMClose, StrongOpen, StrongClose, TextString, AmountNatural, AmountFp, Unknown,
 }

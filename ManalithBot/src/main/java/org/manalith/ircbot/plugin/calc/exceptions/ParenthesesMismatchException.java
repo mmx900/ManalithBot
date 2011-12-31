@@ -8,11 +8,10 @@
 package org.manalith.ircbot.plugin.calc.exceptions;
 
 public class ParenthesesMismatchException extends Exception {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	public ParenthesesMismatchException ( )
-	{
-		super ("Pairs of parentheses did not match.");
+
+	public ParenthesesMismatchException() {
+		super("Pairs of parentheses did not match.");
 	}
 }

@@ -1,4 +1,5 @@
 package org.manalith.ircbot.plugin.calc;
+
 // TokenUnit.java 
 //
 // TokenUnit can have "a Token string", token type information and token subtype information.
@@ -10,54 +11,52 @@ public class TokenUnit {
 	private TokenType Type;
 	private TokenSubtype Subtype;
 	private String TokenStr;
-	
-	public TokenUnit ( )
-	{
-		setTokenType ( TokenType.Unknown );
-		setTokenSubtype ( TokenSubtype.Unknown );
-		setTokenString ( "" );
+
+	public TokenUnit() {
+		setTokenType(TokenType.Unknown);
+		setTokenSubtype(TokenSubtype.Unknown);
+		setTokenString("");
 	}
-	public TokenUnit ( String newTokenStr )
-	{
-		setTokenType ( TokenType.Unknown );
-		setTokenSubtype ( TokenSubtype.Unknown );
-		setTokenString ( newTokenStr );
+
+	public TokenUnit(String newTokenStr) {
+		setTokenType(TokenType.Unknown);
+		setTokenSubtype(TokenSubtype.Unknown);
+		setTokenString(newTokenStr);
 	}
-	public TokenUnit ( TokenType newTokenType, TokenSubtype newTokenSubtype, String newTokenStr )
-	{
-		setTokenType ( newTokenType );
-		setTokenSubtype ( newTokenSubtype );
-		setTokenString ( newTokenStr );
+
+	public TokenUnit(TokenType newTokenType, TokenSubtype newTokenSubtype,
+			String newTokenStr) {
+		setTokenType(newTokenType);
+		setTokenSubtype(newTokenSubtype);
+		setTokenString(newTokenStr);
 	}
-	
-	public void setTokenType ( TokenType newTokenType )
-	{
+
+	public void setTokenType(TokenType newTokenType) {
 		this.Type = newTokenType;
 	}
-	public void setTokenSubtype ( TokenSubtype newTokenSubtype )
-	{
+
+	public void setTokenSubtype(TokenSubtype newTokenSubtype) {
 		this.Subtype = newTokenSubtype;
 	}
-	public void setTokenString ( String newTokenStr )
-	{
+
+	public void setTokenString(String newTokenStr) {
 		this.TokenStr = newTokenStr;
 	}
-	
-	public TokenType getTokenType ( )
-	{
+
+	public TokenType getTokenType() {
 		return this.Type;
 	}
-	public TokenSubtype getTokenSubtype ( )
-	{
+
+	public TokenSubtype getTokenSubtype() {
 		return this.Subtype;
 	}
-	public String getTokenString ( )
-	{
+
+	public String getTokenString() {
 		return this.TokenStr;
 	}
-	
-	public String toString ( )
-	{
-		return this.TokenStr + " : " + this.Type.toString() + "(" + this.Subtype.toString() +")";
+
+	public String toString() {
+		return this.TokenStr + " : " + this.Type.toString() + "("
+				+ this.Subtype.toString() + ")";
 	}
 }

@@ -31,15 +31,15 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		String command = NAMESPACE;//"!날씨";
+		String command = NAMESPACE;// "!날씨";
 
 		String message = event.getMessage();
 		String channel = event.getChannel();
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
 		} else if (message.equals(command)) {
-			bot.sendLoggedMessage(channel,
-					this.getHelp());//String.format("사용법 : %s [영문 지명]", command));
+			bot.sendLoggedMessage(channel, this.getHelp());// String.format("사용법 : %s [영문 지명]",
+															// command));
 		} else if (message.startsWith(command)
 				&& message.length() >= command.length() + 2) {
 			bot.sendLoggedMessage(channel,

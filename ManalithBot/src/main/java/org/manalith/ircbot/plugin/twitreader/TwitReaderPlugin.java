@@ -17,43 +17,36 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	public String getNamespace() {
 		return "twit";
 	}
-	
-	public String getHelp ()
-	{
+
+	public String getHelp() {
 		return "!twit (URL)";
 	}
-	
+
 	@Override
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
-		
-		String [] command = msg.split("\\s");
-		
-		if ( command[0].equals("!twit") )
-		{
-			if ( command.length == 1 )
-			{
+
+		String[] command = msg.split("\\s");
+
+		if (command[0].equals("!twit")) {
+			if (command.length == 1) {
 				bot.sendLoggedMessage(channel, this.getHelp());
-			}
-			else if ( command.length > 2 )
-			{
+			} else if (command.length > 2) {
 				bot.sendLoggedMessage(channel, "불필요한 옵션이 있습니다.");
-			}
-			else
-			{
-				TwitReaderRunner runner = new TwitReaderRunner ( command[1] );
-				String /*[]*/ result = runner.run();
+			} else {
+				TwitReaderRunner runner = new TwitReaderRunner(command[1]);
+				String /* [] */result = runner.run();
 				/*
-				int length = result.length;
-				
-				for ( int i = 0 ; i < length ; i++ )
-				{*/
-					bot.sendLoggedMessage(channel, result/*[i]*/ );
-				//}
-				
+				 * int length = result.length;
+				 * 
+				 * for ( int i = 0 ; i < length ; i++ ) {
+				 */
+				bot.sendLoggedMessage(channel, result/* [i] */);
+				// }
+
 			}
 		}
 	}
-	
+
 }

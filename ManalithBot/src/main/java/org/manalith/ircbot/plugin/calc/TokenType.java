@@ -1,4 +1,5 @@
 package org.manalith.ircbot.plugin.calc;
+
 // TokenType.java 
 //
 // This enumeration means token type ID
@@ -7,12 +8,5 @@ package org.manalith.ircbot.plugin.calc;
 // darkcircle.0426@gmail.com
 
 public enum TokenType {
-	Unknown,
-	Integer,
-	FlPoint,
-	Operatr,
-	Parents,
-	TriangleFunc,
-	BaseConvFunc,
-	MathematFunc
+	Unknown, Integer, FlPoint, Operatr, Parents, TriangleFunc, BaseConvFunc, MathematFunc
 };

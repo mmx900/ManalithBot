@@ -29,17 +29,18 @@ public class SamplePlugin implements IBotPlugin {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
-		
-		if(message.equals("!친반묘")){
+
+		if (message.equals("!친반묘")) {
 			User[] users = BotMain.BOT.getUsers(channel);
 			boolean isMyo = false;
-			for(User u : users){
-				if(u.getNick().equals("myojok")){
+			for (User u : users) {
+				if (u.getNick().equals("myojok")) {
 					isMyo = true;
 					break;
 				}
 			}
-			BotMain.BOT.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!" : "(두리번) +_+/ 멸묘!");
+			BotMain.BOT.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!"
+					: "(두리번) +_+/ 멸묘!");
 			event.setExecuted(true);
 		}
 	}

@@ -7,12 +7,11 @@
 
 package org.manalith.ircbot.plugin.calc.exceptions;
 
-public class NotImplementedException extends Exception{
+public class NotImplementedException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public NotImplementedException()
-	{
+	public NotImplementedException() {
 		super("This feature is not implemented.");
 	}
 }

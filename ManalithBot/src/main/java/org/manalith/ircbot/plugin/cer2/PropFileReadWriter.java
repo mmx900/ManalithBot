@@ -5,28 +5,25 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 public class PropFileReadWriter extends FileReadWriter {
-	public PropFileReadWriter () throws FileNotFoundException
-	{
-		super ();
+	public PropFileReadWriter() throws FileNotFoundException {
+		super();
 	}
-	
-	public PropFileReadWriter ( String newFilename ) throws FileNotFoundException
-	{
-		super ( newFilename );
+
+	public PropFileReadWriter(String newFilename) throws FileNotFoundException {
+		super(newFilename);
 	}
-	
-	public Properties bringUpPropertyFromFile () throws IOException
-	{
+
+	public Properties bringUpPropertyFromFile() throws IOException {
 		this.allocateStreamReader();
-		Properties result = new Properties();	
+		Properties result = new Properties();
 		result.load(this.getStreamReaderResource());
-		
+
 		return result;
 	}
-	
-	public void pushUpPropertyToFile (Properties newProperties) throws IOException 
-	{
-		if ( !this.exists() )
+
+	public void pushUpPropertyToFile(Properties newProperties)
+			throws IOException {
+		if (!this.exists())
 			this.createFile();
 
 		this.allocateStreamWriter();

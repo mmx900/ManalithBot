@@ -8,15 +8,5 @@
 package org.manalith.ircbot.plugin.kvl;
 
 public enum TokenType {
-	TBody,
-	Table,
-	TR,
-	TD,
-	Div,
-	Span,
-	EM,
-	STRONG,
-	TextString,
-	Amount,
-	Unknown
+	TBody, Table, TR, TD, Div, Span, EM, STRONG, TextString, Amount, Unknown
 }

@@ -7,12 +7,11 @@
 
 package org.manalith.ircbot.plugin.calc.exceptions;
 
-public class EmptyTokenStreamException extends Exception{
-	
+public class EmptyTokenStreamException extends Exception {
+
 	private static final long serialVersionUID = 1L;
 
-	public EmptyTokenStreamException ()
-	{
-		super ("Token Stream is empty.");
+	public EmptyTokenStreamException() {
+		super("Token Stream is empty.");
 	}
 }

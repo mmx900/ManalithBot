@@ -11,26 +11,24 @@
 package org.manalith.ircbot.plugin.kvl;
 
 public class KVLMain {
-	public static void main (String [] args)
-	{
+	public static void main(String[] args) {
 		// inger.
-		
+
 		KVLTable kvlTable = null;
-		try
-		{
-			StreamDownloader d = new StreamDownloader("http://kernel.org/index.shtml");
-			KVLTableTokenAnalyzer tAnalyzer = new KVLTableTokenAnalyzer(d.downloadDataStream());
+		try {
+			StreamDownloader d = new StreamDownloader(
+					"http://kernel.org/index.shtml");
+			KVLTableTokenAnalyzer tAnalyzer = new KVLTableTokenAnalyzer(
+					d.downloadDataStream());
 			TokenArray array = tAnalyzer.analysisTokenStream();
-			
+
 			// TODO
-			KVLTableBuilder tBuilder = new KVLTableBuilder ( array );
+			KVLTableBuilder tBuilder = new KVLTableBuilder(array);
 			kvlTable = tBuilder.generateKernelVersionTable();
-			
+
 			System.out.println(kvlTable.getLatestVersions());
-		}
-		catch ( Exception e )
-		{
-			System.out.println ( e.getMessage() );
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }

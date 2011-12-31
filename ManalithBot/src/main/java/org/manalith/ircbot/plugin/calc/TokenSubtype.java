@@ -1,4 +1,5 @@
 package org.manalith.ircbot.plugin.calc;
+
 // TokenSubtype.java 
 //
 // This enumeration means token subtype ID
@@ -7,32 +8,5 @@ package org.manalith.ircbot.plugin.calc;
 // darkcircle.0426@gmail.com
 
 public enum TokenSubtype {
-	Unknown,
-	Binary,
-	Octal,
-	Decimal,
-	Hexadec,
-	SpFltPoint,
-	DpFltPoint,
-	ExpFltPoint,
-	Plus,
-	Minus,
-	Times,
-	Divide,
-	Modulus,
-	Power,
-	Factorial,
-	Left_Parenthesis,
-	Righ_Parenthesis,
-	Sine,
-	Cosine,
-	Tangent,
-	ArcSine,
-	ArcCosine,
-	ArcTangent,
-	ToBin,
-	ToOct,
-	ToDec,
-	ToHex,
-	Sqrt
+	Unknown, Binary, Octal, Decimal, Hexadec, SpFltPoint, DpFltPoint, ExpFltPoint, Plus, Minus, Times, Divide, Modulus, Power, Factorial, Left_Parenthesis, Righ_Parenthesis, Sine, Cosine, Tangent, ArcSine, ArcCosine, ArcTangent, ToBin, ToOct, ToDec, ToHex, Sqrt
 }

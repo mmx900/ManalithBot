@@ -7,7 +7,6 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class CalcPlugin extends AbstractBotPlugin {
 
-	
 	public CalcPlugin(ManalithBot bot) {
 		super(bot);
 	}
@@ -27,19 +26,14 @@ public class CalcPlugin extends AbstractBotPlugin {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
-		String [] command = message.split("\\s");
-		
-		if ( command[0].equals("!eval") )
-		{
-			if ( command.length == 1 )
-			{
+		String[] command = message.split("\\s");
+
+		if (command[0].equals("!eval")) {
+			if (command.length == 1) {
 				BotMain.BOT.sendLoggedMessage(channel, "입력한 식이 없습니다.");
-			}
-			else 
-			{
+			} else {
 				String expr = "";
-				for ( int i = 1 ; i < command.length ; i++ )
-				{
+				for (int i = 1; i < command.length; i++) {
 					expr += command[i];
 				}
 				BotMain.BOT.sendLoggedMessage(channel, CalcRunner.run(expr));

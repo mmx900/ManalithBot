@@ -10,49 +10,44 @@ import org.manalith.ircbot.plugin.distropkgfinder.TokenUnit;
 import org.manalith.ircbot.plugin.distropkgfinder.exceptions.EmptyTokenStreamException;
 
 public class FedoraRpmFindTokenAnalyzer extends TokenAnalyzer {
-	
-	public FedoraRpmFindTokenAnalyzer ( )
-	{
-		super ();
+
+	public FedoraRpmFindTokenAnalyzer() {
+		super();
 	}
-	
-	public FedoraRpmFindTokenAnalyzer ( String newData )
-	{
+
+	public FedoraRpmFindTokenAnalyzer(String newData) {
 		this.data = newData;
 	}
-	
+
 	@Override
 	public TokenType getTokenType(String TokenString) {
 		TokenType result = TokenType.Unknown;
-		
+
 		Pattern table_pattern = Pattern.compile("\\<[\\/]?table\\>");
 		Pattern tbody_pattern = Pattern.compile("\\<[\\/]?tbody\\>");
-		Pattern tr_pattern = Pattern.compile("\\<[\\/]?tr((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>");
-		Pattern td_pattern = Pattern.compile("\\<[\\/]?td((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>");
-		// Pattern a_pattern = Pattern.compile("\\<[\\/]?a((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>"); // uselesss
-		
+		Pattern tr_pattern = Pattern
+				.compile("\\<[\\/]?tr((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>");
+		Pattern td_pattern = Pattern
+				.compile("\\<[\\/]?td((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>");
+		// Pattern a_pattern =
+		// Pattern.compile("\\<[\\/]?a((\\s)(\\S)+\\=\\'(\\s|\\S)*\\')*\\>"); //
+		// uselesss
+
 		Matcher table_matcher = table_pattern.matcher(TokenString);
 		Matcher tbody_matcher = tbody_pattern.matcher(TokenString);
 		Matcher tr_matcher = tr_pattern.matcher(TokenString);
 		Matcher td_matcher = td_pattern.matcher(TokenString);
 
-		if ( table_matcher.matches() )
-		{
+		if (table_matcher.matches()) {
 			result = TokenType.Table;
-		}
-		else if ( tbody_matcher.matches() )
-		{
+		} else if (tbody_matcher.matches()) {
 			result = TokenType.TBody;
-		}
-		else if ( tr_matcher.matches() )
-		{
+		} else if (tr_matcher.matches()) {
 			result = TokenType.Tr;
-		}
-		else if ( td_matcher.matches() )
-		{
+		} else if (td_matcher.matches()) {
 			result = TokenType.Td;
 		}
-		
+
 		return result;
 	}
 
@@ -61,53 +56,33 @@ public class FedoraRpmFindTokenAnalyzer extends TokenAnalyzer {
 			TokenType CurrentType) {
 		TokenSubtype result = TokenSubtype.Unknown;
 		int hashCode = CurrentType.hashCode();
-		
-		
-		if ( hashCode == TokenType.Table.hashCode() )
-		{
-			if ( TokenString.charAt(1) == '/' )
-			{
+
+		if (hashCode == TokenType.Table.hashCode()) {
+			if (TokenString.charAt(1) == '/') {
 				result = TokenSubtype.TableClose;
-			}
-			else
-			{
+			} else {
 				result = TokenSubtype.TableOpen;
 			}
-		}
-		else if ( hashCode == TokenType.TBody.hashCode() )
-		{
-			if ( TokenString.charAt(1) == '/' )
-			{
+		} else if (hashCode == TokenType.TBody.hashCode()) {
+			if (TokenString.charAt(1) == '/') {
 				result = TokenSubtype.TBodyClose;
-			}
-			else
-			{
+			} else {
 				result = TokenSubtype.TBodyOpen;
 			}
-		}
-		else if ( hashCode == TokenType.Tr.hashCode() )
-		{
-			if ( TokenString.charAt(1) == '/')
-			{
+		} else if (hashCode == TokenType.Tr.hashCode()) {
+			if (TokenString.charAt(1) == '/') {
 				result = TokenSubtype.TrClose;
-			}
-			else
-			{
+			} else {
 				result = TokenSubtype.TrOpen;
 			}
-		}
-		else if ( hashCode == TokenType.Td.hashCode() )
-		{
-			if ( TokenString.charAt(1) == '/')
-			{
+		} else if (hashCode == TokenType.Td.hashCode()) {
+			if (TokenString.charAt(1) == '/') {
 				result = TokenSubtype.TdClose;
-			}
-			else
-			{
+			} else {
 				result = TokenSubtype.TdOpen;
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -117,107 +92,100 @@ public class FedoraRpmFindTokenAnalyzer extends TokenAnalyzer {
 		TokenType currentTokenType = TokenType.Unknown;
 		TokenSubtype currentTokenSubtype = TokenSubtype.Unknown;
 		boolean inBoundOfTable = false;
-		
+
 		int len = this.data.length();
-		if ( len == 0 )
+		if (len == 0)
 			throw new EmptyTokenStreamException();
-		
+
 		int i = 0;
-		
+
 		String tokenString = "";
 		String tempchar = "";
-		
-		while ( i < len )
-		{
-			tempchar = this.data.substring(i, i+1);
+
+		while (i < len) {
+			tempchar = this.data.substring(i, i + 1);
 			i++;
 
-			if ( ( tempchar.equals("\t")  || tempchar.equals("\n") ) || ( tempchar.equals("\r") || tempchar.equals(" ") ) )
-			{
+			if ((tempchar.equals("\t") || tempchar.equals("\n"))
+					|| (tempchar.equals("\r") || tempchar.equals(" "))) {
 				continue;
 			}
-			
-			if ( tokenString.equals("") && !tempchar.equals("<") )
-			{
+
+			if (tokenString.equals("") && !tempchar.equals("<")) {
 				tokenString = tempchar;
-				tempchar = this.data.substring(i, i+1);
+				tempchar = this.data.substring(i, i + 1);
 				i++;
 
-				while ( !tempchar.equals("<") )
-				{
-					if ( tempchar.equals("\t") || ( tempchar.equals("\r")|| tempchar.equals("\n") ) )
-					{
-						tempchar = this.data.substring(i, i+1);
+				while (!tempchar.equals("<")) {
+					if (tempchar.equals("\t")
+							|| (tempchar.equals("\r") || tempchar.equals("\n"))) {
+						tempchar = this.data.substring(i, i + 1);
 						i++;
 						continue;
 					}
-					tokenString += tempchar; 
-					tempchar = this.data.substring(i, i+1);
+					tokenString += tempchar;
+					tempchar = this.data.substring(i, i + 1);
 					i++;
 				}
-				
+
 				currentTokenType = TokenType.TextString;
 				currentTokenSubtype = TokenSubtype.TextString;
-				
-				if ( inBoundOfTable )
-				{
-					result.addElement(tokenString, currentTokenType, currentTokenSubtype);
+
+				if (inBoundOfTable) {
+					result.addElement(tokenString, currentTokenType,
+							currentTokenSubtype);
 					tokenString = "";
 					currentTokenType = TokenType.Unknown;
 					currentTokenSubtype = TokenSubtype.Unknown;
 				}
-				
+
 			}
-			
+
 			// get a piece of the tag
-			if ( tempchar.equals("<") )
-			{
+			if (tempchar.equals("<")) {
 				tokenString = tempchar;
-				tempchar = this.data.substring(i, i+1);
+				tempchar = this.data.substring(i, i + 1);
 				i++;
-				
-				while ( !tempchar.equals(">") )
-				{
+
+				while (!tempchar.equals(">")) {
 					tokenString += tempchar;
-					tempchar = this.data.substring(i, i+1);
+					tempchar = this.data.substring(i, i + 1);
 					i++;
 				}
-				
+
 				// I need to check this point;
-				tokenString += tempchar;			
+				tokenString += tempchar;
 			} // OK!
-			
+
 			currentTokenType = this.getTokenType(tokenString);
-			if ( currentTokenType == TokenType.Unknown )
-			{
+			if (currentTokenType == TokenType.Unknown) {
 				tokenString = "";
 				continue;
-			}
-			else
-			{
-				currentTokenSubtype = this.getTokenSubtype(tokenString, currentTokenType);
-				
-				if ( currentTokenSubtype == TokenSubtype.TableOpen )
-				{
+			} else {
+				currentTokenSubtype = this.getTokenSubtype(tokenString,
+						currentTokenType);
+
+				if (currentTokenSubtype == TokenSubtype.TableOpen) {
 					inBoundOfTable = true;
-				}
-				else if ( currentTokenSubtype == TokenSubtype.TableClose && inBoundOfTable )
-				{
-					TokenUnit newTokenUnit = new TokenUnit (tokenString, currentTokenType, currentTokenSubtype);
+				} else if (currentTokenSubtype == TokenSubtype.TableClose
+						&& inBoundOfTable) {
+					TokenUnit newTokenUnit = new TokenUnit(tokenString,
+							currentTokenType, currentTokenSubtype);
 					result.addElement(newTokenUnit);
 					break;
 				}
-				
-				TokenUnit newTokenUnit = new TokenUnit (tokenString, currentTokenType, currentTokenSubtype);
-				if ( inBoundOfTable )
+
+				TokenUnit newTokenUnit = new TokenUnit(tokenString,
+						currentTokenType, currentTokenSubtype);
+				if (inBoundOfTable)
 					result.addElement(newTokenUnit);
-				
+
 				tokenString = "";
 				currentTokenType = TokenType.Unknown;
 				currentTokenSubtype = TokenSubtype.Unknown;
 			}
 		}
-		
+
 		return result;
 	}
 

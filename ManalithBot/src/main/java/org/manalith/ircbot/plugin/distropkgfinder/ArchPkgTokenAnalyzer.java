@@ -3,17 +3,15 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 import org.manalith.ircbot.plugin.distropkgfinder.exceptions.EmptyTokenStreamException;
 
 public class ArchPkgTokenAnalyzer extends TokenAnalyzer {
-	
-	public ArchPkgTokenAnalyzer ( )
-	{
-		super ( );
+
+	public ArchPkgTokenAnalyzer() {
+		super();
 	}
-	
-	public ArchPkgTokenAnalyzer ( String newData )
-	{
+
+	public ArchPkgTokenAnalyzer(String newData) {
 		this.data = newData;
 	}
-	
+
 	@Override
 	public TokenType getTokenType(String TokenString) {
 		return null;

@@ -7,21 +7,6 @@
 
 package org.manalith.ircbot.plugin.cer2;
 
-
 public enum TokenType {
-	TBody,
-	TR,
-	TD,
-	Div,
-	Span,
-	EM,
-	TextString,
-	Command,
-	CurrencyUnit,
-	FieldAbbr,
-	Amount,
-	IRCOption,
-	IRCCurrencyUnit,
-	IRCFieldAbbr,
-	Unknown
+	TBody, TR, TD, Div, Span, EM, TextString, Command, CurrencyUnit, FieldAbbr, Amount, IRCOption, IRCCurrencyUnit, IRCFieldAbbr, Unknown
 }
