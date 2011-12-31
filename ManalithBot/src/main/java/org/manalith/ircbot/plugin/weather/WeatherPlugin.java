@@ -12,7 +12,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class WeatherPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String NAMESPACE = "weather";
+	private static final String NAMESPACE = "!날씨";
 
 	public WeatherPlugin(ManalithBot bot) {
 		super(bot);
@@ -23,7 +23,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public String getNamespace() {
-		return NAMESPACE;
+		return NAMESPACE.substring(1);
 	}
 
 	public String getHelp() {
@@ -31,7 +31,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		String command = "!날씨";
+		String command = NAMESPACE;//"!날씨";
 
 		String message = event.getMessage();
 		String channel = event.getChannel();
@@ -39,7 +39,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, getHelp());
 		} else if (message.equals(command)) {
 			bot.sendLoggedMessage(channel,
-					String.format("사용법 : %s [영문 지명]", command));
+					this.getHelp());//String.format("사용법 : %s [영문 지명]", command));
 		} else if (message.startsWith(command)
 				&& message.length() >= command.length() + 2) {
 			bot.sendLoggedMessage(channel,
@@ -68,8 +68,8 @@ public class WeatherPlugin extends AbstractBotPlugin {
 				String wind_condition = conditions.select("wind_condition")
 						.attr("data");
 
-				return "[" + keyword + "] " + condition + ". 온도 :" + temp
-						+ ", " + humidity + ", " + wind_condition;
+				return "[" + keyword + "] " + condition + ". 온도: " + temp
+						+ "℃, " + humidity + ", " + wind_condition;
 			} else {
 				return "[" + keyword
 						+ "] 지명을 찾을 수 없습니다. 영문 지명이 정확한지 다시 확인해주세요.";

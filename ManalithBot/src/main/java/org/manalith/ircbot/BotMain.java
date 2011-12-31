@@ -52,16 +52,23 @@ public class BotMain {
 
 		// 봇 구동
 		final ManalithBot bot = new ManalithBot(config.getBotName());
+		// config.getBotName();
 		BOT = bot;
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-		bot.addPlugin(new org.manalith.ircbot.plugin.DistroPkgFinder.DistroPkgFinderPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.WaitBDBot.WaitBDBotPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.TwitReader.TwitReaderPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.NvidiaDriverNews.NvidiaDriverNewsPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.DistroPkgFinder.DistroPkgFinderPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
+		// bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.newCER.newCERPlugin(bot));
+		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
@@ -72,6 +79,7 @@ public class BotMain {
 		//bot.addPlugin(new org.manalith.ircbot.plugin.relay.RelayPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.setzer.SetzerPlugin());
 
+		// bot.changeNick("앞북요정");
 		final StringTokenizer st = new StringTokenizer(
 				config.getDefaultChannels(), ",");
 		while (st.hasMoreTokens())
