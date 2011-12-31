@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.calc;
 
-// import org.jibble.pircbot.User;
 import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -11,7 +10,6 @@ public class CalcPlugin extends AbstractBotPlugin {
 	
 	public CalcPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
@@ -19,7 +17,6 @@ public class CalcPlugin extends AbstractBotPlugin {
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "eval";
 	}
 
@@ -27,13 +24,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		return "!eval (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-	}
-
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String message = event.getMessage();
 		String channel = event.getChannel();
 		String [] command = message.split("\\s");
@@ -54,16 +45,6 @@ public class CalcPlugin extends AbstractBotPlugin {
 				BotMain.BOT.sendLoggedMessage(channel, CalcRunner.run(expr));
 			}
 		}
-
-	}
-
-	public void onPart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onQuit() {
-		// TODO Auto-generated method stub
 
 	}
 

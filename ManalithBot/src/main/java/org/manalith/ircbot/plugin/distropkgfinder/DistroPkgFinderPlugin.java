@@ -11,12 +11,10 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "deb|ubu|fed|gen";
 	}
 	
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "뒷북 패키지 검색";
 	}
 	

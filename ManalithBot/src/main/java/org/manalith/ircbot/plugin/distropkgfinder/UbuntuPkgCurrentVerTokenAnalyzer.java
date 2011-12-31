@@ -18,7 +18,6 @@ public class UbuntuPkgCurrentVerTokenAnalyzer extends TokenAnalyzer {
 	}
 	@Override
 	public TokenType getTokenType(String TokenString) {
-		// TODO Auto-generated method stub
 		TokenType result = TokenType.Unknown;
 		
 		Pattern select_pattern = Pattern.compile("\\<[\\/]?select((\\s)[\\S]+\\=\\\"(\\s|\\S)+\\\")*\\>");
@@ -39,7 +38,6 @@ public class UbuntuPkgCurrentVerTokenAnalyzer extends TokenAnalyzer {
 	@Override
 	public TokenSubtype getTokenSubtype(String TokenString,
 			TokenType CurrentType) {
-		// TODO Auto-generated method stub
 		TokenSubtype result = TokenSubtype.Unknown;
 		int hashCode = CurrentType.hashCode();
 		
@@ -64,7 +62,6 @@ public class UbuntuPkgCurrentVerTokenAnalyzer extends TokenAnalyzer {
 
 	@Override
 	public TokenArray analysisTokenStream() throws EmptyTokenStreamException {
-		// TODO Auto-generated method stub
 		TokenArray result = new TokenArray();
 		TokenType currentTokenType = TokenType.Unknown;
 		TokenSubtype currentTokenSubtype = TokenSubtype.Unknown;

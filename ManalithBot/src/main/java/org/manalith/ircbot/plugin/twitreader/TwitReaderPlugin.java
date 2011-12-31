@@ -8,16 +8,13 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 
 	public TwitReaderPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "뒷북 트윗리더";
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "twit";
 	}
 	
@@ -28,7 +25,6 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	
 	@Override
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 		

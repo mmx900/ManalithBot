@@ -15,14 +15,12 @@ public class newCERPlugin extends AbstractBotPlugin {
 
 	public newCERPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
 	 */
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "환율 계산기";
 		//return null;
 	}
@@ -31,7 +29,6 @@ public class newCERPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getNamespace()
 	 */
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "curex";
 	}
 
@@ -52,19 +49,9 @@ public class newCERPlugin extends AbstractBotPlugin {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#onJoin(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources.MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 		

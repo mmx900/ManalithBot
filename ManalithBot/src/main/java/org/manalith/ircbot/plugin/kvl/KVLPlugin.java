@@ -8,28 +8,23 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 	public KVLPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "커널 최신버전";
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "kernel";
 	}
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
 		return "!kernel (latest[default]|all|help)";
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 		

@@ -32,7 +32,6 @@ public class GentooPkgFinderJsoupRunner
 	public String run() {
 		String result = "";
 		String url = "http://gentoo-portage.com/Search?search=" + this.getKeyword ( );
-		// TODO Auto-generated method stub
 		
 		String pkgname = "";
 		String description = "";

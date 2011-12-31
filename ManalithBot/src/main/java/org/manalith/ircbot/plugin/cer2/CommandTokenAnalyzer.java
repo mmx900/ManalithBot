@@ -26,7 +26,6 @@ public class CommandTokenAnalyzer extends TokenAnalyzer {
 	@Override
 	public TokenType getTokenType(String TokenString) 
 	{
-		// TODO Auto-generated method stub
 		TokenType result = TokenType.Unknown;
 		
 		Pattern cmd_pattern = Pattern.compile("\\-\\-[a-z]+");
@@ -61,7 +60,6 @@ public class CommandTokenAnalyzer extends TokenAnalyzer {
 	@Override
 	public TokenSubtype getTokenSubtype(String TokenString, TokenType CurrentType) 
 	{
-		// TODO Auto-generated method stub
 		TokenSubtype result = TokenSubtype.Unknown;
 		
 		if ( CurrentType == TokenType.Command )
@@ -166,10 +164,8 @@ public class CommandTokenAnalyzer extends TokenAnalyzer {
 		return result;
 	}
 
-	// @Override
 	public TokenArray analysisTokenStream()
 			throws EmptyTokenStreamException {
-		// TODO Auto-generated method stub
 		TokenArray result = new TokenArray();
 		
 		String charstream = this.getTokenStringData();

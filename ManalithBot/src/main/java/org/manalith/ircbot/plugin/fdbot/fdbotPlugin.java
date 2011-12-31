@@ -8,22 +8,18 @@ public class fdbotPlugin extends AbstractBotPlugin {
 
 	public fdbotPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "앞북요정";
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "앞북요정";
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 		

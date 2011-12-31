@@ -10,16 +10,13 @@ public class WaitBDBotPlugin extends AbstractBotPlugin {
 
 	public WaitBDBotPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "뒷북바라기";
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "뒷북바라기";
 	}
 	

@@ -16,20 +16,17 @@ public class ArchPkgTokenAnalyzer extends TokenAnalyzer {
 	
 	@Override
 	public TokenType getTokenType(String TokenString) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public TokenSubtype getTokenSubtype(String TokenString,
 			TokenType CurrentType) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public TokenArray analysisTokenStream() throws EmptyTokenStreamException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

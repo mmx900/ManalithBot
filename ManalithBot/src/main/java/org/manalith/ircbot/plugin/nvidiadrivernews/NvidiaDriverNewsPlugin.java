@@ -8,16 +8,13 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 
 	public NvidiaDriverNewsPlugin(ManalithBot bot) {
 		super(bot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Nvidia최신버전";
 	}
 
 	public String getNamespace() {
-		// TODO Auto-generated method stub
 		return "nvidia";
 	}
 	
