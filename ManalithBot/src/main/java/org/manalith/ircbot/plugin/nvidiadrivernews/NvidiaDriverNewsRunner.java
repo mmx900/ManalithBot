@@ -3,6 +3,7 @@ package org.manalith.ircbot.plugin.nvidiadrivernews;
 // import java.net.URL; // this is for the first way
 import java.io.IOException;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 // need to get org.jdom:jdom:1.1 from maven-repo
@@ -90,7 +91,11 @@ public class NvidiaDriverNewsRunner {
 		
 		try
 		{
-			Elements e = Jsoup.connect("http://www.nvnews.net/vbulletin/showthread.php?t=122606").get().select("div#post_message_1836667").get(0).select("a");
+			
+			Connection conn = Jsoup.connect("http://www.nvnews.net/vbulletin/showthread.php?t=122606");
+			conn.timeout(10000);
+			
+			Elements e = conn.get().select("div#post_message_1836667").get(0).select("a");
 			result.append("Current long-lived branch release: ");
 			result.append(e.get(0).text());
 			result.append(", Current official release: ");
