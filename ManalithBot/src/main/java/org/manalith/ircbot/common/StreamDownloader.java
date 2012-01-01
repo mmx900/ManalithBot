@@ -5,7 +5,7 @@
 // This source can be distributed under the terms of GNU General Public License version 3
 // which is derived from the license of Manalith bot.
 
-package org.manalith.ircbot.plugin.twitreader;
+package org.manalith.ircbot.common;
 
 import java.net.URL;
 import java.net.URLConnection;

@@ -7,6 +7,8 @@
 
 package org.manalith.ircbot.plugin.kvl;
 
+import org.manalith.ircbot.common.StreamDownloader;
+
 public class KVLRunner {
 
 	private KVLTable kvlTable;

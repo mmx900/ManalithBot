@@ -10,6 +10,8 @@
 
 package org.manalith.ircbot.plugin.kvl;
 
+import org.manalith.ircbot.common.*;
+
 public class KVLMain {
 	public static void main(String[] args) {
 		// inger.
