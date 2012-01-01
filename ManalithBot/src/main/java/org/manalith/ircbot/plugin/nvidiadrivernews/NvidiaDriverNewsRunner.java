@@ -22,7 +22,7 @@ public class NvidiaDriverNewsRunner {
 	
 	public String run()
 	{
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		
 		/*
 		String ProductSeriesType = "3"; // Geforce
@@ -91,16 +91,18 @@ public class NvidiaDriverNewsRunner {
 		try
 		{
 			Elements e = Jsoup.connect("http://www.nvnews.net/vbulletin/showthread.php?t=122606").get().select("div#post_message_1836667").get(0).select("a");
-			result = "Current long-lived branch release: " + e.get(0).text();
-			result += ", Current official release: " + e.get(1).text();
-			result += ", Current beta release: " + e.get(2).text();
+			result.append("Current long-lived branch release: ");
+			result.append(e.get(0).text());
+			result.append(", Current official release: ");
+			result.append(", Current beta release: ");
+			result.append(e.get(2).text());
 			
 		}
 		catch ( IOException ioe )
 		{
-			result = ioe.getMessage();
+			result.append(ioe.getMessage());
 		}
 		
-		return result;
+		return result.toString();
 	}
 }

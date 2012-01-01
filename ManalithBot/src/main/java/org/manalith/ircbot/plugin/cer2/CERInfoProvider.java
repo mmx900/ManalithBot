@@ -74,33 +74,34 @@ public class CERInfoProvider {
 			result = this.showLatestRound();
 		else if (TokenSubTSequence[i] == TokenSubtype.CommandShow) {
 			i++;
-			String currency_name = TokenSubTSequence[i++].toString().substring(
-					8);
-			String field_name = "country_name,";
+			String currencyName = TokenSubTSequence[i++].toString()
+					.substring(8);
+			StringBuilder fieldName = new StringBuilder();
+			fieldName.append("country_name,");
 
 			if (TokenSubTSequence[i] == TokenSubtype.FAAll)
-				field_name = "*";
+				fieldName.append("*");
 			else if (TokenSubTSequence[i] == TokenSubtype.Unknown
 					|| TokenSubTSequence[i] == TokenSubtype.FACentralRate)
-				field_name += "currency_unit,central_rate";
+				fieldName.append("currency_unit,central_rate");
 			else if (TokenSubTSequence[i] == TokenSubtype.FABuyCash)
-				field_name += "currency_unit,cash_buy";
+				fieldName.append("currency_unit,cash_buy");
 			else if (TokenSubTSequence[i] == TokenSubtype.FACellCash)
-				field_name += "currency_unit,cash_cell";
+				fieldName.append("currency_unit,cash_cell");
 			else if (TokenSubTSequence[i] == TokenSubtype.FARecvRemit)
-				field_name += "currency_unit,remittance_recv";
+				fieldName.append("currency_unit,remittance_recv");
 			else if (TokenSubTSequence[i] == TokenSubtype.FASendRemit)
-				field_name += "currency_unit,remittance_send";
+				fieldName.append("currency_unit,remittance_send");
 			else if (TokenSubTSequence[i] == TokenSubtype.FAECRate)
-				field_name += "currency_unit,exchan_comm_rate";
+				fieldName.append("currency_unit,exchan_comm_rate");
 			else if (TokenSubTSequence[i] == TokenSubtype.FADollarExcRate)
-				field_name += "currency_unit,dollar_exc_rate";
+				fieldName.append("currency_unit,dollar_exc_rate");
 			else
 				throw new InvalidArgumentException(
 						"Unknown field abbreviation [ "
 								+ ta.getElement(i).getTokenString() + " ] ");
 
-			result = this.showCurrencyRate(currency_name, field_name);
+			result = this.showCurrencyRate(currencyName, fieldName.toString());
 		} else if (TokenSubTSequence[i] == TokenSubtype.CommandConvert) {
 			String value = "";
 			i++;
@@ -219,7 +220,7 @@ public class CERInfoProvider {
 	 * "\t de : 달러 환산율"); }
 	 */
 	private String showLatestRound() throws IOException {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		String[] month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 				"Aug", "Sep", "Oct", "Nov", "Dec" };
 
@@ -233,31 +234,38 @@ public class CERInfoProvider {
 		String[] datetime = dt.split("\\s");
 		String[] date = datetime[0].split("\\.");
 
-		result = "Last Updated : " + month[Integer.parseInt(date[1]) - 1] + " "
-				+ date[2] + ", " + date[0] + "  " + datetime[1] + ", "
-				+ Integer.parseInt(roundstr);
+		result.append("Last Updated : ");
+		result.append(month[Integer.parseInt(date[1]) - 1]);
+		result.append(" ");
+		result.append(date[2]);
+		result.append(", ");
+		result.append(date[0]);
+		result.append("  ");
+		result.append(datetime[1]);
+		result.append(", ");
+		result.append(Integer.parseInt(roundstr));
 		int len = roundstr.length();
 		char ch = roundstr.charAt(len - 1);
 		switch (ch) {
 		case '1':
-			result += "st round.";
+			result.append("st round.");
 			break;
 		case '2':
-			result += "nd round.";
+			result.append("nd round.");
 			break;
 		case '3':
-			result += "rd round.";
+			result.append("rd round.");
 			break;
 		default:
-			result += "th round.";
+			result.append("th round.");
 
 		}
-		return result;
+		return result.toString();
 	}
 
 	private String showCurrencyRate(String CurrencyUnit, String FieldId)
 			throws SQLException, ClassNotFoundException {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		SQLiteTableManager sqlManager = new SQLiteTableManager(this.getPath(),
 				"currency.db");
@@ -268,45 +276,55 @@ public class CERInfoProvider {
 		String[] separatedfield = FieldId.split("\\,");
 
 		for (int j = 2; j < separatedfield.length; j++) {
-			if (j == 2)
-				result = data[0] + "(";
-			else
-				result += ", " + data[0] + "(";
+			if (j == 2) {
+				result.append(data[0] + "(");
+			} else {
+				result.append(", ");
+				result.append(data[0]);
+				result.append("(");
+			}
 
-			if (Integer.parseInt(data[1]) == 100)
-				result += data[1] + " ";
+			if (Integer.parseInt(data[1]) == 100) {
+				result.append(data[1]);
+				result.append(" ");
+			}
 
-			result += (CurrencyUnit + ")에 대한 ");
+			result.append(CurrencyUnit);
+			result.append(")에 대한 ");
 
 			if (separatedfield[j].equals("exchan_comm_rate")) {
-				if (data[j].equals("0.0"))
-					result += "환전수수료율을 가져올 수 없습니다. (존재하지 않음)";
-				else
-					result += "환전수수료율 : " + data[j] + "%";
+				if (data[j].equals("0.0")) {
+					result.append("환전수수료율을 가져올 수 없습니다. (존재하지 않음)");
+				} else {
+					result.append("환전수수료율 : " + data[j] + "%");
+				}
 			} else if (separatedfield[j].equals("dollar_exc_rate")) {
-				result += "대미환산율 : "
-						+ String.format("%.3f",
-								(Double.parseDouble(data[j]) * 100.0)) + "%";
+				result.append("대미환산율 : ");
+				result.append(String.format("%.3f",
+						(Double.parseDouble(data[j]) * 100.0)));
+				result.append("%");
 			} else {
 				if (separatedfield[j].equals("central_rate"))
-					result += "거래기준액";
+					result.append("거래기준액");
 				else if (separatedfield[j].equals("cash_buy"))
-					result += "현금매수액";
+					result.append("현금매수액");
 				else if (separatedfield[j].equals("cash_cell"))
-					result += "현금매도액";
+					result.append("현금매도액");
 				else if (separatedfield[j].equals("remittance_send"))
-					result += "송금수신액";
+					result.append("송금수신액");
 				else if (separatedfield[j].equals("remittance_recv"))
-					result += "송금전송액";
+					result.append("송금전송액");
 
-				if (data[j].equals("0.0"))
-					result += " : (거래불가) ";
-				else
-					result += " : ￦" + data[j];
+				if (data[j].equals("0.0")) {
+					result.append(" : (거래불가) ");
+				} else {
+					result.append(" : ￦");
+					result.append(data[j]);
+				}
 			}
 
 		}
-		return result;
+		return result.toString();
 	}
 
 	private String convert(String value, String CurrencyUnit1,
