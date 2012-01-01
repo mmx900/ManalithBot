@@ -4,24 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-public class newCERRunner {
+public class CERRunner {
 
 	private String args;
 	private String dataPath;
 	private String usernick;
 
-	public newCERRunner() {
+	public CERRunner() {
 		this.setArgs("");
 		this.setDataPath("");
 	}
 
-	public newCERRunner(String newUserNick, String newArgs) {
+	public CERRunner(String newUserNick, String newArgs) {
 		this.setUserNick(newUserNick);
 		this.setArgs(newArgs);
 		this.setDataPath("");
 	}
 
-	public newCERRunner(String newUserNick, String newDataPath, String newArgs) {
+	public CERRunner(String newUserNick, String newDataPath, String newArgs) {
 		this.setUserNick(newUserNick);
 		this.setDataPath(newDataPath);
 		File path = new File(this.getDataPath());

@@ -8,21 +8,21 @@ import java.util.regex.Pattern;
 
 import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
 
-public class newCERCustomSettingManager extends TokenAnalyzer {
+public class CERCustomSettingManager extends TokenAnalyzer {
 
 	private String LocalPath;
 	private String channel;
 	private String userNick;
 	private String CurrencyArgString;
 
-	public newCERCustomSettingManager(String newLocalPath) {
+	public CERCustomSettingManager(String newLocalPath) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel("");
 		this.setUserNick("");
 		this.setCurrencyArgString("");
 	}
 
-	public newCERCustomSettingManager(String newLocalPath, String newChannel,
+	public CERCustomSettingManager(String newLocalPath, String newChannel,
 			String newUserNick) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel(newChannel);
@@ -30,7 +30,7 @@ public class newCERCustomSettingManager extends TokenAnalyzer {
 		this.setCurrencyArgString("");
 	}
 
-	public newCERCustomSettingManager(String newLocalPath, String newChannel,
+	public CERCustomSettingManager(String newLocalPath, String newChannel,
 			String newUserNick, String newArgs) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel(newChannel);

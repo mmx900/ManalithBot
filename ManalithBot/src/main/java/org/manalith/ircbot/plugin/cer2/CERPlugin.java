@@ -10,9 +10,9 @@ import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class newCERPlugin extends AbstractBotPlugin {
+public class CERPlugin extends AbstractBotPlugin {
 
-	public newCERPlugin(ManalithBot bot) {
+	public CERPlugin(ManalithBot bot) {
 		super(bot);
 	}
 
@@ -87,7 +87,7 @@ public class newCERPlugin extends AbstractBotPlugin {
 					}
 
 					try {
-						newCERRunner runner = new newCERRunner(
+						CERRunner runner = new CERRunner(
 								event.getSender(), this.getResourcePath(),
 								mergedcmd);
 
@@ -120,7 +120,7 @@ public class newCERPlugin extends AbstractBotPlugin {
 						arg += command[i];
 					}
 
-					newCERCustomSettingManager csMan = new newCERCustomSettingManager(
+					CERCustomSettingManager csMan = new CERCustomSettingManager(
 							this.getResourcePath(), channel, userNick, arg);
 
 					if (subcmd[1].equals("sub"))
