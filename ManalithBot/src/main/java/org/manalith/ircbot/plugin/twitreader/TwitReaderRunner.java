@@ -38,23 +38,19 @@ public class TwitReaderRunner {
 		return this.str;
 	}
 
-	public String/* [] */run() {
+	public String run() {
 
-		String /* [] */result = "";
+		String result = "";
 
 		try {
 			result = getText(this.validateTwitterStr());
 		} catch (StrDoesntSpecifiedException e) {
-			// result = new String[1];
-			// result[0]
 			result = "문자열이 없습니다";
 			return result;
 		} catch (UnknownTypeOfStringException ue) {
 			result = "알 수 없는 형식의 문자열입니다";
 		}
-		// */
 
-		// System.out.println(result);
 		return result;
 	}
 
@@ -68,22 +64,16 @@ public class TwitReaderRunner {
 								.downloadDataStream()));
 
 				String written_by = obj.getJSONObject("user").getString("name");
-				/*
-				 * String written_datetime = obj.getString("created_at"); String
-				 * Creating_Source = obj.getString("source");
-				 */
 				String body = obj.getString("text");
 
-				// result = new String[2];
 				// result[0] = "작성자 : " + written_by + ", 작성시각 : " +
 				// getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : "
 				// + Creating_Source.replaceAll(
 				// "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>",
 				// "");
-				result/* [1] */= "작성자 : " + written_by + ", 본문 : " + body;
+				result = "작성자 : " + written_by + ", 본문 : " + body;
 			} catch (Exception e) {
-				// result = new String[1];
-				result/* [0] */= e.getMessage();
+				result = e.getMessage();
 				return result;
 			}
 		} else if (type == StrType.UserURL || type == StrType.ScrName) {
