@@ -23,6 +23,10 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 		return null;
 	}
 	
+	public String getHelp () {
+		return "!msg [닉] [150자 메시지] // 3개 까지 남길 수 있습니다";
+	}
+	
 	public void onMessage(MessageEvent event) {
 		// TODO <- is lie =3
 		String channel = event.getChannel();
