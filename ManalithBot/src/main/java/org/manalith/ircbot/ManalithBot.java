@@ -146,7 +146,7 @@ public class ManalithBot extends PircBot {
 	protected void onPart(String channel, String sender, String login, String hostname) {
 		logger.trace(String.format("PART : %s / %s / %s / %s", channel, sender, login, hostname));
 
-		//pluginManager.onPart(channel, sender, login, hostname);
+		pluginManager.onPart(channel, sender, login, hostname);
 	}
 	
 	@Override
