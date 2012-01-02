@@ -63,7 +63,7 @@ public class DebianPkgFinderJsoupRunner {
 			pkgname = doc.select("#psearchres").select("h3").get(0).text()
 					.split("\\s")[1];
 
-			result = pkgname + "-";
+			result = pkgname + "  ";
 			Elements ExactHits = doc.select("#psearchres").select("ul").get(0)
 					.select("li");
 			int elemCnt = ExactHits.size();
