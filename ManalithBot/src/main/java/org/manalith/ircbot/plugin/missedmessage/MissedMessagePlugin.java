@@ -44,7 +44,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 				for (User u : users) {
 					if (u.getNick().equals(recv)) // check someone who has a matched nick
 					{
-						bot.sendLoggedMessage(channel, sender + ", ...");
+						bot.sendLoggedMessage(channel, sender + ", ...(물끄럼)...");
 						return;
 					}
 				}
@@ -54,6 +54,15 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 			else if ( cmdnmsg.length >= 3 )
 			{
 				String recv = cmdnmsg[1];
+				
+				for (User u : users) {
+					if (u.getNick().equals(recv)) // check someone who has a matched nick
+					{
+						bot.sendLoggedMessage(channel, sender + ", ...(물끄럼)...");
+						return;
+					}
+				}
+
 				StringBuilder msg = new StringBuilder();
 				
 				for ( int i = 2 ; i < cmdnmsg.length ; i++ )
@@ -63,7 +72,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 				}
 				
 				MissedMessageRunner runner = new MissedMessageRunner ( this.getResourcePath() );
-				runner.addMsg( sender, channel.substring(1) + "." + recv , msg.toString() ); // exclude # in the channel name.
+				bot.sendLoggedMessage(channel, runner.addMsg( sender, channel.substring(1) + "." + recv , msg.toString() )); // exclude # in the channel name.
 			}
 		}
 		
@@ -74,20 +83,27 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 			String hostname) {
 		// TODO Auto-generated method stub
 		MissedMessageRunner runner = new MissedMessageRunner ( this.getResourcePath() );
-		String [] msgs = runner.getMsg( channel.substring(1) + "." + sender );
 		
-		if ( msgs != null )
-			for ( int i = 0 ; i < msgs.length ; i++ )
-			{
-				bot.sendLoggedMessage(channel, msgs[i] );
-			}
+		if ( !runner.isMatchedNickinList( channel.substring(1) + "." + sender ) )
+			runner.addMsgSlot( channel.substring(1) + "." + sender );
+		else
+		{
+			String [] msgs = runner.getMsg( channel.substring(1) + "." + sender );
 		
+			if ( msgs != null )
+				for ( int i = 0 ; i < msgs.length ; i++ )
+				{
+					bot.sendLoggedMessage(channel, msgs[i] );
+				}
+		}
 	}
 	
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
 		// TODO Auto-generated method stub
 		MissedMessageRunner runner = new MissedMessageRunner ( this.getResourcePath() );
-		runner.addMsgSlot( channel.substring(1) + "." + sender );
+		
+		if ( !runner.isMatchedNickinList( channel.substring(1) + "." + sender ) )
+			runner.addMsgSlot( channel.substring(1) + "." + sender );
 	}	
 }
