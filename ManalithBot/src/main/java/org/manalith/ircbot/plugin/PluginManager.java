@@ -37,6 +37,14 @@ public class PluginManager{
 		}
 	}
 	
+	public void onPart(String channel,
+			String sender,
+			String login,
+			String hostName) {
+		for ( IBotPlugin plugin : list )
+			plugin.onPart(channel, sender, login, hostName);
+	}
+	
 	public List<IBotPlugin> getList(){
 		return list;
 	}
