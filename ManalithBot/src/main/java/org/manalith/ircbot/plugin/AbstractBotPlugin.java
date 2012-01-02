@@ -39,12 +39,14 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 
 	}
 
-	public void onPart() {
+	public void onPart(String channel, String sender, String login,
+			String hostname) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void onQuit() {
+	public void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
 		// TODO Auto-generated method stub
 
 	}
