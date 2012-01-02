@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 
-import org.manalith.ircbot.plugin.cer2.PropertyManager;
+import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.cer2.exceptions.FileDoesntSpecifiedException;
 
 public class CERTableUpdater {
