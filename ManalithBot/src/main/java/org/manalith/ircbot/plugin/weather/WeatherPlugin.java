@@ -45,6 +45,8 @@ public class WeatherPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel,
 					getGoogleWeather(message.substring(command.length() + 1)));
 		}
+		
+		event.setExecuted(true);
 	}
 
 	public String getGoogleWeather(String keyword) {

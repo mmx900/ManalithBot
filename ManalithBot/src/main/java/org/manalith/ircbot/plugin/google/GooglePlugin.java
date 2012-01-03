@@ -57,6 +57,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(4)));
 		}
+		event.setExecuted(true);
 	}
 
 	private int getGoogleCount(String keyword) {

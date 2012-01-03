@@ -47,6 +47,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 
 			}
 		}
+		
+		event.setExecuted(true);
 	}
-
 }

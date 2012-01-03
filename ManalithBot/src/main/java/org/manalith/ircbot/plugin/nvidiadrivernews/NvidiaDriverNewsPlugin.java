@@ -30,6 +30,7 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		if (msg.equals("!nvidia")) {
 			NvidiaDriverNewsRunner runner = new NvidiaDriverNewsRunner();
 			bot.sendLoggedMessage(channel, runner.run());
+			event.setExecuted(true);
 		}
 	}
 }

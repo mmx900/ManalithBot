@@ -47,6 +47,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 					command[1]);
 			bot.sendLoggedMessage(channel, runner.run());
 		}
-
+		
+		event.setExecuted(true);
 	}
 }
