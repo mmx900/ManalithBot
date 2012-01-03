@@ -13,6 +13,8 @@ public interface IBotPlugin {
 			String hostname);
 
 	public void onMessage(MessageEvent event);
+	
+	public void onPrivateMessage(MessageEvent event);
 
 	public void onPart(String channel, String sender, String login,
 			String hostname);

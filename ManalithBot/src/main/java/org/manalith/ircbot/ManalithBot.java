@@ -122,7 +122,18 @@ public class ManalithBot extends PircBot {
 	
 	@Override
     protected void onPrivateMessage(String sender, String login, String hostname, String message) {
-		
+		logger.trace(String.format("PRIVMSG : %s / %s / %s / %s", sender , login , hostname , message ));
+		if(message.equals("!도움") || message.equals("!help")){
+			sendMessage(sender, "!도움, !help, 배워, !plugins");
+		}
+		else if (message.equals("!plugins"))
+		{
+			sendMessage(sender, pluginManager.getPluginInfo());
+		}
+		else
+		{
+			pluginManager.onPrivateMessage(sender,login,hostname,message);
+		}
 	}
 	
 	@Override
