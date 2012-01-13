@@ -7,6 +7,7 @@
 
 package org.manalith.ircbot.plugin.cer2;
 
+import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.cer2.exceptions.InvalidArgumentException;
 

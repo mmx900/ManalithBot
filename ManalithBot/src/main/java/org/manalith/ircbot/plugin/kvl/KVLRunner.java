@@ -16,14 +16,14 @@ public class KVLRunner {
 	}
 
 	private void initKVLRun() throws Exception {
-		StreamDownloader d = new StreamDownloader(
-				"http://kernel.org/index.shtml");
-		KVLTableTokenAnalyzer tAnalyzer = new KVLTableTokenAnalyzer(
-				d.downloadDataStream());
-		TokenArray array = tAnalyzer.analysisTokenStream();
+//		StreamDownloader d = new StreamDownloader(
+//				"http://kernel.org/index.shtml");
+//		KVLTableTokenAnalyzer tAnalyzer = new KVLTableTokenAnalyzer(
+//				d.downloadDataStream());
+//		TokenArray array = tAnalyzer.analysisTokenStream();
 
 		// TODO
-		KVLTableBuilder tBuilder = new KVLTableBuilder(array);
+		KVLTableBuilder tBuilder = new KVLTableBuilder("http://kernel.org/index.shtml"/*array*/);
 		kvlTable = tBuilder.generateKernelVersionTable();
 	}
 

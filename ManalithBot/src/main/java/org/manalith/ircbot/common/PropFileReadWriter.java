@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.common;
 
 import java.util.Properties;
 import java.io.IOException;

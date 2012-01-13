@@ -7,13 +7,22 @@ package org.manalith.ircbot.resources;
 public class MessageEvent {
 	private final String channel;
 	private final String sender;
-
 	private final String login;
-
 	private final String hostname;
 
 	private String message;
 	private boolean executed; // 실행 완료 여부
+
+	// This is for PrivateMessage
+	public MessageEvent(String sender, String login, String hostname,
+			String message) {
+		this.channel = null;
+		this.sender = sender;
+		this.login = login;
+		this.hostname = hostname;
+		this.message = message;
+	}
+
 	public MessageEvent(String channel, String sender, String login,
 			String hostname, String message) {
 		this.channel = channel;
@@ -22,6 +31,7 @@ public class MessageEvent {
 		this.hostname = hostname;
 		this.message = message;
 	}
+
 	public String getChannel() {
 		return channel;
 	}

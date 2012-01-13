@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.calc;
 
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -30,14 +29,16 @@ public class CalcPlugin extends AbstractBotPlugin {
 
 		if (command[0].equals("!eval")) {
 			if (command.length == 1) {
-				BotMain.BOT.sendLoggedMessage(channel, "입력한 식이 없습니다.");
+				bot.sendLoggedMessage(channel, "입력한 식이 없습니다.");
+				bot.sendLoggedMessage(channel, this.getHelp());
 			} else {
 				String expr = "";
 				for (int i = 1; i < command.length; i++) {
 					expr += command[i];
 				}
-				BotMain.BOT.sendLoggedMessage(channel, CalcRunner.run(expr));
+				bot.sendLoggedMessage(channel, CalcRunner.run(expr));
 			}
+			event.setExecuted(true);
 		}
 
 	}

@@ -300,7 +300,7 @@ public class CERMessageTokenAnalyzer {
 						throw new InvalidArgumentException("불 필요한 옵션"); // [Amount]
 																		// [Currency_unit1]
 																		// [Currency_unit2]
-																		// (???)
+																		// (???) <- 
 				} else {
 					throw new InvalidArgumentException("통화단위 아님"); // [Amount]
 																	// [Currency_unit1]
@@ -344,7 +344,7 @@ public class CERMessageTokenAnalyzer {
 												// [Currency_unit1]
 
 				if (i == len) {
-					result += " USD"; // --convert [Amount] [Currency_unit1] USD
+					result += " KRW"; // --convert [Amount] [Currency_unit1] KRW
 					return result;
 				}
 			} else {

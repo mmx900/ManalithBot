@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONTokener;
 import org.json.JSONObject;
 
+import org.manalith.ircbot.common.StreamDownloader;
 import org.manalith.ircbot.plugin.twitreader.exceptions.StrDoesntSpecifiedException;
 import org.manalith.ircbot.plugin.twitreader.exceptions.UnknownTypeOfStringException;
 

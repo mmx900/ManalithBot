@@ -63,7 +63,6 @@ DistroPkgFinder comes as new feature! ( -> darkcircle )
  > Debian, Ubuntu, Fedora is supported to find a package we want to know ( !deb, !ubu, !fed )
 
 2011. 12. 17
-
 DistroPkgFinder's bug is fixed ( -> setzer )
  > DistroPkgFinder's three or more word imprudent rejection problem is fixed
 
@@ -77,12 +76,10 @@ Gentoo Distro's package searching feature is added ( -> darkcircle )
  > DistroPkgFinder->GentooPkgFinderJsoupRunner
 
 2011. 12. 24
-
 CER is fully implemented again ( -> darkcircle )
  > Complicating command grammar is changed
 
 2011. 12. 25
-
 fdbot is added ( -> darkcircle )
  > This module is for bot waiting original bot
 
@@ -90,7 +87,6 @@ WaitBDBot is added ( -> darkcircle )
  > This module is for bot waiting original bot. if original bot joined in the channel, this module will terminate itself
 
 2011. 12. 27
-
 TwitReader is added ( -> darkcircle )
  > This module helps to show text of twitter's article
   ex ) !twit https://twitter.com/#!/somebody/status/xxxxxxxxxxxxxxxxxxxxx
@@ -100,5 +96,18 @@ TwitReader is added ( -> darkcircle )
 newCER command is changed to "!curex"
 
 Custom setting feature is added to newCER
- > !curex:sub [list_of_comma_separated_currency_unit] : set a custom view for yourself
- > !curex:unsub : remove your custom view
+ > !curex:sub [list_of_comma_separated_currency_unit] : set a custom view for his/herself
+ > !curex:unsub : remove his/her own custom view
+
+2011. 12. 29
+NvidiaDriverNews is added ( -> darkcircle )
+
+2012. 12. 31
+newCER is renamed to cer2 ( -> mmx900 )
+
+2012. 01 .01
+google is modified to search an information using google API ( -> mmx900 )
+
+2012. 01. 02
+missedmessage is added ( -> darkcircle )
+ > It can says left message by anyone to someone who was left and returned into the channel again.

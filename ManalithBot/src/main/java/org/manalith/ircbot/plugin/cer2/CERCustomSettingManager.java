@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
 
 public class CERCustomSettingManager extends TokenAnalyzer {
