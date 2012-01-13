@@ -72,7 +72,10 @@ public class CERPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 		if (command[0].length() < 6)
+		{
+			// do not recognize as cmd and just return
 			return;
+		}
 		else if (command[0].substring(0, 6).equals("!curex")) {
 			String[] subcmd = command[0].split("\\:");
 			if (!subcmd[0].equals("!curex"))

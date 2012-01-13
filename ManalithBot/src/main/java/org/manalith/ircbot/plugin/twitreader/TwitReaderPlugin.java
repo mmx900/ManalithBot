@@ -11,7 +11,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getName() {
-		return "뒷북 트윗리더";
+		return "트윗리더";
 	}
 
 	public String getNamespace() {
