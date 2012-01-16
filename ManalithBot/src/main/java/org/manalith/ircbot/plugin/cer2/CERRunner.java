@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.manalith.ircbot.common.PropertyManager;
+
 public class CERRunner {
 
 	private String args;

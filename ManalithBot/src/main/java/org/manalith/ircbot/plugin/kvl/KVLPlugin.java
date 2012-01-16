@@ -33,6 +33,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 		if (command[0].equals("!kernel")) {
 			if (command.length >= 3) {
 				bot.sendLoggedMessage(channel, "Too many arguments!");
+				event.setExecuted(true);
 				return;
 			}
 
@@ -42,6 +43,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 				bot.sendLoggedMessage(channel, runner.run(command[1]));
 			else
 				bot.sendLoggedMessage(channel, runner.run(""));
+			event.setExecuted(true);
 		}
 	}
 

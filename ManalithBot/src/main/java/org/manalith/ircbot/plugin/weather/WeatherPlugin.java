@@ -37,14 +37,19 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
+			event.setExecuted(true);
 		} else if (message.equals(command)) {
 			bot.sendLoggedMessage(channel, this.getHelp());// String.format("사용법 : %s [영문 지명]",
 															// command));
+			event.setExecuted(true);
 		} else if (message.startsWith(command)
 				&& message.length() >= command.length() + 2) {
 			bot.sendLoggedMessage(channel,
 					getGoogleWeather(message.substring(command.length() + 1)));
+			event.setExecuted(true);
 		}
+		
+		
 	}
 
 	public String getGoogleWeather(String keyword) {
