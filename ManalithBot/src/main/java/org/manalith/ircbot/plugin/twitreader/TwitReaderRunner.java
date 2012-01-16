@@ -1,18 +1,25 @@
 package org.manalith.ircbot.plugin.twitreader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 import org.json.JSONObject;
 
-import org.manalith.ircbot.common.StreamDownloader;
 import org.manalith.ircbot.plugin.twitreader.exceptions.StrDoesntSpecifiedException;
 import org.manalith.ircbot.plugin.twitreader.exceptions.UnknownTypeOfStringException;
 
@@ -60,28 +67,41 @@ public class TwitReaderRunner {
 
 		if (type == StrType.TwitURL) {
 			try {
+				String [] PathnQuery = this.getJSONPathNQuery(type);
+				URI uri = URIUtils.createURI("https", "api.twitter.com", -1, PathnQuery[0], PathnQuery[1], null);
+				HttpGet get = new HttpGet(uri);
+				
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				
 				JSONObject obj = new JSONObject(new JSONTokener(
-						(new StreamDownloader(this.getJSONURL(type)))
-								.downloadDataStream()));
-
+						(new BufferedReader(new InputStreamReader(httpclient.execute(get).getEntity().getContent()))).readLine()));
+				
 				String written_by = obj.getJSONObject("user").getString("name");
 				String body = obj.getString("text");
-
+				 
 				// result[0] = "작성자 : " + written_by + ", 작성시각 : " +
 				// getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : "
 				// + Creating_Source.replaceAll(
 				// "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>",
 				// "");
 				result = "작성자 : " + written_by + ", 본문 : " + body;
+				//*/
 			} catch (Exception e) {
 				result = e.getMessage();
 				return result;
 			}
 		} else if (type == StrType.UserURL || type == StrType.ScrName) {
 			try {
-				JSONArray arr = new JSONArray(new JSONTokener(
-						(new StreamDownloader(this.getJSONURL(type)))
-								.downloadDataStream()));
+				//*
+				
+				String [] PathnQuery = this.getJSONPathNQuery(type);
+				URI uri = URIUtils.createURI("https", "api.twitter.com", -1, PathnQuery[0], PathnQuery[1], null);
+				HttpGet get = new HttpGet(uri);
+				
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				
+				JSONArray arr = new JSONArray(new JSONTokener((new BufferedReader(new InputStreamReader(httpclient.execute(get).getEntity().getContent()))).readLine()));
+				
 				if (arr.length() == 0) {
 					result = "게시물이 존재하지 않습니다";
 				} else {
@@ -94,12 +114,29 @@ public class TwitReaderRunner {
 							+ getDateTimeinKoreanFormat(written_datetime)
 							+ ", 본문 : " + body;
 				}
+				//*/
 			} catch (NullPointerException e) {
 				result = "페이지가 존재하지 않습니다";
-			} catch (IOException ie) {
+				e.printStackTrace();
+				return result;
+			} 
+			//*
+			catch (IOException ie) {
 				result = ie.getMessage();
-			} catch (JSONException je) {
+				ie.printStackTrace();
+				return result;
+			}
+			catch (JSONException je) {
 				result = je.getMessage();
+				je.printStackTrace();
+				return result;
+			}
+			//*/
+			catch (URISyntaxException urie) {
+				// TODO Auto-generated catch block
+				result = urie.getMessage();
+				urie.printStackTrace();
+				return result;
 			}
 		}
 		return result;
@@ -139,22 +176,24 @@ public class TwitReaderRunner {
 		return result;
 	}
 
-	private String getJSONURL(StrType type) {
-		String json_requrl = "";
+	private String[] getJSONPathNQuery(StrType type) {
+		String [] json_requrl = new String[2]; 
+		// [0] : path, [1] query, [2] path, [3] query 
 
 		if (type == StrType.TwitURL) {
 			String[] split_url = this.getStr().split("\\/");
 			String twit_id = split_url[split_url.length - 1];
-			json_requrl = "https://api.twitter.com/1/statuses/show.json?id="
-					+ twit_id + "&include_entities=false";
-		} else if (type == StrType.ScrName)
-			json_requrl = "https://api.twitter.com/1/statuses/user_timeline.json?include_entities=false&include_rts=true&screen_name="
-					+ this.getStr() + "&count=1";
+			json_requrl[0] = "1/statuses/show.json";
+			json_requrl[1] =	"id=" + twit_id + "&include_entities=false";
+		} else if (type == StrType.ScrName) {
+			json_requrl[0] = "1/statuses/user_timeline.json";
+			json_requrl[1] = "include_entities=false&include_rts=true&screen_name="	+ this.getStr() + "&count=1";
+		}
 		else if (type == StrType.UserURL) {
 			String[] userurl = this.getStr().split("\\/");
 			String scrname = userurl[userurl.length - 1];
-			json_requrl = "https://api.twitter.com/1/statuses/user_timeline.json?include_entities=false&include_rts=true&screen_name="
-					+ scrname + "&count=1";
+			json_requrl[0] = "1/statuses/user_timeline.json";
+			json_requrl[1] = "include_entities=false&include_rts=true&screen_name="	+ scrname + "&count=1";
 		}
 
 		return json_requrl;
