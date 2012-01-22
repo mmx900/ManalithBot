@@ -77,6 +77,7 @@ public class BotMain {
 		//bot.addPlugin(new org.manalith.ircbot.plugin.dictionary.DictionaryPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.relay.RelayPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.setzer.SetzerPlugin());
+		bot.addPlugin(new org.manalith.ircbot.plugin.urititle.UriTitlePlugin(bot));
 
 		final StringTokenizer st = new StringTokenizer(
 				config.getDefaultChannels(), ",");
