@@ -20,9 +20,6 @@ import org.json.JSONException;
 import org.json.JSONTokener;
 import org.json.JSONObject;
 
-import org.manalith.ircbot.plugin.twitreader.exceptions.StrDoesntSpecifiedException;
-import org.manalith.ircbot.plugin.twitreader.exceptions.UnknownTypeOfStringException;
-
 public class TwitReaderRunner {
 	private String[] str;
 
