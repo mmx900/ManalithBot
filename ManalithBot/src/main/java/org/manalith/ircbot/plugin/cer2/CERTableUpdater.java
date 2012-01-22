@@ -17,7 +17,7 @@ public class CERTableUpdater {
 
 	private String LocalPath;
 	private String propFileName;
-	private SQLiteTableManager sqlman;
+	private HSQLDBTableManager sqlman;
 
 	private DateTimeRound local;
 	private DateTimeRound remote;
@@ -48,9 +48,9 @@ public class CERTableUpdater {
 
 	private void initSQLiteTable() throws SQLException, ClassNotFoundException {
 		if (this.getLocalPath().equals("")) {
-			sqlman = new SQLiteTableManager("currency.db");
+			sqlman = new HSQLDBTableManager("currency.db");
 		} else {
-			sqlman = new SQLiteTableManager(this.getLocalPath(), "currency.db");
+			sqlman = new HSQLDBTableManager(this.getLocalPath(), "currency.db");
 		}
 	}
 
