@@ -19,7 +19,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "!twit (URL)";
+		return "";
 	}
 
 	@Override
@@ -29,23 +29,12 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 
-		if (command[0].equals("!twit")) {
-			if (command.length == 1) {
-				bot.sendLoggedMessage(channel, this.getHelp());
-			} else if (command.length > 2) {
-				bot.sendLoggedMessage(channel, "불필요한 옵션이 있습니다.");
-			} else {
-				TwitReaderRunner runner = new TwitReaderRunner(command[1]);
-				String /* [] */result = runner.run();
-				/*
-				 * int length = result.length;
-				 * 
-				 * for ( int i = 0 ; i < length ; i++ ) {
-				 */
-				bot.sendLoggedMessage(channel, result/* [i] */);
-				// }
+		TwitReaderRunner runner = new TwitReaderRunner(command);
+		String /* [] */result = runner.run();
 
-			}
+		if ( !result.equals("") )
+		{
+			bot.sendLoggedMessage(channel, result/* [i] */);
 			event.setExecuted(true);
 		}
 		
