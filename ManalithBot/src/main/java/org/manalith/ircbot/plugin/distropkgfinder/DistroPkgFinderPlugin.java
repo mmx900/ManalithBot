@@ -32,6 +32,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 				&& command.length > 2) {
 			bot.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
 			event.setExecuted(true);
+			return;
 		}
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")
 				|| command[0].equals("!fed") || command[0].equals("!gen"))
