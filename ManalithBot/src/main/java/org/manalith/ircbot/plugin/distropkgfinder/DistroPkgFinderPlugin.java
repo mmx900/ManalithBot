@@ -30,7 +30,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getNamespace() {
-		return "deb|ubu|fed|gen";
+		return "deb|ubu|fed|gen|ar";
 	}
 
 	public String getName() {
@@ -38,7 +38,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name)";
+		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -47,9 +47,8 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		String[] command = message.split("\\s");
 
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")
-				|| command[0].equals("!fed") || command[0].equals("!gen")
-				|| command[0].equals("!ar"))
-				&& command.length > 2) {
+				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
+					.equals("!ar")) && command.length > 2) {
 			bot.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
 			event.setExecuted(true);
 			return;
@@ -83,6 +82,5 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, runner.run());
 			event.setExecuted(true);
 		}
-
 	}
 }
