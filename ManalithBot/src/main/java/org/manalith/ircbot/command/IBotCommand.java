@@ -1,7 +1,7 @@
 /*
- 	IBotCommand.java
+ 	org.manalith.ircbot.command/IBotCommand.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2011  Ki-Beom, Kim
+ 	Copyright (C) 2005, 2011  Ki-Beom, Kim
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
