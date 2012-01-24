@@ -1,7 +1,8 @@
 /*
- 	DistroPkgFinderPlugin.java
+ 	org.manalith.ircbot.plugin.distopkgfinder/DistroPkgFinderPlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011, 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
+ 	Copyright (C) 2012  Changwoo, Ryu <cwryu@debian.org>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,14 +60,14 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, this.getHelp());
 			event.setExecuted(true);
 		} else if (command[0].equals("!deb")) {
-			DebianPkgFinderJsoupRunner runner = new DebianPkgFinderJsoupRunner(
+			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(
 					command[1]);
 			String[] lines = runner.run().split("\n");
 			for (String l : lines)
 			    bot.sendLoggedMessage(channel, l);
 			event.setExecuted(true);
 		} else if (command[0].equals("!ubu")) {
-			UbuntuPkgFinderJsoupRunner runner = new UbuntuPkgFinderJsoupRunner(
+			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(
 					command[1]);
 			bot.sendLoggedMessage(channel, runner.run());
 			event.setExecuted(true);
@@ -75,7 +76,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, runner.run());
 			event.setExecuted(true);
 		} else if (command[0].equals("!gen")) {
-			GentooPkgFinderJsoupRunner runner = new GentooPkgFinderJsoupRunner(
+			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(
 					command[1]);
 			bot.sendLoggedMessage(channel, runner.run());
 			event.setExecuted(true);
