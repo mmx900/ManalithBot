@@ -71,7 +71,7 @@ public class MissedMessageRunner {
 							if (availableSpace != 0) {
 								if (msglen <= 150) {
 									
-									prop.setValue(receiver, str + "::" + "[남김:"
+									prop.setKeyValue(receiver, str + "::" + "[남김:"
 											+ sender + "] " + msg);
 									result.append(availableSpace - 1);
 									result.append(" / 3 )");
@@ -86,7 +86,7 @@ public class MissedMessageRunner {
 						} else // if key has no value
 						{
 							if (msglen <= 150) {
-								prop.setValue(receiver, "[남김:" + sender + "] "
+								prop.setKeyValue(receiver, "[남김:" + sender + "] "
 										+ msg);
 								result.append(StringUtils.split(receiver,'.')[1]);
 								result.append("님의 남은 메시지 공간 ( 2 / 3 )");
@@ -132,7 +132,7 @@ public class MissedMessageRunner {
 					for ( int i = 0 ; i < msgs.length; i++ )
 						msgs[i] = newRecv.split("\\.")[1] + ", " + msgs[i];
 					
-					prop.setValue(newRecv, "");
+					prop.setKeyValue(newRecv, "");
 					prop.storeProperties();
 				}
 			}
@@ -151,7 +151,7 @@ public class MissedMessageRunner {
 			prop.loadProperties();
 
 			// if user not found, init msgslot
-			prop.setValue(newRecv, "");
+			prop.setKeyValue(newRecv, "");
 			prop.storeProperties();
 
 		} catch (IOException ioe) {

@@ -33,11 +33,11 @@ public class CalcPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return "계산";
+		return "계산|eval";
 	}
 
 	public String getHelp() {
-		return "!계산 (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
+		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -45,7 +45,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		String[] command = message.split("\\s");
 
-		if (command[0].equals("!계산")) {
+		if (command[0].equals("!계산") || command[0].equals("!eval")) {
 			if (command.length == 1) {
 				bot.sendLoggedMessage(channel, "입력한 식이 없습니다.");
 				bot.sendLoggedMessage(channel, this.getHelp());
