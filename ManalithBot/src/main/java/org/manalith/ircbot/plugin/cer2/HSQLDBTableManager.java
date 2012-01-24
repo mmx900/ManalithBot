@@ -1,5 +1,5 @@
 //
-// SQLiteTableManager.java
+// HSQLDBTableManager.java
 // darkcircle dot 0426 at gmail dot com
 //
 // This source can be distributed under the terms of GNU General Public License version 3
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-public class SQLiteTableManager {
+public class HSQLDBTableManager {
 
 	private Connection conn;
 	private Statement stat;
@@ -27,18 +27,18 @@ public class SQLiteTableManager {
 	private String path;
 	private String filename;
 
-	public SQLiteTableManager(String newFilename) throws SQLException,
+	public HSQLDBTableManager(String newFilename) throws SQLException,
 			ClassNotFoundException {
 		this.setPath("");
 		this.setFilename(newFilename);
-		this.initJDBCDriverSQLite();
+		this.initJDBCDriverHSQLDB();
 	}
 
-	public SQLiteTableManager(String newPath, String newFilename)
+	public HSQLDBTableManager(String newPath, String newFilename)
 			throws SQLException, ClassNotFoundException {
 		this.setPath(newPath);
 		this.setFilename(newFilename);
-		this.initJDBCDriverSQLite();
+		this.initJDBCDriverHSQLDB();
 	}
 
 	private void setPath(String newPath) {
@@ -57,22 +57,22 @@ public class SQLiteTableManager {
 		return this.filename;
 	}
 
-	private void initJDBCDriverSQLite() throws SQLException,
+	private void initJDBCDriverHSQLDB() throws SQLException,
 			ClassNotFoundException {
-		Class.forName("org.sqlite.JDBC");
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
-		conn = DriverManager.getConnection("jdbc:sqlite:" + this.getPath()
-				+ this.getFilename());
+		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath()
+				+ this.getFilename(),"sa","");
 		stat = conn.createStatement();
 	}
 
 	private void initCurrencyRateTable() throws SQLException {
 		stat.executeUpdate("drop table if exists CurrencyRate");
-		stat.executeUpdate("vacuum");
+		//stat.executeUpdate("vacuum");
 
 		String fields = "";
-		fields += "country_name VARCHAR NOT NULL ,";
-		fields += "currency_name VARCHAR NOT NULL ,";
+		fields += "country_name VARCHAR(32) NOT NULL ,";
+		fields += "currency_name VARCHAR(5) NOT NULL ,";
 		fields += "currency_unit INT NOT NULL ,";
 		fields += "central_rate REAL NOT NULL ,";
 		fields += "cash_buy REAL NOT NULL ,";

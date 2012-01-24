@@ -96,8 +96,8 @@ public class CERRunner {
 					default_currency = new String[4];
 					default_currency[0] = "USD";
 					default_currency[1] = "EUR";
-					default_currency[3] = "JPY";
-					default_currency[4] = "CNY";
+					default_currency[2] = "JPY";
+					default_currency[3] = "CNY";
 				}
 			}
 
