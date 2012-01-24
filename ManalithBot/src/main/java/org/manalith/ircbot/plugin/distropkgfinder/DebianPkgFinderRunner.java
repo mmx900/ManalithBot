@@ -50,15 +50,19 @@ public class DebianPkgFinderRunner {
 
 		for (Element e : exactHits) {
 			String dist = e.select("a").text().split("[\\(\\)]")[1];
-			String version;
-			String[] verSplit = e.toString()
-				.split("\\<br\\s\\/>")[1].split("\\:");
-			if (verSplit.length == 2)
-				version = verSplit[0];
-			else if (verSplit.length == 3)
-				version = verSplit[1];
-			else
-				version = "PARSEERROR";
+			String version = "UNKNOWN";
+			String[] versionLines =
+				e.toString().split("\\<br\\s\\/>");
+
+			for (String line : versionLines) {
+				String v = line.split(":")[0];
+				if (v.split("\\s").length > 1)
+					continue;
+				else {
+					version = v;
+					break;
+				}
+			}
 
 			result += version + " (" + dist + ") ";
 		}
