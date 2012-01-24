@@ -1,3 +1,6 @@
 *~
 /data
 /target
+/src/main/java/org/manalith/ircbot/plugin/ircrelayupdater
+/src/main/java/org/manalith/ircbot/plugin/fdbot
+/src/main/java/org/manalith/ircbot/plugin/waitbdbot
