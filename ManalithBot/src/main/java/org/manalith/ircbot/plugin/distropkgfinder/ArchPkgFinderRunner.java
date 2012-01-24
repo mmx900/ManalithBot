@@ -1,5 +1,5 @@
 /*
- 	ArchPkgFinderRunner.java
+ 	org.manalith.ircbot.plugin.distopkgfinder/ArchPkgFinderRunner.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
