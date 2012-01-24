@@ -142,9 +142,6 @@ public class CERPlugin extends AbstractBotPlugin {
 			if (subcmd[1].equals("sub"))
 				bot.sendLoggedMessage(channel, csMan.addUserSetting());
 			else if (subcmd[1].equals("unsub")) {
-
-				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
-
 				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
 			} else
 				bot.sendLoggedMessage(channel, "그런 옵션은 없습니다.");
