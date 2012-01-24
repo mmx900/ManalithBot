@@ -1,3 +1,23 @@
+/*
+ 	org.manalith.ircbot/ManalithBot.java
+ 	ManalithBot - An open source IRC bot based on the PircBot Framework.
+ 	Copyright (C) 2005, 2011  Ki-Beom, Kim
+ 	Copyright (C) 2011, 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package org.manalith.ircbot;
 
 import java.io.IOException;
@@ -122,7 +142,18 @@ public class ManalithBot extends PircBot {
 	
 	@Override
     protected void onPrivateMessage(String sender, String login, String hostname, String message) {
-		
+		logger.trace(String.format("PRIVMSG : %s / %s / %s / %s", sender , login , hostname , message ));
+		if(message.equals("!도움") || message.equals("!help")){
+			sendMessage(sender, "!도움, !help, 배워, !plugins");
+		}
+		else if (message.equals("!plugins"))
+		{
+			sendMessage(sender, pluginManager.getPluginInfo());
+		}
+		else
+		{
+			pluginManager.onPrivateMessage(sender,login,hostname,message);
+		}
 	}
 	
 	@Override
@@ -146,7 +177,7 @@ public class ManalithBot extends PircBot {
 	protected void onPart(String channel, String sender, String login, String hostname) {
 		logger.trace(String.format("PART : %s / %s / %s / %s", channel, sender, login, hostname));
 
-		//pluginManager.onPart(channel, sender, login, hostname);
+		pluginManager.onPart(channel, sender, login, hostname);
 	}
 	
 	@Override

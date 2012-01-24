@@ -68,7 +68,7 @@ public class UbuntuPkgFinderJsoupRunner {
 
 			pkgname = div.select("h3").get(0).text().split("\\s")[1];
 
-			result = pkgname + "-";
+			result = pkgname + "  ";
 			Elements ExactHits = div.select("ul").get(0).select("li");
 			int elemCnt = ExactHits.size();
 			Element latestElement = ExactHits.get(elemCnt - 1);

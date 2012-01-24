@@ -24,16 +24,35 @@ public class DebianPkgFinderJsoupRunner {
 		return this.keyword;
 	}
 
+	public String parseVersionInfo(Document doc) {
+		Elements exactHits = doc.select("#psearchres").select("ul")
+			.get(0).select("li");
+		String result = "";
+
+		for (Element e : exactHits) {
+			String dist = e.select("a").text().split("[\\(\\)]")[1];
+			String version;
+			String[] verSplit = e.toString()
+				.split("\\<br\\s\\/>")[1].split("\\:");
+			if (verSplit.length == 2)
+				version = verSplit[0];
+			else if (verSplit.length == 3)
+				version = verSplit[1];
+			else
+				version = "PARSEERROR";
+
+			result += version + " (" + dist + ") ";
+		}
+
+		return result;
+	}
+
 	public String run() {
 		String result = "";
 		String url = "http://packages.debian.org/search?keywords="
 				+ this.getKeyword() + "&searchon=names&suite=all&section=all";
 
 		boolean hasExacthits = false;
-
-		String pkgname = "";
-		String version = "";
-		String description = "";
 
 		try {
 			Document doc = Jsoup.connect(url).get();
@@ -60,32 +79,18 @@ public class DebianPkgFinderJsoupRunner {
 				return result;
 			}
 
-			pkgname = doc.select("#psearchres").select("h3").get(0).text()
-					.split("\\s")[1];
+			String pkgname = doc.select("#psearchres")
+			    .select("h3").get(0).text().split("\\s")[1];
 
-			result = pkgname + "-";
-			Elements ExactHits = doc.select("#psearchres").select("ul").get(0)
+			Elements exactHits = doc.select("#psearchres").select("ul").get(0)
 					.select("li");
-			int elemCnt = ExactHits.size();
-			if (ExactHits.get(elemCnt - 1).select("a").text()
-					.contains("experimental"))
-				elemCnt--;
-			Element latestElement = ExactHits.get(elemCnt - 1);
-
-			String[] verSplit = latestElement.toString().split("\\<br\\s\\/>")[1]
-					.split("\\:");
-			if (verSplit.length == 2)
-				version = verSplit[0];
-			else if (verSplit.length == 3)
-				version = verSplit[1];
-
-			result += version + " : ";
-
-			description = latestElement.toString().split("\\<br\\s\\/>")[0]
+			int elemCnt = exactHits.size();
+			Element latestElement = exactHits.get(elemCnt - 1);
+			String description = latestElement.toString().split("\\<br\\s\\/>")[0]
 					.split("\\:")[1].trim();
 
-			result += description;
-
+			result = pkgname + " - " + description + "\n";
+			result += parseVersionInfo(doc);
 		} catch (Exception e) {
 			result = e.getMessage();
 			return result;

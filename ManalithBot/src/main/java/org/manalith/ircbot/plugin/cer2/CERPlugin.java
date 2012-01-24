@@ -72,7 +72,10 @@ public class CERPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 		if (command[0].length() < 6)
+		{
+			// do not recognize as cmd and just return
 			return;
+		}
 		else if (command[0].substring(0, 6).equals("!curex")) {
 			String[] subcmd = command[0].split("\\:");
 			if (!subcmd[0].equals("!curex"))
@@ -107,8 +110,11 @@ public class CERPlugin extends AbstractBotPlugin {
 					} catch (Exception e) {
 						bot.sendLoggedMessage(channel, e.getMessage());
 					}
-				} else if (subcmd.length > 2)
-					return;
+				}
+				else if (subcmd.length > 2)
+				{
+					bot.sendLoggedMessage(channel, "옵션이 너무 많습니다");
+				}
 				else {
 					// remerge strings separated by space.
 					String userNick = event.getSender();
@@ -126,11 +132,14 @@ public class CERPlugin extends AbstractBotPlugin {
 					if (subcmd[1].equals("sub"))
 						bot.sendLoggedMessage(channel, csMan.addUserSetting());
 					else if (subcmd[1].equals("unsub"))
+						
 						bot.sendLoggedMessage(channel,
 								csMan.removeUserSetting());
 					else
-						return;
+						bot.sendLoggedMessage(channel, "그런 옵션은 없습니다.");
+
 				}
+				event.setExecuted(true);
 			}
 		}
 	}

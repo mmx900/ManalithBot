@@ -1,3 +1,21 @@
+/*
+ 	org.manalith.ircbot.plugin.weather/WeatherPlugin.java
+ 	ManalithBot - An open source IRC bot based on the PircBot Framework.
+ 	Copyright (C) 2011  Ki-Beom, Kim
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package org.manalith.ircbot.plugin.weather;
 
 import java.io.IOException;
@@ -37,14 +55,19 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
+			event.setExecuted(true);
 		} else if (message.equals(command)) {
 			bot.sendLoggedMessage(channel, this.getHelp());// String.format("사용법 : %s [영문 지명]",
 															// command));
+			event.setExecuted(true);
 		} else if (message.startsWith(command)
 				&& message.length() >= command.length() + 2) {
 			bot.sendLoggedMessage(channel,
 					getGoogleWeather(message.substring(command.length() + 1)));
+			event.setExecuted(true);
 		}
+		
+		
 	}
 
 	public String getGoogleWeather(String keyword) {

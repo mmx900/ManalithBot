@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
+import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.cer2.exceptions.FileDoesntSpecifiedException;
 
 public class RemoteLocalDatetimeChecker {
