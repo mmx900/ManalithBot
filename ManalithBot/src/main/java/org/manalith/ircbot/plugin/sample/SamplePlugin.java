@@ -35,7 +35,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 		return "Sample Plugin";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		// TODO Auto-generated method stub
 		return null;
 	}

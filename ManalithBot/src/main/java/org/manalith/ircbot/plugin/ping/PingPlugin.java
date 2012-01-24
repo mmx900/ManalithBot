@@ -18,7 +18,7 @@ public class PingPlugin extends AbstractBotPlugin {
 		return "핑";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return null;
 	}
 

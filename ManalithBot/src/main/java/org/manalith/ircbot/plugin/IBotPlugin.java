@@ -23,7 +23,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 public interface IBotPlugin {
 	public String getName();
 
-	public String getNamespace();
+	public String getCommands();
 
 	public String getHelp();
 

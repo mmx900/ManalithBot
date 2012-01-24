@@ -85,7 +85,7 @@ public class PluginManager {
 				else
 					i++; //
 
-				sb.append(name + "(" + p.getNamespace() + ")");
+				sb.append(name + "(" + p.getCommands() + ")");
 			}
 		}
 

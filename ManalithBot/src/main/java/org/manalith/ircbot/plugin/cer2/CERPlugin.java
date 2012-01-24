@@ -43,7 +43,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * 
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getNamespace()
 	 */
-	public String getNamespace() {
+	public String getCommands() {
 		return "curex|환율";
 	}
 

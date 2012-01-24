@@ -30,7 +30,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		super(bot);
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return "deb|ubu|fed|gen|ar";
 	}
 

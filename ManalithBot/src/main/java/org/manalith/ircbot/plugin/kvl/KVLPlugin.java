@@ -32,7 +32,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 		return "커널버전리스트";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return "kernel";
 	}
 

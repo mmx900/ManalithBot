@@ -32,7 +32,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 		return "트윗리더";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return "twit";
 	}
 

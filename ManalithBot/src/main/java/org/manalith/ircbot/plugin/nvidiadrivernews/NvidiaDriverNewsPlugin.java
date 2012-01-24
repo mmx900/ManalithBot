@@ -32,7 +32,7 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		return "Nvidia최신버전";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return "nvidia";
 	}
 
