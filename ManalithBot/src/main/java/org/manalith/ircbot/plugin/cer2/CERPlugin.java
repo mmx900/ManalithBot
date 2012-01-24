@@ -106,15 +106,15 @@ public class CERPlugin extends AbstractBotPlugin {
 				String result = runner.run();
 				if (result.equals("Help!")) {
 					/*
-					bot.sendLoggedMessage(channel,
-							CERInfoProvider.getIRCHelpMessagePart1());
-					bot.sendLoggedMessage(channel,
-							CERInfoProvider.getIRCHelpMessagePart2());
-					bot.sendLoggedMessage(channel,
-							CERInfoProvider.getIRCHelpMessagePart3());
-					bot.sendLoggedMessage(channel,
-							CERInfoProvider.getIRCHelpMessagePart4());
-					*/
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart1());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart2());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart3());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart4());
+					 */
 					bot.sendLoggedMessage(channel, "도움말 그런거 없음!");
 
 				} else {
@@ -123,12 +123,9 @@ public class CERPlugin extends AbstractBotPlugin {
 			} catch (Exception e) {
 				bot.sendLoggedMessage(channel, e.getMessage());
 			}
-		}
-		else if (subcmd.length > 2)
-		{
+		} else if (subcmd.length > 2) {
 			bot.sendLoggedMessage(channel, "옵션이 너무 많습니다");
-		}
-		else {
+		} else {
 			// remerge strings separated by space.
 			String userNick = event.getSender();
 
@@ -144,15 +141,12 @@ public class CERPlugin extends AbstractBotPlugin {
 
 			if (subcmd[1].equals("sub"))
 				bot.sendLoggedMessage(channel, csMan.addUserSetting());
-			else if (subcmd[1].equals("unsub"))
-			{
+			else if (subcmd[1].equals("unsub")) {
 
 				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
-				
-				bot.sendLoggedMessage(channel,
-						csMan.removeUserSetting());
-			}
-			else
+
+				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
+			} else
 				bot.sendLoggedMessage(channel, "그런 옵션은 없습니다.");
 
 		}
