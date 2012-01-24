@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Properties;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -77,15 +76,7 @@ public class RemoteLocalDatetimeChecker {
 		PropertyManager prop = new PropertyManager(this.getLocalPath(),
 				this.getLocalFilename());
 
-		try {
-			prop.loadProperties();
-		} catch (IOException e) {
-			prop.setProp(new Properties());
-			prop.setValue("date", "");
-			prop.setValue("round", "0");
-
-			prop.storeProperties();
-		}
+		prop.loadProperties();
 
 		if (prop.getValue("date") == null || prop.getValue("date").equals("")) {
 			GregorianCalendar tCalendar = new GregorianCalendar();

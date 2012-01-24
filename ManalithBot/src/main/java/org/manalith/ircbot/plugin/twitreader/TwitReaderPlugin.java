@@ -33,7 +33,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return "twit";
+		return null;
 	}
 
 	public String getHelp() {

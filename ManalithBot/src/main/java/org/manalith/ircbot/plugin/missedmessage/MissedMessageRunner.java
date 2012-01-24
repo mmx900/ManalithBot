@@ -20,7 +20,6 @@ package org.manalith.ircbot.plugin.missedmessage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
@@ -122,13 +121,8 @@ public class MissedMessageRunner {
 		try {
 			
 			// init!
-			try {
-				prop.loadProperties();
-			} catch (IOException e) {
-				prop.setProp(new Properties());
-				prop.storeProperties();
-				return msgs;
-			}
+			prop.loadProperties();
+
 
 			if ( this.isMatchedNickinList(newRecv) )
 			{
@@ -154,13 +148,7 @@ public class MissedMessageRunner {
 		PropertyManager prop = new PropertyManager(this.getResourcePath(),
 				MissedMessageRunner.filename);
 		try {
-			try {
-				prop.loadProperties();
-			} catch (IOException ioe) {
-				// create empty properties
-				prop.setProp(new Properties());
-				prop.storeProperties();
-			}
+			prop.loadProperties();
 
 			// if user not found, init msgslot
 			prop.setValue(newRecv, "");
@@ -176,30 +164,19 @@ public class MissedMessageRunner {
 		boolean result = false;
 		PropertyManager prop = new PropertyManager ( this.getResourcePath(), MissedMessageRunner.filename);
 		
-		try {
-			try {
-				prop.loadProperties();
-			} catch (IOException ioe) {
-				// create empty properties
-				prop.setProp(new Properties());
-				prop.storeProperties();
-			}
-
-			String[] userlist = prop.getKeyList();
-			if (userlist != null) {
-				for (String u : userlist) {
-					// if user found from userlist, just break this routine
-					if (u.equals(newRecv))
-					{
-						result = true;
-						break;
-					}
+		
+		prop.loadProperties();
+			
+		String[] userlist = prop.getKeyList();
+		if (userlist != null) {
+			for (String u : userlist) {
+				// if user found from userlist, just break this routine
+				if (u.equals(newRecv))
+				{
+					result = true;
+					break;
 				}
 			}
-		}
-		catch ( IOException e )
-		{
-			; // ignore
 		}
 		
 		return result;

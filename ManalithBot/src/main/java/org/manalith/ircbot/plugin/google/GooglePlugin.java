@@ -37,7 +37,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String NAMESPACE = "gg";
+	private static final String NAMESPACE = "구글";
 
 	public GooglePlugin(ManalithBot bot) {
 		super(bot);
@@ -52,7 +52,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "사용법 : gg [키워드], gg:match [키워드1] [키워드2]";
+		return "사용법 : !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -62,16 +62,16 @@ public class GooglePlugin extends AbstractBotPlugin {
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
 		} else if (message.length() >= 12
-				&& message.substring(0, 9).equals("gg:match ")) {
+				&& ( message.substring(0, 9).equals("!구글:match ") || message.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
 		} else if (message.length() >= 4
-				&& message.substring(0, 3).equals("gg ")) {
+				&& ( message.substring(0, 3).equals("구글 ") || message.substring(0, 3).equals("gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(3)));
 		} else if (message.length() >= 5
-				&& message.substring(0, 4).equals("!gg ")) {
+				&& ( message.substring(0, 4).equals("!구글 ") || message.substring(0, 4).equals("!gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(4)));
 		}
