@@ -32,7 +32,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		return "뒷북 계산기";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return "eval";
 	}
 

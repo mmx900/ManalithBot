@@ -47,7 +47,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 		return "Google";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return NAMESPACE;
 	}
 

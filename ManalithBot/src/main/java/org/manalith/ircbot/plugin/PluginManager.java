@@ -15,12 +15,13 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class PluginManager {
@@ -85,7 +86,12 @@ public class PluginManager {
 				else
 					i++; //
 
-				sb.append(name + "(" + p.getNamespace() + ")");
+				sb.append(name);
+
+				String commands = p.getCommands();
+				if (StringUtils.isNotBlank(commands)) {
+					sb.append("(" + commands + ")");
+				}
 			}
 		}
 

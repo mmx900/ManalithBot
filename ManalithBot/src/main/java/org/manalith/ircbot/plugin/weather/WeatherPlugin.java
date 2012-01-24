@@ -40,7 +40,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		return "구글 날씨";
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		return NAMESPACE.substring(1);
 	}
 

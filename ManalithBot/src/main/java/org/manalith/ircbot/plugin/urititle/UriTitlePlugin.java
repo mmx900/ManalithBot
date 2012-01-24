@@ -31,7 +31,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
         super(bot);
     }
 
-    public String getNamespace() {
+    public String getCommands() {
         return null;
     }
 

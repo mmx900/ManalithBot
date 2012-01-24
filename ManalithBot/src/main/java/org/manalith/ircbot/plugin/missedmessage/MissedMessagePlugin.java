@@ -36,7 +36,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 		return null;
 	}
 
-	public String getNamespace() {
+	public String getCommands() {
 		// TODO Auto-generated method stub
 		return null;
 	}
