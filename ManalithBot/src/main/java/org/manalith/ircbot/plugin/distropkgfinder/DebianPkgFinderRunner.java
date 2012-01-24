@@ -81,7 +81,7 @@ public class DebianPkgFinderRunner {
 		try {
 			
 			Connection conn = Jsoup.connect(url);
-			conn.timeout(10000);
+			conn.timeout(20000);
 			Document doc = conn.get();
 
 			if (doc.select("#psearchres").size() == 0) {
