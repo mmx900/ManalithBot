@@ -44,7 +44,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getNamespace()
 	 */
 	public String getNamespace() {
-		return "curex";
+		return "환율";
 	}
 
 	/*
@@ -83,14 +83,14 @@ public class CERPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 
 		String[] command = msg.split("\\s");
-		if (command[0].length() < 6)
+		if (command[0].length() < 3)
 		{
 			// do not recognize as cmd and just return
 			return;
 		}
-		else if (command[0].substring(0, 6).equals("!curex")) {
+		else if (command[0].substring(0, 3).equals("!환율")) {
 			String[] subcmd = command[0].split("\\:");
-			if (!subcmd[0].equals("!curex"))
+			if (!subcmd[0].equals("!환율"))
 				return;
 			else {
 				if (subcmd.length == 1) {
@@ -108,6 +108,7 @@ public class CERPlugin extends AbstractBotPlugin {
 
 						String result = runner.run();
 						if (result.equals("Help!")) {
+							/*
 							bot.sendLoggedMessage(channel,
 									CERInfoProvider.getIRCHelpMessagePart1());
 							bot.sendLoggedMessage(channel,
@@ -116,6 +117,8 @@ public class CERPlugin extends AbstractBotPlugin {
 									CERInfoProvider.getIRCHelpMessagePart3());
 							bot.sendLoggedMessage(channel,
 									CERInfoProvider.getIRCHelpMessagePart4());
+							*/
+							bot.sendLoggedMessage(channel, "도움말 그런거 없다능! (츤츤)ㄴ");
 						} else {
 							bot.sendLoggedMessage(channel, result);
 						}
