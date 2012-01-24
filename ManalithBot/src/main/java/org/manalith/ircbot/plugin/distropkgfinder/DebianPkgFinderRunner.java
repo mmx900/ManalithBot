@@ -19,6 +19,7 @@
  */
 package org.manalith.ircbot.plugin.distropkgfinder;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -78,7 +79,10 @@ public class DebianPkgFinderRunner {
 		boolean hasExacthits = false;
 
 		try {
-			Document doc = Jsoup.connect(url).get();
+			
+			Connection conn = Jsoup.connect(url);
+			conn.timeout(10000);
+			Document doc = conn.get();
 
 			if (doc.select("#psearchres").size() == 0) {
 				result = "There is no result";
