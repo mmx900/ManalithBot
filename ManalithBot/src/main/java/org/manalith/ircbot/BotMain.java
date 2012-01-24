@@ -77,39 +77,15 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-<<<<<<< HEAD
-		//bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.waitbdbot.WaitBDBotPlugin(bot));
-=======
-		// bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.waitbdbot.WaitBDBotPlugin(bot));
->>>>>>> 56bd3ef48154e3f2d802b680fe19decacbd99864
 		bot.addPlugin(new org.manalith.ircbot.plugin.twitreader.TwitReaderPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.nvidiadrivernews.NvidiaDriverNewsPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.missedmessage.MissedMessagePlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.distropkgfinder.DistroPkgFinderPlugin(bot));
-		// bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.kvl.KVLPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.cer2.CERPlugin(bot));
-		// bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.ircrelayupdater.IRCRelayUpdaterPlugin(bot));
-		// bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.google.GooglePlugin(bot));
-		// bot.addPlugin(new org.manalith.ircbot.plugin.bsh.BshPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.chat.TranslatePlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.dictionary.DictionaryPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.relay.RelayPlugin());
-		// bot.addPlugin(new org.manalith.ircbot.plugin.setzer.SetzerPlugin());
+		bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.nvidiadrivernews.NvidiaDriverNewsPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.DistroPkgFinder.DistroPkgFinderPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
 		// bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.cer2.CERPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
 		//bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
