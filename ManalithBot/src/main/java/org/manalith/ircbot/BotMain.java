@@ -57,7 +57,7 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-		//bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
+		bot.addPlugin(new org.manalith.ircbot.plugin.fdbot.fdbotPlugin(bot));
 		//bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.waitbdbot.WaitBDBotPlugin(bot));
 		bot.addPlugin(new org.manalith.ircbot.plugin.twitreader.TwitReaderPlugin(bot));
