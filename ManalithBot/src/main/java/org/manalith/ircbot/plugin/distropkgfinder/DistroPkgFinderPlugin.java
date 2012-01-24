@@ -26,10 +26,6 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 
-	public DistroPkgFinderPlugin(ManalithBot bot) {
-		super(bot);
-	}
-
 	public String getCommands() {
 		return "deb|ubu|fed|gen|ar";
 	}

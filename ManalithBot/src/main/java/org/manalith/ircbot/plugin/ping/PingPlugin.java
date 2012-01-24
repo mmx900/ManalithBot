@@ -5,15 +5,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang.StringUtils;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class PingPlugin extends AbstractBotPlugin {
-	public PingPlugin(ManalithBot bot) {
-		super(bot);
-	}
-
 	public String getName() {
 		return "핑";
 	}

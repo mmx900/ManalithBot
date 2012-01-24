@@ -18,15 +18,10 @@
 */
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
-
-	public NvidiaDriverNewsPlugin(ManalithBot bot) {
-		super(bot);
-	}
 
 	public String getName() {
 		return "Nvidia최신버전";

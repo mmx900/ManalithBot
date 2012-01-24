@@ -20,17 +20,13 @@ package org.manalith.ircbot.plugin.urititle;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class UriTitlePlugin extends AbstractBotPlugin {
-    public UriTitlePlugin(ManalithBot bot) {
-        super(bot);
-    }
-
     public String getCommands() {
         return null;
     }

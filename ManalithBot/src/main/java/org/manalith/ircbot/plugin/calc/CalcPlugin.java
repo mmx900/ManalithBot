@@ -24,10 +24,6 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class CalcPlugin extends AbstractBotPlugin {
 
-	public CalcPlugin(ManalithBot bot) {
-		super(bot);
-	}
-
 	public String getName() {
 		return "뒷북 계산기";
 	}

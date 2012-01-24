@@ -26,8 +26,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-
-//import org.hsqldb.Server;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class BotMain {
 	public static ManalithBot BOT; // FIXME 플러그인이 메시지 전송을 위해 봇 인스턴스를 호출하는 경로
@@ -54,49 +54,15 @@ public class BotMain {
 		// 설정 초기화
 		ConfigurationManager config = ConfigurationManager.getInstance();
 
-		// DB 시작
-		// Server hsqlServer = null;
-		//
-		// try {
-		// hsqlServer = new Server();
-		//
-		// hsqlServer.setDatabaseName(0, "manalith_ircbot");
-		// hsqlServer.setDatabasePath(0, "file:manalith_ircbot");
-		//
-		// hsqlServer.start();
-		// } finally {
-		// if (hsqlServer != null) {
-		// hsqlServer.stop();
-		// }
-		// }
+		ApplicationContext context = new FileSystemXmlApplicationContext("springcontext.xml");
 
 		// 봇 구동
-		final ManalithBot bot = new ManalithBot(config.getBotName());
+		final ManalithBot bot = context.getBean(ManalithBot.class);
 		BOT = bot;
+		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
-
-		bot.addPlugin(new org.manalith.ircbot.plugin.twitreader.TwitReaderPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.missedmessage.MissedMessagePlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.distropkgfinder.DistroPkgFinderPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.weather.WeatherPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.nvidiadrivernews.NvidiaDriverNewsPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.Calc.CalcPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.KVL.KVLPlugin(bot));
-		// bot.addPlugin(new org.manalith.ircbot.plugin.CER.CERPlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.cer2.CERPlugin(bot));
-		//bot.addPlugin(new org.manalith.ircbot.plugin.et.ETPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.rss.SlashdotReaderPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.javaapi.JavaApiPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.google.GooglePlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.bsh.BshPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.chat.TranslatePlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.dictionary.DictionaryPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.relay.RelayPlugin());
-		//bot.addPlugin(new org.manalith.ircbot.plugin.setzer.SetzerPlugin());
-		bot.addPlugin(new org.manalith.ircbot.plugin.urititle.UriTitlePlugin(bot));
-		bot.addPlugin(new org.manalith.ircbot.plugin.ping.PingPlugin(bot));
 
 		final StringTokenizer st = new StringTokenizer(
 				config.getDefaultChannels(), ",");

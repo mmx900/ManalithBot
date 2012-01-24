@@ -21,6 +21,7 @@
 package org.manalith.ircbot;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jibble.pircbot.DccChat;
@@ -43,13 +44,20 @@ public class ManalithBot extends PircBot {
 	private static final String[] owners = {};
 	private PluginManager pluginManager = new PluginManager();
 
-	protected ManalithBot(String name) throws NickAlreadyInUseException,
+	public ManalithBot(List<IBotPlugin> plugins) {
+		for (IBotPlugin plugin : plugins) {
+			addPlugin(plugin);
+		}
+	}
+
+	public void setNickname(String name) throws NickAlreadyInUseException,
 			IOException, IrcException {
 		this.setName(name);
 	}
 
 	public void addPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
+		plugin.setBot(this);
 	}
 
 	/**

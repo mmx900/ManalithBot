@@ -24,10 +24,6 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class KVLPlugin extends AbstractBotPlugin {
 
-	public KVLPlugin(ManalithBot bot) {
-		super(bot);
-	}
-
 	public String getName() {
 		return "커널버전리스트";
 	}

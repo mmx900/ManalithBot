@@ -32,10 +32,6 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "!날씨";
 
-	public WeatherPlugin(ManalithBot bot) {
-		super(bot);
-	}
-
 	public String getName() {
 		return "구글 날씨";
 	}

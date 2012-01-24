@@ -19,15 +19,10 @@
  */
 package org.manalith.ircbot.plugin.cer2;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class CERPlugin extends AbstractBotPlugin {
-
-	public CERPlugin(ManalithBot bot) {
-		super(bot);
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin;
 
 import java.io.File;
@@ -26,7 +26,14 @@ import org.manalith.ircbot.resources.MessageEvent;
 public abstract class AbstractBotPlugin implements IBotPlugin {
 	protected ManalithBot bot;
 
+	public AbstractBotPlugin() {
+	}
+
 	public AbstractBotPlugin(ManalithBot bot) {
+		this.bot = bot;
+	}
+
+	public void setBot(ManalithBot bot) {
 		this.bot = bot;
 	}
 
@@ -56,7 +63,7 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void onPrivateMessage(MessageEvent event) {
 		// TODO Auto-generated method stub
 	}

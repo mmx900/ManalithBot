@@ -18,15 +18,10 @@
 */
 package org.manalith.ircbot.plugin.twitreader;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class TwitReaderPlugin extends AbstractBotPlugin {
-
-	public TwitReaderPlugin(ManalithBot bot) {
-		super(bot);
-	}
 
 	public String getName() {
 		return "트윗리더";
