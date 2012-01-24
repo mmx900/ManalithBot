@@ -19,8 +19,7 @@
 package org.manalith.ircbot.plugin.cer2;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Properties;
+
 
 import org.manalith.ircbot.common.PropertyManager;
 
@@ -90,12 +89,8 @@ public class CERRunner {
 
 			PropertyManager prop = new PropertyManager(this.getDataPath(),
 					"customsetlist.prop");
-			try {
-				prop.loadProperties();
-			} catch (IOException e) {
-				prop.setProp(new Properties());
-				prop.storeProperties();
-			}
+			prop.loadProperties();
+
 
 			String[] userlist = prop.getKeyList();
 			if (userlist == null) {

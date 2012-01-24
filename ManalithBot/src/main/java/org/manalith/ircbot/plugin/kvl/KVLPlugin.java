@@ -33,12 +33,12 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return "kernel";
+		return "커널|kernel";
 	}
 
 	@Override
 	public String getHelp() {
-		return "!kernel (latest[default]|all|help)";
+		return "!커널 (latest[default]|all|help), !kernel (latest[default]|all|help)";
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 
-		if (command[0].equals("!kernel")) {
+		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
 			if (command.length >= 3) {
 				bot.sendLoggedMessage(channel, "Too many arguments!");
 				event.setExecuted(true);

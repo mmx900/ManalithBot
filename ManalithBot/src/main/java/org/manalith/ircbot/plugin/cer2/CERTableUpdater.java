@@ -96,12 +96,12 @@ public class CERTableUpdater {
 		date += ":";
 		date += Integer.toString(remote.getCalendar().get(
 				GregorianCalendar.MINUTE));
-		pm.setValue("date", date);
+		pm.setKeyValue("date", date);
 
 		String round = Integer.toString(remote.getRoundVal());
 		while (round.length() < 3)
 			round = "0" + round;
-		pm.setValue("round", round);
+		pm.setKeyValue("round", round);
 
 		// commit into prop file.
 		pm.storeProperties();
