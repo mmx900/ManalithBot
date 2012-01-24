@@ -20,7 +20,6 @@ package org.manalith.ircbot.plugin.cer2;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -108,12 +107,9 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 
 			PropertyManager customsetlist = new PropertyManager(
 					this.getLocalPath(), "customsetlist.prop");
-			try {
-				customsetlist.loadProperties();
-			} catch (IOException ii) {
-				customsetlist.setProp(new Properties());
-				customsetlist.storeProperties();
-			}
+
+			customsetlist.loadProperties();
+
 
 			String[] userlist = customsetlist.getKeyList();
 			if (userlist == null) {
@@ -122,7 +118,7 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
 			}
 
-			customsetlist.setValue(
+			customsetlist.setKeyValue(
 					this.getChannel().substring(1) + "." + this.getUserNick(),
 					this.getCurrencyArgString());
 			customsetlist.storeProperties();
@@ -145,12 +141,9 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 		try {
 			PropertyManager customsetlist = new PropertyManager(
 					this.getLocalPath(), "customsetlist.prop");
-			try {
-				customsetlist.loadProperties();
-			} catch (IOException ii) {
-				customsetlist.setProp(new Properties());
-				customsetlist.storeProperties();
-			}
+			
+			customsetlist.loadProperties();
+			
 
 			String[] userlist = customsetlist.getKeyList();
 			if (userlist == null) {

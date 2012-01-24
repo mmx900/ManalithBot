@@ -73,13 +73,13 @@ public class HSQLDBTableManager {
 		Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
 		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath()
-				+ this.getFilename(),"sa","");
+				+ this.getFilename(), "sa", "");
 		stat = conn.createStatement();
 	}
 
 	private void initCurrencyRateTable() throws SQLException {
 		stat.executeUpdate("drop table if exists CurrencyRate");
-		//stat.executeUpdate("vacuum");
+		// stat.executeUpdate("vacuum");
 
 		String fields = "";
 		fields += "country_name VARCHAR(32) NOT NULL ,";
@@ -145,37 +145,34 @@ public class HSQLDBTableManager {
 							j--; // trick
 						}
 					} else {
-						if ( i == 0 && j == 1 ) t = Double.parseDouble(tds.get(j).text().replaceAll("\\,","")); 
+						if (i == 0 && j == 1)
+							t = Double.parseDouble(tds.get(j).text()
+									.replaceAll("\\,", ""));
 						stmt.setDouble(
 								3 + j,
 								Double.parseDouble(tds.get(j).text()
 										.replaceAll("\\,", "")));
 					}
 				}
-				
-				
-				
+
 				stmt.addBatch();
 				conn.setAutoCommit(false);
 				stmt.executeBatch();
 				conn.setAutoCommit(true);
 				stmt.clearParameters();
 			}
-			
+
 			stmt.setString(1, "한국");
 			stmt.setString(2, "KRW");
 			stmt.setInt(3, 1);
-			for ( int k = 4 ; k <= 6 ; k++ )
-			{
-				stmt.setDouble(k, 1.0 );
+			for (int k = 4; k <= 6; k++) {
+				stmt.setDouble(k, 1.0);
 			}
-			for ( int k = 7 ; k <= 9 ; k++ )
-			{
-				stmt.setDouble(k, 0.0 );
+			for (int k = 7; k <= 9; k++) {
+				stmt.setDouble(k, 0.0);
 			}
-			System.out.println(String.format("%.3f",1.0 / t));
-			stmt.setDouble(10,1.0/t);
-			
+			stmt.setDouble(10, 1.0 / t);
+
 			stmt.addBatch();
 			conn.setAutoCommit(false);
 			stmt.executeBatch();

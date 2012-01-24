@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.common;
 
 import java.util.Properties;
@@ -75,13 +75,23 @@ public class PropertyManager {
 		return this.prop;
 	}
 
-	public void loadProperties() throws IOException {
-		PropFileReadWriter fr = new PropFileReadWriter(this.getPath()
-				+ this.getFilename());
-		this.setProp(fr.bringUpPropertyFromFile());
+	public void loadProperties() {
 
-		if (this.getProp() == null)
-			this.initProp();
+		try {
+			PropFileReadWriter fr = new PropFileReadWriter(this.getPath()
+					+ this.getFilename());
+			this.setProp(fr.bringUpPropertyFromFile());
+
+			if (this.getProp() == null)
+				this.initProp();
+		} catch (IOException ioe) {
+			this.setProp(new Properties());
+			try {
+				this.storeProperties();
+			} catch (Exception e) {
+				;
+			}
+		}
 	}
 
 	public void storeProperties() throws FileNotFoundException, IOException {
@@ -94,7 +104,11 @@ public class PropertyManager {
 		return (String) this.getProp().get(key);
 	}
 
-	public void setValue(String key, String value) {
+	public void setKey(String key) {
+		this.getProp().setProperty(key, "");
+	}
+
+	public void setKeyValue(String key, String value) {
 		this.getProp().setProperty(key, value);
 	}
 
