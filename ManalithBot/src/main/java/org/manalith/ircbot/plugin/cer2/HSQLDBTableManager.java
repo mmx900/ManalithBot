@@ -201,6 +201,7 @@ public class HSQLDBTableManager {
 	}
 
 	public void close() throws SQLException {
+		stat.executeUpdate("SHUTDOWN");
 		conn.close();
 	}
 }
