@@ -18,7 +18,6 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
