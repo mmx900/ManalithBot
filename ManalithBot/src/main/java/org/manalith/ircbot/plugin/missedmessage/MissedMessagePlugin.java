@@ -20,25 +20,19 @@ package org.manalith.ircbot.plugin.missedmessage;
 
 import org.jibble.pircbot.User;
 import org.manalith.ircbot.BotMain;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class MissedMessagePlugin extends AbstractBotPlugin {
 
-	public MissedMessagePlugin(ManalithBot bot) {
-		super(bot);
-		// TODO Auto-generated constructor stub
-	}
-
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "부재중메시지";
 	}
 
 	public String getCommands() {
 		// TODO Auto-generated method stub
-		return null;
+		return "msg";
 	}
 
 	public String getHelp() {
