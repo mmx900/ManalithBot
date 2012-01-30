@@ -124,7 +124,7 @@ public class ManalithBot extends PircBot {
 	protected void onUserList(String channel, User[] users) {
 
 	}
-
+	//*
 	@Override
 	protected void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
@@ -150,7 +150,7 @@ public class ManalithBot extends PircBot {
 			pluginManager.onMessage(channel, sender, login, hostname, message);
 		}
 	}
-
+	//*/
 	@Override
 	protected void onPrivateMessage(String sender, String login,
 			String hostname, String message) {
