@@ -36,7 +36,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
-	
+	//*
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
@@ -81,7 +81,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			event.setExecuted(true);
 		}
 	}
-	
+	//*/
 	public void onPrivateMessage ( MessageEvent event ) 
 	{
 		String message = event.getMessage();

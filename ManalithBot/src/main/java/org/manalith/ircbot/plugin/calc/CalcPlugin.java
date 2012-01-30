@@ -34,7 +34,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
-
+	//*
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
@@ -54,7 +54,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 			event.setExecuted(true);
 		}
 	}
-	
+	//*/
 	public void onPrivateMessage(MessageEvent event)
 	{
 		String message = event.getMessage();

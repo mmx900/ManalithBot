@@ -42,7 +42,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "사용법 : !날씨 [영문 지명]";
 	}
-
+	//*
 	public void onMessage(MessageEvent event) {
 		String command = NAMESPACE;// "!날씨";
 
@@ -64,7 +64,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		
 		
 	}
-	
+	//*/
 	public void onPrivateMessage(MessageEvent event) {
 		String command = NAMESPACE;// "!날씨";
 

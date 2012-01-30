@@ -41,7 +41,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 */
 
 	public String getCommands() {
-		return "curex|환율";
+		return "환율|curex";
 	}
 
 	/*
@@ -75,6 +75,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
 	 * .MessageEvent)
 	 */
+	//*
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
@@ -109,7 +110,8 @@ public class CERPlugin extends AbstractBotPlugin {
 					 * CERInfoProvider.getIRCHelpMessagePart3());
 					 * bot.sendLoggedMessage(channel,
 					 * CERInfoProvider.getIRCHelpMessagePart4());
-					 */
+					 // */
+	//*
 					bot.sendLoggedMessage(channel, "도움말 그런거 없음!");
 
 				} else {
@@ -144,6 +146,7 @@ public class CERPlugin extends AbstractBotPlugin {
 		}
 		event.setExecuted(true);
 	}
+	//*/
 	public void onPrivateMessage(MessageEvent event) {
 		String msg = event.getMessage();
 		String sender = event.getSender();
