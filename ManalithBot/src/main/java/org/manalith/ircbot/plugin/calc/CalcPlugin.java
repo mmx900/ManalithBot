@@ -53,7 +53,28 @@ public class CalcPlugin extends AbstractBotPlugin {
 			}
 			event.setExecuted(true);
 		}
-
+	}
+	
+	public void onPrivateMessage(MessageEvent event)
+	{
+		String message = event.getMessage();
+		String sender = event.getSender();
+		
+		String[] command = message.split("\\s");
+		
+		if (command[0].equals("!계산") || command[0].equals("!eval")) {
+			if (command.length == 1) {
+				bot.sendLoggedMessage(sender, "입력한 식이 없습니다.");
+				bot.sendLoggedMessage(sender, this.getHelp());
+			} else {
+				String expr = "";
+				for (int i = 1; i < command.length; i++) {
+					expr += command[i];
+				}
+				bot.sendLoggedMessage(sender, CalcRunner.run(expr));
+			}
+			event.setExecuted(true);
+		}
 	}
 
 }
