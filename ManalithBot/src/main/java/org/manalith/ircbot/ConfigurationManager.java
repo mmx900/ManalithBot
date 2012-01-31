@@ -75,8 +75,19 @@ public class ConfigurationManager {
 	}
 
 	public boolean getVerbose() {
-		return Boolean.parseBoolean(properties
-				.getProperty("org.manalith.ircbot.bot.verbose"));
+		boolean result;
+
+		try
+		{
+			result = Boolean.parseBoolean(properties
+					.getProperty("org.manalith.ircbot.bot.verbose"));
+		}
+		catch ( Exception e )
+		{
+			result = false;
+		}
+		
+		return result;
 	}
 
 	public String getServer() {
@@ -84,8 +95,17 @@ public class ConfigurationManager {
 	}
 
 	public int getServerPort() {
-		return Integer.parseInt(properties
-				.getProperty("org.manalith.ircbot.bot.server.port"));
+		int port;
+		try
+		{
+			port = Integer.parseInt(properties
+					.getProperty("org.manalith.ircbot.bot.server.port"));
+		}
+		catch ( Exception e )
+		{
+			port = 0;
+		}
+		return port;
 	}
 
 	public String getServerEncoding() {
@@ -96,6 +116,69 @@ public class ConfigurationManager {
 	public String getDefaultChannels() {
 		return properties
 				.getProperty("org.manalith.ircbot.bot.server.channels");
+	}
+	
+	public boolean getEnableRelay()
+	{
+		boolean result;
+		try
+		{
+			result = Boolean.parseBoolean(properties
+					.getProperty("org.manalith.ircbot.bot.enablerelay"));
+		}
+		catch ( Exception e )
+		{
+			result = false;
+		}
+		return result;
+	}
+	
+	public String getRelayBotName()
+	{
+		return properties.getProperty("org.manalith.ircbot.bot.plugin.relay.name");
+	}
+	
+	public boolean getRelayVerbose () 
+	{
+		boolean result;
+		try
+		{
+			result = Boolean.parseBoolean(properties.getProperty("org.manalith.ircbot.bot.plugin.relay.verbose"));
+		}
+		catch ( Exception e )
+		{
+			result = false;
+		}
+		return result;
+	}
+	
+	public String getRelayServer()
+	{
+		return properties.getProperty("org.manalith.ircbot.bot.plugin.relay.server");
+	}
+	
+	public int getRelayServerPort ()
+	{
+		int port;
+		try
+		{
+			port = Integer.parseInt(properties.getProperty("org.manalith.ircbot.bot.plugin.relay.server.port"));
+		}
+		catch ( Exception e )
+		{
+			port = 0;
+		}
+		return port;
+	}
+	
+	public String getRelayServerEncoding () 
+	{
+		return properties.getProperty("org.manalith.ircbot.bot.plugin.relay.server.encoding");
+	}
+	
+	public String getRelayDefaultChannels()
+	{
+		return properties.getProperty("org.manalith.ircbot.bot.plugin.relay.server.channels");
 	}
 
 	public static boolean isWindows() {
