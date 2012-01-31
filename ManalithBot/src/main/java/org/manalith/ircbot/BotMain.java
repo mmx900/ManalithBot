@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class BotMain {
-	public static ManalithBot BOT; // FIXME 플러그인이 메시지 전송을 위해 봇 인스턴스를 호출하는 경로
+	// public static ManalithBot BOT; // FIXME 플러그인이 메시지 전송을 위해 봇 인스턴스를 호출하는 경로
 
 	public static void main(String[] args) throws Exception {
 		// 인코딩을 검사한다.
@@ -58,7 +58,7 @@ public class BotMain {
 
 		// 봇 구동
 		final ManalithBot bot = context.getBean(ManalithBot.class);
-		BOT = bot;
+		// BOT = bot;
 		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());
