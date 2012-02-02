@@ -41,7 +41,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 */
 
 	public String getCommands() {
-		return "curex|환율";
+		return "환율|curex";
 	}
 
 	/*
@@ -75,6 +75,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
 	 * .MessageEvent)
 	 */
+	//*
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
@@ -109,7 +110,8 @@ public class CERPlugin extends AbstractBotPlugin {
 					 * CERInfoProvider.getIRCHelpMessagePart3());
 					 * bot.sendLoggedMessage(channel,
 					 * CERInfoProvider.getIRCHelpMessagePart4());
-					 */
+					 // */
+	//*
 					bot.sendLoggedMessage(channel, "도움말 그런거 없음!");
 
 				} else {
@@ -140,6 +142,76 @@ public class CERPlugin extends AbstractBotPlugin {
 				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
 			} else
 				bot.sendLoggedMessage(channel, "그런 옵션은 없습니다.");
+
+		}
+		event.setExecuted(true);
+	}
+	//*/
+	public void onPrivateMessage(MessageEvent event) {
+		String msg = event.getMessage();
+		String sender = event.getSender();
+
+		String[] command = msg.split("\\s");
+		if (!command[0].equals("!curex") && !command[0].equals("!환율")
+				&& !command[0].startsWith("!curex:")
+				&& !command[0].startsWith("!환율:"))
+			return;
+
+		String[] subcmd = command[0].split("\\:");
+		if (subcmd.length == 1) {
+			String mergedcmd = "";
+			for (int i = 1; i < command.length; i++) {
+				mergedcmd += command[i];
+				if (i != command.length - 1)
+					mergedcmd += " ";
+			}
+
+			try {
+				CERRunner runner = new CERRunner(event.getSender(),
+						this.getResourcePath(), mergedcmd);
+
+				String result = runner.run();
+				if (result.equals("Help!")) {
+					/*
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart1());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart2());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart3());
+					 * bot.sendLoggedMessage(channel,
+					 * CERInfoProvider.getIRCHelpMessagePart4());
+					 */
+					bot.sendLoggedMessage(sender, "도움말 그런거 없음!");
+
+				} else {
+					bot.sendLoggedMessage(sender, result);
+				}
+			} catch (Exception e) {
+				bot.sendLoggedMessage(sender, e.getMessage());
+			}
+		} else if (subcmd.length > 2) {
+			bot.sendLoggedMessage(sender, "옵션이 너무 많습니다");
+		} else {
+			// remerge strings separated by space.
+			String userNick = event.getSender();
+
+			String arg = "";
+			for (int i = 1; i < command.length; i++) {
+				if (command[i].equals(" "))
+					continue;
+				arg += command[i];
+			}
+
+			CERCustomSettingManager csMan = new CERCustomSettingManager(
+					this.getResourcePath(), sender, userNick, arg);
+
+			if (subcmd[1].equals("sub"))
+				bot.sendLoggedMessage(sender, csMan.addUserSetting());
+			else if (subcmd[1].equals("unsub")) {
+				bot.sendLoggedMessage(sender, csMan.removeUserSetting());
+			} else
+				bot.sendLoggedMessage(sender, "그런 옵션은 없습니다.");
 
 		}
 		event.setExecuted(true);
