@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin.weather;
 
 import java.io.IOException;
@@ -29,62 +29,44 @@ import org.manalith.ircbot.resources.MessageEvent;
 
 public class WeatherPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String NAMESPACE = "!날씨";
+	private static final String COMMAND = "!날씨";
 
 	public String getName() {
 		return "구글 날씨";
 	}
 
 	public String getCommands() {
-		return NAMESPACE.substring(1);
+		return COMMAND.substring(1);
 	}
 
 	public String getHelp() {
 		return "사용법 : !날씨 [영문 지명]";
 	}
-	//*
+
 	public void onMessage(MessageEvent event) {
-		String command = NAMESPACE;// "!날씨";
+		onMessage(event, event.getChannel());
 
-		String message = event.getMessage();
-		String channel = event.getChannel();
-		if (message.equals(NAMESPACE + ":help")) {
-			bot.sendLoggedMessage(channel, getHelp());
-			event.setExecuted(true);
-		} else if (message.equals(command)) {
-			bot.sendLoggedMessage(channel, this.getHelp());// String.format("사용법 : %s [영문 지명]",
-															// command));
-			event.setExecuted(true);
-		} else if (message.startsWith(command)
-				&& message.length() >= command.length() + 2) {
-			bot.sendLoggedMessage(channel,
-					getGoogleWeather(message.substring(command.length() + 1)));
-			event.setExecuted(true);
-		}
-		
-		
 	}
-	//*/
-	public void onPrivateMessage(MessageEvent event) {
-		String command = NAMESPACE;// "!날씨";
 
+	public void onPrivateMessage(MessageEvent event) {
+		onMessage(event, event.getSender());
+	}
+
+	private void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
-		String sender = event.getSender();
-		if (message.equals(NAMESPACE + ":help")) {
-			bot.sendLoggedMessage(sender, getHelp());
+
+		if (message.equals(COMMAND + ":help")) {
+			bot.sendLoggedMessage(target, getHelp());
 			event.setExecuted(true);
-		} else if (message.equals(command)) {
-			bot.sendLoggedMessage(sender, this.getHelp());// String.format("사용법 : %s [영문 지명]",
-															// command));
+		} else if (message.equals(COMMAND)) {
+			bot.sendLoggedMessage(target, this.getHelp());
 			event.setExecuted(true);
-		} else if (message.startsWith(command)
-				&& message.length() >= command.length() + 2) {
-			bot.sendLoggedMessage(sender,
-					getGoogleWeather(message.substring(command.length() + 1)));
+		} else if (message.startsWith(COMMAND)
+				&& message.length() >= COMMAND.length() + 2) {
+			bot.sendLoggedMessage(target,
+					getGoogleWeather(message.substring(COMMAND.length() + 1)));
 			event.setExecuted(true);
 		}
-		
-		
 	}
 
 	public String getGoogleWeather(String keyword) {
