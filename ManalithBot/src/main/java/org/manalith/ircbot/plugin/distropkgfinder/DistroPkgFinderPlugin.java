@@ -21,7 +21,7 @@
 package org.manalith.ircbot.plugin.distropkgfinder;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 
@@ -37,7 +37,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
 	//*
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
 		String[] command = message.split("\\s");
@@ -82,7 +82,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		}
 	}
 	//*/
-	public void onPrivateMessage ( MessageEvent event ) 
+	public void onPrivateMessage ( MessageEventData event ) 
 	{
 		String message = event.getMessage();
 		String sender = event.getSender();

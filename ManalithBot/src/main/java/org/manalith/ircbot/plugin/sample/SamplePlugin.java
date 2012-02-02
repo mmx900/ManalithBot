@@ -18,10 +18,11 @@
 */
 package org.manalith.ircbot.plugin.sample;
 
-import org.jibble.pircbot.User;
+import org.pircbotx.User;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
+
 
 public class SamplePlugin extends AbstractBotPlugin {
 
@@ -49,12 +50,14 @@ public class SamplePlugin extends AbstractBotPlugin {
 
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
+		
+		//Channel chan = 
 
 		if (message.equals("!친반묘")) {
-			User[] users = bot.getUsers(channel);
+			User[] users = event.getUsers();
 			boolean isMyo = false;
 			for (User u : users) {
 				if (u.getNick().equals("myojok")) {
@@ -69,7 +72,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
 		// TODO Auto-generated method stub
 		String message = event.getMessage();
 		String sender = event.getSender();

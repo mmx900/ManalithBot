@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 
@@ -36,7 +36,7 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		return "!nvidia";
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String channel = event.getChannel();
 		String msg = event.getMessage();
 

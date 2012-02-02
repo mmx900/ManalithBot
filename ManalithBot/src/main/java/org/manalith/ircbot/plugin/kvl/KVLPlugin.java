@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin.kvl;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class KVLPlugin extends AbstractBotPlugin {
 
@@ -37,7 +37,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 
@@ -61,7 +61,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 	
 	@Override
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
 		String msg = event.getMessage();
 		String sender = event.getSender();
 

@@ -20,7 +20,7 @@
 package org.manalith.ircbot.plugin.cer2;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class CERPlugin extends AbstractBotPlugin {
 
@@ -73,10 +73,10 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * 
 	 * @see
 	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
-	 * .MessageEvent)
+	 * .MessageEventData)
 	 */
 	//*
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 
@@ -147,7 +147,7 @@ public class CERPlugin extends AbstractBotPlugin {
 		event.setExecuted(true);
 	}
 	//*/
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
 		String msg = event.getMessage();
 		String sender = event.getSender();
 

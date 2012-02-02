@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin.calc;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class CalcPlugin extends AbstractBotPlugin {
 
@@ -35,7 +35,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 	//*
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
 		String[] command = message.split("\\s");
@@ -55,7 +55,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		}
 	}
 	//*/
-	public void onPrivateMessage(MessageEvent event)
+	public void onPrivateMessage(MessageEventData event)
 	{
 		String message = event.getMessage();
 		String sender = event.getSender();
@@ -76,5 +76,4 @@ public class CalcPlugin extends AbstractBotPlugin {
 			event.setExecuted(true);
 		}
 	}
-
 }

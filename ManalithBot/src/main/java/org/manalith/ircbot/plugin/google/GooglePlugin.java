@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import org.manalith.ircbot.ConfigurationManager;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
@@ -55,7 +55,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 		return "사용법 : !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
 
