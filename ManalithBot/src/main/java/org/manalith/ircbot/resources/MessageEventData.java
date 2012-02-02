@@ -22,6 +22,7 @@
 package org.manalith.ircbot.resources;
 
 import org.manalith.ircbot.ManalithBot;
+import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.ActionEvent;
@@ -181,7 +182,18 @@ public class MessageEventData {
 	
 	public User[] getUsers()
 	{
-		return ( this.channel != null ) ? (User[])((MessageEvent<ManalithBot>)this.getEvent()).getChannel().getUsers().toArray() : null;
+		User[] result;
+		
+		if ( ((MessageEvent<ManalithBot>)this.getEvent()).getChannel() != null )
+		{
+			Channel c = ((MessageEvent<ManalithBot>)this.getEvent()).getChannel(); 
+			result = new User[c.getUsers().size()];
+			c.getUsers().toArray(result);
+		}
+		else
+			result = null;
+		
+		return result;
 	}
 
 	public boolean isExecuted() {

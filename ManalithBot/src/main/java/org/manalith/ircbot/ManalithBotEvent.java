@@ -22,12 +22,14 @@
 package org.manalith.ircbot;
 
 import org.apache.log4j.Logger;
-import org.jibble.pircbot.User;
+
 import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.plugin.PluginManager;
 //import org.pircbotx.Channel;
 //import org.pircbotx.DccChat;
 //import org.pircbotx.DccFileTransfer;
+import org.pircbotx.Channel;
+import org.pircbotx.User;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
 
@@ -132,7 +134,8 @@ public class ManalithBotEvent extends ListenerAdapter<ManalithBot> implements
 	@Override
 	public void onUserList(UserListEvent<ManalithBot> event) {
 		String channel = event.getChannel().getName();
-		User[] users = (User[])event.getChannel().getUsers().toArray();
+		User[] users = new User[event.getChannel().getUsers().size()];
+		event.getChannel().getUsers().toArray(users);
 		
 		logger.trace(String.format("USER_LIST : %s / %s", channel, users[0].getNick() + " and " + (users.length - 1) + " more."));
 	}
@@ -213,7 +216,11 @@ public class ManalithBotEvent extends ListenerAdapter<ManalithBot> implements
 		String sourceNick = event.getUser().getNick();
 		String sourceLogin = event.getUser().getLogin();
 		String sourceHostname = event.getUser().getServer();
-		String target = event.getChannel().getName();
+		String target;
+		if ( event.getChannel() != null )   
+			target = event.getChannel().getName();
+		else
+			target = "";
 		String notice = event.getNotice();
 
 		logger.trace(String.format("NOTICE : %s / %s / %s / %s / %s",
