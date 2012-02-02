@@ -20,7 +20,6 @@
 
 package org.manalith.ircbot.plugin.distropkgfinder;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
@@ -37,7 +36,7 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
-
+	//*
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
@@ -79,6 +78,53 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 		} else if (command[0].equals("!ar")) {
 			ArchPkgFinderRunner runner = new ArchPkgFinderRunner(command[1]);
 			bot.sendLoggedMessage(channel, runner.run());
+			event.setExecuted(true);
+		}
+	}
+	//*/
+	public void onPrivateMessage ( MessageEvent event ) 
+	{
+		String message = event.getMessage();
+		String sender = event.getSender();
+		//String channel = event.getChannel();
+		String[] command = message.split("\\s");
+
+		if ((command[0].equals("!deb") || command[0].equals("!ubu")
+				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
+					.equals("!ar")) && command.length > 2) {
+			bot.sendLoggedMessage(sender, "검색 단어는 하나면 충분합니다.");
+			event.setExecuted(true);
+			return;
+		}
+		if ((command[0].equals("!deb") || command[0].equals("!ubu")
+				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
+					.equals("!ar")) && command.length == 1) {
+			bot.sendLoggedMessage(sender, this.getHelp());
+			event.setExecuted(true);
+		} else if (command[0].equals("!deb")) {
+			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(
+					command[1]);
+			String[] lines = runner.run().split("\n");
+			for (String l : lines)
+			    bot.sendLoggedMessage(sender, l);
+			event.setExecuted(true);
+		} else if (command[0].equals("!ubu")) {
+			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(
+					command[1]);
+			bot.sendLoggedMessage(sender, runner.run());
+			event.setExecuted(true);
+		} else if (command[0].equals("!fed")) {
+			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner(command[1]);
+			bot.sendLoggedMessage(sender, runner.run());
+			event.setExecuted(true);
+		} else if (command[0].equals("!gen")) {
+			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(
+					command[1]);
+			bot.sendLoggedMessage(sender, runner.run());
+			event.setExecuted(true);
+		} else if (command[0].equals("!ar")) {
+			ArchPkgFinderRunner runner = new ArchPkgFinderRunner(command[1]);
+			bot.sendLoggedMessage(sender, runner.run());
 			event.setExecuted(true);
 		}
 	}

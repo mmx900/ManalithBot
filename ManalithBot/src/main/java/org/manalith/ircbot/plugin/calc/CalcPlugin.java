@@ -18,7 +18,6 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
@@ -35,7 +34,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
-
+	//*
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel();
@@ -54,7 +53,28 @@ public class CalcPlugin extends AbstractBotPlugin {
 			}
 			event.setExecuted(true);
 		}
-
+	}
+	//*/
+	public void onPrivateMessage(MessageEvent event)
+	{
+		String message = event.getMessage();
+		String sender = event.getSender();
+		
+		String[] command = message.split("\\s");
+		
+		if (command[0].equals("!계산") || command[0].equals("!eval")) {
+			if (command.length == 1) {
+				bot.sendLoggedMessage(sender, "입력한 식이 없습니다.");
+				bot.sendLoggedMessage(sender, this.getHelp());
+			} else {
+				String expr = "";
+				for (int i = 1; i < command.length; i++) {
+					expr += command[i];
+				}
+				bot.sendLoggedMessage(sender, CalcRunner.run(expr));
+			}
+			event.setExecuted(true);
+		}
 	}
 
 }

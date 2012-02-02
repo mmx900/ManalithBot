@@ -22,7 +22,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
@@ -55,8 +54,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 
     private String getTitle(String uri) {
         try {
-            Document doc = Jsoup.connect(uri).get();
-            return doc.title();
+        	return Jsoup.connect(uri).get().title().replaceAll("\\n", "").replaceAll("(\\s){2,}", " ");
         } catch (Exception e) {
             return null;
         }

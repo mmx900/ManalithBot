@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
@@ -43,7 +42,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "사용법 : !날씨 [영문 지명]";
 	}
-
+	//*
 	public void onMessage(MessageEvent event) {
 		String command = NAMESPACE;// "!날씨";
 
@@ -59,6 +58,28 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		} else if (message.startsWith(command)
 				&& message.length() >= command.length() + 2) {
 			bot.sendLoggedMessage(channel,
+					getGoogleWeather(message.substring(command.length() + 1)));
+			event.setExecuted(true);
+		}
+		
+		
+	}
+	//*/
+	public void onPrivateMessage(MessageEvent event) {
+		String command = NAMESPACE;// "!날씨";
+
+		String message = event.getMessage();
+		String sender = event.getSender();
+		if (message.equals(NAMESPACE + ":help")) {
+			bot.sendLoggedMessage(sender, getHelp());
+			event.setExecuted(true);
+		} else if (message.equals(command)) {
+			bot.sendLoggedMessage(sender, this.getHelp());// String.format("사용법 : %s [영문 지명]",
+															// command));
+			event.setExecuted(true);
+		} else if (message.startsWith(command)
+				&& message.length() >= command.length() + 2) {
+			bot.sendLoggedMessage(sender,
 					getGoogleWeather(message.substring(command.length() + 1)));
 			event.setExecuted(true);
 		}

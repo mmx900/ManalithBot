@@ -48,7 +48,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 		if ( !result.equals("") )
 		{
 			bot.sendLoggedMessage(channel, result/* [i] */);
-			event.setExecuted(true);
+			// event.setExecuted(true);
 		}
 		
 	}

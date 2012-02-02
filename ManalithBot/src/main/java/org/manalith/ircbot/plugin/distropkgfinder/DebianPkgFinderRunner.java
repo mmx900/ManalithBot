@@ -56,7 +56,7 @@ public class DebianPkgFinderRunner {
 				e.toString().split("\\<br\\s\\/>");
 
 			for (String line : versionLines) {
-				String v = line.split(":")[0];
+				String v = line.split(": ")[0];
 				if (v.split("\\s").length > 1)
 					continue;
 				else {
