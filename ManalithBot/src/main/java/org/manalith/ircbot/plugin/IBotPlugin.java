@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin;
 
 import org.manalith.ircbot.ManalithBot;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public interface IBotPlugin {
 	public void setBot(ManalithBot bot);
@@ -30,16 +30,15 @@ public interface IBotPlugin {
 
 	public String getHelp();
 
-	public void onJoin(String channel, String sender, String login,
-			String hostname);
+	public void onJoin(MessageEventData event);
+	
+	public void onAction(MessageEventData event);
 
-	public void onMessage(MessageEvent event);
+	public void onMessage(MessageEventData event);
 
-	public void onPrivateMessage(MessageEvent event);
+	public void onPrivateMessage(MessageEventData event);
 
-	public void onPart(String channel, String sender, String login,
-			String hostname);
+	public void onPart(MessageEventData event);
 
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason);
+	public void onQuit(MessageEventData event);
 }

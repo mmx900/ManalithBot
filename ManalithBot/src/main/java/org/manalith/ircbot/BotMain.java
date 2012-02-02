@@ -2,6 +2,7 @@
  	org.manalith.ircbot/BotMain.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2005, 2011, 2012  Ki-Beom, Kim
+ 	Copyright (C) 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,8 +56,18 @@ public class BotMain {
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				"springcontext.xml");
 
+		
+		// 이벤트 리스너 준비
+
+		
+		
 		// 봇 구동
 		final ManalithBot bot = context.getBean(ManalithBot.class);
+		
+		// 이벤트 리스너 등록
+		ManalithBotEvent botEvent = new ManalithBotEvent( bot.getOwners(), bot.getLogger(), bot.getPluginManager() );
+		bot.getListenerManager().addListener(botEvent);
+		
 		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());

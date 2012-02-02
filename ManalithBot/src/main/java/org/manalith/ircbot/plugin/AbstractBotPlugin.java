@@ -21,18 +21,18 @@ package org.manalith.ircbot.plugin;
 import java.io.File;
 
 import org.manalith.ircbot.ManalithBot;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
-	protected ManalithBot bot;
-
+	protected ManalithBot bot; // This is for the pircbot
+	
 	public AbstractBotPlugin() {
+		
 	}
 
 	public AbstractBotPlugin(ManalithBot bot) {
 		this.bot = bot;
 	}
-
 	public void setBot(ManalithBot bot) {
 		this.bot = bot;
 	}
@@ -53,29 +53,31 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 		return null;
 	}
 
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
+	public void onJoin(MessageEventData event) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public void onAction(MessageEventData event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMessage(MessageEventData event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
+		// TODO Auto-generated method stub
+	}
+
+	public void onPart(MessageEventData event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void onPrivateMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
-	}
-
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
+	public void onQuit(MessageEventData event) {
 		// TODO Auto-generated method stub
 
 	}
