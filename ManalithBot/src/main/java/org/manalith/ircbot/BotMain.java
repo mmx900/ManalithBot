@@ -56,18 +56,8 @@ public class BotMain {
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				"springcontext.xml");
 
-		
-		// 이벤트 리스너 준비
-
-		
-		
 		// 봇 구동
-		final ManalithBot bot = context.getBean(ManalithBot.class);
-		
-		// 이벤트 리스너 등록
-		ManalithBotEvent botEvent = new ManalithBotEvent( bot.getOwners(), bot.getLogger(), bot.getPluginManager() );
-		bot.getListenerManager().addListener(botEvent);
-		
+		final ManalithBot bot = context.getBean(ManalithBot.class);		
 		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());

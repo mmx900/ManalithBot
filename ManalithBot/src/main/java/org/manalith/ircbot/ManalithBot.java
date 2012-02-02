@@ -59,7 +59,12 @@ public class ManalithBot extends PircBotX {
 			addPlugin(plugin);
 		}
 		
+		// 로거 초기화
 		logger = Logger.getLogger(getClass());
+		
+		// 이벤트 리스너 등록
+		ManalithBotEvent botEvent = new ManalithBotEvent ( owners, logger, pluginManager );
+		this.getListenerManager().addListener(botEvent);
 	}
 	
 	public Logger getLogger ()
