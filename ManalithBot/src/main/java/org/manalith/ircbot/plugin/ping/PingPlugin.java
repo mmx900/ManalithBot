@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class PingPlugin extends AbstractBotPlugin {
 	public String getName() {
@@ -23,16 +23,16 @@ public class PingPlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		onMessage(event, event.getChannel());
 	}
 
 	@Override
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEvent event, String target) {
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
 
 		if (StringUtils.startsWith(message, "!ping ")) {

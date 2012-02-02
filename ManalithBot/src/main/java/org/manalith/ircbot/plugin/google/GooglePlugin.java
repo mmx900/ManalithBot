@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import org.manalith.ircbot.ConfigurationManager;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
@@ -55,24 +55,34 @@ public class GooglePlugin extends AbstractBotPlugin {
 		return "사용법 : !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
+		this.onMessage(event, event.getChannel());
+	}
+
+	public void onPrivateMessage(MessageEventData event) {
+		this.onMessage(event, event.getSender());
+	}
+
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
-		String channel = event.getChannel();
 
 		if (message.equals(NAMESPACE + ":help")) {
-			bot.sendLoggedMessage(channel, getHelp());
+			bot.sendLoggedMessage(target, getHelp());
 		} else if (message.length() >= 12
-				&& ( message.substring(0, 9).equals("!구글:match ") || message.substring(0, 9).equals("!gg:match "))) {
+				&& (message.substring(0, 9).equals("!구글:match ") || message
+						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
-			bot.sendLoggedMessage(channel,
+			bot.sendLoggedMessage(target,
 					getGoogleMatch(keywords[0], keywords[1]));
 		} else if (message.length() >= 4
-				&& ( message.substring(0, 3).equals("구글 ") || message.substring(0, 3).equals("gg "))) {
-			bot.sendLoggedMessage(channel,
+				&& (message.substring(0, 3).equals("구글 ") || message.substring(
+						0, 3).equals("gg "))) {
+			bot.sendLoggedMessage(target,
 					getGoogleTopResult(message.substring(3)));
 		} else if (message.length() >= 5
-				&& ( message.substring(0, 4).equals("!구글 ") || message.substring(0, 4).equals("!gg "))) {
-			bot.sendLoggedMessage(channel,
+				&& (message.substring(0, 4).equals("!구글 ") || message
+						.substring(0, 4).equals("!gg "))) {
+			bot.sendLoggedMessage(target,
 					getGoogleTopResult(message.substring(4)));
 		}
 		event.setExecuted(true);

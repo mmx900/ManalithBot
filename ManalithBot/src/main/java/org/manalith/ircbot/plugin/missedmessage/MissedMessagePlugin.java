@@ -18,9 +18,9 @@
  */
 package org.manalith.ircbot.plugin.missedmessage;
 
-import org.jibble.pircbot.User;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
+import org.pircbotx.User;
 
 public class MissedMessagePlugin extends AbstractBotPlugin {
 
@@ -38,12 +38,13 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 		return "!msg [닉] [150자 메시지] // 3개 까지 남길 수 있습니다";
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		// TODO <- is lie =3
 		String channel = event.getChannel();
 		String sender = event.getSender();
 		String message = event.getMessage();
-		User[] users = bot.getUsers(channel);
+
+		User[] users = event.getUsers();
 
 		String[] cmdnmsg = message.split("\\s");
 

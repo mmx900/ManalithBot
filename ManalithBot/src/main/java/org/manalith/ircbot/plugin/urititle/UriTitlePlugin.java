@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class UriTitlePlugin extends AbstractBotPlugin {
     public String getCommands() {
@@ -60,7 +60,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
         }
     }
 
-    public void onMessage(MessageEvent event) {
+    public void onMessage(MessageEventData event) {
         String message = event.getMessage();
         String channel = event.getChannel();
 

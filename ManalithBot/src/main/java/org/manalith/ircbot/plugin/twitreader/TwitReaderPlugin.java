@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin.twitreader;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class TwitReaderPlugin extends AbstractBotPlugin {
 
@@ -36,7 +36,7 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		String msg = event.getMessage();
 		String channel = event.getChannel();
 

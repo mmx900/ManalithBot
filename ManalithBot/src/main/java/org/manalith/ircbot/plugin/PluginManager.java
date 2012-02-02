@@ -22,7 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.ManalithBot;
+import org.manalith.ircbot.resources.MessageEventData;
+
+import org.pircbotx.hooks.events.ActionEvent;
+import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PartEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.events.QuitEvent;
 
 public class PluginManager {
 	private List<IBotPlugin> list = new ArrayList<IBotPlugin>();
@@ -35,16 +43,42 @@ public class PluginManager {
 		list.remove(plugin);
 	}
 
-	public void onJoin(String channel, String sender, String login,
-			String hostName) {
+	public void onJoin(JoinEvent<ManalithBot> event) {
+		/*
+		String channel = event.getChannel().getName();
+		String sender = event.getUser().getNick();
+		String login = event.getUser().getLogin();
+		String hostName = event.getUser().getServer();
+		*/ // do not delete for recovery
+		
+		MessageEventData msg = new MessageEventData ( event );
+		
 		for (IBotPlugin plugin : list)
-			plugin.onJoin(channel, sender, login, hostName);
+			plugin.onJoin(msg);
+	}
+	
+	public void onAction (ActionEvent<ManalithBot> event)
+	{
+		MessageEventData msg = new MessageEventData(event);
+		
+		for ( IBotPlugin plugin : list )
+		{
+			plugin.onAction(msg);
+			if ( msg.isExecuted() )
+				break;
+		}
 	}
 
-	public void onMessage(String channel, String sender, String login,
-			String hostName, String message) {
-		MessageEvent msg = new MessageEvent(channel, sender, login, hostName,
-				message);
+	public void onMessage(MessageEvent<ManalithBot> event) {
+		/*
+		String channel = event.getChannel().getName();
+		String sender = event.getUser().getNick();
+		String login = event.getUser().getLogin();
+		String hostName = event.getUser().getServer();
+		String message = event.getMessage();
+		*/ // do not delete for recovery
+		
+		MessageEventData msg = new MessageEventData(event);
 
 		for (IBotPlugin plugin : list) {
 			plugin.onMessage(msg);
@@ -53,9 +87,15 @@ public class PluginManager {
 		}
 	}
 
-	public void onPrivateMessage(String sender, String login, String hostName,
-			String message) {
-		MessageEvent msg = new MessageEvent(sender, login, hostName, message);
+	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event) {
+		/*
+		String sender = event.getUser().getNick();
+		String login = event.getUser().getLogin();
+		String hostName = event.getUser().getServer();
+		String message = event.getMessage();
+		*/ // do not delete for recovery
+		
+		MessageEventData msg = new MessageEventData(event);
 
 		for (IBotPlugin plugin : list) {
 			plugin.onPrivateMessage(msg);
@@ -64,10 +104,37 @@ public class PluginManager {
 		}
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostName) {
+	public void onPart(PartEvent<ManalithBot> event) {
+		/*
+		String channel = event.getChannel().getName();
+		String sender = event.getUser().getNick();
+		String login = event.getUser().getLogin();
+		String hostName = event.getUser().getServer();
+		//*/
+		
+		MessageEventData msg = new MessageEventData ( event );
+		
 		for (IBotPlugin plugin : list)
-			plugin.onPart(channel, sender, login, hostName);
+		{
+			plugin.onPart(msg);
+		}
+	}
+	
+	public void onQuit (QuitEvent<ManalithBot> event)
+	{
+		/*
+		String sourceNick = event.getUser().getNick();
+		String sourceLogin = event.getUser().getLogin();
+		String sourceHostname = event.getUser().getServer();
+		String reason = event.getReason();
+		*/
+		
+		MessageEventData msg = new MessageEventData ( event );
+		
+		for ( IBotPlugin plugin : list )
+		{
+			plugin.onQuit(msg);
+		}
 	}
 
 	public List<IBotPlugin> getList() {

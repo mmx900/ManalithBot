@@ -15,11 +15,11 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 
@@ -36,13 +36,20 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		return "!nvidia";
 	}
 
-	public void onMessage(MessageEvent event) {
-		String channel = event.getChannel();
+	public void onMessage(MessageEventData event) {
+		this.onMessage(event, event.getChannel());
+	}
+
+	public void onPrivateMessage(MessageEventData event) {
+		this.onMessage(event, event.getSender());
+	}
+
+	protected void onMessage(MessageEventData event, String target) {
 		String msg = event.getMessage();
 
 		if (msg.equals("!nvidia")) {
 			NvidiaDriverNewsRunner runner = new NvidiaDriverNewsRunner();
-			bot.sendLoggedMessage(channel, runner.run());
+			bot.sendLoggedMessage(target, runner.run());
 			event.setExecuted(true);
 		}
 	}

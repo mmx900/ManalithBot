@@ -25,7 +25,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class WeatherPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
@@ -43,16 +43,15 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		return "사용법 : !날씨 [영문 지명]";
 	}
 
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEventData event) {
 		onMessage(event, event.getChannel());
-
 	}
 
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(MessageEventData event) {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEvent event, String target) {
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
 
 		if (message.equals(COMMAND + ":help")) {
@@ -103,5 +102,4 @@ public class WeatherPlugin extends AbstractBotPlugin {
 
 		return null;
 	}
-
 }

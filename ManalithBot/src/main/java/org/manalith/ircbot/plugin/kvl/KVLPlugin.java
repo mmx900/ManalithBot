@@ -19,7 +19,7 @@
 package org.manalith.ircbot.plugin.kvl;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.resources.MessageEventData;
 
 public class KVLPlugin extends AbstractBotPlugin {
 
@@ -37,39 +37,22 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) {
-		String msg = event.getMessage();
-		String channel = event.getChannel();
-
-		String[] command = msg.split("\\s");
-
-		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
-			if (command.length >= 3) {
-				bot.sendLoggedMessage(channel, "Too many arguments!");
-				event.setExecuted(true);
-				return;
-			}
-
-			KVLRunner runner = new KVLRunner();
-
-			if (command.length >= 2)
-				bot.sendLoggedMessage(channel, runner.run(command[1]));
-			else
-				bot.sendLoggedMessage(channel, runner.run(""));
-			event.setExecuted(true);
-		}
+	public void onMessage(MessageEventData event) {
+		this.onMessage(event, event.getChannel());
 	}
-	
-	@Override
-	public void onPrivateMessage(MessageEvent event) {
-		String msg = event.getMessage();
-		String sender = event.getSender();
 
+	@Override
+	public void onPrivateMessage(MessageEventData event) {
+		this.onMessage(event, event.getSender());
+	}
+
+	protected void onMessage(MessageEventData event, String target) {
+		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
 
 		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
 			if (command.length >= 3) {
-				bot.sendLoggedMessage(sender, "Too many arguments!");
+				bot.sendLoggedMessage(target, "Too many arguments!");
 				event.setExecuted(true);
 				return;
 			}
@@ -77,9 +60,9 @@ public class KVLPlugin extends AbstractBotPlugin {
 			KVLRunner runner = new KVLRunner();
 
 			if (command.length >= 2)
-				bot.sendLoggedMessage(sender, runner.run(command[1]));
+				bot.sendLoggedMessage(target, runner.run(command[1]));
 			else
-				bot.sendLoggedMessage(sender, runner.run(""));
+				bot.sendLoggedMessage(target, runner.run(""));
 			event.setExecuted(true);
 		}
 	}
