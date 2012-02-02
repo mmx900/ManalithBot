@@ -32,7 +32,7 @@ public class PingPlugin extends AbstractBotPlugin {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEventData event, String target) {
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
 
 		if (StringUtils.startsWith(message, "!ping ")) {

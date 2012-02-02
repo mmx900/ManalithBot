@@ -37,7 +37,7 @@ public interface IBotPlugin {
 	public void onMessage(MessageEventData event);
 
 	public void onPrivateMessage(MessageEventData event);
-
+	
 	public void onPart(MessageEventData event);
 
 	public void onQuit(MessageEventData event);

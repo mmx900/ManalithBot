@@ -25,14 +25,15 @@ import org.manalith.ircbot.resources.MessageEventData;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
 	protected ManalithBot bot; // This is for the pircbot
-	
+
 	public AbstractBotPlugin() {
-		
+
 	}
 
 	public AbstractBotPlugin(ManalithBot bot) {
 		this.bot = bot;
 	}
+
 	public void setBot(ManalithBot bot) {
 		this.bot = bot;
 	}
@@ -55,31 +56,30 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 
 	public void onJoin(MessageEventData event) {
 		// TODO Auto-generated method stub
-
 	}
-	
+
 	public void onAction(MessageEventData event) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void onMessage(MessageEventData event) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void onPrivateMessage(MessageEventData event) {
 		// TODO Auto-generated method stub
 	}
 
+	protected void onMessage(MessageEventData event, String target) {
+		// TODO Auto-Generated method stub
+	}
+
 	public void onPart(MessageEventData event) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void onQuit(MessageEventData event) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

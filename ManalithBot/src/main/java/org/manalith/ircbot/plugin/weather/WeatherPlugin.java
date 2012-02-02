@@ -45,14 +45,13 @@ public class WeatherPlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEventData event) {
 		onMessage(event, event.getChannel());
-
 	}
 
 	public void onPrivateMessage(MessageEventData event) {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEventData event, String target) {
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
 
 		if (message.equals(COMMAND + ":help")) {

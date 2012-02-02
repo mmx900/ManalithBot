@@ -34,44 +34,29 @@ public class CalcPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
-	//*
+
 	public void onMessage(MessageEventData event) {
+		this.onMessage(event, event.getChannel());
+	}
+
+	public void onPrivateMessage(MessageEventData event) {
+		this.onMessage(event, event.getSender());
+	}
+
+	protected void onMessage(MessageEventData event, String target) {
 		String message = event.getMessage();
-		String channel = event.getChannel();
 		String[] command = message.split("\\s");
 
 		if (command[0].equals("!계산") || command[0].equals("!eval")) {
 			if (command.length == 1) {
-				bot.sendLoggedMessage(channel, "입력한 식이 없습니다.");
-				bot.sendLoggedMessage(channel, this.getHelp());
+				bot.sendLoggedMessage(target, "입력한 식이 없습니다.");
+				bot.sendLoggedMessage(target, this.getHelp());
 			} else {
 				String expr = "";
 				for (int i = 1; i < command.length; i++) {
 					expr += command[i];
 				}
-				bot.sendLoggedMessage(channel, CalcRunner.run(expr));
-			}
-			event.setExecuted(true);
-		}
-	}
-	//*/
-	public void onPrivateMessage(MessageEventData event)
-	{
-		String message = event.getMessage();
-		String sender = event.getSender();
-		
-		String[] command = message.split("\\s");
-		
-		if (command[0].equals("!계산") || command[0].equals("!eval")) {
-			if (command.length == 1) {
-				bot.sendLoggedMessage(sender, "입력한 식이 없습니다.");
-				bot.sendLoggedMessage(sender, this.getHelp());
-			} else {
-				String expr = "";
-				for (int i = 1; i < command.length; i++) {
-					expr += command[i];
-				}
-				bot.sendLoggedMessage(sender, CalcRunner.run(expr));
+				bot.sendLoggedMessage(target, CalcRunner.run(expr));
 			}
 			event.setExecuted(true);
 		}
