@@ -8,10 +8,4 @@
 <entry key="org.manalith.ircbot.bot.server.encoding">CP949</entry>
 <entry key="org.manalith.ircbot.bot.server.channels">#CHANNEL,#CHANNEL2</entry>
 <entry key="org.manalith.ircbot.bot.plugin.google.key">KEY</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.name">NICK</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.verbose">true</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.server">SERVER2</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.server.port">8080</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.server.encoding">UTF-8</entry>
-<entry key="org.manalith.ircbot.bot.plugin.relay.server.channels">#CHANNEL,#CHANNEL2</entry>
 </properties>

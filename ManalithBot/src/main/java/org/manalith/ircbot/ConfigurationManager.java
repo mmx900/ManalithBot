@@ -100,55 +100,16 @@ public class ConfigurationManager {
 				.getProperty("org.manalith.ircbot.bot.server.channels");
 	}
 
-	public boolean getEnableRelay() {
-		return BooleanUtils.toBoolean(properties
-				.getProperty("org.manalith.ircbot.bot.enablerelay"));
-	}
-
-	public String getRelayBotName() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.plugin.relay.name");
-	}
-
-	public boolean getRelayVerbose() {
-		return BooleanUtils.toBoolean(properties
-				.getProperty("org.manalith.ircbot.bot.plugin.relay.verbose"));
-	}
-
-	public String getRelayServer() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.plugin.relay.server");
-	}
-
-	public int getRelayServerPort() {
-		return NumberUtils
-				.toInt(properties
-						.getProperty("org.manalith.ircbot.bot.plugin.relay.server.port"));
-	}
-
-	public String getRelayServerEncoding() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.plugin.relay.server.encoding");
-	}
-
-	public String getRelayDefaultChannels() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.plugin.relay.server.channels");
-	}
-
 	public static boolean isWindows() {
-		// windows
 		return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
 	}
 
 	public static boolean isMac() {
-		// Mac
 		return (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0);
 	}
 
 	public static boolean isUnix() {
 		String os = System.getProperty("os.name").toLowerCase();
-		// linux or unix
 		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
 	}
 }
