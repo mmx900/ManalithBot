@@ -19,7 +19,6 @@
 package org.manalith.ircbot.plugin.sample;
 
 import org.jibble.pircbot.User;
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -55,7 +54,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 
 		if (message.equals("!친반묘")) {
-			User[] users = BotMain.BOT.getUsers(channel);
+			User[] users = bot.getUsers(channel);
 			boolean isMyo = false;
 			for (User u : users) {
 				if (u.getNick().equals("myojok")) {
@@ -63,7 +62,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 					break;
 				}
 			}
-			BotMain.BOT.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!"
+			bot.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!"
 					: "(두리번) +_+/ 멸묘!");
 			event.setExecuted(true);
 		}
@@ -82,7 +81,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 			if (sender.equals("myojok")) {
 				isMyo = true;
 			}
-			BotMain.BOT.sendLoggedMessage(sender, isMyo ? "친묘!" : "+_+/ 멸묘!");
+			bot.sendLoggedMessage(sender, isMyo ? "친묘!" : "+_+/ 멸묘!");
 			event.setExecuted(true);
 		}
 	}

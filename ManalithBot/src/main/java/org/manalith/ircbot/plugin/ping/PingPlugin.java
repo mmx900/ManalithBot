@@ -14,14 +14,14 @@ public class PingPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return null;
+		return "ping";
 	}
 
 	@Override
 	public String getHelp() {
 		return "서버에 ICMP ECHO 요청을 보내고 결과를 표시합니다.";
 	}
-
+	//*
 	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
@@ -49,6 +49,41 @@ public class PingPlugin extends AbstractBotPlugin {
 			} catch (IOException e) {
 				bot.sendLoggedMessage(
 						channel,
+						String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
+								e.getMessage()));
+			}
+
+			event.setExecuted(true);
+		}
+	}
+	//*/
+	@Override
+	public void onPrivateMessage(MessageEvent event) {
+		String message = event.getMessage();
+		String sender = event.getSender();
+
+		if (StringUtils.startsWith(message, "!ping ")) {
+			String uri = StringUtils.substringAfter(message, " ");
+			if (StringUtils.isBlank(uri)) {
+				bot.sendLoggedMessage(sender, "[Ping] 사용법 : !ping DOMAIN/IP");
+				return;
+			}
+
+			InetAddress addr = null;
+			try {
+				addr = InetAddress.getByName(uri);
+			} catch (UnknownHostException e) {
+				bot.sendLoggedMessage(sender, "[Ping] 올바른 주소가 아닙니다.");
+			}
+
+			try {
+				bot.sendLoggedMessage(sender, String.format(
+						"[Ping] %s(%s) is %s: ", addr.getHostName(), addr
+								.getHostAddress(),
+						addr.isReachable(3000) ? "reachable" : "not reachable"));
+			} catch (IOException e) {
+				bot.sendLoggedMessage(
+						sender,
 						String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
 								e.getMessage()));
 			}

@@ -46,31 +46,24 @@ public class KVLTableBuilder {
 		return this.url;
 	}
 
-	public KVLTable generateKernelVersionTable() {
+	public KVLTable generateKernelVersionTable() throws IOException {
 		KVLTable result = new KVLTable();
 
 		String newTag = "";
 		String newVerElement = "";
 		
-		try
-		{
-			Iterator<Element> e = Jsoup.connect(this.getURL()).get().select("table.kver>tbody>tr").iterator();
+		Iterator<Element> e = Jsoup.connect(this.getURL()).get().select("table.kver>tbody>tr").iterator();
 			 
-			//*
-			while ( e.hasNext() )
-			{
-				Elements tds = e.next().select("td");
-				newTag = tds.get(0).text().replaceAll("\\:", "");
-				newVerElement = tds.get(1).text();
-				
-				result.addVersionInfo(newTag, newVerElement);
-			}
-			//*/
-		}
-		catch ( IOException e )
+		//*
+		while ( e.hasNext() )
 		{
-			System.out.println(e.getMessage());
+			Elements tds = e.next().select("td");
+			newTag = tds.get(0).text().replaceAll("\\:", "");
+			newVerElement = tds.get(1).text();
+				
+			result.addVersionInfo(newTag, newVerElement);
 		}
+		//*/
 		
 		return result;
 	}
