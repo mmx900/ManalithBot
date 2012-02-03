@@ -19,6 +19,7 @@
  */
 package org.manalith.ircbot.plugin.distropkgfinder;
 
+import java.lang.ArrayIndexOutOfBoundsException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,7 +51,13 @@ public class DebianPkgFinderRunner {
 		String result = "";
 
 		for (Element e : exactHits) {
-			String dist = e.select("a").text().split("[\\(\\)]")[1];
+			String dist;
+			try {
+				dist = e.select("a").text().split("[\\(\\)]")[1];
+			}  catch (ArrayIndexOutOfBoundsException ex) {
+				dist = e.select("a").text();
+			}
+
 			String version = "UNKNOWN";
 			String[] versionLines =
 				e.toString().split("\\<br\\s\\/>");
@@ -119,7 +126,7 @@ public class DebianPkgFinderRunner {
 			result = pkgname + " - " + description + "\n";
 			result += parseVersionInfo(doc);
 		} catch (Exception e) {
-			result = e.getMessage();
+			result = "ERROR: " + e.getMessage();
 			return result;
 		}
 
