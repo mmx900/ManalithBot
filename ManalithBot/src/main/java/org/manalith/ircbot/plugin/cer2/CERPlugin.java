@@ -75,82 +75,18 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
 	 * .MessageEvent)
 	 */
-	//*
+	// *
 	public void onMessage(MessageEvent event) {
-		String msg = event.getMessage();
-		String channel = event.getChannel();
-
-		String[] command = msg.split("\\s");
-		if (!command[0].equals("!curex") && !command[0].equals("!환율")
-				&& !command[0].startsWith("!curex:")
-				&& !command[0].startsWith("!환율:"))
-			return;
-
-		String[] subcmd = command[0].split("\\:");
-		if (subcmd.length == 1) {
-			String mergedcmd = "";
-			for (int i = 1; i < command.length; i++) {
-				mergedcmd += command[i];
-				if (i != command.length - 1)
-					mergedcmd += " ";
-			}
-
-			try {
-				CERRunner runner = new CERRunner(event.getSender(),
-						this.getResourcePath(), mergedcmd);
-
-				String result = runner.run();
-				if (result.equals("Help!")) {
-					/*
-					 * bot.sendLoggedMessage(channel,
-					 * CERInfoProvider.getIRCHelpMessagePart1());
-					 * bot.sendLoggedMessage(channel,
-					 * CERInfoProvider.getIRCHelpMessagePart2());
-					 * bot.sendLoggedMessage(channel,
-					 * CERInfoProvider.getIRCHelpMessagePart3());
-					 * bot.sendLoggedMessage(channel,
-					 * CERInfoProvider.getIRCHelpMessagePart4());
-					 // */
-	//*
-					bot.sendLoggedMessage(channel, "도움말 그런거 없음!");
-
-				} else {
-					bot.sendLoggedMessage(channel, result);
-				}
-			} catch (Exception e) {
-				bot.sendLoggedMessage(channel, e.getMessage());
-			}
-		} else if (subcmd.length > 2) {
-			bot.sendLoggedMessage(channel, "옵션이 너무 많습니다");
-		} else {
-			// remerge strings separated by space.
-			String userNick = event.getSender();
-
-			String arg = "";
-			for (int i = 1; i < command.length; i++) {
-				if (command[i].equals(" "))
-					continue;
-				arg += command[i];
-			}
-
-			CERCustomSettingManager csMan = new CERCustomSettingManager(
-					this.getResourcePath(), channel, userNick, arg);
-
-			if (subcmd[1].equals("sub"))
-				bot.sendLoggedMessage(channel, csMan.addUserSetting());
-			else if (subcmd[1].equals("unsub")) {
-				bot.sendLoggedMessage(channel, csMan.removeUserSetting());
-			} else
-				bot.sendLoggedMessage(channel, "그런 옵션은 없습니다.");
-
-		}
-		event.setExecuted(true);
+		onMessage(event, event.getChannel());
 	}
-	//*/
-	public void onPrivateMessage(MessageEvent event) {
-		String msg = event.getMessage();
-		String sender = event.getSender();
 
+	// */
+	public void onPrivateMessage(MessageEvent event) {
+		onMessage(event, event.getSender());
+	}
+
+	private void onMessage(MessageEvent event, String target) {
+		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
 		if (!command[0].equals("!curex") && !command[0].equals("!환율")
 				&& !command[0].startsWith("!curex:")
@@ -173,25 +109,26 @@ public class CERPlugin extends AbstractBotPlugin {
 				String result = runner.run();
 				if (result.equals("Help!")) {
 					/*
-					 * bot.sendLoggedMessage(channel,
+					 * bot.sendLoggedMessage(target,
 					 * CERInfoProvider.getIRCHelpMessagePart1());
-					 * bot.sendLoggedMessage(channel,
+					 * bot.sendLoggedMessage(target,
 					 * CERInfoProvider.getIRCHelpMessagePart2());
-					 * bot.sendLoggedMessage(channel,
+					 * bot.sendLoggedMessage(target,
 					 * CERInfoProvider.getIRCHelpMessagePart3());
-					 * bot.sendLoggedMessage(channel,
-					 * CERInfoProvider.getIRCHelpMessagePart4());
+					 * bot.sendLoggedMessage(target,
+					 * CERInfoProvider.getIRCHelpMessagePart4()); //
 					 */
-					bot.sendLoggedMessage(sender, "도움말 그런거 없음!");
+					// *
+					bot.sendLoggedMessage(target, "도움말 그런거 없음!");
 
 				} else {
-					bot.sendLoggedMessage(sender, result);
+					bot.sendLoggedMessage(target, result);
 				}
 			} catch (Exception e) {
-				bot.sendLoggedMessage(sender, e.getMessage());
+				bot.sendLoggedMessage(target, e.getMessage());
 			}
 		} else if (subcmd.length > 2) {
-			bot.sendLoggedMessage(sender, "옵션이 너무 많습니다");
+			bot.sendLoggedMessage(target, "옵션이 너무 많습니다");
 		} else {
 			// remerge strings separated by space.
 			String userNick = event.getSender();
@@ -204,14 +141,14 @@ public class CERPlugin extends AbstractBotPlugin {
 			}
 
 			CERCustomSettingManager csMan = new CERCustomSettingManager(
-					this.getResourcePath(), sender, userNick, arg);
+					this.getResourcePath(), target, userNick, arg);
 
 			if (subcmd[1].equals("sub"))
-				bot.sendLoggedMessage(sender, csMan.addUserSetting());
+				bot.sendLoggedMessage(target, csMan.addUserSetting());
 			else if (subcmd[1].equals("unsub")) {
-				bot.sendLoggedMessage(sender, csMan.removeUserSetting());
+				bot.sendLoggedMessage(target, csMan.removeUserSetting());
 			} else
-				bot.sendLoggedMessage(sender, "그런 옵션은 없습니다.");
+				bot.sendLoggedMessage(target, "그런 옵션은 없습니다.");
 
 		}
 		event.setExecuted(true);

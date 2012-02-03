@@ -36,95 +36,52 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
-	//*
+
 	public void onMessage(MessageEvent event) {
-		String message = event.getMessage();
-		String channel = event.getChannel();
-		String[] command = message.split("\\s");
-
-		if ((command[0].equals("!deb") || command[0].equals("!ubu")
-				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
-					.equals("!ar")) && command.length > 2) {
-			bot.sendLoggedMessage(channel, "검색 단어는 하나면 충분합니다.");
-			event.setExecuted(true);
-			return;
-		}
-		if ((command[0].equals("!deb") || command[0].equals("!ubu")
-				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
-					.equals("!ar")) && command.length == 1) {
-			bot.sendLoggedMessage(channel, this.getHelp());
-			event.setExecuted(true);
-		} else if (command[0].equals("!deb")) {
-			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(
-					command[1]);
-			String[] lines = runner.run().split("\n");
-			for (String l : lines)
-			    bot.sendLoggedMessage(channel, l);
-			event.setExecuted(true);
-		} else if (command[0].equals("!ubu")) {
-			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(
-					command[1]);
-			bot.sendLoggedMessage(channel, runner.run());
-			event.setExecuted(true);
-		} else if (command[0].equals("!fed")) {
-			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(channel, runner.run());
-			event.setExecuted(true);
-		} else if (command[0].equals("!gen")) {
-			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(
-					command[1]);
-			bot.sendLoggedMessage(channel, runner.run());
-			event.setExecuted(true);
-		} else if (command[0].equals("!ar")) {
-			ArchPkgFinderRunner runner = new ArchPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(channel, runner.run());
-			event.setExecuted(true);
-		}
+		onMessage(event, event.getChannel());
 	}
-	//*/
-	public void onPrivateMessage ( MessageEvent event ) 
-	{
+
+	public void onPrivateMessage(MessageEvent event) {
+		onMessage(event, event.getSender());
+	}
+
+	public void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
-		String sender = event.getSender();
-		//String channel = event.getChannel();
 		String[] command = message.split("\\s");
 
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")
 				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
 					.equals("!ar")) && command.length > 2) {
-			bot.sendLoggedMessage(sender, "검색 단어는 하나면 충분합니다.");
+			bot.sendLoggedMessage(target, "검색 단어는 하나면 충분합니다.");
 			event.setExecuted(true);
 			return;
 		}
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")
 				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
 					.equals("!ar")) && command.length == 1) {
-			bot.sendLoggedMessage(sender, this.getHelp());
+			bot.sendLoggedMessage(target, this.getHelp());
 			event.setExecuted(true);
 		} else if (command[0].equals("!deb")) {
-			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(
-					command[1]);
+			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(command[1]);
 			String[] lines = runner.run().split("\n");
 			for (String l : lines)
-			    bot.sendLoggedMessage(sender, l);
+				bot.sendLoggedMessage(target, l);
 			event.setExecuted(true);
 		} else if (command[0].equals("!ubu")) {
-			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(
-					command[1]);
-			bot.sendLoggedMessage(sender, runner.run());
+			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(command[1]);
+			bot.sendLoggedMessage(target, runner.run());
 			event.setExecuted(true);
 		} else if (command[0].equals("!fed")) {
 			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(sender, runner.run());
+			bot.sendLoggedMessage(target, runner.run());
 			event.setExecuted(true);
 		} else if (command[0].equals("!gen")) {
-			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(
-					command[1]);
-			bot.sendLoggedMessage(sender, runner.run());
+			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(command[1]);
+			bot.sendLoggedMessage(target, runner.run());
 			event.setExecuted(true);
 		} else if (command[0].equals("!ar")) {
 			ArchPkgFinderRunner runner = new ArchPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(sender, runner.run());
+			bot.sendLoggedMessage(target, runner.run());
 			event.setExecuted(true);
 		}
 	}
