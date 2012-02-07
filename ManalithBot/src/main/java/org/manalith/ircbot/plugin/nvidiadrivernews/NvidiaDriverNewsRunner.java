@@ -117,6 +117,7 @@ public class NvidiaDriverNewsRunner {
 			result.append("Current long-lived branch release: ");
 			result.append(e.get(0).text());
 			result.append(", Current official release: ");
+			result.append(e.get(1).text());
 			result.append(", Current beta release: ");
 			result.append(e.get(2).text());
 			
