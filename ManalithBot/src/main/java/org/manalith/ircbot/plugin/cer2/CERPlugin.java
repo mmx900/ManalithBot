@@ -50,22 +50,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		/*
-		 * String result =
-		 * "!curex ( [Option] [Currency_Unit] [FieldAbbr/Amount] ) [Option] : show, lastround, convfrom, convto, buycash, cellcash, sendremit, recvremit "
-		 * ; result +=
-		 * "[Currency_Unit] : USD:U.S, EUR:Europe, JPY:Japan, CNY:China, HKD:HongKong, TWD:Taiwan, GBP:Great Britain, CAD:Canada, CHF:Switzerland, SEK:Sweden, "
-		 * ; result +=
-		 * "AUD:Australia, NZD:NewZealand, ISL:Israel, DKK:Denmark, NOK:Norway, SAR:Saudi Arabia, KWD:Kuweit, BHD:Bahrain, AED:United of Arab Emirates, "
-		 * ; result +=
-		 * "JOD:Jordan, EGP:Egypt, THB:Thailand, SGD:Singapore, MYR:Malaysia, IDR:Indonesia, BND:Brunei, INR:India, PKR:Pakistan, BDT:Bangladesh, PHP:Philippine, "
-		 * ; result +=
-		 * "MXN:Mexico, BRL:Brazil, VND:Vietnam, ZAR:Republic of South Africa, RUB:Russia, HUF:Hungary, PLN:Poland "
-		 * ; result +=
-		 * "[FieldAbbr] (show 명령에만 해당) 모두보기, 매매기준, 현찰매수, 현찰매도, 송금보냄, 송금받음, 환수수료, 대미환산 "
-		 * ; result += "[Amount] 금액";
-		 */
-		return "(null)";
+		return null;
 	}
 
 	/*
@@ -95,12 +80,9 @@ public class CERPlugin extends AbstractBotPlugin {
 
 		String[] subcmd = command[0].split("\\:");
 		if (subcmd.length == 1) {
-			String mergedcmd = "";
-			for (int i = 1; i < command.length; i++) {
-				mergedcmd += command[i];
-				if (i != command.length - 1)
-					mergedcmd += " ";
-			}
+			
+			String [] mergedcmd = new String[command.length - 1];
+			System.arraycopy(command, 1, mergedcmd, 0, command.length - 1);
 
 			try {
 				CERRunner runner = new CERRunner(event.getSender(),
@@ -108,19 +90,11 @@ public class CERPlugin extends AbstractBotPlugin {
 
 				String result = runner.run();
 				if (result.equals("Help!")) {
-					/*
-					 * bot.sendLoggedMessage(target,
-					 * CERInfoProvider.getIRCHelpMessagePart1());
-					 * bot.sendLoggedMessage(target,
-					 * CERInfoProvider.getIRCHelpMessagePart2());
-					 * bot.sendLoggedMessage(target,
-					 * CERInfoProvider.getIRCHelpMessagePart3());
-					 * bot.sendLoggedMessage(target,
-					 * CERInfoProvider.getIRCHelpMessagePart4()); //
-					 */
-					// *
-					bot.sendLoggedMessage(target, "도움말 그런거 없음!");
-
+					bot.sendLoggedMessage(target, CERInfoProvider.getIRCHelpMessagePart1());
+					bot.sendLoggedMessage(target, CERInfoProvider.getIRCHelpMessagePart2());
+				} else if ( result.equals("unitlist")) {
+					bot.sendLoggedMessage(target, CERInfoProvider.getUnitListPart1());
+					bot.sendLoggedMessage(target, CERInfoProvider.getUnitListPart2());
 				} else {
 					bot.sendLoggedMessage(target, result);
 				}

@@ -18,219 +18,603 @@
  */
 package org.manalith.ircbot.plugin.cer2;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.ParseException;
+
 import org.manalith.ircbot.common.PropertyManager;
+import org.manalith.ircbot.plugin.cer2.TokenSubtype;
 import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.cer2.exceptions.InvalidArgumentException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CERInfoProvider {
 
-	private String command;
+	private String[] args;
 	private String path;
 
+	private Options optionList;
+	private CommandLineParser argParser;
+
+	/**
+	 * 3 types of Constructors
+	 */
 	public CERInfoProvider() {
-		this.setCommand("");
-	}
-
-	public CERInfoProvider(String newCommand) {
-		this.setCommand(newCommand);
+		this.setArgs(null);
 		this.setPath("");
+		this.initArgumentParser();
 	}
 
-	public CERInfoProvider(String newPath, String newCommand) {
-		this.setCommand(newCommand);
+	public CERInfoProvider(String[] newArgs) {
+		this.setArgs(newArgs);
+		this.setPath("");
+		this.initArgumentParser();
+	}
+
+	public CERInfoProvider(String newPath, String[] newArgs) {
+		this.setArgs(newArgs);
 		this.setPath(newPath);
+		this.initArgumentParser();
 	}
 
-	public void setCommand(String newCommand) {
-		this.command = newCommand;
+	/**
+	 * set array into args
+	 * 
+	 * @param newArgs
+	 */
+	public void setArgs(String[] newArgs) {
+		this.args = newArgs;
 	}
 
-	public String getCommand() {
-		return this.command;
+	/**
+	 * return argument as array of string
+	 * 
+	 * @return string[] args
+	 */
+	private String[] getArgs() {
+		return this.args;
 	}
 
+	/**
+	 * set this plugin's data path
+	 * 
+	 * @param newPath
+	 */
 	public void setPath(String newPath) {
 		this.path = newPath;
 	}
 
-	public String getPath() {
+	/**
+	 * return this plugin's data path as a string
+	 * 
+	 * @return String path.
+	 */
+	private String getPath() {
 		return this.path;
 	}
 
-	public String commandInterpreter() throws EmptyTokenStreamException,
-			InvalidArgumentException, IOException, SQLException,
-			ClassNotFoundException {
-		String result = "";
+	/**
+	 * Initiate org.apache.commons.cli based argument parser
+	 */
+	private void initArgumentParser() {
+		optionList = new Options();
 
-		CommandTokenAnalyzer cta = new CommandTokenAnalyzer(this.getCommand());
-		TokenArray ta = cta.analysisTokenStream();
+		Option help = new Option("help", "show help messages");
+		Option lastround = new Option("lastround",
+				"show latest updated date and time");
+		Option currencyunit = new Option("unitlist",
+				"show the list of a currency unit");
 
-		int size = this.getCommand().split("\\s").length;
-		TokenType[] TokenTypeSequence = new TokenType[size];
-		TokenSubtype[] TokenSubTSequence = new TokenSubtype[size];
+		Option show = new Option("show",
+				"show the value on the currency exchance table.");
+		show.setArgs(2);
 
-		for (int i = 0; i < size; i++) {
-			TokenTypeSequence[i] = ta.getElement(i).getTokenType();
-			TokenSubTSequence[i] = ta.getElement(i).getTokenSubtype();
+		Option conv = new Option("conv",
+				"compute the value for the selected currency unit.");
+		conv.setArgs(3);
+
+		Option buycash = new Option("buycash",
+				"show the price when we buy the cache.");
+		buycash.setArgs(2);
+
+		Option cellcash = new Option("cellcash",
+				"show the price when we cell the cacle.");
+		cellcash.setArgs(2);
+
+		Option recvremit = new Option("recvremit",
+				"show the price when we receive the remittance.");
+		recvremit.setArgs(2);
+
+		Option sendremit = new Option("sendremit",
+				"show the price when we send the remittance");
+		sendremit.setArgs(2);
+
+		optionList.addOption(help);
+		optionList.addOption(lastround);
+		optionList.addOption(currencyunit);
+		optionList.addOption(show);
+		optionList.addOption(conv);
+		optionList.addOption(buycash);
+		optionList.addOption(cellcash);
+		optionList.addOption(recvremit);
+		optionList.addOption(sendremit);
+
+		argParser = new GnuParser();
+	}
+
+	/**
+	 * Token Lexer
+	 * 
+	 * @param TokenString
+	 * @return TokenType
+	 */
+	public TokenType getTokenType(String TokenString) {
+		TokenType result = TokenType.Unknown;
+
+		Pattern cmd_pattern = Pattern.compile("\\-[a-z]+");
+		Pattern currency_pattern = Pattern.compile("[A-Z]{3}");
+		Pattern fieldabbr_pattern = Pattern.compile("[a-z]{2,3}");
+		Pattern amount_pattern = Pattern
+				.compile("[0-9]{1,3}((\\,)?[0-9]{3})*(.[0-9]{1,2})?");
+
+		Matcher cmd_match = cmd_pattern.matcher(TokenString);
+		Matcher currency_match = currency_pattern.matcher(TokenString);
+		Matcher fieldabbr_match = fieldabbr_pattern.matcher(TokenString);
+		Matcher amount_match = amount_pattern.matcher(TokenString);
+
+		if (cmd_match.matches()) {
+			result = TokenType.Command;
+		} else if (currency_match.matches()) {
+			result = TokenType.CurrencyUnit;
+		} else if (fieldabbr_match.matches()) {
+			result = TokenType.FieldAbbr;
+		} else if (amount_match.matches()) {
+			result = TokenType.Amount;
 		}
 
-		// interpret command.
-		int i = 0;
+		return result;
+	}
 
-		if (TokenSubTSequence[i] == TokenSubtype.CommandHelp)
+	/**
+	 * Token Lexer
+	 * 
+	 * @param TokenString
+	 * @param CurrentType
+	 * @return TokenSubtype
+	 */
+	public TokenSubtype getTokenSubtype(String TokenString,
+			TokenType CurrentType) {
+		TokenSubtype result = TokenSubtype.Unknown;
+
+		if (CurrentType == TokenType.Command) {
+			String cmd = TokenString.substring(1, TokenString.length());
+			if (cmd.equals("help")) {
+				result = TokenSubtype.CommandHelp;
+			} else if (cmd.equals("show")) {
+				result = TokenSubtype.CommandShow;
+			} else if (cmd.equals("lastround")) {
+				result = TokenSubtype.CommandLastRound;
+			} else if (cmd.equals("unitlist")) {
+				result = TokenSubtype.CommandUnitList;
+			} else if (cmd.equals("conv")) {
+				result = TokenSubtype.CommandConvert;
+			} else if (cmd.equals("buycash")) {
+				result = TokenSubtype.CommandBuyCash;
+			} else if (cmd.equals("cellcash")) {
+				result = TokenSubtype.CommandCellCash;
+			} else if (cmd.equals("sendremit")) {
+				result = TokenSubtype.CommandSendRemit;
+			} else if (cmd.equals("recvremit")) {
+				result = TokenSubtype.CommandRecvRemit;
+			} else {
+				result = TokenSubtype.Unknown;
+			}
+		} else if (CurrentType == TokenType.CurrencyUnit) {
+			try {
+				result = TokenSubtype.valueOf("Currency" + TokenString);
+			} catch (IllegalArgumentException e) {
+				result = TokenSubtype.Unknown;
+			}
+		} else if (CurrentType == TokenType.FieldAbbr) {
+			if (TokenString.equals("all")) {
+				result = TokenSubtype.FAAll;
+			} else if (TokenString.equals("cr")) {
+				result = TokenSubtype.FACentralRate;
+			} else if (TokenString.equals("cb")) {
+				result = TokenSubtype.FABuyCash;
+			} else if (TokenString.equals("cc")) {
+				result = TokenSubtype.FACellCash;
+			} else if (TokenString.equals("rs")) {
+				result = TokenSubtype.FASendRemit;
+			} else if (TokenString.equals("rr")) {
+				result = TokenSubtype.FARecvRemit;
+			} else if (TokenString.equals("de")) {
+				result = TokenSubtype.FADollarExcRate;
+			} else {
+				result = TokenSubtype.Unknown;
+			}
+		} else if (CurrentType == TokenType.Amount) {
+			Pattern natural_pattern = Pattern
+					.compile("[0-9]{1,3}((\\,)?[0-9]{3})*");
+			Pattern fp_pattern = Pattern
+					.compile("[0-9]{1,3}((\\,)?[0-9]{3})*\\.[0-9]{1,2}");
+
+			Matcher natural_match = natural_pattern.matcher(TokenString);
+			Matcher fp_match = fp_pattern.matcher(TokenString);
+
+			if (natural_match.matches())
+				result = TokenSubtype.AmountNatural;
+			else if (fp_match.matches())
+				result = TokenSubtype.AmountFp;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Argument re-arranger
+	 * 
+	 * @return arranged argument array
+	 * @throws InvalidArgumentException
+	 */
+	public String[] rearrangeArgs() throws InvalidArgumentException {
+		String[] result = null;
+
+		TokenSubtype ts = this.getTokenSubtype(this.getArgs()[0],
+				TokenType.Command);
+
+		if (ts == TokenSubtype.CommandHelp
+				|| ts == TokenSubtype.CommandLastRound
+				|| ts == TokenSubtype.CommandUnitList) {
+			result = new String[1];
+			result[0] = this.getArgs()[0];
+		} else if (ts == TokenSubtype.CommandBuyCash
+				|| ts == TokenSubtype.CommandCellCash
+				|| ts == TokenSubtype.CommandRecvRemit
+				|| ts == TokenSubtype.CommandSendRemit) {
+			result = new String[3];
+			result[0] = this.getArgs()[0];
+
+			switch (this.getArgs().length) {
+			case 1:
+				result[1] = "1";
+				result[2] = "USD";
+				break;
+			case 2:
+				if (this.getTokenSubtype(this.getArgs()[1],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result[1] = "1";
+					result[2] = this.getArgs()[1];
+				} else if (this.getTokenType(this.getArgs()[1]) == TokenType.Amount) {
+					result[1] = this.getArgs()[1];
+					result[2] = "USD";
+				} else
+					throw new InvalidArgumentException(this.getArgs()[1]);
+				break;
+			case 3:
+				// first arg.
+				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown)
+					result[1] = this.getArgs()[1];
+				else
+					throw new InvalidArgumentException(this.getArgs()[1]);
+
+				// second arg
+				if (this.getTokenSubtype(this.getArgs()[2],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown)
+					result[2] = this.getArgs()[2];
+				else
+					throw new InvalidArgumentException(this.getArgs()[2]);
+
+				break;
+			default:
+				throw new InvalidArgumentException("불 필요한 인자");
+			}
+		} else if (ts == TokenSubtype.CommandShow) {
+			switch (this.getArgs().length) {
+			case 1:
+				result = new String[3];
+				result[0] = this.getArgs()[0];
+				result[1] = "USD";
+				result[2] = "cr";
+				break;
+			case 2:
+				if (this.getTokenSubtype(this.getArgs()[1],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[3];
+					System.arraycopy(this.getArgs(), 0, result, 0,
+							this.getArgs().length);
+					result[2] = "cr";
+				} else {
+					throw new InvalidArgumentException(this.getArgs()[1]);
+				}
+				break;
+			case 3:
+				if (this.getTokenSubtype(this.getArgs()[1],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[2],
+								TokenType.FieldAbbr) != TokenSubtype.Unknown) {
+					result = new String[this.getArgs().length];
+					System.arraycopy(this.getArgs(), 0, result, 0,
+							this.getArgs().length);
+				} else
+					throw new InvalidArgumentException(this.getArgs()[1]
+							+ " and " + this.getArgs()[2]);
+				break;
+			default:
+				throw new InvalidArgumentException("불 필요한 인자");
+			}
+
+		} else if (ts == TokenSubtype.CommandConvert) {
+			switch (this.getArgs().length) {
+			case 1:
+				throw new InvalidArgumentException("필요한 옵션 빠짐");
+			case 2:
+				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown) {
+					result = new String[4];
+					System.arraycopy(this.getArgs(), 0, result, 0, 2);
+					result[2] = "USD";
+					result[3] = "KRW";
+				} else
+					throw new InvalidArgumentException(this.getArgs()[1]);
+
+				break;
+			case 3:
+				if (this.getTokenSubtype(this.getArgs()[1],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[2],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					result[0] = this.getArgs()[0];
+					result[1] = "1";
+					System.arraycopy(this.getArgs(), 1, result, 2, 2);
+				} else if (this.getTokenSubtype(this.getArgs()[1],
+						TokenType.Amount) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[2],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					System.arraycopy(this.getArgs(), 0, result, 0,
+							this.getArgs().length);
+					result[3] = "KRW";
+				} else
+					throw new InvalidArgumentException(this.getArgs()[1]
+							+ " and " + this.getArgs()[2]);
+				break;
+			case 4:
+				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[2],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[3],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					System.arraycopy(this.getArgs(), 0, result, 0,
+							this.getArgs().length);
+				} else
+					throw new InvalidArgumentException(this.getArgs()[1] + ", "
+							+ this.getArgs()[2] + " and " + this.getArgs()[3]);
+				break;
+			default:
+				throw new InvalidArgumentException("불 필요한 인자");
+			}
+		} else {
+			switch (this.getArgs().length) {
+			case 1:
+				if (this.getTokenSubtype(this.getArgs()[0],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[3];
+					result[0] = "-show";
+					result[1] = this.getArgs()[0];
+					result[2] = "cr";
+				} else if (this.getTokenSubtype(this.getArgs()[0],
+						TokenType.Amount) != TokenSubtype.Unknown) {
+					result = new String[4];
+					result[0] = "-conv";
+					result[1] = this.getArgs()[0];
+					result[2] = "USD";
+					result[3] = "KRW";
+				} else {
+					throw new InvalidArgumentException(this.getArgs()[0]);
+				}
+				break;
+			case 2:
+				if (this.getTokenSubtype(this.getArgs()[0],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[1],
+								TokenType.FieldAbbr) != TokenSubtype.Unknown) {
+					result = new String[3];
+					result[0] = "-show";
+					System.arraycopy(this.getArgs(), 0, result, 1, 2);
+				} else if (this.getTokenSubtype(this.getArgs()[0],
+						TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[1],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					result[0] = "-conv";
+					result[1] = "1";
+					System.arraycopy(this.getArgs(), 0, result, 2, 2);
+				} else if (this.getTokenSubtype(this.getArgs()[0],
+						TokenType.Amount) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[1],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					result[0] = "-conv";
+					System.arraycopy(this.getArgs(), 0, result, 1, 2);
+					result[3] = "KRW";
+				} else {
+					throw new InvalidArgumentException(this.getArgs()[0]
+							+ " and " + this.getArgs()[1]);
+				}
+				break;
+			case 3:
+				if (this.getTokenSubtype(this.getArgs()[0], TokenType.Amount) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[1],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& this.getTokenSubtype(this.getArgs()[2],
+								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					result = new String[4];
+					result[0] = "-conv";
+					System.arraycopy(this.getArgs(), 0, result, 1, 3);
+				}
+				break;
+			default:
+				throw new InvalidArgumentException("불 필요한 인자");
+
+			}
+
+		}
+
+		return result;
+	}
+
+	/**
+	 * Analyze arguments, process for the request, and return result.
+	 * 
+	 * @return result message as string
+	 * @throws EmptyTokenStreamException
+	 * @throws InvalidArgumentException
+	 * @throws IOException
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	public String commandInterpreter() throws EmptyTokenStreamException,
+			InvalidArgumentException, IOException, SQLException,
+			ParseException, ClassNotFoundException {
+		String result = "";
+		TokenSubtype st;
+
+		// Argument preprocessor
+		String[] aargs = this.rearrangeArgs();
+		// Parse!
+		CommandLine cl = argParser.parse(optionList, aargs);
+
+		if (cl.hasOption("help"))
 			result = "Help!";
-		else if (TokenSubTSequence[i] == TokenSubtype.CommandLastRound)
+		else if (cl.hasOption("lastround"))
 			result = this.showLatestRound();
-		else if (TokenSubTSequence[i] == TokenSubtype.CommandShow) {
-			i++;
-			String currencyName = TokenSubTSequence[i++].toString()
-					.substring(8);
+		else if (cl.hasOption("unitlist"))
+			result = "unitlist";
+		else if (cl.hasOption("show")) {
+			String[] args = cl.getOptionValues(aargs[0].substring(1));
+
+			String currencyUnit;
+			if (this.getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
+				currencyUnit = args[0];
+			else
+				throw new InvalidArgumentException("통화 단위 아님");
+
 			StringBuilder fieldName = new StringBuilder();
 			fieldName.append("country_name,");
 
-			if (TokenSubTSequence[i] == TokenSubtype.FAAll)
+			if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAAll)
+			{
+				fieldName.delete(0, fieldName.length());
 				fieldName.append("*");
-			else if (TokenSubTSequence[i] == TokenSubtype.Unknown
-					|| TokenSubTSequence[i] == TokenSubtype.FACentralRate)
+			}
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACentralRate)
 				fieldName.append("currency_unit,central_rate");
-			else if (TokenSubTSequence[i] == TokenSubtype.FABuyCash)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FABuyCash)
 				fieldName.append("currency_unit,cash_buy");
-			else if (TokenSubTSequence[i] == TokenSubtype.FACellCash)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACellCash)
 				fieldName.append("currency_unit,cash_cell");
-			else if (TokenSubTSequence[i] == TokenSubtype.FARecvRemit)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FARecvRemit)
 				fieldName.append("currency_unit,remittance_recv");
-			else if (TokenSubTSequence[i] == TokenSubtype.FASendRemit)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FASendRemit)
 				fieldName.append("currency_unit,remittance_send");
-			else if (TokenSubTSequence[i] == TokenSubtype.FAECRate)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAECRate)
 				fieldName.append("currency_unit,exchan_comm_rate");
-			else if (TokenSubTSequence[i] == TokenSubtype.FADollarExcRate)
+			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FADollarExcRate)
 				fieldName.append("currency_unit,dollar_exc_rate");
 			else
-				throw new InvalidArgumentException(
-						"Unknown field abbreviation [ "
-								+ ta.getElement(i).getTokenString() + " ] ");
+				throw new InvalidArgumentException("알 수 없는 필드 [ " + args[1]
+						+ " ] ");
 
-			result = this.showCurrencyRate(currencyName, fieldName.toString());
-		} else if (TokenSubTSequence[i] == TokenSubtype.CommandConvert) {
-			String value = "";
-			i++;
-			if (TokenSubTSequence[i] == TokenSubtype.AmountNatural)
-				value = ta.getElement(i++).getTokenString() + ".0";
-			else
-				value = ta.getElement(i++).getTokenString();
+			result = this.showCurrencyRate(currencyUnit, fieldName.toString());
+		} else if (cl.hasOption("conv")) {
+			String[] args = cl.getOptionValues(aargs[0].substring(1));
+			String value;
+			st = this.getTokenSubtype(args[0], TokenType.Amount);
 
-			String cname1 = TokenSubTSequence[i++].toString().substring(8);
-			String cname2 = TokenSubTSequence[i++].toString().substring(8);
+			// argument validation
+			if (st != TokenSubtype.Unknown) {
+				if (st == TokenSubtype.AmountNatural)
+					value = args[0] + ".0";
+				else
+					value = args[0];
+			} else
+				throw new InvalidArgumentException("금액 아님");
+			st = this.getTokenSubtype(args[1], TokenType.CurrencyUnit);
+			if (st == TokenSubtype.Unknown)
+				throw new InvalidArgumentException("화폐 단위 아님");
+			st = this.getTokenSubtype(args[2], TokenType.CurrencyUnit);
+			if (st == TokenSubtype.Unknown)
+				throw new InvalidArgumentException("화폐 단위 아님");
 
-			result = this.convert(value, cname1, cname2);
-		} else {
-			i++;
+			result = this.convert(value, args[1], args[2]);
+		} else if (cl.hasOption("buycash") || cl.hasOption("cellcash")
+				|| cl.hasOption("recvremit") || cl.hasOption("sendremit")) {
+ 			String [] args = cl.getOptionValues(aargs[0].substring(1));
+			String currencyUnit;
+			String value;
 
-			String currency_name = TokenSubTSequence[i++].toString().substring(
-					8);
-			String value = "";
+			st = this.getTokenSubtype(args[0], TokenType.Amount);
+			if (st != TokenSubtype.Unknown) {
+				if (st == TokenSubtype.AmountNatural)
+					value = args[0] + ".0";
+				else
+					value = args[0];
+			} else
+				throw new InvalidArgumentException("금액 아님");
+			st = this.getTokenSubtype(args[1], TokenType.CurrencyUnit);
+			if (st == TokenSubtype.Unknown)
+				throw new InvalidArgumentException("화폐 단위 아님");
 
-			if (TokenSubTSequence[i] == TokenSubtype.AmountNatural)
-				value = ta.getElement(i).getTokenString() + ".0";
-			else
-				value = ta.getElement(i).getTokenString();
+			currencyUnit = args[1];
 
-			if (TokenSubTSequence[0] == TokenSubtype.CommandBuyCash)
-				result = this.buyCash(currency_name, value);
-			else if (TokenSubTSequence[0] == TokenSubtype.CommandCellCash)
-				result = this.cellCash(currency_name, value);
-			else if (TokenSubTSequence[0] == TokenSubtype.CommandSendRemit)
-				result = this.sendRemittance(currency_name, value);
-			else if (TokenSubTSequence[0] == TokenSubtype.CommandRecvRemit)
-				result = this.recvRemittance(currency_name, value);
+			if (cl.hasOption("buycash"))
+				result = this.buyCash(currencyUnit, value);
+			else if (cl.hasOption("cellcash"))
+				result = this.cellCash(currencyUnit, value);
+			else if (cl.hasOption("recvremit"))
+				result = this.recvRemittance(currencyUnit, value);
+			else if (cl.hasOption("sendremit"))
+				result = this.sendRemittance(currencyUnit, value);
 		}
 
+		return result;
+	}
+
+	public static String getUnitListPart1() {
+		String result = "[Currency_Unit] : USD:U.S, EUR:Europe, JPY:Japan, CNY:China, HKD:HongKong, TWD:Taiwan, GBP:Great Britain, CAD:Canada, CHF:Swiss, SEK:Sweden, ";
+		result += "AUD:Australia, NZD:NewZealand, ISL:Israel, DKK:Denmark, NOK:Norway, SAR:Saudi Arabia, KWD:Kuweit, BHD:Bahrain, AED:UAE, JOD:Jordan, ";
+		return result;
+	}
+
+	public static String getUnitListPart2() {
+		String result = "EGP:Egypt, THB:Thailand, SGD:Singapore, MYR:Malaysia, IDR:Indonesia, BND:Brunei, INR:India, PKR:Pakistan, BDT:Bangladesh, PHP:Philippine, MXN:Mexico, ";
+		result += " BRL:Brazil, VND:Vietnam, ZAR:Republic of South Africa, RUB:Russia, HUF:Hungary, PLN:Poland";
 		return result;
 	}
 
 	public static String getIRCHelpMessagePart1() {
-		String result = "!curex ( help | lastround ) | !cer ( buycash | cellcash | sendremit | recvremit ) [Amount] [Currency_Unit] | !cer ( show | \"\" ) [Currency_Unit] ";
-		result += "[FieldAbbr] | !cer ( conv | \"\" ) ( [Amount] : KRW to USD | [Amount] [Currency_Unit(1)] [Current_Unit(2)] | [Currency_Unit(1)] [Current_Unit(2)] : | [Amount] [Currency_Unit(2)] )";
-
+		String result = "!(환율|curex) ( help | lastround | unitlist ) | !(환율|curex) ( buycash | cellcash | sendremit | recvremit ) [Amount] [Currency_Unit] | !(환율|curex) ( show | \"\" ) [Currency_Unit] [FieldAbbr]";
+		result += " | !(환율|curex) ( conv | \"\" ) ( [Amount] : USD to KRW | [Amount] [Currency_Unit(1)] [Current_Unit(2)] | [Currency_Unit(1)] [Current_Unit(2)] : | [Amount] [Currency_Unit(2)] )";
 		return result;
 	}
 
 	public static String getIRCHelpMessagePart2() {
-		return "help: 도움말, lastround: 최종갱신회차, buycash: 현찰매수, cellcash: 현찰매도, sendremit: 송금보냄, recvremit: 송금받음, show: 환율보이기, conv: 환율계산";
-	}
-
-	public static String getIRCHelpMessagePart3() {
-		String result = "[Currency_Unit] : USD:U.S, EUR:Europe, JPY:Japan, CNY:China, HKD:HongKong, TWD:Taiwan, GBP:Great Britain, CAD:Canada, CHF:Switzerland, SEK:Sweden, ";
-		result += "AUD:Australia, NZD:NewZealand, ISL:Israel, DKK:Denmark, NOK:Norway, SAR:Saudi Arabia, KWD:Kuweit, BHD:Bahrain, AED:United of Arab Emirates, ";
-		result += "JOD:Jordan, EGP:Egypt, THB:Thailand, SGD:Singapore, MYR:Malaysia, IDR:Indonesia, BND:Brunei, INR:India, PKR:Pakistan,";
-
-		return result;
-	}
-
-	public static String getIRCHelpMessagePart4() {
-		String result = "BDT:Bangladesh, PHP:Philippine, MXN:Mexico, BRL:Brazil, VND:Vietnam, ZAR:Republic of South Africa, RUB:Russia, HUF:Hungary, PLN:Poland ";
+		String result = "help: 도움말, lastround: 최종갱신회차, buycash: 현찰매수, cellcash: 현찰매도, sendremit: 송금보냄, recvremit: 송금받음, show: 환율보이기, conv: 환율계산, unitlist: 화폐단위";
 		result += "[FieldAbbr] (show 명령에만 해당) 모두보기, 매매기준, 현찰매수, 현찰매도, 송금보냄, 송금받음, 환수수료, 대미환산 ";
-		result += "[Amount] 금액 [Currency_Unit] 단일화폐단위 [Current_Unit(1)] 변환할화폐단위 [Current_Unit(2)] 대상화폐단위";
+		result += "[Amount] 금액 [Currency_Unit] 화폐단위 [Current_Unit(1)] 대상 [Current_Unit(2)] 목적";
 
 		return result;
 	}
 
-	/*
-	 * This method is for executing on the CLI environment. private void
-	 * showHelpMessage ( ) { // this method must be deprecated for executing
-	 * from ircbot. System.out.println ( "사용법 : ./run.sh --command [옵션]\n");
-	 * System.out.println ( "\t--help : 이 메시지를 보여줍니다."); System.out.println (
-	 * "\t--latestround : 최종 갱신 일자, 시간, 회차를 보여줍니다."); System.out.println (
-	 * "\t--forceupdate : 강제로 정보 테이블을 갱신합니다."); System.out.println (
-	 * "\t--show [Currency_unit] ([Field]) : 지정한 화폐단위에 대한 환율 항목을 보여줍니다.");
-	 * System.out.println (
-	 * "\t--convert [Amount] [Currency_unit] : 지정 금액을 원화로 취급하며 [Currency_Unit] 으로 환산하여 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--convert [Amount] [Curr_unit1] [Curr_unit2] : 지정 금액을 [Curr_unit1] 단위로 취급하며 [Curr_Unit2] 로 환산하여 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--convert [Curr_unit1] [Curr_unit2] : 금액 1을 [Curr_unit1] 단위로 취급하며 [Curr_unit2] 로 환산하여 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--buycash [Currency_unit] [Amount] : 환전 거래시 [Currency_name]단위의 [Amount] 금액으로 바꾸기 위해 필요한 원화금액을 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--cellcash [Currency_unit] [Amount] : 환전 거래시 [Currency_name]단위의 [Amount] 금액을 받을 수 있는 원화금액을 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--sendremit [Currency_unit] [Amount] : 송금 보낼 때 [Currency_name]단위의 [Amount] 금액을 보내기 위해 필요한 원화금액을 보여줍니다."
-	 * ); System.out.println (
-	 * "\t--recvremit [Currency_unit] [Amount] : 송금 받을 때 [Currency_name]단위의 [Amount] 금액에 대해 받을 수 있는 원화금액을 보여줍니다.\n"
-	 * );
-	 * 
-	 * System.out.println ( "\t [Currency_name]"); System.out.println (
-	 * "\t USD : U.S Dollar, EUR : Europe United EURO, JPY : Japan Yen, CNY : China Yuan"
-	 * ); System.out.println (
-	 * "\t HKD : HongKong HongKongDollar, TWD : Taiwan NewTaiwanDollar, GBP : Great Britain Pound"
-	 * ); System.out.println (
-	 * "\t CAD : Canada CanadianDollar, CHF : Switzerland SwissFranc, SEK : Sweden SwedishKrona"
-	 * ); System.out.println (
-	 * "\t AUD : Australia AustralianDollar, NZD : NewZealand NewZealandDollar, ISL : Israel NewShekel"
-	 * ); System.out.println (
-	 * "\t DKK : Denmark DanishKrone, NOK : Norway NorwegianKrone, SAR : Saudi Arabia SaudiRial"
-	 * ); System.out.println (
-	 * "\t KWD : Kuweit Dinar, BHD : Bahrain Dinar, AED : United of Arab Emirates EmiratiDirham"
-	 * ); System.out.println (
-	 * "\t JOD : Jordan Dinar, EGP : Egypt EgyptianPound, THB : Thailand Baht, SGD : Singapore SingaporeDollar"
-	 * ); System.out.println (
-	 * "\t MYR : Malaysia Ringgit, IDR : Indonesia Rupiah, BND : Brunei BruneiDollar, INR : India Rupee"
-	 * ); System.out.println (
-	 * "\t PKR : Pakistan PakistaniRupee, BDT : Bangladesh Taka, PHP : Philippine Peso, MXN : Mexico MexicanPero"
-	 * ); System.out.println (
-	 * "\t BRL : Brazil Real, VND : Vietnam VietnameseDong, ZAR : Republic of South Africa Rand"
-	 * ); System.out.println (
-	 * "\t RUB : Russia Ruble, HUF : Hungary Forint, PLN : Poland Zloty\n");
-	 * 
-	 * System.out.println ( "\t [Field]"); System.out.println (
-	 * "\t all : 모두 보여주기"); System.out.println (
-	 * "\t cr : 매매 기준율 (기본값), cb : 현찰 매수 지불, cc : 현찰 매도 수익"); System.out.println
-	 * ( "\t rs : 송금 보낼 때, rr : 송금 받을 때, ec : 환전 수수료율"); System.out.println (
-	 * "\t de : 달러 환산율"); }
-	 */
 	private String showLatestRound() throws IOException {
 		StringBuilder result = new StringBuilder();
 		String[] month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
@@ -394,7 +778,7 @@ public class CERInfoProvider {
 			central_rate = Double.parseDouble(data[2]);
 			s_value = Double.parseDouble(resval);
 
-			resval = String.format("%.2f", (s_value / central_rate)
+			resval = String.format("%.2f", (s_value / central_rate )
 					* currency_unit);
 			// result = "￦" + value + " => " + resval + " " + CurrencyUnit;
 		}
