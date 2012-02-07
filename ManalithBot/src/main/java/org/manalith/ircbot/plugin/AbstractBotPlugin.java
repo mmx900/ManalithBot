@@ -67,6 +67,11 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 	public void onPrivateMessage(MessageEvent event) {
 		// TODO Auto-generated method stub
 	}
+	
+	protected void onMessage(MessageEvent event, String target)
+	{
+		// TODO !!!
+	}
 
 	public void onPart(String channel, String sender, String login,
 			String hostname) {

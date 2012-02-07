@@ -52,7 +52,7 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEvent event, String target) {
+	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
 
 		if (message.equals(COMMAND + ":help")) {
