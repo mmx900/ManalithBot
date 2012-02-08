@@ -69,6 +69,13 @@ public class PluginManager {
 		for (IBotPlugin plugin : list)
 			plugin.onPart(channel, sender, login, hostName);
 	}
+	
+	public void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
+		// TODO Auto-generated method stub
+		for (IBotPlugin plugin : list)
+			plugin.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+	}
 
 	public List<IBotPlugin> getList() {
 		return list;
@@ -97,4 +104,5 @@ public class PluginManager {
 
 		return sb.toString();
 	}
+
 }

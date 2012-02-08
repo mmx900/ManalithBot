@@ -221,8 +221,7 @@ public class ManalithBot extends PircBot {
 		logger.trace(String.format("QUIT : %s / %s / %s / %s", sourceNick,
 				sourceLogin, sourceHostname, reason));
 
-		// pluginManager.onQuit(sourceNick, sourceLogin, sourceHostname,
-		// reason);
+		pluginManager.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 	}
 
 	@Override
