@@ -1,7 +1,8 @@
 /*
  	org.manalith.ircbot.plugin.sample/SamplePlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2011  Ki-Beom, Kim
+ 	Copyright (C) 2011, 2012  Ki-Beom, Kim
+ 	Copyright (C) 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,6 +51,17 @@ public class SamplePlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		this.onMessage(event, event.getChannel());
+	}
+
+	@Override
+	public void onPrivateMessage(MessageEvent event) {
+		// This example source code is only for public.
+		// this.onMessage(event, event.getSender());
+	}
+	
+	protected void onMessage (MessageEvent event, String target)
+	{
 		String message = event.getMessage();
 		String channel = event.getChannel();
 
@@ -66,24 +78,7 @@ public class SamplePlugin extends AbstractBotPlugin {
 					: "(두리번) +_+/ 멸묘!");
 			event.setExecuted(true);
 		}
-	}
 
-	@Override
-	public void onPrivateMessage(MessageEvent event) {
-		// TODO Auto-generated method stub
-		String message = event.getMessage();
-		String sender = event.getSender();
-
-		if (message.equals("!친반묘")) {
-
-			boolean isMyo = false;
-
-			if (sender.equals("myojok")) {
-				isMyo = true;
-			}
-			bot.sendLoggedMessage(sender, isMyo ? "친묘!" : "+_+/ 멸묘!");
-			event.setExecuted(true);
-		}
 	}
 
 	public void onPart(String channel, String sender, String login,
