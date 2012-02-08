@@ -43,7 +43,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEvent event, String target) {
+	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
 		String[] command = message.split("\\s");
 

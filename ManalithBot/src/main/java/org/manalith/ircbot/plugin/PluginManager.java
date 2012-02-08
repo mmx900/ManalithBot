@@ -1,7 +1,8 @@
 /*
  	org.manalith.ircbot.plugin/PluginManager.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2005, 2011  Ki-Beom, Kim
+ 	Copyright (C) 2005, 2011, 2012  Ki-Beom, Kim
+ 	Copyright (C) 2012  Seong-ho, Cho  <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -69,6 +70,13 @@ public class PluginManager {
 		for (IBotPlugin plugin : list)
 			plugin.onPart(channel, sender, login, hostName);
 	}
+	
+	public void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
+		// TODO Auto-generated method stub
+		for (IBotPlugin plugin : list)
+			plugin.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+	}
 
 	public List<IBotPlugin> getList() {
 		return list;
@@ -97,4 +105,5 @@ public class PluginManager {
 
 		return sb.toString();
 	}
+
 }
