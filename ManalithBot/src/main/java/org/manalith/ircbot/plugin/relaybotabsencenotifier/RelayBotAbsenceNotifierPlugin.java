@@ -15,74 +15,64 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin.relaybotabsencenotifier;
 
 import org.jibble.pircbot.User;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin{
-	public String getName()
-	{
+public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
+	public String getName() {
 		return "릴봇부재알리미";
 	}
 
 	public String getCommands() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
-		// TODO Auto-generated method stub
 		boolean beingBot = false;
-		if ( sender.equals("DarkCircle") )
-		{
+		if (sender.equals("DarkCircle")) {
 			User[] list = bot.getUsers("#gnome");
-			for ( User u : list )
-			{
-				if ( u.getNick().equals("♠한씨네") )
-				{
+			for (User u : list) {
+				if (u.getNick().equals("♠한씨네")) {
 					beingBot = true;
 					break;
 				}
 			}
-			
-			if ( !beingBot ) bot.sendLoggedMessage(channel, "DarkCircle: ...");
+
+			if (!beingBot)
+				bot.sendLoggedMessage(channel, "DarkCircle: ...");
 		}
 	}
-	
-	public void onMessage(MessageEvent event)
-	{
-		if ( event.getSender().equals("DarkCircle") )
-		{
+
+	public void onMessage(MessageEvent event) {
+		if (event.getSender().equals("DarkCircle")) {
 			boolean beingBot = false;
 			User[] list = bot.getUsers("#gnome");
-			for ( User u : list )
-			{
-				if ( u.getNick().equals("♠한씨네") )
-				{
+			for (User u : list) {
+				if (u.getNick().equals("♠한씨네")) {
 					beingBot = true;
 					break;
 				}
 			}
-			
-			if ( !beingBot ) bot.sendLoggedMessage(event.getChannel(), "DarkCircle: ...");
+
+			if (!beingBot)
+				bot.sendLoggedMessage(event.getChannel(), "DarkCircle: ...");
 		}
 	}
-	
+
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
-		// TODO Auto-generated method stub
-		if ( sender.equals("♠한씨네") )
+		if (sender.equals("♠한씨네"))
 			bot.sendLoggedMessage(channel, "DarkCircle: ...");
 	}
 
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
-		// TODO Auto-generated method stub
-		if ( sourceNick.equals("♠한씨네") )
+		if (sourceNick.equals("♠한씨네"))
 			bot.sendLoggedMessage("#gnome", "DarkCircle: ...");
 	}
 }

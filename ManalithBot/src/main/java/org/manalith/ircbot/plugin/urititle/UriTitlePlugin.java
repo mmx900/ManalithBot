@@ -26,52 +26,53 @@ import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class UriTitlePlugin extends AbstractBotPlugin {
-    public String getCommands() {
-        return null;
-    }
+	public String getCommands() {
+		return null;
+	}
 
-    public String getName() {
-        return "URI 타이틀";
-    }
+	public String getName() {
+		return "URI 타이틀";
+	}
 
-    public String getHelp() {
-        return "대화 중 등장하는 URI의 타이틀을 표시합니다";
-    }
+	public String getHelp() {
+		return "대화 중 등장하는 URI의 타이틀을 표시합니다";
+	}
 
-    private String findUri(String msg) {
-        if (!msg.contains("http"))
-            return null;
+	private String findUri(String msg) {
+		if (!msg.contains("http"))
+			return null;
 
-        String URI_REGEX = ".*(https?://\\S+).*";
-        Pattern pattern = Pattern.compile(URI_REGEX);
-        Matcher matcher = pattern.matcher(msg);
+		String URI_REGEX = ".*(https?://\\S+).*";
+		Pattern pattern = Pattern.compile(URI_REGEX);
+		Matcher matcher = pattern.matcher(msg);
 
-        if (!matcher.matches())
-            return null;
+		if (!matcher.matches())
+			return null;
 
-        return matcher.group(1);
-    }
+		return matcher.group(1);
+	}
 
-    private String getTitle(String uri) {
-        try {
-        	return Jsoup.connect(uri).get().title().replaceAll("\\n", "").replaceAll("(\\s){2,}", " ");
-        } catch (Exception e) {
-            return null;
-        }
-    }
+	private String getTitle(String uri) {
+		try {
+			return Jsoup.connect(uri).get().title().replaceAll("\\n", "")
+					.replaceAll("(\\s){2,}", " ");
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
-    public void onMessage(MessageEvent event) {
-        String message = event.getMessage();
-        String channel = event.getChannel();
+	public void onMessage(MessageEvent event) {
+		String message = event.getMessage();
+		String channel = event.getChannel();
 
-        String uri = findUri(message);
-        if (uri == null)
-            return;
+		String uri = findUri(message);
+		if (uri == null)
+			return;
 
-        String title = getTitle(uri);
-        if (title != null) {
-            bot.sendLoggedMessage(channel, "[Link Title] " + title);;
-        }
-        event.setExecuted(true);
-    }
+		String title = getTitle(uri);
+		if (title != null) {
+			bot.sendLoggedMessage(channel, "[Link Title] " + title);
+		}
+		event.setExecuted(true);
+	}
 }

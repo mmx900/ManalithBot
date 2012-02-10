@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin.twitreader;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -45,11 +45,10 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 		TwitReaderRunner runner = new TwitReaderRunner(command);
 		String /* [] */result = runner.run();
 
-		if ( !result.equals("") )
-		{
+		if (!result.equals("")) {
 			bot.sendLoggedMessage(channel, result/* [i] */);
 			// event.setExecuted(true);
 		}
-		
+
 	}
 }
