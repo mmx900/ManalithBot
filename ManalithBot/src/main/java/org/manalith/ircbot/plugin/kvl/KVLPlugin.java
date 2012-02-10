@@ -46,7 +46,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 		onMessage(event, event.getSender());
 	}
 
-	private void onMessage(MessageEvent event, String target) {
+	protected void onMessage(MessageEvent event, String target) {
 		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
 

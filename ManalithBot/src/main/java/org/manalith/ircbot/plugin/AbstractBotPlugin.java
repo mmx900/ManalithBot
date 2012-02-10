@@ -1,7 +1,8 @@
 /*
  	org.manalith.ircbot.plugin/AbstractBotPlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2011  Ki-Beom, Kim
+ 	Copyright (C) 2011,2012  Ki-Beom, Kim
+ 	Copyright (C) 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,6 +67,11 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 
 	public void onPrivateMessage(MessageEvent event) {
 		// TODO Auto-generated method stub
+	}
+	
+	protected void onMessage(MessageEvent event, String target)
+	{
+		// TODO !!!
 	}
 
 	public void onPart(String channel, String sender, String login,

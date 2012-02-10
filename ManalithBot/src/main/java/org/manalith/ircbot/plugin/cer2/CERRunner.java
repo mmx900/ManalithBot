@@ -25,22 +25,22 @@ import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {
 
-	private String args;
+	private String[] args;
 	private String dataPath;
 	private String usernick;
 
 	public CERRunner() {
-		this.setArgs("");
+		this.setArgs(null);
 		this.setDataPath("");
 	}
 
-	public CERRunner(String newUserNick, String newArgs) {
+	public CERRunner(String newUserNick, String[] newArgs) {
 		this.setUserNick(newUserNick);
 		this.setArgs(newArgs);
 		this.setDataPath("");
 	}
 
-	public CERRunner(String newUserNick, String newDataPath, String newArgs) {
+	public CERRunner(String newUserNick, String newDataPath, String[] newArgs) {
 		this.setUserNick(newUserNick);
 		this.setDataPath(newDataPath);
 		File path = new File(this.getDataPath());
@@ -51,11 +51,11 @@ public class CERRunner {
 		this.setArgs(newArgs);
 	}
 
-	public void setArgs(String newArgs) {
+	public void setArgs(String[] newArgs) {
 		this.args = newArgs;
 	}
 
-	private String getArgs() {
+	private String[] getArgs() {
 		return this.args;
 	}
 
@@ -81,10 +81,10 @@ public class CERRunner {
 		CERTableUpdater updater = new CERTableUpdater(this.getDataPath());
 		updater.update();
 
-		String cmd = "";
+		String [] cmd = null;
 		CERInfoProvider info = null;
 
-		if (this.getArgs().equals("")) {
+		if (this.getArgs() == null) {
 			String[] default_currency = null;
 
 			PropertyManager prop = new PropertyManager(this.getDataPath(),
@@ -115,8 +115,11 @@ public class CERRunner {
 			}
 
 			for (int i = 0; i < default_currency.length; i++) {
+				
+				String [] args = new String[1];
+				args[0] = default_currency[i];
 				cmd = CERMessageTokenAnalyzer
-						.convertToCLICommandString(default_currency[i]);
+						.convertToCLICommandString(args);
 				info = new CERInfoProvider(this.getDataPath(), cmd);
 
 				if (i != 0)
@@ -138,9 +141,9 @@ public class CERRunner {
 	private int indexOfContained(String[] strarray, String value) {
 		int result = -1;
 		int length = strarray.length;
-
+		
 		for (int i = 0; i < length; i++) {
-			if (strarray[i].contains(value)) {
+			if (strarray[i].equals(value)) {
 				result = i;
 				break;
 			}
