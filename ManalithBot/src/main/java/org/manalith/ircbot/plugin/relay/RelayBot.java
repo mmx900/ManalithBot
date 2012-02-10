@@ -27,7 +27,8 @@ public class RelayBot extends PircBot {
 				targetChannel = "#setzer";
 			}
 			
-			BotMain.BOT.sendLoggedMessage(targetChannel, "<" + sender + "> " + message, false);
+			//XXX 최신 API에 맞게 수정 필요
+			//BotMain.BOT.sendLoggedMessage(targetChannel, "<" + sender + "> " + message, false);
 		}
 	}
 	

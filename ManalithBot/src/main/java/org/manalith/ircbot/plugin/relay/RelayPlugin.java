@@ -45,12 +45,10 @@ public class RelayPlugin extends AbstractBotPlugin {
 	public void onMessage(MessageEvent event) {
 		if (event.getMessage().equals("relay:stop")) {
 			setRelaying(false);
-			BotMain.BOT
-					.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 종료합니다.");
+			bot.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 종료합니다.");
 		} else if (event.getMessage().equals("relay:start")) {
 			setRelaying(true);
-			BotMain.BOT
-					.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 시작합니다.");
+			bot.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 시작합니다.");
 		}
 
 		if (isRelaying()) {
