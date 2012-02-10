@@ -8,4 +8,10 @@
 <entry key="org.manalith.ircbot.bot.server.encoding">CP949</entry>
 <entry key="org.manalith.ircbot.bot.server.channels">#CHANNEL,#CHANNEL2</entry>
 <entry key="org.manalith.ircbot.bot.plugin.google.key">KEY</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.name">뒷북요정</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.verbose">true</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.server">irc.ozinger.org</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.server.port">8080</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.server.encoding">UTF-8</entry>
+<entry key="org.manalith.ircbot.bot.plugin.relay.server.channels">#gnome,#setzer</entry>
 </properties>
