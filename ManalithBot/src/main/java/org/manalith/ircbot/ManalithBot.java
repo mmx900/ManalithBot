@@ -33,8 +33,7 @@ import org.jibble.pircbot.User;
 import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.plugin.PluginManager;
-
-//import org.manalith.ircbot.plugin.relay.RelayPlugin;
+import org.manalith.ircbot.plugin.relay.RelayPlugin;
 
 public class ManalithBot extends PircBot {
 	private Logger logger = Logger.getLogger(getClass());
@@ -72,8 +71,8 @@ public class ManalithBot extends PircBot {
 
 		sendMessage(target, message);
 
-		// if(redirectToRelayBot && RelayPlugin.RELAY_BOT != null)
-		// RelayPlugin.RELAY_BOT.sendMessage(target, message);
+		if (redirectToRelayBot && RelayPlugin.RELAY_BOT != null)
+			RelayPlugin.RELAY_BOT.sendMessage(target, message);
 	}
 
 	public void sendLoggedMessage(String target, String message) {
@@ -124,7 +123,7 @@ public class ManalithBot extends PircBot {
 	protected void onUserList(String channel, User[] users) {
 
 	}
-	//*
+
 	@Override
 	protected void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
@@ -133,7 +132,7 @@ public class ManalithBot extends PircBot {
 
 		// 릴레이 메시지일 경우 로컬 메시지로 변환한다.
 		// TODO 메시지 필터 구현
-		if (sender.equals("♣오씨네") || sender.equals("♣오씨네가건물")) {
+		if (sender.equals("♣한씨네") || sender.equals("♣한씨네가건물")) {
 			sender = CommandParser.getSenderByRelayMessage(message);
 			message = CommandParser.convertRelayToLocalMessage(message);
 		}
@@ -150,7 +149,7 @@ public class ManalithBot extends PircBot {
 			pluginManager.onMessage(channel, sender, login, hostname, message);
 		}
 	}
-	//*/
+
 	@Override
 	protected void onPrivateMessage(String sender, String login,
 			String hostname, String message) {
