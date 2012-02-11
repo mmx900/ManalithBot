@@ -20,79 +20,53 @@ package org.manalith.ircbot.plugin.cer2;
 
 import java.io.File;
 
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {
 
-	private String[] args;
+	private String[] arguments;
 	private String dataPath;
-	private String usernick;
+	private String userNick;
 
 	public CERRunner() {
-		this.setArgs(null);
-		this.setDataPath("");
+		arguments = null;
+		dataPath = "";
 	}
 
-	public CERRunner(String newUserNick, String[] newArgs) {
-		this.setUserNick(newUserNick);
-		this.setArgs(newArgs);
-		this.setDataPath("");
+	public CERRunner(String userNick, String[] arguments) {
+		this.userNick = userNick;
+		this.arguments = arguments;
+		dataPath = "";
 	}
 
-	public CERRunner(String newUserNick, String newDataPath, String[] newArgs) {
-		this.setUserNick(newUserNick);
-		this.setDataPath(newDataPath);
-		File path = new File(this.getDataPath());
+	public CERRunner(String userNick, String dataPath, String[] arguments) {
+		this.userNick = userNick;
+		this.dataPath = dataPath;
+		File path = new File(dataPath);
 
 		if (!path.exists())
 			path.mkdirs();
 
-		this.setArgs(newArgs);
-	}
-
-	public void setArgs(String[] newArgs) {
-		this.args = newArgs;
-	}
-
-	private String[] getArgs() {
-		return this.args;
-	}
-
-	public void setDataPath(String newDataPath) {
-		this.dataPath = newDataPath;
-	}
-
-	private String getDataPath() {
-		return this.dataPath;
-	}
-
-	private void setUserNick(String newUserNick) {
-		this.usernick = newUserNick;
-	}
-
-	private String getUserNick() {
-		return this.usernick;
+		this.arguments = arguments;
 	}
 
 	public String run() throws Exception {
 		String result = "";
 
-		CERTableUpdater updater = new CERTableUpdater(this.getDataPath());
+		CERTableUpdater updater = new CERTableUpdater(dataPath);
 		updater.update();
 
-		String [] cmd = null;
+		String[] cmd = null;
 		CERInfoProvider info = null;
 
-		if (ArrayUtils.isEmpty(this.getArgs())) {
+		if (ArrayUtils.isEmpty(arguments)) {
 			String[] default_currency = null;
 
-			PropertyManager prop = new PropertyManager(this.getDataPath(),
+			PropertyManager prop = new PropertyManager(dataPath,
 					"customsetlist.prop");
 			prop.loadProperties();
-
 
 			String[] userlist = prop.getKeyList();
 			if (userlist == null) {
@@ -102,7 +76,7 @@ public class CERRunner {
 				default_currency[2] = "JPY";
 				default_currency[3] = "CNY";
 			} else {
-				int existidx = StringUtils.indexOfAny(this.getUserNick(), userlist); 
+				int existidx = StringUtils.indexOfAny(userNick, userlist);
 				if (existidx != -1) {
 					default_currency = prop.getValue(userlist[existidx]).split(
 							"\\,");
@@ -116,12 +90,11 @@ public class CERRunner {
 			}
 
 			for (int i = 0; i < default_currency.length; i++) {
-				
-				String [] args = new String[1];
+
+				String[] args = new String[1];
 				args[0] = default_currency[i];
-				cmd = CERMessageTokenAnalyzer
-						.convertToCLICommandString(args);
-				info = new CERInfoProvider(this.getDataPath(), cmd);
+				cmd = CERMessageTokenAnalyzer.convertToCLICommandString(args);
+				info = new CERInfoProvider(dataPath, cmd);
 
 				if (i != 0)
 					result += ", " + info.commandInterpreter();
@@ -129,9 +102,8 @@ public class CERRunner {
 					result += info.commandInterpreter();
 			}
 		} else {
-			cmd = CERMessageTokenAnalyzer.convertToCLICommandString(this
-					.getArgs());
-			info = new CERInfoProvider(this.getDataPath(), cmd);
+			cmd = CERMessageTokenAnalyzer.convertToCLICommandString(arguments);
+			info = new CERInfoProvider(dataPath, cmd);
 
 			result = info.commandInterpreter();
 		}
