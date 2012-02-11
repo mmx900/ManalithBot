@@ -22,6 +22,7 @@ import java.io.File;
 
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {
@@ -101,8 +102,7 @@ public class CERRunner {
 				default_currency[2] = "JPY";
 				default_currency[3] = "CNY";
 			} else {
-				int existidx = this.indexOfContained(userlist,
-						this.getUserNick());
+				int existidx = StringUtils.indexOfAny(userlist, this.getUserNick()); 
 				if (existidx != -1) {
 					default_currency = prop.getValue(userlist[existidx]).split(
 							"\\,");
@@ -141,7 +141,7 @@ public class CERRunner {
 
 	private int indexOfContained(String[] strarray, String value) {
 		int result = -1;
-		int length = strarray.length;
+		int length = strarray.length;ㅑ
 		
 		for (int i = 0; i < length; i++) {
 			if (strarray[i].equals(value)) {
