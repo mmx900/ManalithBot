@@ -21,6 +21,7 @@ package org.manalith.ircbot.plugin.cer2;
 import java.io.File;
 
 
+import org.apache.commons.lang.ArrayUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {
@@ -84,7 +85,7 @@ public class CERRunner {
 		String [] cmd = null;
 		CERInfoProvider info = null;
 
-		if (this.getArgs() == null || this.getArgs().length == 0) {
+		if (ArrayUtils.isEmpty(this.getArgs())) {
 			String[] default_currency = null;
 
 			PropertyManager prop = new PropertyManager(this.getDataPath(),
