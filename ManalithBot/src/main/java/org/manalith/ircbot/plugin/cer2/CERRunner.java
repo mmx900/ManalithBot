@@ -84,7 +84,7 @@ public class CERRunner {
 		String [] cmd = null;
 		CERInfoProvider info = null;
 
-		if (this.getArgs() == null) {
+		if (this.getArgs() == null || this.getArgs().length == 0) {
 			String[] default_currency = null;
 
 			PropertyManager prop = new PropertyManager(this.getDataPath(),
