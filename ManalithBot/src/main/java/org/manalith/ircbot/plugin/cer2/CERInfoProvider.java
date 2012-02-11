@@ -24,6 +24,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang.math.NumberUtils;
 
 import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.cer2.TokenSubtype;
@@ -629,9 +630,9 @@ public class CERInfoProvider {
 
 		String[] datetime = dt.split("\\s");
 		String[] date = datetime[0].split("\\.");
-
+		
 		result.append("Last Updated : ");
-		result.append(month[Integer.parseInt(date[1]) - 1]);
+		result.append(month[NumberUtils.toInt(date[1]) - 1]);
 		result.append(" ");
 		result.append(date[2]);
 		result.append(", ");
@@ -639,7 +640,7 @@ public class CERInfoProvider {
 		result.append("  ");
 		result.append(datetime[1]);
 		result.append(", ");
-		result.append(Integer.parseInt(roundstr));
+		result.append(NumberUtils.toInt(roundstr));
 		int len = roundstr.length();
 		char ch = roundstr.charAt(len - 1);
 		switch (ch) {
@@ -680,7 +681,7 @@ public class CERInfoProvider {
 				result.append("(");
 			}
 
-			if (Integer.parseInt(data[1]) == 100) {
+			if (NumberUtils.toInt(data[1]) == 100) {
 				result.append(data[1]);
 				result.append(" ");
 			}
@@ -697,7 +698,7 @@ public class CERInfoProvider {
 			} else if (separatedfield[j].equals("dollar_exc_rate")) {
 				result.append("대미환산율 : ");
 				result.append(String.format("%.3f",
-						(Double.parseDouble(data[j]) * 100.0)));
+						(NumberUtils.toDouble(data[j]) * 100.0)));
 				result.append("%");
 			} else {
 				if (separatedfield[j].equals("central_rate"))
@@ -742,9 +743,9 @@ public class CERInfoProvider {
 			String[] data = sqlman.selectDataFromTable(field, CurrencyUnit2);
 			sqlman.close();
 
-			double currency_unit = Double.parseDouble(data[1]);
-			double central_rate = Double.parseDouble(data[2]);
-			double s_value = Double.parseDouble(value);
+			double currency_unit = NumberUtils.toDouble(data[1]);
+			double central_rate = NumberUtils.toDouble(data[2]);
+			double s_value = NumberUtils.toDouble(value);
 
 			resval = String.format("%.2f", (s_value / central_rate)
 					* currency_unit);
@@ -753,9 +754,9 @@ public class CERInfoProvider {
 		} else if (CurrencyUnit2.equals("KRW")) {
 			String[] data = sqlman.selectDataFromTable(field, CurrencyUnit1);
 
-			double currency_unit = Double.parseDouble(data[1]);
-			double central_rate = Double.parseDouble(data[2]);
-			double s_value = Double.parseDouble(value);
+			double currency_unit = NumberUtils.toDouble(data[1]);
+			double central_rate = NumberUtils.toDouble(data[2]);
+			double s_value = NumberUtils.toDouble(value);
 
 			resval = String.format("%.2f", (s_value / currency_unit)
 					* central_rate);
@@ -763,9 +764,9 @@ public class CERInfoProvider {
 		} else {
 			String[] data = sqlman.selectDataFromTable(field, CurrencyUnit1);
 
-			double currency_unit = Double.parseDouble(data[1]);
-			double central_rate = Double.parseDouble(data[2]);
-			double s_value = Double.parseDouble(value);
+			double currency_unit = NumberUtils.toDouble(data[1]);
+			double central_rate = NumberUtils.toDouble(data[2]);
+			double s_value = NumberUtils.toDouble(value);
 
 			resval = String.format("%.2f", (s_value / currency_unit)
 					* central_rate);
@@ -774,9 +775,9 @@ public class CERInfoProvider {
 			data = sqlman.selectDataFromTable(field, CurrencyUnit2);
 			sqlman.close();
 
-			currency_unit = Double.parseDouble(data[1]);
-			central_rate = Double.parseDouble(data[2]);
-			s_value = Double.parseDouble(resval);
+			currency_unit = NumberUtils.toDouble(data[1]);
+			central_rate = NumberUtils.toDouble(data[2]);
+			s_value = NumberUtils.toDouble(resval);
 
 			resval = String.format("%.2f", (s_value / central_rate )
 					* currency_unit);
@@ -797,9 +798,9 @@ public class CERInfoProvider {
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
 
-		double currency_unit = Double.parseDouble(data[1]);
-		double central_rate = Double.parseDouble(data[2]);
-		double s_value = Double.parseDouble(value);
+		double currency_unit = NumberUtils.toDouble(data[1]);
+		double central_rate = NumberUtils.toDouble(data[2]);
+		double s_value = NumberUtils.toDouble(value);
 
 		String resval = String.format("%.2f", (s_value / currency_unit)
 				* central_rate);
@@ -817,9 +818,9 @@ public class CERInfoProvider {
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
 
-		double currency_unit = Double.parseDouble(data[1]);
-		double central_rate = Double.parseDouble(data[2]);
-		double s_value = Double.parseDouble(value);
+		double currency_unit = NumberUtils.toDouble(data[1]);
+		double central_rate = NumberUtils.toDouble(data[2]);
+		double s_value = NumberUtils.toDouble(value);
 
 		String resval = String.format("%.2f", (s_value / currency_unit)
 				* central_rate);
@@ -837,9 +838,9 @@ public class CERInfoProvider {
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
 
-		double currency_unit = Double.parseDouble(data[1]);
-		double central_rate = Double.parseDouble(data[2]);
-		double s_value = Double.parseDouble(value);
+		double currency_unit = NumberUtils.toDouble(data[1]);
+		double central_rate = NumberUtils.toDouble(data[2]);
+		double s_value = NumberUtils.toDouble(value);
 
 		String resval = String.format("%.2f", (s_value / currency_unit)
 				* central_rate);
@@ -858,9 +859,9 @@ public class CERInfoProvider {
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
 
-		double currency_unit = Double.parseDouble(data[1]);
-		double central_rate = Double.parseDouble(data[2]);
-		double s_value = Double.parseDouble(value);
+		double currency_unit = NumberUtils.toDouble(data[1]);
+		double central_rate = NumberUtils.toDouble(data[2]);
+		double s_value = NumberUtils.toDouble(value);
 
 		String resval = String.format("%.2f", (s_value / currency_unit)
 				* central_rate);
