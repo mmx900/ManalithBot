@@ -21,6 +21,8 @@ package org.manalith.ircbot.plugin.cer2;
 import java.io.File;
 
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {
@@ -84,7 +86,7 @@ public class CERRunner {
 		String [] cmd = null;
 		CERInfoProvider info = null;
 
-		if (this.getArgs() == null) {
+		if (ArrayUtils.isEmpty(this.getArgs())) {
 			String[] default_currency = null;
 
 			PropertyManager prop = new PropertyManager(this.getDataPath(),
@@ -100,8 +102,7 @@ public class CERRunner {
 				default_currency[2] = "JPY";
 				default_currency[3] = "CNY";
 			} else {
-				int existidx = this.indexOfContained(userlist,
-						this.getUserNick());
+				int existidx = StringUtils.indexOfAny(this.getUserNick(), userlist); 
 				if (existidx != -1) {
 					default_currency = prop.getValue(userlist[existidx]).split(
 							"\\,");
@@ -133,20 +134,6 @@ public class CERRunner {
 			info = new CERInfoProvider(this.getDataPath(), cmd);
 
 			result = info.commandInterpreter();
-		}
-
-		return result;
-	}
-
-	private int indexOfContained(String[] strarray, String value) {
-		int result = -1;
-		int length = strarray.length;
-		
-		for (int i = 0; i < length; i++) {
-			if (strarray[i].equals(value)) {
-				result = i;
-				break;
-			}
 		}
 
 		return result;
