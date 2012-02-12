@@ -11,17 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class DictionaryPlugin extends AbstractBotPlugin {
 	private DictionaryManager dict;
-	
-	@Autowired
-	private WordDao wordDao;
-	
-	public WordDao getWordDao(){
-		return wordDao;
-	}
-	
-	public void setWordDao(WordDao wordDao){
-		this.wordDao = wordDao;
-	}
 
 	public DictionaryPlugin() {
 		dict = DictionaryManager.instance();
@@ -55,17 +44,6 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 				else
 					bot.sendLoggedMessage(channel, "(먼산)");
 			} else {
-				//XXX
-				/*
-				if (cmd.startsWith("DAO ")){
-					Word word = new Word();
-					word.setWord("test");
-					word.setAuthor("test");
-					word.setDescription("test");
-					word.setDate(new Date());
-					wordDao.save(word);
-				}else 
-				*/
 				if (cmd.startsWith("배워 ")) {
 					String[] arr = cmd.split(" ");
 
