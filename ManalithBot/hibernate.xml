@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="dataSource" 
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+			<!--<property name="url" value="jdbc:hsqldb:mem:testdb" />-->
+			<property name="url" value="jdbc:hsqldb:file:common.db;shutdown=true" />
+			<property name="username" value="sa" />
+			<property name="password" value="" />
+	</bean>
+
+	<!-- Hibernate session factory -->
+	<bean id="sessionFactory" 
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+ 
+		<property name="dataSource">
+		  <ref bean="dataSource"/>
+		</property>
+		 
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<property name="annotatedClasses">
+			<list>
+				<value>org.manalith.ircbot.plugin.dictionary.Word</value>
+			</list>
+		</property>
+		
+		<property name="schemaUpdate"><value>true</value></property>
+	</bean>
+</beans>

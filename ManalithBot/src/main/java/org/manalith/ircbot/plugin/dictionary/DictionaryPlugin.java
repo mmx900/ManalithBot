@@ -10,10 +10,15 @@ import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DictionaryPlugin extends AbstractBotPlugin {
-	private DictionaryManager dict;
+	@Autowired
+	private DictionaryManager dictionaryManager;
 
-	public DictionaryPlugin() {
-		dict = DictionaryManager.instance();
+	public DictionaryManager getDictionaryManager() {
+		return dictionaryManager;
+	}
+
+	public void setDictionaryManager(DictionaryManager dictionaryManager) {
+		this.dictionaryManager = dictionaryManager;
 	}
 
 	public String getName() {
@@ -33,8 +38,8 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		String sender = event.getSender();
 
-		String cmd = CommandParser.checkMessageAndRemoveNick(
-				bot.getName(), message);
+		String cmd = CommandParser.checkMessageAndRemoveNick(bot.getName(),
+				message);
 
 		if (cmd != null) {
 
@@ -44,11 +49,12 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 				else
 					bot.sendLoggedMessage(channel, "(먼산)");
 			} else {
+				Word w = null;
 				if (cmd.startsWith("배워 ")) {
 					String[] arr = cmd.split(" ");
 
 					if (arr.length >= 3) {
-						Word w = new Word();
+						w = new Word();
 						w.word = arr[1];
 						if (arr.length > 3)
 							w.description = StringUtils.join(arr, ' ', 2,
@@ -57,25 +63,18 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 							w.description = arr[2];
 						w.author = sender;
 						w.date = new Date();
-						dict.add(w);
-						dict.save();
+						dictionaryManager.add(w);
 
 						bot.sendLoggedMessage(channel, "단어를 배웠습니다.");
 					} else {
-						bot.sendLoggedMessage(channel,
-								"사용법 : 배워 [단어] [해석]");
+						bot.sendLoggedMessage(channel, "사용법 : 배워 [단어] [해석]");
 					}
 
-				} else if (dict.hasWord(cmd)) {
-					try {
-						Word w = dict.getWord(cmd);
-						bot.sendLoggedMessage(channel, "[" + w.word
-								+ "] " + w.description + " -" + w.author + "("
-								+ DateFormatUtils.format(w.date, "yyyy-MM-dd")
-								+ ")");
-					} catch (NotRegisteredException e) {
-						// ignore
-					}
+				} else if ((w = dictionaryManager.getWord(cmd)) != null) {
+					bot.sendLoggedMessage(channel, "[" + w.word + "] "
+							+ w.description + " -" + w.author + "("
+							+ DateFormatUtils.format(w.date, "yyyy-MM-dd")
+							+ ")");
 				} else {
 					bot.sendLoggedMessage(channel, "(먼산)");
 				}
