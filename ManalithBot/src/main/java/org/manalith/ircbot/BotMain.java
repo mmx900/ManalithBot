@@ -32,13 +32,13 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class BotMain {
 	public static void main(String[] args) throws Exception {
-		// 인코딩을 검사한다.
+		// 인코딩 검사
 		if (!Charset.defaultCharset().toString().equals("UTF-8")) {
 			System.out.println("-Dfile.encoding=UTF-8 옵션으로 실행시켜 주세요.");
 			return;
 		}
 
-		// 옵션을 가져온다.
+		// 옵션 반영
 		Options options = new Options();
 		options.addOption("c", true, "config file");
 
