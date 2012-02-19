@@ -8,7 +8,9 @@ import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DictionaryPlugin extends AbstractBotPlugin {
 	@Autowired
 	private DictionaryManager dictionaryManager;

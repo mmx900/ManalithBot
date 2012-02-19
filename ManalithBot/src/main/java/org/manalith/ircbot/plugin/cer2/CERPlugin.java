@@ -21,7 +21,9 @@ package org.manalith.ircbot.plugin.cer2;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component("cerPlugin")
 public class CERPlugin extends AbstractBotPlugin {
 
 	/*

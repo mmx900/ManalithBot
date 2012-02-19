@@ -25,7 +25,9 @@ import java.net.UnknownHostException;
 import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PingPlugin extends AbstractBotPlugin {
 	public String getName() {
 		return "핑";

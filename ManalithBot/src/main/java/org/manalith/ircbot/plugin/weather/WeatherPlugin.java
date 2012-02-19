@@ -26,7 +26,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WeatherPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String COMMAND = "!날씨";

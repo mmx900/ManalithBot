@@ -22,7 +22,9 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 
 	public String getCommands() {

@@ -20,7 +20,9 @@ package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 
 	public String getName() {

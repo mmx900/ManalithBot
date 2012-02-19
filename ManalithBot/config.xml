@@ -23,17 +23,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="uriTitlePlugin" />
 				<ref bean="dictionaryPlugin" />
 				<ref bean="pingPlugin" />
+				<ref bean="samplePlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
-	<bean id="twitReaderPlugin" class="org.manalith.ircbot.plugin.twitreader.TwitReaderPlugin"></bean>
-	<bean id="distroPkgFinderPlugin" class="org.manalith.ircbot.plugin.distropkgfinder.DistroPkgFinderPlugin"></bean>
-	<bean id="weatherPlugin" class="org.manalith.ircbot.plugin.weather.WeatherPlugin"></bean>
-	<bean id="nvidiaDriverNewsPlugin" class="org.manalith.ircbot.plugin.nvidiadrivernews.NvidiaDriverNewsPlugin"></bean>
-	<bean id="calcPlugin" class="org.manalith.ircbot.plugin.calc.CalcPlugin"></bean>
-	<bean id="kvlPlugin" class="org.manalith.ircbot.plugin.kvl.KVLPlugin"></bean>
-	<bean id="cerPlugin" class="org.manalith.ircbot.plugin.cer2.CERPlugin"></bean>
-	<bean id="uriTitlePlugin" class="org.manalith.ircbot.plugin.urititle.UriTitlePlugin"></bean>
-	<bean id="pingPlugin" class="org.manalith.ircbot.plugin.ping.PingPlugin"></bean>
-	<bean id="dictionaryPlugin" class="org.manalith.ircbot.plugin.dictionary.DictionaryPlugin"></bean>
 </beans>

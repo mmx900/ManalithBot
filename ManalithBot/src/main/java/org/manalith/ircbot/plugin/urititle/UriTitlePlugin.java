@@ -24,7 +24,9 @@ import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UriTitlePlugin extends AbstractBotPlugin {
 	public String getCommands() {
 		return null;

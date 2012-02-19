@@ -20,7 +20,9 @@ package org.manalith.ircbot.plugin.twitreader;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TwitReaderPlugin extends AbstractBotPlugin {
 
 	public String getName() {
