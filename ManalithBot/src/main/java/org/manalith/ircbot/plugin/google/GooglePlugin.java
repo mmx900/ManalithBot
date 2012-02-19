@@ -30,18 +30,16 @@ import java.net.URLEncoder;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.manalith.ircbot.ConfigurationManager;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "구글";
-
-	public GooglePlugin(ManalithBot bot) {
-		super(bot);
-	}
+	private String apiKey;
+	private String apiReferer;
 
 	public String getName() {
 		return "Google";
@@ -62,16 +60,19 @@ public class GooglePlugin extends AbstractBotPlugin {
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
 		} else if (message.length() >= 12
-				&& ( message.substring(0, 9).equals("!구글:match ") || message.substring(0, 9).equals("!gg:match "))) {
+				&& (message.substring(0, 9).equals("!구글:match ") || message
+						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
 		} else if (message.length() >= 4
-				&& ( message.substring(0, 3).equals("구글 ") || message.substring(0, 3).equals("gg "))) {
+				&& (message.substring(0, 3).equals("구글 ") || message.substring(
+						0, 3).equals("gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(3)));
 		} else if (message.length() >= 5
-				&& ( message.substring(0, 4).equals("!구글 ") || message.substring(0, 4).equals("!gg "))) {
+				&& (message.substring(0, 4).equals("!구글 ") || message
+						.substring(0, 4).equals("!gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(4)));
 		}
@@ -83,16 +84,11 @@ public class GooglePlugin extends AbstractBotPlugin {
 			// http://code.google.com/apis/websearch/docs/#fonje
 			URL url = new URL(
 					"https://ajax.googleapis.com/ajax/services/search/web?v=1.0&"
-							+ "q="
-							+ URLEncoder.encode(keyword, "UTF-8")
-							+ "&key="
-							+ ConfigurationManager
-									.getInstance()
-									.get("org.manalith.ircbot.bot.plugin.google.key")
-							+ "&userip="
+							+ "q=" + URLEncoder.encode(keyword, "UTF-8")
+							+ "&key=" + apiKey + "&userip="
 							+ InetAddress.getLocalHost().getHostAddress());
 			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("Referer", "http://manalith.org");
+			connection.addRequestProperty("Referer", apiReferer);
 
 			String line;
 			StringBuilder builder = new StringBuilder();
@@ -127,13 +123,8 @@ public class GooglePlugin extends AbstractBotPlugin {
 			// http://code.google.com/apis/websearch/docs/#fonje
 			URL url = new URL(
 					"https://ajax.googleapis.com/ajax/services/search/web?v=1.0&"
-							+ "q="
-							+ URLEncoder.encode(keyword, "UTF-8")
-							+ "&key="
-							+ ConfigurationManager
-									.getInstance()
-									.get("org.manalith.ircbot.bot.plugin.google.key")
-							+ "&userip="
+							+ "q=" + URLEncoder.encode(keyword, "UTF-8")
+							+ "&key=" + apiKey + "&userip="
 							+ InetAddress.getLocalHost().getHostAddress());
 			URLConnection connection = url.openConnection();
 			connection.addRequestProperty("Referer", "http://manalith.org");
@@ -167,5 +158,21 @@ public class GooglePlugin extends AbstractBotPlugin {
 		}
 
 		return null;
+	}
+
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public String getApiReferer() {
+		return apiReferer;
+	}
+
+	public void setApiReferer(String apiReferer) {
+		this.apiReferer = apiReferer;
 	}
 }

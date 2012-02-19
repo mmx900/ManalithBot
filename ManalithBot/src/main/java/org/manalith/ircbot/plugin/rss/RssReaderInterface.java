@@ -3,6 +3,8 @@
  */
 package org.manalith.ircbot.plugin.rss;
 
+
+
 public interface RssReaderInterface extends ReaderInterface{
 
 }

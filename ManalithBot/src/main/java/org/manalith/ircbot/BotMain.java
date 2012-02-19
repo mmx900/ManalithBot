@@ -26,6 +26,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -44,16 +45,18 @@ public class BotMain {
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = parser.parse(options, args);
 
-		String configFile = cmd.getOptionValue("c");
-		if (configFile != null) {
-			ConfigurationManager.setConfigFile(configFile);
+		String configFile = "config.xml";
+		String configFileOptionArg = cmd.getOptionValue("c");
+		if (StringUtils.isNotBlank(configFileOptionArg)) {
+			configFile = configFileOptionArg;
 		}
 
 		// 설정 초기화
-		ConfigurationManager config = ConfigurationManager.getInstance();
-
 		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"config.xml");
+				configFile);
+
+		ConfigurationManager config = context
+				.getBean(ConfigurationManager.class);
 
 		// 봇 구동
 		final ManalithBot bot = context.getBean(ManalithBot.class);

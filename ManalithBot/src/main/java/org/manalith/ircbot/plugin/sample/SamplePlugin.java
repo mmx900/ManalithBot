@@ -20,17 +20,12 @@
 package org.manalith.ircbot.plugin.sample;
 
 import org.jibble.pircbot.User;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SamplePlugin extends AbstractBotPlugin {
-
-	public SamplePlugin(ManalithBot bot) {
-		super(bot);
-	}
 
 	public String getName() {
 		return "Sample Plugin";

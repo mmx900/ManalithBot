@@ -1,37 +1,58 @@
 package org.manalith.ircbot.plugin.relay;
 
-import org.manalith.ircbot.ConfigurationManager;
-
 public class RelayPluginConfigurationManager {
-	private ConfigurationManager mgr = ConfigurationManager.getInstance();
-
-	public RelayPluginConfigurationManager() {
-
-	}
+	private String botName;
+	private boolean verbose;
+	private String server;
+	private int serverPort;
+	private String serverEncoding;
+	private String defaultChannels;
 
 	public String getBotName() {
-		return mgr.get("org.manalith.ircbot.bot.plugin.relay.name");
+		return botName;
+	}
+
+	public void setBotName(String botName) {
+		this.botName = botName;
 	}
 
 	public boolean getVerbose() {
-		return Boolean.parseBoolean(mgr
-				.get("org.manalith.ircbot.bot.plugin.relay.verbose"));
+		return verbose;
 	}
 
-	public String getServerEncoding() {
-		return mgr.get("org.manalith.ircbot.bot.plugin.relay.server.encoding");
-	}
-
-	public int getServerPort() {
-		return Integer.parseInt(mgr
-				.get("org.manalith.ircbot.bot.plugin.relay.server.port"));
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
 	}
 
 	public String getServer() {
-		return mgr.get("org.manalith.ircbot.bot.plugin.relay.server");
+		return server;
+	}
+
+	public void setServer(String server) {
+		this.server = server;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
+	}
+
+	public String getServerEncoding() {
+		return serverEncoding;
+	}
+
+	public void setServerEncoding(String serverEncoding) {
+		this.serverEncoding = serverEncoding;
 	}
 
 	public String getDefaultChannels() {
-		return mgr.get("org.manalith.ircbot.bot.plugin.relay.server.channels");
+		return defaultChannels;
+	}
+
+	public void setDefaultChannels(String defaultChannels) {
+		this.defaultChannels = defaultChannels;
 	}
 }

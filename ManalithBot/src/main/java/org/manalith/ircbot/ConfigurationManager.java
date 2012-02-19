@@ -18,86 +18,60 @@
  */
 package org.manalith.ircbot;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.log4j.Logger;
-
 public class ConfigurationManager {
-	private Logger logger = Logger.getLogger(getClass());
-	private static ConfigurationManager instance = null;
-	private static String configFile = "ircbot.props.xml";
-
-	public static ConfigurationManager getInstance() {
-		if (instance == null)
-			instance = new ConfigurationManager();
-
-		return instance;
-	}
-
-	public static void setConfigFile(String configFile) {
-		ConfigurationManager.configFile = configFile;
-	}
-
-	private Properties properties = null;
-
-	private ConfigurationManager() {
-		java.io.InputStream in = null;
-		properties = null;
-		try {
-			in = new FileInputStream(new File(configFile));
-			properties = new Properties();
-			properties.loadFromXML(in);
-			in.close();
-		} catch (IOException e) {
-			logger.error(e);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					logger.error(e);
-				} finally {
-					in = null;
-				}
-			}
-		}
-	}
-
-	public String get(String key) {
-		return properties.getProperty(key);
-	}
+	private String botName;
+	private boolean verbose;
+	private String server;
+	private int serverPort;
+	private String serverEncoding;
+	private String defaultChannels;
 
 	public String getBotName() {
-		return properties.getProperty("org.manalith.ircbot.bot.name");
+		return botName;
+	}
+
+	public void setBotName(String botName) {
+		this.botName = botName;
 	}
 
 	public boolean getVerbose() {
-		return BooleanUtils.toBoolean(properties
-				.getProperty("org.manalith.ircbot.bot.verbose"));
+		return verbose;
+	}
+
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
 	}
 
 	public String getServer() {
-		return properties.getProperty("org.manalith.ircbot.bot.server");
+		return server;
+	}
+
+	public void setServer(String server) {
+		this.server = server;
 	}
 
 	public int getServerPort() {
-		return NumberUtils.toInt(properties
-				.getProperty("org.manalith.ircbot.bot.server.port"));
+		return serverPort;
+	}
+
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
 	}
 
 	public String getServerEncoding() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.server.encoding");
+		return serverEncoding;
+	}
+
+	public void setServerEncoding(String serverEncoding) {
+		this.serverEncoding = serverEncoding;
 	}
 
 	public String getDefaultChannels() {
-		return properties
-				.getProperty("org.manalith.ircbot.bot.server.channels");
+		return defaultChannels;
+	}
+
+	public void setDefaultChannels(String defaultChannels) {
+		this.defaultChannels = defaultChannels;
 	}
 
 	public static boolean isWindows() {

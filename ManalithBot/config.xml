@@ -10,9 +10,36 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<context:component-scan base-package="org.manalith.ircbot" />
 	
+	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
+		<!-- 접속할 서버 설정 -->
+		<property name="botName" value="NICK" />
+		<property name="verbose" value="true" />
+		<property name="server" value="SERVER" />
+		<property name="serverPort" value="8080" />
+		<property name="serverEncoding" value="UTF-8" />
+		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+	</bean>
+	
+	<bean id="relayPluginConfigurationManager" class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
+		<!-- 릴레이 플러그인에서 접속할 서버 설정 -->
+		<property name="botName" value="NICK2" />
+		<property name="verbose" value="true" />
+		<property name="server" value="SERVER2" />
+		<property name="serverPort" value="6667" />
+		<property name="serverEncoding" value="CP949" />
+		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+	</bean>
+	
+	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
+		<!-- 구글 플러그인에서 사용할 API KEY 설정 -->
+		<property name="apiKey" value="ABCDEFG" />
+		<property name="apiReferer" value="http://org" />
+	</bean>
+	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
 			<list>
+				<!-- 사용할 플러그인 목록 -->
 				<ref bean="twitReaderPlugin" />
 				<ref bean="distroPkgFinderPlugin" />
 				<ref bean="weatherPlugin" />
@@ -23,6 +50,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="uriTitlePlugin" />
 				<ref bean="dictionaryPlugin" />
 				<ref bean="pingPlugin" />
+				<ref bean="googlePlugin" />
 				<ref bean="samplePlugin" />
 			</list>
 		</constructor-arg>
