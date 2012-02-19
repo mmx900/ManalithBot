@@ -53,7 +53,7 @@ public class BotMain {
 		ConfigurationManager config = ConfigurationManager.getInstance();
 
 		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"springcontext.xml");
+				"config.xml");
 
 		// 봇 구동
 		final ManalithBot bot = context.getBean(ManalithBot.class);
