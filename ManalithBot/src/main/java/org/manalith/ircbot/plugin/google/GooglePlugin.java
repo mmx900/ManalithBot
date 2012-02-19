@@ -59,24 +59,28 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 		if (message.equals(NAMESPACE + ":help")) {
 			bot.sendLoggedMessage(channel, getHelp());
+			event.setExecuted(true);
 		} else if (message.length() >= 12
 				&& (message.substring(0, 9).equals("!구글:match ") || message
 						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
+			event.setExecuted(true);
 		} else if (message.length() >= 4
 				&& (message.substring(0, 3).equals("구글 ") || message.substring(
 						0, 3).equals("gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(3)));
+			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals("!구글 ") || message
 						.substring(0, 4).equals("!gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(4)));
+			event.setExecuted(true);
 		}
-		event.setExecuted(true);
+		
 	}
 
 	private int getGoogleCount(String keyword) {
