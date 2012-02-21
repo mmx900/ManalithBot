@@ -34,8 +34,9 @@ public class KVLRunner {
 
 	public String run(String arg) {
 		String result = "";
+
 		try {
-			this.initKVLRun();
+			initKVLRun();
 		} catch (Exception e) {
 			result = e.getMessage();
 			return result;
