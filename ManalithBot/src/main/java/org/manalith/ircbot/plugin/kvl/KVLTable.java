@@ -26,71 +26,73 @@ public class KVLTable {
 		private ArrayList<String> versionlist;
 
 		public KVLRecord(String newTag) {
-			this.setTag(newTag);
-			this.versionlist = new ArrayList<String>();
+			setTag(newTag);
+			versionlist = new ArrayList<String>();
 		}
 
-		public void setTag(String newTag) {
-			this.tag = newTag;
+		public void setTag(String tag) {
+			this.tag = tag;
 		}
 
 		public String getTag() {
-			return this.tag;
+			return tag;
 		}
 
-		public void addVersionElement(String newVerElement) {
-			this.versionlist.add(newVerElement);
+		public void addVersionElement(String versionElement) {
+			versionlist.add(versionElement);
 		}
 
 		public String getLatestVersion() {
-			return this.versionlist.get(0);
+			return versionlist.get(0);
 		}
 
 		public String toString() {
 			String result = "";
-			result += this.getTag() + " : ";
-			int arraysize = this.versionlist.size();
+			result += getTag() + " : ";
+			int arraysize = versionlist.size();
+
 			for (int i = 0; i < arraysize; i++) {
-				result += this.versionlist.get(i);
+				result += versionlist.get(i);
 				if (i != arraysize - 1)
 					result += ", ";
 			}
+
 			return result;
 		}
 	}
 
-	ArrayList<KVLRecord> array;
+	ArrayList<KVLRecord> records;
 
 	public KVLTable() {
-		array = new ArrayList<KVLRecord>();
+		records = new ArrayList<KVLRecord>();
 	}
 
-	public void addVersionInfo(String newTag, String newVerElement) {
-		int arraysize = this.array.size();
+	public void addVersionInfo(String tag, String versionElement) {
+		int arraysize = records.size();
 		boolean isSaved = false;
 		for (int i = 0; i < arraysize; i++) {
-			if (array.get(i).getTag().equals(newTag)) {
+			if (records.get(i).getTag().equals(tag)) {
 				isSaved = true;
-				array.get(i).addVersionElement(newVerElement);
+				records.get(i).addVersionElement(versionElement);
 			}
 		}
 
 		if (!isSaved) {
-			KVLRecord newRecord = new KVLRecord(newTag);
-			newRecord.addVersionElement(newVerElement);
+			KVLRecord newRecord = new KVLRecord(tag);
+			newRecord.addVersionElement(versionElement);
 
-			array.add(newRecord);
+			records.add(newRecord);
 		}
 	}
 
 	public String getLatestVersions() {
 		String result = "";
 
-		int arraysize = this.array.size();
+		int arraysize = records.size();
 
 		for (int i = 0; i < arraysize; i++) {
-			result += this.array.get(i).getTag() + " : "
-					+ this.array.get(i).getLatestVersion();
+			result += records.get(i).getTag() + " : "
+					+ records.get(i).getLatestVersion();
 			if (i != arraysize - 1)
 				result += ", ";
 		}
@@ -100,10 +102,10 @@ public class KVLTable {
 
 	public String getAllVersionInfo() {
 		String result = "";
-		int arraysize = this.array.size();
+		int arraysize = records.size();
 
 		for (int i = 0; i < arraysize; i++) {
-			result += this.array.get(i).toString();
+			result += records.get(i).toString();
 			if (i != arraysize - 1) {
 				result += ", ";
 			}

@@ -30,28 +30,28 @@ public class KVLTableBuilder {
 	private String url;
 
 	public KVLTableBuilder() {
-		this.setURL("");
+		setURL("");
 	}
 
 	public KVLTableBuilder(String newURL) {
-		this.setURL(newURL);
+		setURL(newURL);
 	}
 
-	private void setURL(String newURL) {
-		this.url = newURL;
+	private void setURL(String url) {
+		this.url = url;
 	}
 
 	private String getURL() {
-		return this.url;
+		return url;
 	}
 
 	public KVLTable generateKernelVersionTable() throws IOException {
 		KVLTable result = new KVLTable();
 
-		String newTag = "";
-		String newVerElement = "";
+		String newTag = null;
+		String newVerElement = null;
 
-		Iterator<Element> e = Jsoup.connect(this.getURL()).get()
+		Iterator<Element> e = Jsoup.connect(getURL()).get()
 				.select("table.kver>tbody>tr").iterator();
 
 		while (e.hasNext()) {
