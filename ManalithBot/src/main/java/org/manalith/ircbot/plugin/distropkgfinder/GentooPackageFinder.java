@@ -22,15 +22,15 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-public class GentooPkgFinderRunner {
+public class GentooPackageFinder implements PackageFinder {
 
 	private String keyword;
 
-	public GentooPkgFinderRunner() {
+	public GentooPackageFinder() {
 		this.setKeyword("");
 	}
 
-	public GentooPkgFinderRunner(String newKeyword) {
+	public GentooPackageFinder(String newKeyword) {
 		this.setKeyword(newKeyword);
 	}
 
@@ -42,7 +42,7 @@ public class GentooPkgFinderRunner {
 		return this.keyword;
 	}
 
-	public String run() {
+	public String find() {
 		String result = "";
 		String url = "http://gentoo-portage.com/Search?search="
 				+ this.getKeyword();

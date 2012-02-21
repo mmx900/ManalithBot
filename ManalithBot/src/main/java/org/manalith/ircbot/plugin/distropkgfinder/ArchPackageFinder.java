@@ -26,14 +26,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ArchPkgFinderRunner {
+public class ArchPackageFinder implements PackageFinder {
 	private String keyword;
 
-	public ArchPkgFinderRunner() {
+	public ArchPackageFinder() {
 		this.setKeyword("");
 	}
 
-	public ArchPkgFinderRunner(String newKeyword) {
+	public ArchPackageFinder(String newKeyword) {
 		this.setKeyword(newKeyword);
 	}
 
@@ -45,7 +45,7 @@ public class ArchPkgFinderRunner {
 		return this.keyword;
 	}
 
-	public String run() {
+	public String find() {
 		String result = "";
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
@@ -60,12 +60,12 @@ public class ArchPkgFinderRunner {
 						+ arch_keywords[i] + "&q=" + this.getKeyword();
 				Iterator<Element> e = Jsoup.connect(url).get()
 						.select("table.results>tbody>tr").iterator();
-				
+
 				while (e.hasNext()) {
 					Elements ee = e.next().select("td");
 					if (ee.get(2).select("a").get(0).text()
 							.equals(this.getKeyword())) {
-						if ( !infostr.equals("") )
+						if (!infostr.equals(""))
 							infostr += ", ";
 						infostr += "[main-" + ee.get(0).text() + "] ";
 						infostr += ee.get(2).select("a").get(0).text() + "  ";
@@ -79,46 +79,50 @@ public class ArchPkgFinderRunner {
 						infostr += "(" + ee.get(1).text() + ")";
 						if (description.equals(""))
 							description = ee.get(4).text();
-						
+
 						break;
 					}
 				}
 			}
 
-			if ( !infostr.equals("") )
+			if (!infostr.equals(""))
 				infostr += " : " + description;
-			
-			url = "http://aur.archlinux.org/packages.php?K=" + this.getKeyword();
-			Iterator<Element> e = Jsoup.connect(url).get().select("table>tbody>tr").iterator();
-			
-			boolean firstrow = false; 
-			//*
-			while ( e.hasNext() )
-			{
-				if ( !firstrow )
-				{
+
+			url = "http://aur.archlinux.org/packages.php?K="
+					+ this.getKeyword();
+			Iterator<Element> e = Jsoup.connect(url).get()
+					.select("table>tbody>tr").iterator();
+
+			boolean firstrow = false;
+			// *
+			while (e.hasNext()) {
+				if (!firstrow) {
 					firstrow = true;
 					e.next();
 					continue;
 				}
 				Elements ee = e.next().select("td");
-				if ( ee.get(1).select("span>a>span").get(0).text().split("\\s")[0].equals(this.getKeyword()) )
-				{
-					String [] namenver = ee.get(1).select("span>a>span").get(0).text().split("\\s");
-					if ( !infostr.equals("") ) infostr += " | ";
-					infostr += "[AUR-" + ee.get(0).select("span>span").get(0).text() + "] ";
+				if (ee.get(1).select("span>a>span").get(0).text().split("\\s")[0]
+						.equals(this.getKeyword())) {
+					String[] namenver = ee.get(1).select("span>a>span").get(0)
+							.text().split("\\s");
+					if (!infostr.equals(""))
+						infostr += " | ";
+					infostr += "[AUR-"
+							+ ee.get(0).select("span>span").get(0).text()
+							+ "] ";
 					infostr += namenver[0] + "  " + namenver[1];
-					infostr += " : " + ee.get(3).select("span>span").get(0).text();
+					infostr += " : "
+							+ ee.get(3).select("span>span").get(0).text();
 					break;
 				}
 			}
-			//*/
-			if ( !infostr.equals("") )
+			// */
+			if (!infostr.equals(""))
 				result = infostr;
 			else
 				result = "There is no result";
-			
-			
+
 		} catch (IOException ioe) {
 			result = ioe.getMessage();
 			ioe.printStackTrace();

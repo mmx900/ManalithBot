@@ -26,14 +26,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class DebianPkgFinderRunner {
+public class DebianPackageFinder implements PackageFinder {
 	private String keyword;
 
-	public DebianPkgFinderRunner() {
+	public DebianPackageFinder() {
 		this.setKeyword("");
 	}
 
-	public DebianPkgFinderRunner(String newKeyword) {
+	public DebianPackageFinder(String newKeyword) {
 		this.setKeyword(newKeyword);
 	}
 
@@ -46,21 +46,20 @@ public class DebianPkgFinderRunner {
 	}
 
 	public String parseVersionInfo(Document doc) {
-		Elements exactHits = doc.select("#psearchres").select("ul")
-			.get(0).select("li");
+		Elements exactHits = doc.select("#psearchres").select("ul").get(0)
+				.select("li");
 		String result = "";
 
 		for (Element e : exactHits) {
 			String dist;
 			try {
 				dist = e.select("a").text().split("[\\(\\)]")[1];
-			}  catch (ArrayIndexOutOfBoundsException ex) {
+			} catch (ArrayIndexOutOfBoundsException ex) {
 				dist = e.select("a").text();
 			}
 
 			String version = "UNKNOWN";
-			String[] versionLines =
-				e.toString().split("\\<br\\s\\/>");
+			String[] versionLines = e.toString().split("\\<br\\s\\/>");
 
 			for (String line : versionLines) {
 				String v = line.split(": ")[0];
@@ -78,7 +77,7 @@ public class DebianPkgFinderRunner {
 		return result;
 	}
 
-	public String run() {
+	public String find() {
 		String result = "";
 		String url = "http://packages.debian.org/search?keywords="
 				+ this.getKeyword() + "&searchon=names&suite=all&section=all";
@@ -86,7 +85,7 @@ public class DebianPkgFinderRunner {
 		boolean hasExacthits = false;
 
 		try {
-			
+
 			Connection conn = Jsoup.connect(url);
 			conn.timeout(20000);
 			Document doc = conn.get();
@@ -113,8 +112,8 @@ public class DebianPkgFinderRunner {
 				return result;
 			}
 
-			String pkgname = doc.select("#psearchres")
-			    .select("h3").get(0).text().split("\\s")[1];
+			String pkgname = doc.select("#psearchres").select("h3").get(0)
+					.text().split("\\s")[1];
 
 			Elements exactHits = doc.select("#psearchres").select("ul").get(0)
 					.select("li");

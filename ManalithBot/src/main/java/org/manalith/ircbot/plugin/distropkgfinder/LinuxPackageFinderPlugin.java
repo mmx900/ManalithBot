@@ -25,7 +25,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DistroPkgFinderPlugin extends AbstractBotPlugin {
+public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 
 	public String getCommands() {
 		return "deb|ubu|fed|gen|ar";
@@ -58,32 +58,35 @@ public class DistroPkgFinderPlugin extends AbstractBotPlugin {
 			event.setExecuted(true);
 			return;
 		}
+
+		PackageFinder finder = null;
+
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")
 				|| command[0].equals("!fed") || command[0].equals("!gen") || command[0]
 					.equals("!ar")) && command.length == 1) {
-			bot.sendLoggedMessage(target, this.getHelp());
+			bot.sendLoggedMessage(target, getHelp());
 			event.setExecuted(true);
 		} else if (command[0].equals("!deb")) {
-			DebianPkgFinderRunner runner = new DebianPkgFinderRunner(command[1]);
-			String[] lines = runner.run().split("\n");
-			for (String l : lines)
-				bot.sendLoggedMessage(target, l);
-			event.setExecuted(true);
+			finder = new DebianPackageFinder(command[1]);
 		} else if (command[0].equals("!ubu")) {
-			UbuntuPkgFinderRunner runner = new UbuntuPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(target, runner.run());
-			event.setExecuted(true);
+			finder = new UbuntuPackageFinder(command[1]);
 		} else if (command[0].equals("!fed")) {
-			FedoraPkgFinderRunner runner = new FedoraPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(target, runner.run());
-			event.setExecuted(true);
+			finder = new FedoraPackageFinder(command[1]);
 		} else if (command[0].equals("!gen")) {
-			GentooPkgFinderRunner runner = new GentooPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(target, runner.run());
-			event.setExecuted(true);
+			finder = new GentooPackageFinder(command[1]);
 		} else if (command[0].equals("!ar")) {
-			ArchPkgFinderRunner runner = new ArchPkgFinderRunner(command[1]);
-			bot.sendLoggedMessage(target, runner.run());
+			finder = new ArchPackageFinder(command[1]);
+		}
+
+		if (finder != null) {
+			if (finder instanceof DebianPackageFinder) {
+				String[] lines = finder.find().split("\n");
+				for (String l : lines)
+					bot.sendLoggedMessage(target, l);
+			} else {
+				bot.sendLoggedMessage(target, finder.find());
+			}
+
 			event.setExecuted(true);
 		}
 	}
