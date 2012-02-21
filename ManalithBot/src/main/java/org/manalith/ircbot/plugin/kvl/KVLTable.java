@@ -25,10 +25,6 @@ public class KVLTable {
 		private String tag;
 		private ArrayList<String> versionlist;
 
-		/*
-		 * public KVLRecord () { this.setTag( "" ); this.versionlist = new
-		 * ArrayList<String>(); }
-		 */
 		public KVLRecord(String newTag) {
 			this.setTag(newTag);
 			this.versionlist = new ArrayList<String>();

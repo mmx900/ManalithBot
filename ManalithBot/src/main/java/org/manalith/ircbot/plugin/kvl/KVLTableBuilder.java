@@ -33,16 +33,15 @@ public class KVLTableBuilder {
 		this.setURL("");
 	}
 
-	public KVLTableBuilder ( String newURL )
-	{
-		this.setURL ( newURL );
+	public KVLTableBuilder(String newURL) {
+		this.setURL(newURL);
 	}
-	private void setURL ( String newURL )
-	{
+
+	private void setURL(String newURL) {
 		this.url = newURL;
 	}
-	private String getURL ( )
-	{
+
+	private String getURL() {
 		return this.url;
 	}
 
@@ -51,20 +50,18 @@ public class KVLTableBuilder {
 
 		String newTag = "";
 		String newVerElement = "";
-		
-		Iterator<Element> e = Jsoup.connect(this.getURL()).get().select("table.kver>tbody>tr").iterator();
-			 
-		//*
-		while ( e.hasNext() )
-		{
+
+		Iterator<Element> e = Jsoup.connect(this.getURL()).get()
+				.select("table.kver>tbody>tr").iterator();
+
+		while (e.hasNext()) {
 			Elements tds = e.next().select("td");
 			newTag = tds.get(0).text().replaceAll("\\:", "");
 			newVerElement = tds.get(1).text();
-				
+
 			result.addVersionInfo(newTag, newVerElement);
 		}
-		//*/
-		
+
 		return result;
 	}
 

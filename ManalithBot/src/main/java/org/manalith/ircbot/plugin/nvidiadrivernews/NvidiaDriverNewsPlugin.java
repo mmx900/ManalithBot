@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -42,8 +42,8 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		String msg = event.getMessage();
 
 		if (msg.equals("!nvidia")) {
-			NvidiaDriverNewsRunner runner = new NvidiaDriverNewsRunner();
-			bot.sendLoggedMessage(channel, runner.run());
+			NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
+			bot.sendLoggedMessage(channel, reader.read());
 			event.setExecuted(true);
 		}
 	}
