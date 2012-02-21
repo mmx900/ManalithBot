@@ -41,7 +41,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 			<list>
 				<!-- 사용할 플러그인 목록 -->
 				<ref bean="twitReaderPlugin" />
-				<ref bean="distroPkgFinderPlugin" />
+				<ref bean="linuxPackageFinderPlugin" />
 				<ref bean="weatherPlugin" />
 				<ref bean="nvidiaDriverNewsPlugin" />
 				<ref bean="calcPlugin" />

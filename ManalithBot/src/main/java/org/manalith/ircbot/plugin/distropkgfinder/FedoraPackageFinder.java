@@ -25,15 +25,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class FedoraPkgFinderRunner {
+public class FedoraPackageFinder implements PackageFinder {
 
 	private String keyword;
 
-	public FedoraPkgFinderRunner() {
+	public FedoraPackageFinder() {
 		this.setKeyword("");
 	}
 
-	public FedoraPkgFinderRunner(String newKeyword) {
+	public FedoraPackageFinder(String newKeyword) {
 		this.setKeyword(newKeyword);
 	}
 
@@ -45,7 +45,7 @@ public class FedoraPkgFinderRunner {
 		return this.keyword;
 	}
 
-	public String run() {
+	public String find() {
 		String result = "";
 
 		if (this.getKeyword().equals("")) {
@@ -119,14 +119,14 @@ public class FedoraPkgFinderRunner {
 					while (!(spl[i].charAt(0) >= '0' && spl[i].charAt(0) <= '9')) {
 						name += "-" + spl[i++];
 					}
-					
+
 					int initial_veridx = i;
 					while (i < spl.length) {
 						if (initial_veridx != i)
 							ver += "-";
 						ver += spl[i++];
 					}
-					
+
 					NamenVer = name + "  " + ver;
 
 					break;
@@ -135,12 +135,9 @@ public class FedoraPkgFinderRunner {
 			}
 
 			// need to give result into result.
-			if ( !dist.contains("Fedora") )
-			{
+			if (!dist.contains("Fedora")) {
 				result = "There is no result";
-			}
-			else
-			{
+			} else {
 				result = NamenVer + " : " + description;
 			}
 

@@ -27,15 +27,16 @@ public class KVLRunner {
 	}
 
 	private void initKVLRun() throws Exception {
-		// TODO
-		KVLTableBuilder tBuilder = new KVLTableBuilder("http://kernel.org/index.shtml"/*array*/);
+		KVLTableBuilder tBuilder = new KVLTableBuilder(
+				"http://kernel.org/index.shtml"/* array */);
 		kvlTable = tBuilder.generateKernelVersionTable();
 	}
 
 	public String run(String arg) {
 		String result = "";
+
 		try {
-			this.initKVLRun();
+			initKVLRun();
 		} catch (Exception e) {
 			result = e.getMessage();
 			return result;

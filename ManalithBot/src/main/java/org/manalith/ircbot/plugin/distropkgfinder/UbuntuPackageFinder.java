@@ -24,15 +24,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class UbuntuPkgFinderRunner {
+public class UbuntuPackageFinder implements PackageFinder {
 
 	private String keyword;
 
-	public UbuntuPkgFinderRunner() {
+	public UbuntuPackageFinder() {
 		this.setKeyword("");
 	}
 
-	public UbuntuPkgFinderRunner(String newKeyword) {
+	public UbuntuPackageFinder(String newKeyword) {
 		this.setKeyword(newKeyword);
 	}
 
@@ -44,7 +44,7 @@ public class UbuntuPkgFinderRunner {
 		return this.keyword;
 	}
 
-	public String run() {
+	public String find() {
 		String result = "";
 		String latestPkgName = this.getLatestPkgName();
 		String url = "http://packages.ubuntu.com/search?keywords="
