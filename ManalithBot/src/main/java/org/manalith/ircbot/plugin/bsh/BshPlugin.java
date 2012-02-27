@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.Empty;
 import org.manalith.ircbot.resources.MessageEvent;
