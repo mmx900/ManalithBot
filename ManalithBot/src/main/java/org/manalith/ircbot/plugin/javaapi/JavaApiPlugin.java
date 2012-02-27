@@ -5,7 +5,9 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JavaApiPlugin extends AbstractBotPlugin {
 	private static final String NAMESPACE = "java-api";
 
