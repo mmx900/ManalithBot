@@ -19,7 +19,6 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
-import org.jibble.pircbot.User;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -32,11 +31,11 @@ public class SamplePlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return null;
+		return "!hello";
 	}
 
 	public String getHelp() {
-		return "!친반묘";
+		return "!hello";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -47,18 +46,9 @@ public class SamplePlugin extends AbstractBotPlugin {
 		String message = event.getMessage();
 		String channel = event.getChannel();
 
-		if (message.equals("!친반묘")) {
-			User[] users = bot.getUsers(channel);
-			boolean isMyo = false;
-			for (User u : users) {
-				if (u.getNick().equals("myojok")) {
-					isMyo = true;
-					break;
-				}
-			}
-
-			bot.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!"
-					: "(두리번) +_+/ 멸묘!");
+		if (message.equals("!hello")) {
+			bot.sendLoggedMessage(channel, "Hello World!");
+			
 			event.setExecuted(true);
 		}
 	}
