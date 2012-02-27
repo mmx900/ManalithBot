@@ -1,7 +1,6 @@
 package org.manalith.ircbot.plugin.relay;
 
 import org.jibble.pircbot.PircBot;
-import org.manalith.ircbot.BotMain;
 
 public class RelayBot extends PircBot {
 
