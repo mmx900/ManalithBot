@@ -19,12 +19,13 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
+import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SamplePlugin extends AbstractBotPlugin {
+public class HelloPlugin extends AbstractBotPlugin {
 
 	public String getName() {
 		return "Sample Plugin";
@@ -38,18 +39,13 @@ public class SamplePlugin extends AbstractBotPlugin {
 		return "!hello";
 	}
 
-	public void onMessage(MessageEvent event) {
-		this.onMessage(event, event.getChannel());
+	@BotCommand({ "!hello", "!인사" })
+	public String sayHello(MessageEvent event, String... args) {
+		return "Hello World!";
 	}
 
-	protected void onMessage(MessageEvent event, String target) {
-		String message = event.getMessage();
-		String channel = event.getChannel();
-
-		if (message.equals("!hello")) {
-			bot.sendLoggedMessage(channel, "Hello World!");
-			
-			event.setExecuted(true);
-		}
+	@BotCommand({ "!bye", "!작별인사" })
+	public String sayBye(MessageEvent event, String... args) {
+		return "Bye!";
 	}
 }

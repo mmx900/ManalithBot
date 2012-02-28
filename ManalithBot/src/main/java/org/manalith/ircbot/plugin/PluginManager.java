@@ -19,21 +19,58 @@
  */
 package org.manalith.ircbot.plugin;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
+import org.manalith.ircbot.common.stereotype.BotFilter;
+import org.manalith.ircbot.common.stereotype.BotTimer;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class PluginManager {
 	private List<IBotPlugin> list = new ArrayList<IBotPlugin>();
+	private Map<Method, Object> commands = new HashMap<Method, Object>();
+	private Map<Method, Object> filters = new HashMap<Method, Object>();
+	private Map<Method, Object> timers = new HashMap<Method, Object>();
 
 	public void add(IBotPlugin plugin) {
+		extractEventDelegates(plugin);
+
 		list.add(plugin);
 	}
 
 	public void remove(IBotPlugin plugin) {
 		list.remove(plugin);
+	}
+
+	private void extractEventDelegates(IBotPlugin plugin) {
+		Method[] methods = plugin.getClass().getDeclaredMethods();
+		for (Method method : methods) {
+			BotCommand command = method.getAnnotation(BotCommand.class);
+			if (command != null) {
+				commands.put(method, plugin);
+				continue;
+			}
+
+			BotFilter filter = method.getAnnotation(BotFilter.class);
+			if (filter != null) {
+				filters.put(method, plugin);
+				continue;
+			}
+
+			BotTimer timer = method.getAnnotation(BotTimer.class);
+			if (timer != null) {
+				timers.put(method, plugin);
+				continue;
+			}
+		}
 	}
 
 	public void onJoin(String channel, String sender, String login,
@@ -44,13 +81,60 @@ public class PluginManager {
 
 	public void onMessage(String channel, String sender, String login,
 			String hostName, String message) {
+		if (StringUtils.isEmpty(message))
+			return;
+
 		MessageEvent msg = new MessageEvent(channel, sender, login, hostName,
 				message);
 
+		// 어노테이션(@BotCommand) 기반 플러그인 실행
+		for (Method method : commands.keySet()) {
+			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
+
+			String[] segments = StringUtils
+					.splitByWholeSeparator(message, null);
+
+			if (ArrayUtils.contains(commandMeta.listeners(),
+					BotEvent.ON_MESSAGE)
+					&& ArrayUtils.contains(commandMeta.value(), segments[0])) {
+				IBotPlugin plugin = (IBotPlugin) commands.get(method);
+
+				if (segments.length - 1 != commandMeta.arguments()) {
+					plugin.getBot().sendLoggedMessage(channel,
+							commandMeta.argumentsLengthErrorMessage());
+				}
+
+				try {
+					// TODO MethodUtils 사용
+					String result = (String) method.invoke(plugin, msg,
+							ArrayUtils.subarray(segments, 1,
+									segments.length - 1));
+
+					if (StringUtils.isNotBlank(result)) {
+						plugin.getBot().sendLoggedMessage(channel, result);
+					}
+
+					msg.setExecuted(commandMeta.stopEvent());
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+
+				if (msg.isExecuted()) {
+					return;
+				}
+			}
+		}
+
+		// 비 어노테이션 기반 플러그인 실행
 		for (IBotPlugin plugin : list) {
 			plugin.onMessage(msg);
-			if (msg.isExecuted())
-				break;
+			if (msg.isExecuted()) {
+				return;
+			}
 		}
 	}
 
@@ -70,10 +154,10 @@ public class PluginManager {
 		for (IBotPlugin plugin : list)
 			plugin.onPart(channel, sender, login, hostName);
 	}
-	
+
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
-		// TODO Auto-generated method stub
+
 		for (IBotPlugin plugin : list)
 			plugin.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 	}
@@ -92,7 +176,7 @@ public class PluginManager {
 				if (i != 0)
 					sb.append(", "); // To make well-formed message
 				else
-					i++; //
+					i++;
 
 				sb.append(name);
 

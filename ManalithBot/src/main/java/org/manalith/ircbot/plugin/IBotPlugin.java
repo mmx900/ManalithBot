@@ -25,6 +25,8 @@ import org.manalith.ircbot.resources.MessageEvent;
 public interface IBotPlugin {
 	public void setBot(ManalithBot bot);
 
+	public ManalithBot getBot();
+
 	public String getName();
 
 	public String getCommands();
