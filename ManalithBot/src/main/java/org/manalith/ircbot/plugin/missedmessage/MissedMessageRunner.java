@@ -65,14 +65,14 @@ public class MissedMessageRunner {
 						if (prop.getValue(receiver).length() != 0) {
 							result.append(StringUtils.split(receiver, '.')[1]);
 							String str = prop.getValue(receiver);
-							
+
 							result.append("님의 남은 메시지 공간 ( ");
 							int availableSpace = 3 - str.split("\\:\\:").length;
 							if (availableSpace != 0) {
 								if (msglen <= 150) {
-									
-									prop.setKeyValue(receiver, str + "::" + "[남김:"
-											+ sender + "] " + msg);
+
+									prop.setKeyValue(receiver, str + "::"
+											+ "[남김:" + sender + "] " + msg);
 									result.append(availableSpace - 1);
 									result.append(" / 3 )");
 								} else {
@@ -86,9 +86,9 @@ public class MissedMessageRunner {
 						} else // if key has no value
 						{
 							if (msglen <= 150) {
-								prop.setKeyValue(receiver, "[남김:" + sender + "] "
-										+ msg);
-								result.append(StringUtils.split(receiver,'.')[1]);
+								prop.setKeyValue(receiver, "[남김:" + sender
+										+ "] " + msg);
+								result.append(StringUtils.split(receiver, '.')[1]);
 								result.append("님의 남은 메시지 공간 ( 2 / 3 )");
 							} else {
 								result.delete(0, result.length());
@@ -119,19 +119,17 @@ public class MissedMessageRunner {
 		PropertyManager prop = new PropertyManager(this.getResourcePath(),
 				MissedMessageRunner.filename);
 		try {
-			
+
 			// init!
 			prop.loadProperties();
 
-
-			if ( this.isMatchedNickinList(newRecv) )
-			{
+			if (this.isMatchedNickinList(newRecv)) {
 				if (prop.getValue(newRecv).length() != 0) {
 					msgs = prop.getValue(newRecv).split("\\:\\:");
-					
-					for ( int i = 0 ; i < msgs.length; i++ )
+
+					for (int i = 0; i < msgs.length; i++)
 						msgs[i] = newRecv.split("\\.")[1] + ", " + msgs[i];
-					
+
 					prop.setKeyValue(newRecv, "");
 					prop.storeProperties();
 				}
@@ -158,27 +156,25 @@ public class MissedMessageRunner {
 			; // ignore exception
 		}
 	}
-	
-	public boolean isMatchedNickinList ( String newRecv )
-	{
+
+	public boolean isMatchedNickinList(String newRecv) {
 		boolean result = false;
-		PropertyManager prop = new PropertyManager ( this.getResourcePath(), MissedMessageRunner.filename);
-		
-		
+		PropertyManager prop = new PropertyManager(this.getResourcePath(),
+				MissedMessageRunner.filename);
+
 		prop.loadProperties();
-			
+
 		String[] userlist = prop.getKeyList();
 		if (userlist != null) {
 			for (String u : userlist) {
 				// if user found from userlist, just break this routine
-				if (u.equals(newRecv))
-				{
+				if (u.equals(newRecv)) {
 					result = true;
 					break;
 				}
 			}
 		}
-		
+
 		return result;
 	}
 

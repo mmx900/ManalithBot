@@ -94,7 +94,7 @@ public class ArchPackageFinder implements PackageFinder {
 					.select("table>tbody>tr").iterator();
 
 			boolean firstrow = false;
-			// *
+
 			while (e.hasNext()) {
 				if (!firstrow) {
 					firstrow = true;
@@ -117,7 +117,7 @@ public class ArchPackageFinder implements PackageFinder {
 					break;
 				}
 			}
-			// */
+
 			if (!infostr.equals(""))
 				result = infostr;
 			else
