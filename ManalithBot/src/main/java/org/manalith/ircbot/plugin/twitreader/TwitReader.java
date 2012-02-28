@@ -38,18 +38,18 @@ import org.json.JSONException;
 import org.json.JSONTokener;
 import org.json.JSONObject;
 
-public class TwitReaderRunner {
+public class TwitReader {
 	private String[] str;
 
 	private enum StrType {
 		TwitURL, UserURL, ScrName, Unknown
 	}
 
-	public TwitReaderRunner() {
+	public TwitReader() {
 		this.setStrArray(new String[1]);
 	}
 
-	public TwitReaderRunner(String[] newStrArray) {
+	public TwitReader(String[] newStrArray) {
 		this.setStrArray(newStrArray);
 	}
 
@@ -65,11 +65,10 @@ public class TwitReaderRunner {
 		return this.str;
 	}
 
-	public String run() {
+	public String read() {
 
 		String result = "";
 
-		// try {
 		String[] strs = this.getStrArray();
 		int len = strs.length;
 		for (int i = 0; i < len; i++) {
@@ -101,21 +100,13 @@ public class TwitReaderRunner {
 				String written_by = obj.getJSONObject("user").getString("name");
 				String body = obj.getString("text");
 
-				// result[0] = "작성자 : " + written_by + ", 작성시각 : " +
-				// getDateTimeinKoreanFormat(written_datetime) + ", 작성 클라이언트 : "
-				// + Creating_Source.replaceAll(
-				// "\\<(\\/)?[a-zA-Z]+((\\s)[a-zA-Z]+\\=\\\"(\\s|\\S)+\\\")*\\>",
-				// "");
 				result = "작성자 : " + written_by + ", 본문 : " + body;
-				// */
 			} catch (Exception e) {
 				result = e.getMessage();
 				return result;
 			}
-		} else if (type == StrType.UserURL /* || type == StrType.ScrName */) {
+		} else if (type == StrType.UserURL) {
 			try {
-				// *
-
 				String[] PathnQuery = this.getJSONPathNQuery(twitterurl, type);
 				URI uri = URIUtils.createURI("https", "api.twitter.com", -1,
 						PathnQuery[0], PathnQuery[1], null);
@@ -140,14 +131,11 @@ public class TwitReaderRunner {
 							+ getDateTimeinKoreanFormat(written_datetime)
 							+ ", 본문 : " + body;
 				}
-				// */
 			} catch (NullPointerException e) {
 				result = "페이지가 존재하지 않습니다";
 				e.printStackTrace();
 				return result;
-			}
-			// *
-			catch (IOException ie) {
+			} catch (IOException ie) {
 				result = ie.getMessage();
 				ie.printStackTrace();
 				return result;
@@ -155,10 +143,7 @@ public class TwitReaderRunner {
 				result = je.getMessage();
 				je.printStackTrace();
 				return result;
-			}
-			// */
-			catch (URISyntaxException urie) {
-				// TODO Auto-generated catch block
+			} catch (URISyntaxException urie) {
 				result = urie.getMessage();
 				urie.printStackTrace();
 				return result;
@@ -168,10 +153,7 @@ public class TwitReaderRunner {
 		return result;
 	}
 
-	private StrType validateTwitterStr(String twitterurl) // throws
-															// StrDoesntSpecifiedException,
-															// UnknownTypeOfStringException
-	{
+	private StrType validateTwitterStr(String twitterurl) {
 		StrType result = StrType.Unknown;
 
 		if (twitterurl.equals(""))
@@ -185,25 +167,11 @@ public class TwitReaderRunner {
 				.compile("http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}");
 		Matcher user_url_pattern_matcher = user_url_pattern.matcher(twitterurl);
 
-		/*
-		 * Pattern user_scrname_pattern =
-		 * Pattern.compile("[a-zA-Z0-9\\_]{1,15}"); Matcher
-		 * user_scrname_pattern_matcher =
-		 * user_scrname_pattern.matcher(twitterurl);
-		 */
-		// deprecated 2012.01.22
-
 		if (twit_url_pattern_matcher.matches())
 			result = StrType.TwitURL;
 		else if (user_url_pattern_matcher.matches())
 			result = StrType.UserURL;
-		/*
-		 * else if (user_scrname_pattern_matcher.matches()) result =
-		 * StrType.ScrName;
-		 * 
-		 * if (result == StrType.Unknown) throw new
-		 * UnknownTypeOfStringException();
-		 */
+
 		return result;
 	}
 
@@ -216,13 +184,7 @@ public class TwitReaderRunner {
 			String twit_id = split_url[split_url.length - 1];
 			json_requrl[0] = "1/statuses/show.json";
 			json_requrl[1] = "id=" + twit_id + "&include_entities=false";
-		}/*
-		 * else if (type == StrType.ScrName) { json_requrl[0] =
-		 * "1/statuses/user_timeline.json"; json_requrl[1] =
-		 * "include_entities=false&include_rts=true&screen_name=" +
-		 * this.getStr() + "&count=1"; }
-		 */
-		else if (type == StrType.UserURL) {
+		} else if (type == StrType.UserURL) {
 			String[] userurl = twitterurl.split("\\/");
 			String scrname = userurl[userurl.length - 1];
 			json_requrl[0] = "1/statuses/user_timeline.json";

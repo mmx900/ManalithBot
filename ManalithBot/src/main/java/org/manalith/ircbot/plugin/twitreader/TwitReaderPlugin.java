@@ -18,6 +18,7 @@
  */
 package org.manalith.ircbot.plugin.twitreader;
 
+import org.apache.commons.lang.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -44,12 +45,11 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 
-		TwitReaderRunner runner = new TwitReaderRunner(command);
-		String /* [] */result = runner.run();
+		TwitReader reader = new TwitReader(command);
+		String result = reader.read();
 
-		if (!result.equals("")) {
-			bot.sendLoggedMessage(channel, result/* [i] */);
-			// event.setExecuted(true);
+		if (!StringUtils.isNotBlank(result)) {
+			bot.sendLoggedMessage(channel, result);
 		}
 
 	}
