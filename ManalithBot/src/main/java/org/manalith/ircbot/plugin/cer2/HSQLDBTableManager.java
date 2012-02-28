@@ -27,10 +27,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
 public class HSQLDBTableManager {
+	private Logger logger = Logger.getLogger(getClass());
 
 	private Connection conn;
 	private Statement stat;
@@ -179,7 +181,7 @@ public class HSQLDBTableManager {
 			conn.setAutoCommit(true);
 			stmt.clearParameters();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

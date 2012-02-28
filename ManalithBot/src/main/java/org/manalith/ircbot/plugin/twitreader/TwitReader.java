@@ -31,11 +31,13 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class TwitReader {
+	private Logger logger = Logger.getLogger(getClass());
 	private static final String TWITTER_USER_HOME_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}";
 	private static final String TWITTER_TWIT_URL_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+";
 	private static final String SOURCE_DATE_PATTERN = "EEE MMM dd HH:mm:ss ZZZZ yyyy";
@@ -100,8 +102,7 @@ public class TwitReader {
 				break;
 			}
 		} catch (Exception e) {
-			result = e.getMessage();
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return result;
@@ -154,7 +155,7 @@ public class TwitReader {
 			result = DateFormatUtils.format(sourceDateFormat.parse(dateString),
 					TARGET_DATE_PATTERN);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return result;

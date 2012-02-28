@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.manalith.ircbot.common.stereotype.BotFilter;
@@ -35,6 +36,7 @@ import org.manalith.ircbot.common.stereotype.BotTimer;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class PluginManager {
+	private Logger logger = Logger.getLogger(getClass());
 	private List<IBotPlugin> list = new ArrayList<IBotPlugin>();
 	private Map<Method, Object> commands = new HashMap<Method, Object>();
 	private Map<Method, Object> filters = new HashMap<Method, Object>();
@@ -116,11 +118,11 @@ public class PluginManager {
 
 					msg.setExecuted(commandMeta.stopEvent());
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					logger.error(e);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					logger.error(e);
 				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+					logger.error(e);
 				}
 
 				if (msg.isExecuted()) {
