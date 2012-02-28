@@ -18,12 +18,13 @@
  */
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
+import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
+	private NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
 
 	public String getName() {
 		return "Nvidia최신버전";
@@ -37,14 +38,8 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 		return "!nvidia";
 	}
 
-	public void onMessage(MessageEvent event) {
-		String channel = event.getChannel();
-		String msg = event.getMessage();
-
-		if (msg.equals("!nvidia")) {
-			NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
-			bot.sendLoggedMessage(channel, reader.read());
-			event.setExecuted(true);
-		}
+	@BotCommand({ "!nvidia" })
+	public String getNews() {
+		return reader.read();
 	}
 }
