@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.sample/SamplePlugin.java
+ 	org.manalith.ircbot.plugin.sample/HelloPlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011, 2012  Ki-Beom, Kim
  	Copyright (C) 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class HelloPlugin extends AbstractBotPlugin {
 
 	public String getName() {
-		return "Sample Plugin";
+		return "Hello Plugin (Sample)";
 	}
 
 	public String getCommands() {
