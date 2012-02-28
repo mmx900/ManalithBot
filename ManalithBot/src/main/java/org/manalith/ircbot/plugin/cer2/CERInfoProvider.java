@@ -18,23 +18,21 @@
  */
 package org.manalith.ircbot.plugin.cer2;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.lang.math.NumberUtils;
-
-import org.manalith.ircbot.common.PropertyManager;
-import org.manalith.ircbot.plugin.cer2.TokenSubtype;
-import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
-import org.manalith.ircbot.plugin.cer2.exceptions.InvalidArgumentException;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.manalith.ircbot.common.PropertyManager;
+import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.cer2.exceptions.InvalidArgumentException;
 
 public class CERInfoProvider {
 

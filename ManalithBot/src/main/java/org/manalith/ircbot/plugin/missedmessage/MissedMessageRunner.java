@@ -21,7 +21,7 @@ package org.manalith.ircbot.plugin.missedmessage;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class MissedMessageRunner {
