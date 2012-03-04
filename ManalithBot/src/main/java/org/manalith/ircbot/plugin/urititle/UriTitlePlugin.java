@@ -75,6 +75,8 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 		if (title != null) {
 			bot.sendLoggedMessage(channel, "[Link Title] " + title);
 		}
-		event.setExecuted(true);
+
+		// This plugin runs implicitly; NO need to call
+		// event.setExecuted(true)
 	}
 }
