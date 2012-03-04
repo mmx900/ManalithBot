@@ -11,9 +11,9 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>pircbot</groupId>
-			<artifactId>pircbot</artifactId>
-			<version>1.5.0</version>
+			<groupId>org.pircbotx</groupId>
+			<artifactId>pircbotx</artifactId>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

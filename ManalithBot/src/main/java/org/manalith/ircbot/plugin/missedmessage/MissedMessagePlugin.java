@@ -18,9 +18,11 @@
  */
 package org.manalith.ircbot.plugin.missedmessage;
 
-import org.jibble.pircbot.User;
+import java.util.Set;
+
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.pircbotx.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,7 +44,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 		String channel = event.getChannel();
 		String sender = event.getSender();
 		String message = event.getMessage();
-		User[] users = bot.getUsers(channel);
+		Set<User> users = bot.getUsers(bot.getChannel(channel));
 
 		String[] cmdnmsg = message.split("\\s");
 
