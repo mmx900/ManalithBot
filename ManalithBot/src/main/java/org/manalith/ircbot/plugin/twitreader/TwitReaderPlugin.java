@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TwitReaderPlugin extends AbstractBotPlugin {
+	private TwitReader reader = new TwitReader();
 
 	public String getName() {
 		return "트윗리더";
@@ -44,12 +45,10 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 
 		String[] command = msg.split("\\s");
 
-		TwitReaderRunner runner = new TwitReaderRunner(command);
-		String /* [] */result = runner.run();
+		String result = reader.read(command);
 
-		if (!result.equals("")) {
-			bot.sendLoggedMessage(channel, result/* [i] */);
-			// event.setExecuted(true);
+		if (result != null) {
+			bot.sendLoggedMessage(channel, result);
 		}
 
 	}

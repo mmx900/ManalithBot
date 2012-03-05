@@ -29,11 +29,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 			</props>
 		</property>
 		
-		<property name="annotatedClasses">
-			<list>
-				<value>org.manalith.ircbot.plugin.dictionary.Word</value>
-			</list>
-		</property>
+		<property name="packagesToScan" value="org.manalith.ircbot.plugin" />
 		
 		<property name="schemaUpdate"><value>true</value></property>
 	</bean>

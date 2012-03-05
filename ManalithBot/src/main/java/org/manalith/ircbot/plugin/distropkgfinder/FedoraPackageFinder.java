@@ -20,12 +20,14 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class FedoraPackageFinder implements PackageFinder {
+	private Logger logger = Logger.getLogger(getClass());
 
 	private String keyword;
 
@@ -142,8 +144,7 @@ public class FedoraPackageFinder implements PackageFinder {
 			}
 
 		} catch (Exception e) {
-			result = e.getMessage();
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return result;

@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.sample/SamplePlugin.java
+ 	org.manalith.ircbot.plugin.sample/HelloPlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011, 2012  Ki-Beom, Kim
  	Copyright (C) 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
@@ -19,47 +19,33 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
-import org.jibble.pircbot.User;
+import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SamplePlugin extends AbstractBotPlugin {
+public class HelloPlugin extends AbstractBotPlugin {
 
 	public String getName() {
-		return "Sample Plugin";
+		return "Hello Plugin (Sample)";
 	}
 
 	public String getCommands() {
-		return null;
+		return "!hello";
 	}
 
 	public String getHelp() {
-		return "!친반묘";
+		return "!hello";
 	}
 
-	public void onMessage(MessageEvent event) {
-		this.onMessage(event, event.getChannel());
+	@BotCommand({ "!hello", "!인사" })
+	public String sayHello(MessageEvent event, String... args) {
+		return "Hello World!";
 	}
 
-	protected void onMessage(MessageEvent event, String target) {
-		String message = event.getMessage();
-		String channel = event.getChannel();
-
-		if (message.equals("!친반묘")) {
-			User[] users = bot.getUsers(channel);
-			boolean isMyo = false;
-			for (User u : users) {
-				if (u.getNick().equals("myojok")) {
-					isMyo = true;
-					break;
-				}
-			}
-
-			bot.sendLoggedMessage(channel, isMyo ? "(두리번) ... 친묘!"
-					: "(두리번) +_+/ 멸묘!");
-			event.setExecuted(true);
-		}
+	@BotCommand({ "!bye", "!작별인사" })
+	public String sayBye(MessageEvent event, String... args) {
+		return "Bye!";
 	}
 }

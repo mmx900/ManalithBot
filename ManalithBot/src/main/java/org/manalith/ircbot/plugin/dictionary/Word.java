@@ -1,5 +1,6 @@
 package org.manalith.ircbot.plugin.dictionary;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -37,7 +38,7 @@ public class Word {
 		return id;
 	}
 
-	@Column(unique = true, nullable = false)
+	@Column(unique = false, nullable = false)
 	public String getWord() {
 		return word;
 	}
@@ -67,7 +68,8 @@ public class Word {
 
 	@Override
 	public String toString() {
-		// XXX
-		return null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		return "'" + author + "','" + sdf.format(date.getTime()) + "','"
+				+ description + "','" + word + "'";
 	}
 }

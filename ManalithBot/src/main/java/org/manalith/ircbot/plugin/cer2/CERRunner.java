@@ -20,8 +20,8 @@ package org.manalith.ircbot.plugin.cer2;
 
 import java.io.File;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
 public class CERRunner {

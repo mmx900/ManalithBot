@@ -22,11 +22,14 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArchPackageFinder implements PackageFinder {
+	private Logger logger = Logger.getLogger(getClass());
+	
 	private String keyword;
 
 	public ArchPackageFinder() {
@@ -94,7 +97,7 @@ public class ArchPackageFinder implements PackageFinder {
 					.select("table>tbody>tr").iterator();
 
 			boolean firstrow = false;
-			// *
+
 			while (e.hasNext()) {
 				if (!firstrow) {
 					firstrow = true;
@@ -117,15 +120,14 @@ public class ArchPackageFinder implements PackageFinder {
 					break;
 				}
 			}
-			// */
+
 			if (!infostr.equals(""))
 				result = infostr;
 			else
 				result = "There is no result";
 
-		} catch (IOException ioe) {
-			result = ioe.getMessage();
-			ioe.printStackTrace();
+		} catch (IOException e) {
+			logger.error(e);
 		}
 		return result;
 	}

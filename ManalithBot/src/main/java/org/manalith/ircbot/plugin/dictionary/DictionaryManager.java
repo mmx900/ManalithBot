@@ -21,11 +21,6 @@ public class DictionaryManager {
 	}
 
 	public void add(Word word) {
-		Word w = wordDao.findByWord(word.word);
-
-		if (w != null)
-			wordDao.delete(w);
-
 		wordDao.save(word);
 	}
 

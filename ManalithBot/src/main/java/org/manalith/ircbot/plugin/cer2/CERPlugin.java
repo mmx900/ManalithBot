@@ -62,12 +62,10 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
 	 * .MessageEvent)
 	 */
-	// *
 	public void onMessage(MessageEvent event) {
 		onMessage(event, event.getChannel());
 	}
 
-	// */
 	public void onPrivateMessage(MessageEvent event) {
 		onMessage(event, event.getSender());
 	}
@@ -96,7 +94,8 @@ public class CERPlugin extends AbstractBotPlugin {
 					bot.sendLoggedMessage(target, CERInfoProvider.getIRCHelpMessagePart2());
 				} else if ( result.equals("unitlist")) {
 					bot.sendLoggedMessage(target, CERInfoProvider.getUnitListPart1());
-					bot.sendLoggedMessage(target, CERInfoProvider.getUnitListPart2());
+					bot.sendLoggedMessage(target,
+							CERInfoProvider.getUnitListPart2());
 				} else {
 					bot.sendLoggedMessage(target, result);
 				}

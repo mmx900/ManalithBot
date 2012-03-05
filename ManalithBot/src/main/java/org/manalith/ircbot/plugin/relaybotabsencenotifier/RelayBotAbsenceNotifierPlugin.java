@@ -18,9 +18,11 @@
  */
 package org.manalith.ircbot.plugin.relaybotabsencenotifier;
 
-import org.jibble.pircbot.User;
+import java.util.Set;
+
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.pircbotx.User;
 
 public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 	public String getName() {
@@ -35,7 +37,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 			String hostname) {
 		boolean beingBot = false;
 		if (sender.equals("DarkCircle")) {
-			User[] list = bot.getUsers("#gnome");
+			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
 			for (User u : list) {
 				if (u.getNick().equals("♠한씨네")) {
 					beingBot = true;
@@ -51,7 +53,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 	public void onMessage(MessageEvent event) {
 		if (event.getSender().equals("DarkCircle")) {
 			boolean beingBot = false;
-			User[] list = bot.getUsers("#gnome");
+			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
 			for (User u : list) {
 				if (u.getNick().equals("♠한씨네")) {
 					beingBot = true;

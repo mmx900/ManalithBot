@@ -2,8 +2,8 @@ package org.manalith.ircbot.plugin.dictionary;
 
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;

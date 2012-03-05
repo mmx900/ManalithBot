@@ -2,7 +2,6 @@ package org.manalith.ircbot.plugin.relay;
 
 import java.util.StringTokenizer;
 
-import org.manalith.ircbot.BotMain;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 

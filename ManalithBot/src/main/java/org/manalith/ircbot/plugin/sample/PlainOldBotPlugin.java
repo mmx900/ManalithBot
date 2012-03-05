@@ -1,7 +1,8 @@
 /*
- 	org.manalith.ircbot.plugin.nvidiadrivernews/NvidiaDriverNewsPlugin.java
+ 	org.manalith.ircbot.plugin.sample/SamplePlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2011, 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
+ 	Copyright (C) 2011, 2012  Ki-Beom, Kim
+ 	Copyright (C) 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,30 +17,39 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.nvidiadrivernews;
+package org.manalith.ircbot.plugin.sample;
 
-import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
-	private NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
+public class PlainOldBotPlugin extends AbstractBotPlugin {
 
 	public String getName() {
-		return "Nvidia최신버전";
+		return "Sample Plugin";
 	}
 
 	public String getCommands() {
-		return "nvidia";
+		return "!hello";
 	}
 
 	public String getHelp() {
-		return "!nvidia";
+		return "!hello";
 	}
 
-	@BotCommand({ "!nvidia" })
-	public String getNews() {
-		return reader.read();
+	public void onMessage(MessageEvent event) {
+		this.onMessage(event, event.getChannel());
+	}
+
+	protected void onMessage(MessageEvent event, String target) {
+		String message = event.getMessage();
+		String channel = event.getChannel();
+
+		if (message.equals("!hello")) {
+			bot.sendLoggedMessage(channel, "Hello World!");
+			
+			event.setExecuted(true);
+		}
 	}
 }

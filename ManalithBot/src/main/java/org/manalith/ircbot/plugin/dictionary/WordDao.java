@@ -29,7 +29,7 @@ public class WordDao extends HibernateDaoSupport {
 
 	public Word findByWord(String word) {
 		@SuppressWarnings("rawtypes")
-		List list = getHibernateTemplate().find("from Word where word=?", word);
+		List list = getHibernateTemplate().find("from Word where word=? order by date desc", word);
 		return CollectionUtils.isEmpty(list) ? null : (Word) list.get(0);
 	}
 }

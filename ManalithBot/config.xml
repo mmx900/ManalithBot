@@ -51,7 +51,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="dictionaryPlugin" />
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
-				<ref bean="samplePlugin" />
+				<ref bean="helloPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
