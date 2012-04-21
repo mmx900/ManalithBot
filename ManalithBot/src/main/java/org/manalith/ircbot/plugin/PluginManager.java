@@ -101,9 +101,11 @@ public class PluginManager {
 					&& ArrayUtils.contains(commandMeta.value(), segments[0])) {
 				IBotPlugin plugin = (IBotPlugin) commands.get(method);
 
-				if (segments.length - 1 != commandMeta.arguments()) {
-					plugin.getBot().sendLoggedMessage(channel,
-							commandMeta.argumentsLengthErrorMessage());
+				if (segments.length - 1 < commandMeta.minimumArguments()) {
+					plugin.getBot().sendLoggedMessage(
+							channel,
+							String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
+									commandMeta.minimumArguments()));
 				}
 
 				try {
