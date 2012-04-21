@@ -67,12 +67,6 @@ public class GooglePlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
 			event.setExecuted(true);
-		} else if (message.length() >= 4
-				&& (message.substring(0, 3).equals("구글 ") || message.substring(
-						0, 3).equals("gg "))) {
-			bot.sendLoggedMessage(channel,
-					getGoogleTopResult(message.substring(3)));
-			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals("!구글 ") || message
 						.substring(0, 4).equals("!gg "))) {
