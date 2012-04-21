@@ -19,9 +19,10 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,20 +33,24 @@ public class HelloPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return "!hello";
+		return "!hello, !bye";
 	}
 
 	public String getHelp() {
-		return "!hello";
+		return "!hello, !bye";
 	}
 
-	@BotCommand({ "!hello", "!인사" })
-	public String sayHello(MessageEvent event, String... args) {
-		return "Hello World!";
+	@BotCommand(value = { "!hello", "!인사" })
+	public String sayHello(String... args) {
+		if (ArrayUtils.isEmpty(args)) {
+			return "Hello world!";
+		} else {
+			return String.format("Hello %s!", StringUtils.join(args, ", "));
+		}
 	}
 
 	@BotCommand({ "!bye", "!작별인사" })
-	public String sayBye(MessageEvent event, String... args) {
+	public String sayBye() {
 		return "Bye!";
 	}
 }
