@@ -5,7 +5,7 @@
 	<artifactId>ManalithBot</artifactId>
 	<version>0.9</version>
 	<properties>
-		<jdkversion>1.6</jdkversion>
+		<jdkversion>1.7</jdkversion>
 		<encodingType>UTF-8</encodingType>
 		<project.build.sourceEncoding>${encodingType}</project.build.sourceEncoding>
 	</properties>
@@ -134,14 +134,14 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- 
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			-->
