@@ -29,10 +29,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class HelloPlugin extends AbstractBotPlugin {
 
+	@Override
 	public String getName() {
 		return "Hello Plugin (Sample)";
 	}
 
+	@Override
 	public String getCommands() {
 		return "!hello, !bye";
 	}

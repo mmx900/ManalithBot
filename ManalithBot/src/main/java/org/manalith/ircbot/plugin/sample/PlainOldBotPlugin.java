@@ -26,10 +26,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlainOldBotPlugin extends AbstractBotPlugin {
 
+	@Override
 	public String getName() {
 		return "Sample Plugin";
 	}
 
+	@Override
 	public String getCommands() {
 		return "!hello";
 	}
@@ -38,6 +40,7 @@ public class PlainOldBotPlugin extends AbstractBotPlugin {
 		return "!hello";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		this.onMessage(event, event.getChannel());
 	}
@@ -48,7 +51,7 @@ public class PlainOldBotPlugin extends AbstractBotPlugin {
 
 		if (message.equals("!hello")) {
 			bot.sendLoggedMessage(channel, "Hello World!");
-			
+
 			event.setExecuted(true);
 		}
 	}
