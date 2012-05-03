@@ -65,8 +65,8 @@ public class BotMain {
 		bot.setEncoding(config.getServerEncoding());
 		bot.connect(config.getServer(), config.getServerPort());
 
-		final StringTokenizer st = new StringTokenizer(
-				config.getDefaultChannels(), ",");
+		StringTokenizer st = new StringTokenizer(config.getDefaultChannels(),
+				",");
 		while (st.hasMoreTokens())
 			bot.joinChannel(st.nextToken());
 	}
