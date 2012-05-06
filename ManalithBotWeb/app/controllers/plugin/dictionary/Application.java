@@ -30,7 +30,7 @@ public class Application extends Controller {
 		Query query = JPA.em().createQuery(
 				"SELECT w FROM Word w WHERE w.word=:arg1 ORDER BY w.date DESC");
 		query.setParameter("arg1", word);
-		Word w = (Word) query.getSingleResult();
+		Word w = (Word) query.setMaxResults(1).getSingleResult();
 
 		return ok(view.render(w));
 	}
