@@ -74,7 +74,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 					getGoogleTopResult(message.substring(4)));
 			event.setExecuted(true);
 		}
-		
+
 	}
 
 	private int getGoogleCount(String keyword) {
@@ -143,7 +143,9 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 			// HTML 코드 처리
 			result = result.replace("<b>", "[").replace("</b>", "]")
-					.replace("&quot;", "\"").replace("&amp;", "&");
+					.replace("&quot;", "\"").replace("&amp;", "&")
+					.replace("&#39;", "'").replace("&gt;", ">")
+					.replace("&lt;", "<");
 
 			return result;
 
