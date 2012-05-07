@@ -1,5 +1,6 @@
 package org.manalith.ircbot;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.command.CommandParser;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -48,12 +49,6 @@ import org.pircbotx.hooks.events.VoiceEvent;
 public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 	private Logger logger = Logger.getLogger(getClass());
 
-	private ManalithBot bot;
-
-	public ManalithBotListener(ManalithBot bot) {
-		this.bot = bot;
-	}
-
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
 		logger.trace("CONNECT");
@@ -86,6 +81,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onMessage(MessageEvent<ManalithBot> event) {
+		ManalithBot bot = event.getBot();
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 		String login = event.getUser().getLogin();
@@ -102,8 +98,9 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 			message = CommandParser.convertRelayToLocalMessage(message);
 		}
 
-		if (message.equals("!도움") || message.equals("!help")
-				|| message.equals("!plugins")) {
+		if (ArrayUtils.contains(new String[] { "!도움", "!help", "!plugins" },
+				message)) {
+			System.out.println("wow");
 			bot.sendMessage(channel, bot.getPluginManager().getPluginInfo());
 		} else if (message.equals("!quit")) {
 			if (bot.isOwner(sender)) {
@@ -119,6 +116,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event)
 			throws Exception {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();
 
@@ -154,9 +152,11 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		bot.getPluginManager().onJoin(event.getChannel().getName(),
-				event.getUser().getNick(), event.getUser().getLogin(),
-				event.getUser().getHostmask());
+		event.getBot()
+				.getPluginManager()
+				.onJoin(event.getChannel().getName(),
+						event.getUser().getNick(), event.getUser().getLogin(),
+						event.getUser().getHostmask());
 	}
 
 	@Override
@@ -165,9 +165,11 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		bot.getPluginManager().onPart(event.getChannel().getName(),
-				event.getUser().getNick(), event.getUser().getLogin(),
-				event.getUser().getHostmask());
+		event.getBot()
+				.getPluginManager()
+				.onPart(event.getChannel().getName(),
+						event.getUser().getNick(), event.getUser().getLogin(),
+						event.getUser().getHostmask());
 	}
 
 	@Override
@@ -197,9 +199,10 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getNick(), event.getUser().getLogin(), event.getUser()
 				.getHostmask(), event.getReason()));
 
-		bot.getPluginManager().onQuit(event.getUser().getNick(),
-				event.getUser().getLogin(), event.getUser().getHostmask(),
-				event.getReason());
+		event.getBot()
+				.getPluginManager()
+				.onQuit(event.getUser().getNick(), event.getUser().getLogin(),
+						event.getUser().getHostmask(), event.getReason());
 	}
 
 	@Override
