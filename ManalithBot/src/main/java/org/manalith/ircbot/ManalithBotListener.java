@@ -45,9 +45,9 @@ import org.pircbotx.hooks.events.UserListEvent;
 import org.pircbotx.hooks.events.UserModeEvent;
 import org.pircbotx.hooks.events.VoiceEvent;
 
-public class ManalithBotListener extends ListenerAdapter {
+public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 	private Logger logger = Logger.getLogger(getClass());
-	
+
 	private ManalithBot bot;
 
 	public ManalithBotListener(ManalithBot bot) {
@@ -55,21 +55,23 @@ public class ManalithBotListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onConnect(ConnectEvent event) throws Exception {
+	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
 		logger.trace("CONNECT");
 
 		// pluginManager.onConnect();
 	}
 
 	@Override
-	public void onDisconnect(DisconnectEvent event) throws Exception {
+	public void onDisconnect(DisconnectEvent<ManalithBot> event)
+			throws Exception {
 		logger.trace("DISCONNECT");
 
 		// pluginManager.onDisconnect();
 	}
 
 	@Override
-	public void onServerResponse(ServerResponseEvent event) throws Exception {
+	public void onServerResponse(ServerResponseEvent<ManalithBot> event)
+			throws Exception {
 		logger.trace(String.format("SERVER_RESPONSE: %s / %s", event.getCode(),
 				event.getResponse()));
 
@@ -77,13 +79,13 @@ public class ManalithBotListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onUserList(UserListEvent event) throws Exception {
+	public void onUserList(UserListEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onUserList(event);
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) {
+	public void onMessage(MessageEvent<ManalithBot> event) {
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 		String login = event.getUser().getLogin();
@@ -109,12 +111,14 @@ public class ManalithBotListener extends ListenerAdapter {
 				System.exit(-1);
 			}
 		} else {
-			bot.getPluginManager().onMessage(channel, sender, login, hostname, message);
+			bot.getPluginManager().onMessage(channel, sender, login, hostname,
+					message);
 		}
 	}
 
 	@Override
-	public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
+	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event)
+			throws Exception {
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();
 
@@ -126,48 +130,49 @@ public class ManalithBotListener extends ListenerAdapter {
 				|| message.equals("!plugins")) {
 			bot.sendMessage(sender, bot.getPluginManager().getPluginInfo());
 		} else {
-			bot.getPluginManager().onPrivateMessage(event.getUser().getNick(), event
-					.getUser().getLogin(), event.getUser().getHostmask(), event
-					.getMessage());
+			bot.getPluginManager().onPrivateMessage(event.getUser().getNick(),
+					event.getUser().getLogin(), event.getUser().getHostmask(),
+					event.getMessage());
 		}
 	}
 
 	@Override
-	public void onAction(ActionEvent event) throws Exception {
+	public void onAction(ActionEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onAction(event);
 	}
 
 	@Override
-	public void onNotice(NoticeEvent event) throws Exception {
+	public void onNotice(NoticeEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onNotice(event);
 	}
 
 	@Override
-	public void onJoin(JoinEvent event) throws Exception {
+	public void onJoin(JoinEvent<ManalithBot> event) throws Exception {
 		logger.trace(String.format("JOIN : %s / %s / %s / %s", event
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		bot.getPluginManager().onJoin(event.getChannel().getName(), event.getUser()
-				.getNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask());
+		bot.getPluginManager().onJoin(event.getChannel().getName(),
+				event.getUser().getNick(), event.getUser().getLogin(),
+				event.getUser().getHostmask());
 	}
 
 	@Override
-	public void onPart(PartEvent event) throws Exception {
+	public void onPart(PartEvent<ManalithBot> event) throws Exception {
 		logger.trace(String.format("PART : %s / %s / %s / %s", event
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		bot.getPluginManager().onPart(event.getChannel().getName(), event.getUser()
-				.getNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask());
+		bot.getPluginManager().onPart(event.getChannel().getName(),
+				event.getUser().getNick(), event.getUser().getLogin(),
+				event.getUser().getHostmask());
 	}
 
 	@Override
-	public void onNickChange(NickChangeEvent event) throws Exception {
+	public void onNickChange(NickChangeEvent<ManalithBot> event)
+			throws Exception {
 		logger.trace(String.format("NICK_CHANGE : %s / %s / %s / %s", event
 				.getOldNick(), event.getUser().getLogin(), event.getUser()
 				.getHostmask(), event.getNewNick()));
@@ -176,7 +181,7 @@ public class ManalithBotListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onKick(KickEvent event) throws Exception {
+	public void onKick(KickEvent<ManalithBot> event) throws Exception {
 		logger.trace(String.format("KICK : %s / %s / %s / %s / %s / %s", event
 				.getChannel().getName(), event.getSource().getNick(), event
 				.getSource().getLogin(), event.getSource().getHostmask(), event
@@ -187,17 +192,18 @@ public class ManalithBotListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onQuit(QuitEvent event) throws Exception {
+	public void onQuit(QuitEvent<ManalithBot> event) throws Exception {
 		logger.trace(String.format("QUIT : %s / %s / %s / %s", event.getUser()
 				.getNick(), event.getUser().getLogin(), event.getUser()
 				.getHostmask(), event.getReason()));
 
-		bot.getPluginManager().onQuit(event.getUser().getNick(), event.getUser()
-				.getLogin(), event.getUser().getHostmask(), event.getReason());
+		bot.getPluginManager().onQuit(event.getUser().getNick(),
+				event.getUser().getLogin(), event.getUser().getHostmask(),
+				event.getReason());
 	}
 
 	@Override
-	public void onTopic(TopicEvent event) throws Exception {
+	public void onTopic(TopicEvent<ManalithBot> event) throws Exception {
 		logger.trace(String.format("TOPIC : %s / %s / %s / %s / %s", event
 				.getChannel().getName(), event.getTopic(), event.getChannel()
 				.getTopicSetter(), event.getTimestamp(), event.isChanged()));
@@ -206,176 +212,186 @@ public class ManalithBotListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onChannelInfo(ChannelInfoEvent event) throws Exception {
-//		logger.trace(String.format("CHANNEL_INFO : %s / %s / %s", channel,
-//				userCount, topic));
+	public void onChannelInfo(ChannelInfoEvent<ManalithBot> event)
+			throws Exception {
+		// logger.trace(String.format("CHANNEL_INFO : %s / %s / %s", channel,
+		// userCount, topic));
 
 		// pluginManager.onTopic(channel, userCount, topic);
 	}
 
 	@Override
-	public void onMode(ModeEvent event) throws Exception {
+	public void onMode(ModeEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onMode(event);
 	}
 
 	@Override
-	public void onUserMode(UserModeEvent event) throws Exception {
+	public void onUserMode(UserModeEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onUserMode(event);
 	}
 
 	@Override
-	public void onOp(OpEvent event) throws Exception {
+	public void onOp(OpEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onOp(event);
 	}
 
 	@Override
-	public void onVoice(VoiceEvent event) throws Exception {
+	public void onVoice(VoiceEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onVoice(event);
 	}
 
 	@Override
-	public void onSetChannelKey(SetChannelKeyEvent event) throws Exception {
+	public void onSetChannelKey(SetChannelKeyEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetChannelKey(event);
 	}
 
 	@Override
-	public void onRemoveChannelKey(RemoveChannelKeyEvent event)
+	public void onRemoveChannelKey(RemoveChannelKeyEvent<ManalithBot> event)
 			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveChannelKey(event);
 	}
 
 	@Override
-	public void onSetChannelLimit(SetChannelLimitEvent event) throws Exception {
+	public void onSetChannelLimit(SetChannelLimitEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetChannelLimit(event);
 	}
 
 	@Override
-	public void onRemoveChannelLimit(RemoveChannelLimitEvent event)
+	public void onRemoveChannelLimit(RemoveChannelLimitEvent<ManalithBot> event)
 			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveChannelLimit(event);
 	}
 
 	@Override
-	public void onSetChannelBan(SetChannelBanEvent event) throws Exception {
+	public void onSetChannelBan(SetChannelBanEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetChannelBan(event);
 	}
 
 	@Override
-	public void onRemoveChannelBan(RemoveChannelBanEvent event)
+	public void onRemoveChannelBan(RemoveChannelBanEvent<ManalithBot> event)
 			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveChannelBan(event);
 	}
 
 	@Override
-	public void onSetTopicProtection(SetTopicProtectionEvent event)
+	public void onSetTopicProtection(SetTopicProtectionEvent<ManalithBot> event)
 			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetTopicProtection(event);
 	}
 
 	@Override
-	public void onRemoveTopicProtection(RemoveTopicProtectionEvent event)
-			throws Exception {
+	public void onRemoveTopicProtection(
+			RemoveTopicProtectionEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveTopicProtection(event);
 	}
 
 	@Override
-	public void onSetNoExternalMessages(SetNoExternalMessagesEvent event)
-			throws Exception {
+	public void onSetNoExternalMessages(
+			SetNoExternalMessagesEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetNoExternalMessages(event);
 	}
 
 	@Override
-	public void onRemoveNoExternalMessages(RemoveNoExternalMessagesEvent event)
-			throws Exception {
+	public void onRemoveNoExternalMessages(
+			RemoveNoExternalMessagesEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveNoExternalMessages(event);
 	}
 
 	@Override
-	public void onSetInviteOnly(SetInviteOnlyEvent event) throws Exception {
+	public void onSetInviteOnly(SetInviteOnlyEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetInviteOnly(event);
 	}
 
 	@Override
-	public void onRemoveInviteOnly(RemoveInviteOnlyEvent event)
+	public void onRemoveInviteOnly(RemoveInviteOnlyEvent<ManalithBot> event)
 			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveInviteOnly(event);
 	}
 
 	@Override
-	public void onSetModerated(SetModeratedEvent event) throws Exception {
+	public void onSetModerated(SetModeratedEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetModerated(event);
 	}
 
 	@Override
-	public void onRemoveModerated(RemoveModeratedEvent event) throws Exception {
+	public void onRemoveModerated(RemoveModeratedEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveModerated(event);
 	}
 
 	@Override
-	public void onSetPrivate(SetPrivateEvent event) throws Exception {
+	public void onSetPrivate(SetPrivateEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetPrivate(event);
 	}
 
 	@Override
-	public void onRemovePrivate(RemovePrivateEvent event) throws Exception {
+	public void onRemovePrivate(RemovePrivateEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemovePrivate(event);
 	}
 
 	@Override
-	public void onSetSecret(SetSecretEvent event) throws Exception {
+	public void onSetSecret(SetSecretEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onSetSecret(event);
 	}
 
 	@Override
-	public void onRemoveSecret(RemoveSecretEvent event) throws Exception {
+	public void onRemoveSecret(RemoveSecretEvent<ManalithBot> event)
+			throws Exception {
 		// TODO Auto-generated method stub
 		super.onRemoveSecret(event);
 	}
 
 	@Override
-	public void onInvite(InviteEvent event) throws Exception {
+	public void onInvite(InviteEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onInvite(event);
 	}
 
 	@Override
-	public void onIncomingFileTransfer(IncomingFileTransferEvent event)
-			throws Exception {
+	public void onIncomingFileTransfer(
+			IncomingFileTransferEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onIncomingFileTransfer(event);
 	}
 
 	@Override
-	public void onFileTransferFinished(FileTransferFinishedEvent event)
-			throws Exception {
+	public void onFileTransferFinished(
+			FileTransferFinishedEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onFileTransferFinished(event);
 	}
 
 	@Override
-	public void onIncomingChatRequest(IncomingChatRequestEvent event)
-			throws Exception {
+	public void onIncomingChatRequest(
+			IncomingChatRequestEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
 		super.onIncomingChatRequest(event);
 	}

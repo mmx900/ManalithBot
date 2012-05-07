@@ -1,11 +1,12 @@
 package org.manalith.ircbot.plugin.relay;
 
+import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class RelayBotListener extends ListenerAdapter {
+public class RelayBotListener extends ListenerAdapter<ManalithBot> {
 	@Override
-	public void onMessage(MessageEvent event) throws Exception {
+	public void onMessage(MessageEvent<ManalithBot> event) throws Exception {
 		String channel = event.getChannel().getName();
 
 		if (RelayPlugin.isRelaying()) {
