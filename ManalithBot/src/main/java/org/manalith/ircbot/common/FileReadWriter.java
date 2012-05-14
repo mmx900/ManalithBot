@@ -79,6 +79,23 @@ public class FileReadWriter {
 	}
 
 	protected File allocateFileObject() {
+		
+		String dir = "";
+		
+		if ( this.getFilename().contains(Character.toString(File.separatorChar)) )
+		{
+			int len = this.getFilename().split("\\" + Character.toString(File.separatorChar)).length - 1;
+			
+			for ( int i = 0 ; i < len; i++ )
+			{
+				if ( i != 0 ) dir += "/";
+				dir += this.getFilename().split("\\/")[i];
+			}
+		}
+			
+		File t = new File(dir);
+		if ( !t.exists() ) t.mkdirs();
+		
 		return new File(this.filename);
 	}
 
