@@ -67,12 +67,6 @@ public class GooglePlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
 			event.setExecuted(true);
-		} else if (message.length() >= 4
-				&& (message.substring(0, 3).equals("구글 ") || message.substring(
-						0, 3).equals("gg "))) {
-			bot.sendLoggedMessage(channel,
-					getGoogleTopResult(message.substring(3)));
-			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals("!구글 ") || message
 						.substring(0, 4).equals("!gg "))) {
@@ -80,7 +74,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 					getGoogleTopResult(message.substring(4)));
 			event.setExecuted(true);
 		}
-		
+
 	}
 
 	private int getGoogleCount(String keyword) {
@@ -149,7 +143,9 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 			// HTML 코드 처리
 			result = result.replace("<b>", "[").replace("</b>", "]")
-					.replace("&quot;", "\"").replace("&amp;", "&");
+					.replace("&quot;", "\"").replace("&amp;", "&")
+					.replace("&#39;", "'").replace("&gt;", ">")
+					.replace("&lt;", "<");
 
 			return result;
 

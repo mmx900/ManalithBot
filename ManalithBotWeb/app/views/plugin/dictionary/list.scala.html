@@ -1,0 +1,11 @@
+@(words: List[String])
+
+@main("ManalithBot") {
+    
+    @for(word<-words){
+    	<ul>
+    		<li><a href="/words/view/@word">@word</a></li>
+    	</ul>
+    }
+    
+}

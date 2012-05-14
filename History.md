@@ -1,11 +1,13 @@
+0.0.0 / 2012-05-03
+==================
 
 2011. 10. 31
 CER ( Currency Exchange Rate ) is added. ( -> darkcircle )
  - Requirement
-   > sqlitejdbc-v056.jar : JDBC SQLite Ä¿³ØÅÍ »ç¿ëÇÏ±â À§ÇÑ ÆÄÀÏ. ÄÄÆÄÀÏ ÇÒ¶§ ÇÊ¿ä.
-     -> http://files.zentus.com/sqlitejdbc/sqlitejdbc-v056.jar ¿¡¼­ ¹Ş¾ÒÀ½.
-   > ±×³ğ Ã¤³Î¿¡ º¿ ÀÔÀåÀü Å×½ºÆ® Ã¤³Î¿¡¼­ !cer fupdate¸¦ ½ÇÇà. (ÇÁ·ÎÆÛÆ¼, DB °»½Å ¹× ÁØºñ)
-   > LatestUpdatedDatetime.prop°ú currency.db´Â Å¬·¡½º °æ·Î ·çÆ®»ó¿¡ ÀÖ¾î¾ß ÇÔ.
+   > sqlitejdbc-v056.jar : JDBC SQLite ì»¤ë„¥í„° ì‚¬ìš©í•˜ê¸° ìœ„í•œ íŒŒì¼. ì»´íŒŒì¼ í• ë•Œ í•„ìš”.
+     -> http://files.zentus.com/sqlitejdbc/sqlitejdbc-v056.jar ì—ì„œ ë°›ì•˜ìŒ.
+   > ê·¸ë†ˆ ì±„ë„ì— ë´‡ ì…ì¥ì „ í…ŒìŠ¤íŠ¸ ì±„ë„ì—ì„œ !cer fupdateë¥¼ ì‹¤í–‰. (í”„ë¡œí¼í‹°, DB ê°±ì‹  ë° ì¤€ë¹„)
+   > LatestUpdatedDatetime.propê³¼ currency.dbëŠ” í´ë˜ìŠ¤ ê²½ë¡œ ë£¨íŠ¸ìƒì— ìˆì–´ì•¼ í•¨.
 
 Calc is updated ( -> darkcircle )
  > factorial operator is added.
@@ -14,25 +16,25 @@ Calc is updated ( -> darkcircle )
 2011. 11. 01
 CER ( Currency Exchange Rate ) is updated ( -> darkcircle )
  - Requirement
-  > (2011. 10. 31ÀÏÀÚ Ã¹¹øÂ° ¿ä±¸»çÇ× »èÁ¦)
-  > Maven ¿¡¼­ org.xerial.sqlite-jdbc.3.7.2 ¸¦ ¹Ş¾Æ¾ß µÊ. 
-    ( ½ÇÇà½Ã -cp ¿É¼Ç¿¡ MAVEN_REPOS/org/xerial/sqlite-jdbc/3.7.2/sqlite-jdbc.3.7.2.jar Ãß°¡. )
-  > ±×³ğ Ã¤³Î¿¡ º¿ ÀÔÀå Àü Å×½ºÆ® Ã¤³Î¿¡¼­ !cer fupdate¸¦ ½ÇÇà. 
-    ( ÇÁ·ÎÆÛÆ¼, DB °»½Å ¹× ÁØºñ : org/manalith/ircbot/plugin/CER/data ¿¡ ÀúÀåµÊ )
-  > (2011. 10. 31ÀÏÀÚ ¼¼¹øÂ° ¿ä±¸»çÇ× »èÁ¦)
+  > (2011. 10. 31ì¼ì ì²«ë²ˆì§¸ ìš”êµ¬ì‚¬í•­ ì‚­ì œ)
+  > Maven ì—ì„œ org.xerial.sqlite-jdbc.3.7.2 ë¥¼ ë°›ì•„ì•¼ ë¨. 
+    ( ì‹¤í–‰ì‹œ -cp ì˜µì…˜ì— MAVEN_REPOS/org/xerial/sqlite-jdbc/3.7.2/sqlite-jdbc.3.7.2.jar ì¶”ê°€. )
+  > ê·¸ë†ˆ ì±„ë„ì— ë´‡ ì…ì¥ ì „ í…ŒìŠ¤íŠ¸ ì±„ë„ì—ì„œ !cer fupdateë¥¼ ì‹¤í–‰. 
+    ( í”„ë¡œí¼í‹°, DB ê°±ì‹  ë° ì¤€ë¹„ : org/manalith/ircbot/plugin/CER/data ì— ì €ì¥ë¨ )
+  > (2011. 10. 31ì¼ì ì„¸ë²ˆì§¸ ìš”êµ¬ì‚¬í•­ ì‚­ì œ)
 
 2011. 11. 05
 KVL ( Kernel Version List ) is added ( -> darkcircle )
 
 2011. 11. 06
 CER ( Currency Exchange Rate ) is updated
- - NPE À¯¹ß ÄÚµå Á¦°ÅµÊ. ( -> mmx900 ) 
+ - NPE ìœ ë°œ ì½”ë“œ ì œê±°ë¨. ( -> mmx900 ) 
 
 
 2011. 11. 07
 Calc is updated ( -> darkcircle )
- > ÀÎÀÚ°¡ ÇÏ³ª¹Û¿¡ ¾øÀ» ¶§ÀÇ ¹®Á¦ ¼öÁ¤
- > ÆÑÅä¸®¾ó ¿¬»ê ¹®Á¦ ¼öÁ¤
+ > ì¸ìê°€ í•˜ë‚˜ë°–ì— ì—†ì„ ë•Œì˜ ë¬¸ì œ ìˆ˜ì •
+ > íŒ©í† ë¦¬ì–¼ ì—°ì‚° ë¬¸ì œ ìˆ˜ì •
  > sqrt computation problem is fixed
 
 2011. 11. 12
@@ -90,8 +92,8 @@ WaitBDBot is added ( -> darkcircle )
 TwitReader is added ( -> darkcircle )
  > This module helps to show text of twitter's article
   ex ) !twit https://twitter.com/#!/somebody/status/xxxxxxxxxxxxxxxxxxxxx
-       => ÀÛ¼ºÀÚ: ... ÀÛ¼º½Ã°¢: ... ÀÛ¼º Å¬¶óÀÌ¾ğÆ®: ...
-	      º»¹®: ...
+       => ì‘ì„±ì: ... ì‘ì„±ì‹œê°: ... ì‘ì„± í´ë¼ì´ì–¸íŠ¸: ...
+	      ë³¸ë¬¸: ...
 
 newCER command is changed to "!curex"
 

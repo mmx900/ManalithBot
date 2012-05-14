@@ -40,7 +40,7 @@ public class ManalithBot extends PircBotX {
 	private PluginManager pluginManager = new PluginManager();
 
 	public ManalithBot(List<IBotPlugin> plugins) {
-		getListenerManager().addListener(new ManalithBotListener(this));
+		getListenerManager().addListener(new ManalithBotListener());
 
 		for (IBotPlugin plugin : plugins) {
 			addPlugin(plugin);

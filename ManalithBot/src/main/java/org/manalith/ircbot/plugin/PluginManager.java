@@ -96,21 +96,41 @@ public class PluginManager {
 			String[] segments = StringUtils
 					.splitByWholeSeparator(message, null);
 
-			if (ArrayUtils.contains(commandMeta.listeners(),
-					BotEvent.ON_MESSAGE)
-					&& ArrayUtils.contains(commandMeta.value(), segments[0])) {
-				IBotPlugin plugin = (IBotPlugin) commands.get(method);
+			if (!ArrayUtils.contains(commandMeta.listeners(),
+					BotEvent.ON_MESSAGE))
+				continue;
 
-				if (segments.length - 1 != commandMeta.arguments()) {
-					plugin.getBot().sendLoggedMessage(channel,
-							commandMeta.argumentsLengthErrorMessage());
-				}
+			if (!ArrayUtils.contains(commandMeta.value(), segments[0]))
+				continue;
 
+			IBotPlugin plugin = (IBotPlugin) commands.get(method);
+
+			if (segments.length - 1 < commandMeta.minimumArguments()) {
+				plugin.getBot().sendLoggedMessage(
+						channel,
+						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
+								commandMeta.minimumArguments()));
+
+				msg.setExecuted(true);
+			} else {
 				try {
+					String result = null;
+
 					// TODO MethodUtils 사용
-					String result = (String) method.invoke(plugin, msg,
-							ArrayUtils.subarray(segments, 1,
-									segments.length - 1));
+					if (method.getParameterTypes().length == 0) {
+						result = (String) method.invoke(plugin);
+					} else if (method.getParameterTypes().length == 1) {
+						if (method.getParameterTypes()[0] == MessageEvent.class) {
+							result = (String) method.invoke(plugin, msg);
+						} else {
+							result = (String) method.invoke(plugin,
+									(Object) ArrayUtils.subarray(segments, 1,
+											segments.length));
+						}
+					} else {
+						result = (String) method.invoke(plugin, msg, ArrayUtils
+								.subarray(segments, 1, segments.length));
+					}
 
 					if (StringUtils.isNotBlank(result)) {
 						plugin.getBot().sendLoggedMessage(channel, result);
@@ -119,24 +139,41 @@ public class PluginManager {
 					msg.setExecuted(commandMeta.stopEvent());
 				} catch (IllegalArgumentException e) {
 					logger.error(e);
+					plugin.getBot()
+							.sendLoggedMessage(
+									channel,
+									String.format("실행중 %s 오류가 발생했습니다.",
+											e.getMessage()));
+					msg.setExecuted(true);
 				} catch (IllegalAccessException e) {
 					logger.error(e);
+					plugin.getBot()
+							.sendLoggedMessage(
+									channel,
+									String.format("실행중 %s 오류가 발생했습니다.",
+											e.getMessage()));
+					msg.setExecuted(true);
 				} catch (InvocationTargetException e) {
 					logger.error(e);
-				}
-
-				if (msg.isExecuted()) {
-					return;
+					plugin.getBot()
+							.sendLoggedMessage(
+									channel,
+									String.format("실행중 %s 오류가 발생했습니다.",
+											e.getMessage()));
+					msg.setExecuted(true);
 				}
 			}
+
+			if (msg.isExecuted())
+				return;
 		}
 
 		// 비 어노테이션 기반 플러그인 실행
 		for (IBotPlugin plugin : list) {
 			plugin.onMessage(msg);
-			if (msg.isExecuted()) {
+
+			if (msg.isExecuted())
 				return;
-			}
 		}
 	}
 

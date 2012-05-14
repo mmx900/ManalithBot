@@ -14,9 +14,7 @@ public @interface BotCommand {
 
 	String[] value();
 
-	int arguments() default 0;
-
-	String argumentsLengthErrorMessage() default "인자가 부족합니다.";
+	int minimumArguments() default 0;
 
 	BotEvent[] listeners() default { BotEvent.ON_MESSAGE };
 
