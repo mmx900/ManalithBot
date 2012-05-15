@@ -56,7 +56,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 
 	private String getTitle(String uri) {
 		try {
-			return Jsoup.connect(uri).get().title().replaceAll("\\n", "")
+			return Jsoup.connect(uri).get().title().replaceAll("\\n", "").replaceAll("\\r", "")
 					.replaceAll("(\\s){2,}", " ");
 		} catch (Exception e) {
 			return null;
