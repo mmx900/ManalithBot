@@ -26,11 +26,6 @@
 			<version>4.1.3</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.jtidy</groupId>
-			<artifactId>jtidy</artifactId>
-			<version>r938</version>
-		</dependency>
-		<dependency>
 			<groupId>org.beanshell</groupId>
 			<artifactId>bsh-classgen</artifactId>
 			<version>2.0b4</version>
