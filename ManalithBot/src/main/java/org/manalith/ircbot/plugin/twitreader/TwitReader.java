@@ -39,7 +39,7 @@ import org.json.JSONTokener;
 public class TwitReader {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String TWITTER_USER_HOME_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}";
-	private static final String TWITTER_TWIT_URL_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/\\#\\!\\/[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+";
+	private static final String TWITTER_TWIT_URL_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+";
 	private static final String SOURCE_DATE_PATTERN = "EEE MMM dd HH:mm:ss ZZZZ yyyy";
 	private static final String TARGET_DATE_PATTERN = "yyyy년 MM월 dd일 E요일 HH:mm:ss";
 
@@ -78,12 +78,13 @@ public class TwitReader {
 				JSONObject obj = new JSONObject(tokener);
 
 				String written_by = obj.getJSONObject("user").getString("name");
-				String body = obj.getString("text");
+				String body = obj.getString("text").trim().replaceAll("\\n","").replaceAll("(\\s){2,}", " ");
 
 				result = "작성자 : " + written_by + ", 본문 : " + body;
 			}
 				break;
 			case UserURL:
+				System.out.println(tokener.toString());
 				JSONArray arr = new JSONArray(tokener);
 
 				if (arr.length() == 0) {
@@ -92,7 +93,7 @@ public class TwitReader {
 					JSONObject obj = arr.getJSONObject(0);
 
 					String written_datetime = obj.getString("created_at");
-					String body = obj.getString("text");
+					String body = obj.getString("text").trim().replaceAll("\\n","").replaceAll("(\\s){2,}", " ");
 
 					result = "작성시각 : "
 							+ getDateTimeinKoreanFormat(written_datetime)
