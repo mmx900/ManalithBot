@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UriTitlePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	
+
 	public String getCommands() {
 		return null;
 	}
@@ -59,7 +59,11 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 
 	private String getTitle(String uri) {
 		try {
-			return Jsoup.connect(uri).get().title().replaceAll("\\n", "").replaceAll("\\r", "")
+			return Jsoup
+					.connect(uri)
+					.header("User-Agent",
+							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
+					.get().title().replaceAll("\\n", "").replaceAll("\\r", "")
 					.replaceAll("(\\s){2,}", " ");
 		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
