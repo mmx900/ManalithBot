@@ -21,6 +21,7 @@ package org.manalith.ircbot.plugin.urititle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UriTitlePlugin extends AbstractBotPlugin {
+	private Logger logger = Logger.getLogger(getClass());
+	
 	public String getCommands() {
 		return null;
 	}
@@ -59,6 +62,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 			return Jsoup.connect(uri).get().title().replaceAll("\\n", "").replaceAll("\\r", "")
 					.replaceAll("(\\s){2,}", " ");
 		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
 			return null;
 		}
 	}
