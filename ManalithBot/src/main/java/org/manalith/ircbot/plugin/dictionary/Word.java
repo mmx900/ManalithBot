@@ -13,10 +13,21 @@ import javax.persistence.Table;
 @Entity
 @Table
 public class Word {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
 	public Integer id;
+
+	@Column(unique = false, nullable = false)
 	public String word;
+
+	@Column(unique = false, nullable = false)
 	public String description;
+
+	@Column(unique = false, nullable = false)
 	public Date date;
+
+	@Column(unique = false, nullable = false)
 	public String author;
 
 	public String getAuthor() {
@@ -31,29 +42,22 @@ public class Word {
 		return description;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
 	public Integer getId() {
 		return id;
 	}
 
-	@Column(unique = false, nullable = false)
 	public String getWord() {
 		return word;
 	}
 
-	@Column(unique = false, nullable = false)
 	public void setAuthor(String author) {
 		this.author = author;
 	}
 
-	@Column(unique = false, nullable = false)
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	@Column(unique = false, nullable = false)
 	public void setDescription(String description) {
 		this.description = description;
 	}
