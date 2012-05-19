@@ -41,8 +41,8 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		String channel = event.getChannel();
-		String sender = event.getSender();
+		String channel = event.getChannel().getName();
+		String sender = event.getUser().getNick();
 		String message = event.getMessage();
 		Set<User> users = bot.getUsers(bot.getChannel(channel));
 

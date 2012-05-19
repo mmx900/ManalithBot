@@ -100,7 +100,6 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 
 		if (ArrayUtils.contains(new String[] { "!도움", "!help", "!plugins" },
 				message)) {
-			System.out.println("wow");
 			bot.sendMessage(channel, bot.getPluginManager().getPluginInfo());
 		} else if (message.equals("!quit")) {
 			if (bot.isOwner(sender)) {
@@ -108,8 +107,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				System.exit(-1);
 			}
 		} else {
-			bot.getPluginManager().onMessage(channel, sender, login, hostname,
-					message);
+			bot.getPluginManager().onMessage(event);
 		}
 	}
 
@@ -128,9 +126,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				|| message.equals("!plugins")) {
 			bot.sendMessage(sender, bot.getPluginManager().getPluginInfo());
 		} else {
-			bot.getPluginManager().onPrivateMessage(event.getUser().getNick(),
-					event.getUser().getLogin(), event.getUser().getHostmask(),
-					event.getMessage());
+			bot.getPluginManager().onPrivateMessage(event);
 		}
 	}
 

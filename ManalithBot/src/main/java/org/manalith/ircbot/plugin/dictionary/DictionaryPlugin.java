@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -36,9 +37,10 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
-		String channel = event.getChannel();
-		String sender = event.getSender();
+		String channel = event.getChannel().getName();
+		String sender = event.getUser().getNick();
 
 		String cmd = CommandParser.checkMessageAndRemoveNick(bot.getName(),
 				message);

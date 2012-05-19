@@ -42,12 +42,12 @@ public class PlainOldBotPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		this.onMessage(event, event.getChannel());
+		onMessage(event, event.getChannel().getName());
 	}
 
 	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
-		String channel = event.getChannel();
+		String channel = event.getChannel().getName();
 
 		if (message.equals("!hello")) {
 			bot.sendLoggedMessage(channel, "Hello World!");

@@ -40,11 +40,11 @@ public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel());
+		onMessage(event, event.getChannel().getName());
 	}
 
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getSender());
+		onMessage(event, event.getUser().getNick());
 	}
 
 	public void onMessage(MessageEvent event, String target) {

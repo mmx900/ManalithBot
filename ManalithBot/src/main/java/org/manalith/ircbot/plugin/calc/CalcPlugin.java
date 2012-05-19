@@ -18,6 +18,7 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -38,14 +39,15 @@ public class CalcPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel());
+		onMessage(event, event.getChannel().getName());
 	}
 
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getSender());
+		onMessage(event, event.getUser().getNick());
 	}
 
 	protected void onMessage(MessageEvent event, String target) {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String[] command = message.split("\\s");
 

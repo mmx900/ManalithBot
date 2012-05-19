@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.Empty;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -38,8 +39,9 @@ public class BshPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
-		String channel = event.getChannel();
+		String channel = event.getChannel().getName();
 
 		if (message.equals(NAMESPACE + ":help"))
 			bot.sendLoggedMessage(channel, getHelp());

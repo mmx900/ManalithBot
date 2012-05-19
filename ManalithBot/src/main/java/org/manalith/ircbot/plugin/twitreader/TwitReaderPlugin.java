@@ -41,14 +41,14 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 	@Override
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
-		String channel = event.getChannel();
+		String channel = event.getChannel().getName();
 
 		String[] command = msg.split("\\s");
 
 		String result = reader.read(command);
 
 		if (result != null) {
-			bot.sendLoggedMessage(channel, result);
+			event.getBot().sendLoggedMessage(channel, result);
 		}
 
 	}

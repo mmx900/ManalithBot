@@ -51,7 +51,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		if (event.getSender().equals("DarkCircle")) {
+		if (event.getUser().getNick().equals("DarkCircle")) {
 			boolean beingBot = false;
 			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
 			for (User u : list) {
@@ -62,7 +62,8 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 			}
 
 			if (!beingBot)
-				bot.sendLoggedMessage(event.getChannel(), "DarkCircle: ...");
+				bot.sendLoggedMessage(event.getChannel().getName(),
+						"DarkCircle: ...");
 		}
 	}
 

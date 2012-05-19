@@ -73,7 +73,7 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		String channel = event.getChannel();
+		String channel = event.getChannel().getName();
 
 		String uri = findUri(message);
 		if (uri == null)

@@ -19,6 +19,7 @@
  */
 package org.manalith.ircbot.plugin.cer2;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -63,14 +64,15 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * .MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel());
+		onMessage(event, event.getChannel().getName());
 	}
 
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getSender());
+		onMessage(event, event.getUser().getNick());
 	}
 
 	protected void onMessage(MessageEvent event, String target) {
+		ManalithBot bot = event.getBot();
 		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
 		if (!command[0].equals("!curex") && !command[0].equals("!환율")
@@ -80,20 +82,23 @@ public class CERPlugin extends AbstractBotPlugin {
 
 		String[] subcmd = command[0].split("\\:");
 		if (subcmd.length == 1) {
-			
-			String [] mergedcmd = new String[command.length - 1];
+
+			String[] mergedcmd = new String[command.length - 1];
 			System.arraycopy(command, 1, mergedcmd, 0, command.length - 1);
 
 			try {
-				CERRunner runner = new CERRunner(event.getSender(),
+				CERRunner runner = new CERRunner(event.getUser().getNick(),
 						this.getResourcePath(), mergedcmd);
 
 				String result = runner.run();
 				if (result.equals("Help!")) {
-					bot.sendLoggedMessage(target, CERInfoProvider.getIRCHelpMessagePart1());
-					bot.sendLoggedMessage(target, CERInfoProvider.getIRCHelpMessagePart2());
-				} else if ( result.equals("unitlist")) {
-					bot.sendLoggedMessage(target, CERInfoProvider.getUnitListPart1());
+					bot.sendLoggedMessage(target,
+							CERInfoProvider.getIRCHelpMessagePart1());
+					bot.sendLoggedMessage(target,
+							CERInfoProvider.getIRCHelpMessagePart2());
+				} else if (result.equals("unitlist")) {
+					bot.sendLoggedMessage(target,
+							CERInfoProvider.getUnitListPart1());
 					bot.sendLoggedMessage(target,
 							CERInfoProvider.getUnitListPart2());
 				} else {
@@ -106,7 +111,7 @@ public class CERPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(target, "옵션이 너무 많습니다");
 		} else {
 			// remerge strings separated by space.
-			String userNick = event.getSender();
+			String userNick = event.getUser().getNick();
 
 			String arg = "";
 			for (int i = 1; i < command.length; i++) {

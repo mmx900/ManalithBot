@@ -40,12 +40,12 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel());
+		onMessage(event, event.getChannel().getName());
 	}
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getSender());
+		onMessage(event, event.getUser().getNick());
 	}
 
 	protected void onMessage(MessageEvent event, String target) {

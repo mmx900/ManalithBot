@@ -42,12 +42,14 @@ public class RelayPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		String channel = event.getChannel().getName();
+
 		if (event.getMessage().equals("relay:stop")) {
 			setRelaying(false);
-			bot.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 종료합니다.");
+			bot.sendLoggedMessage(channel, "릴레이를 강제로 종료합니다.");
 		} else if (event.getMessage().equals("relay:start")) {
 			setRelaying(true);
-			bot.sendLoggedMessage(event.getChannel(), "릴레이를 강제로 시작합니다.");
+			bot.sendLoggedMessage(channel, "릴레이를 강제로 시작합니다.");
 		}
 
 		if (isRelaying()) {
@@ -55,7 +57,6 @@ public class RelayPlugin extends AbstractBotPlugin {
 			 * 메인 봇에 메시지가 들어오면 릴레이 봇으로 전송한다.
 			 */
 			String targetChannel = "#setzer";
-			String channel = event.getChannel();
 
 			if (channel.equals("#gnome")) {
 				targetChannel = "#gnome";
@@ -63,8 +64,8 @@ public class RelayPlugin extends AbstractBotPlugin {
 				targetChannel = "#setzer";
 			}
 
-			RELAY_BOT.sendMessage(targetChannel, "<" + event.getSender() + "> "
-					+ event.getMessage());
+			RELAY_BOT.sendMessage(targetChannel, "<"
+					+ event.getUser().getNick() + "> " + event.getMessage());
 		}
 	}
 

@@ -35,10 +35,12 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 		this.bot = bot;
 	}
 
+	@Deprecated
 	public void setBot(ManalithBot bot) {
 		this.bot = bot;
 	}
 
+	@Deprecated
 	public ManalithBot getBot() {
 		return bot;
 	}

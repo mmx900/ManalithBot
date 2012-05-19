@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.manalith.ircbot.common.stereotype.BotFilter;
@@ -81,13 +82,16 @@ public class PluginManager {
 			plugin.onJoin(channel, sender, login, hostName);
 	}
 
-	public void onMessage(String channel, String sender, String login,
-			String hostName, String message) {
+	public void onMessage(
+			org.pircbotx.hooks.events.MessageEvent<ManalithBot> event) {
+		ManalithBot bot = event.getBot();
+		String channel = event.getChannel().getName();
+		String message = event.getMessage();
+
 		if (StringUtils.isEmpty(message))
 			return;
 
-		MessageEvent msg = new MessageEvent(channel, sender, login, hostName,
-				message);
+		MessageEvent msg = new MessageEvent(event);
 
 		// 어노테이션(@BotCommand) 기반 플러그인 실행
 		for (Method method : commands.keySet()) {
@@ -106,7 +110,7 @@ public class PluginManager {
 			IBotPlugin plugin = (IBotPlugin) commands.get(method);
 
 			if (segments.length - 1 < commandMeta.minimumArguments()) {
-				plugin.getBot().sendLoggedMessage(
+				bot.sendLoggedMessage(
 						channel,
 						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
 								commandMeta.minimumArguments()));
@@ -133,33 +137,24 @@ public class PluginManager {
 					}
 
 					if (StringUtils.isNotBlank(result)) {
-						plugin.getBot().sendLoggedMessage(channel, result);
+						bot.sendLoggedMessage(channel, result);
 					}
 
 					msg.setExecuted(commandMeta.stopEvent());
 				} catch (IllegalArgumentException e) {
 					logger.error(e);
-					plugin.getBot()
-							.sendLoggedMessage(
-									channel,
-									String.format("실행중 %s 오류가 발생했습니다.",
-											e.getMessage()));
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
 				} catch (IllegalAccessException e) {
 					logger.error(e);
-					plugin.getBot()
-							.sendLoggedMessage(
-									channel,
-									String.format("실행중 %s 오류가 발생했습니다.",
-											e.getMessage()));
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
 				} catch (InvocationTargetException e) {
 					logger.error(e);
-					plugin.getBot()
-							.sendLoggedMessage(
-									channel,
-									String.format("실행중 %s 오류가 발생했습니다.",
-											e.getMessage()));
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
 				}
 			}
@@ -177,9 +172,9 @@ public class PluginManager {
 		}
 	}
 
-	public void onPrivateMessage(String sender, String login, String hostName,
-			String message) {
-		MessageEvent msg = new MessageEvent(sender, login, hostName, message);
+	public void onPrivateMessage(
+			org.pircbotx.hooks.events.PrivateMessageEvent<ManalithBot> event) {
+		MessageEvent msg = new MessageEvent(event);
 
 		for (IBotPlugin plugin : list) {
 			plugin.onPrivateMessage(msg);

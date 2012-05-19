@@ -59,8 +59,9 @@ public class HelloPlugin extends AbstractBotPlugin {
 
 	@BotCommand({ "!count" })
 	public String count(MessageEvent event) {
-		return String.format("%s 방에 %d 명이 있습니다.", event.getChannel(), getBot()
-				.getChannel(event.getChannel()).getUsers().size());
+		return String.format("%s 방에 %d 명이 있습니다.", event.getChannel(), event
+				.getBot().getChannel(event.getChannel().getName()).getUsers()
+				.size());
 	}
 
 	@BotCommand(value = { "!채널인사" }, minimumArguments = 1)

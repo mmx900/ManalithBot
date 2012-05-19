@@ -20,7 +20,7 @@ public class SlashdotReaderPlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		String channel = event.getChannel();
+		String channel = event.getChannel().getName();
 
 		if (message.equals(NAMESPACE))
 			bot.sendLoggedMessage(channel, getLastestSlashdot());
