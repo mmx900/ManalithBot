@@ -69,7 +69,18 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	private String getInfo(String newUri) {
 		
 		String result;
-			
+		
+		/*
+		try {
+			return Jsoup
+					.connect(uri)
+					.header("User-Agent",
+							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
+					.get().title().replaceAll("\\n", "").replaceAll("\\r", "")
+					.replaceAll("(\\s){2,}", " ");
+		
+		//*/
+		
 		try {
 			String content_type = (new URL(newUri)).openConnection()
 					.getContentType();
@@ -89,25 +100,11 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 								.replaceAll("\\r", "")
 								.replaceAll("(\\s){2,}", " ");
 			}
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			result = "";
 		}
-		/*
-		try {
-			return Jsoup
-					.connect(uri)
-					.header("User-Agent",
-							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
-					.get().title().replaceAll("\\n", "").replaceAll("\\r", "")
-					.replaceAll("(\\s){2,}", " ");
-		} catch (Exception e) {
+		catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 			return null;
 		}
-		//*/
 		
 		return result;
 	}
@@ -125,7 +122,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, info);
 		}
 
-		// This plugin runs implicitly; NO need to call
+		// This plugin runs implicitly; it does NOT need to call
 		// event.setExecuted(true)
 	}
 }
