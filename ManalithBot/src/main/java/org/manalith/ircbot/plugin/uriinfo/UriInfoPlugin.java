@@ -69,43 +69,18 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	private String getInfo(String newUri) {
 		
 		String result;
-		
-		// split scheme from uri
-		String scheme = newUri.split("\\:\\/\\/")[0];
-		String uriWOScheme = newUri.split("\\:\\/\\/")[1];
-		
-		// split query from uri
-		String query = "";
-		if ( uriWOScheme.split("\\?").length >= 2 )
-			 query = uriWOScheme.split("\\?")[1];
-		
-		// split hostname and path
-		String [] hp = uriWOScheme.split("\\?")[0].split("\\/");
-		String host = hp[0];
-		String path = "";
-		if ( hp.length > 1 )
-			for ( int i = 1; i < hp.length; i++ )
-			{
-				if ( i != 1 ) path += "/";
-				path += hp[i];
-			}
 			
 		try {
-			HttpResponse resp = (new DefaultHttpClient()).execute(new HttpGet(
-					URIUtils.createURI(scheme, host, -1, path, query, null)));
 			String content_type = (new URL(newUri)).openConnection()
 					.getContentType();
 			
 			// all possible failure case
-			if (resp.getStatusLine().getStatusCode() != 200
-					|| !content_type.contains("text/")
+			if (!content_type.contains("text/")
 					|| !content_type.contains("application/")
 					&& !content_type.contains("ml")) {
 				result = "[Link Content-type] "
 						+ (new URL(newUri)).openConnection().getContentType();
-			} 
-			else 
-			{
+			} else {
 				result = "[Link Title] "
 						+ Jsoup.connect(newUri)
 								.header("User-Agent",
