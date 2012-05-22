@@ -34,9 +34,6 @@ import org.pircbotx.exception.NickAlreadyInUseException;
 public class ManalithBot extends PircBotX {
 	private Logger logger = Logger.getLogger(getClass());
 
-	// TODO 닉 도용 가능성이 있으니 로그인 기능을 만들 것
-	// private static final String[] owners = {"setzer"};
-	private static final String[] owners = {};
 	private PluginManager pluginManager = new PluginManager();
 
 	public ManalithBot(List<IBotPlugin> plugins) {
@@ -87,16 +84,4 @@ public class ManalithBot extends PircBotX {
 	// m.setMessage(m.getMessage().substring(0, 179));
 	// sendMessage(m.getChannel(), m.getSender() + ", " + m.getMessage());
 	// }
-
-	// TODO nick(String) 비교가 아닌 User 비교로
-	public boolean isOwner(String nick) {
-		boolean result = false;
-		for (String s : owners) {
-			if (s.equals(nick)) {
-				result = true;
-				break;
-			}
-		}
-		return result;
-	}
 }

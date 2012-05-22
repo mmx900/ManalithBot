@@ -73,6 +73,11 @@ public class AdminPlugin extends AbstractBotPlugin {
 				long upTime = bean.getUptime();
 				event.getBot().sendLoggedMessage(channel.getName(),
 						String.format("Up Time = %d (ms)", upTime));
+			} else if (message.equals("!quit")) {
+				// TODO 보다 안전한 종료가 필요
+				// TODO 재시작 기능이 필요
+				bot.quitServer();
+				System.exit(-1);
 			}
 		}
 	}
