@@ -75,7 +75,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
 					.execute();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 			return null;
 		}
 
@@ -90,7 +90,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 				result = "[Link Content-type] " + resp.contentType();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.warn(e1.getMessage(),e1);
 				result = null;
 			}
 		}
