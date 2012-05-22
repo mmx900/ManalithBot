@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -63,22 +64,13 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 	private String getInfo(String newUri) {
 		
-		String result;
-		/*
-		try {
-			return Jsoup
-					.connect(uri)
-					.header("User-Agent",
-							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
-					.get().title().replaceAll("\\n", "").replaceAll("\\r", "")
-					.replaceAll("(\\s){2,}", " ");
-		
-		//*/
+		String result;		
+		Connection conn = Jsoup.connect(newUri);
 		
 		try {
 			result = "[Link Title] "
-					+ Jsoup.connect(newUri)
-							.header("User-Agent",
+					+ 
+							conn.header("User-Agent",
 									"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
 							.get().title().replaceAll("\\n", "")
 							.replaceAll("\\r", "")
@@ -88,7 +80,8 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 			logger.warn(e.getMessage(), e);
 			try {
 				result = "[Link Content-type] "
-						+ (new URL(newUri)).openConnection().getContentType();
+						+ conn.execute().contentType();
+						
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				logger.warn(e1.getMessage(), e1);
