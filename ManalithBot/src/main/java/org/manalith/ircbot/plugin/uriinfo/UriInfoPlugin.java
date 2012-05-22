@@ -19,14 +19,12 @@
  */
 package org.manalith.ircbot.plugin.uriinfo;
 
+
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -85,11 +83,9 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 					+ resp.parse().title().replaceAll("\\n", "")
 							.replaceAll("\\r", "").replaceAll("(\\s){2,}", " ");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			try {
 				result = "[Link Content-type] " + resp.contentType();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				logger.warn(e1.getMessage(),e1);
 				result = null;
 			}
