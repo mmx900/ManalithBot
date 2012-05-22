@@ -57,7 +57,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="calcPlugin" />
 				<ref bean="kvlPlugin" />
 				<ref bean="cerPlugin" />
-				<ref bean="uriTitlePlugin" />
+				<ref bean="uriInfoPlugin" />
 				<ref bean="dictionaryPlugin" />
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />

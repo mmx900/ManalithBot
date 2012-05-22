@@ -1,7 +1,8 @@
 /*
- 	org.manalith.ircbot.plugin.urititle/UriTitlePlugin.java
+ 	org.manalith.ircbot.plugin.uriinfo/UriInfoPlugin.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2012  Changwoo Ryu <cwryu@debian.org>
+ 	Copyright (C) 2012  Seong-ho Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,19 +17,22 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.urititle;
+package org.manalith.ircbot.plugin.uriinfo;
 
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.Connection.Response;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UriTitlePlugin extends AbstractBotPlugin {
+public class UriInfoPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 
 	public String getCommands() {
@@ -57,18 +61,37 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 		return matcher.group(1);
 	}
 
-	private String getTitle(String uri) {
+	private String getInfo(String uri) {
+
+		String result;
+		Response resp = null;
+
 		try {
-			return Jsoup
+			resp = Jsoup
 					.connect(uri)
 					.header("User-Agent",
 							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
-					.get().title().replaceAll("\\n", "").replaceAll("\\r", "")
-					.replaceAll("(\\s){2,}", " ");
-		} catch (Exception e) {
+					.execute();
+		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
 			return null;
 		}
+
+		try {
+
+			result = "[Link Title] "
+					+ resp.parse().title().replaceAll("\\n", "")
+							.replaceAll("\\r", "").replaceAll("(\\s){2,}", " ");
+		} catch (IOException e) {
+			try {
+				result = "[Link Content-type] " + resp.contentType();
+			} catch (Exception e1) {
+				logger.warn(e1.getMessage(),e1);
+				result = null;
+			}
+		}
+
+		return result;
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -79,12 +102,12 @@ public class UriTitlePlugin extends AbstractBotPlugin {
 		if (uri == null)
 			return;
 
-		String title = getTitle(uri);
-		if (title != null) {
-			bot.sendLoggedMessage(channel, "[Link Title] " + title);
+		String info = getInfo(uri);
+		if (info != null) {
+			bot.sendLoggedMessage(channel, info);
 		}
 
-		// This plugin runs implicitly; NO need to call
+		// This plugin runs implicitly; it does NOT need to call
 		// event.setExecuted(true)
 	}
 }
