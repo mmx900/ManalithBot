@@ -101,11 +101,6 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 		if (ArrayUtils.contains(new String[] { "!도움", "!help", "!plugins" },
 				message)) {
 			bot.sendMessage(channel, bot.getPluginManager().getPluginInfo());
-		} else if (message.equals("!quit")) {
-			if (bot.isOwner(sender)) {
-				bot.quitServer();
-				System.exit(-1);
-			}
 		} else {
 			bot.getPluginManager().onMessage(event);
 		}

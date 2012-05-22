@@ -1,5 +1,7 @@
 package org.manalith.ircbot.plugin.admin;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,22 +50,34 @@ public class AdminPlugin extends AbstractBotPlugin {
 		String message = event.getMessage();
 		Channel channel = event.getChannel();
 
-		if (isAdmin(event.getUser()) && message.equals("!@")) {
-			int i = 0;
+		if (isAdmin(event.getUser())) {
+			if (message.equals("!@")) {
+				int i = 0;
 
-			// 모든 사용자에게 옵을 준다
-			for (User user : channel.getUsers()) {
-				if (!channel.getOps().contains(user)
-						&& !channel.getSuperOps().contains(user)
-						&& !channel.getOwners().contains(user)) {
-					channel.op(user);
-					i++;
+				// 모든 사용자에게 옵을 준다
+				for (User user : channel.getUsers()) {
+					if (!channel.getOps().contains(user)
+							&& !channel.getSuperOps().contains(user)
+							&& !channel.getOwners().contains(user)) {
+						channel.op(user);
+						i++;
+					}
 				}
-			}
 
-			if (i == 0) {
+				if (i == 0) {
+					event.getBot().sendLoggedMessage(channel.getName(),
+							"모든 사용자가 옵을 가지고 있습니다.");
+				}
+			} else if (message.equals("!uptime")) {
+				RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+				long upTime = bean.getUptime();
 				event.getBot().sendLoggedMessage(channel.getName(),
-						"모든 사용자가 옵을 가지고 있습니다.");
+						String.format("Up Time = %d (ms)", upTime));
+			} else if (message.equals("!quit")) {
+				// TODO 보다 안전한 종료가 필요
+				// TODO 재시작 기능이 필요
+				bot.quitServer();
+				System.exit(-1);
 			}
 		}
 	}
