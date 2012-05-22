@@ -21,15 +21,10 @@ package org.manalith.ircbot.plugin.uriinfo;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -69,7 +64,6 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	private String getInfo(String newUri) {
 		
 		String result;
-		
 		/*
 		try {
 			return Jsoup
@@ -82,28 +76,24 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 		//*/
 		
 		try {
-			String content_type = (new URL(newUri)).openConnection()
-					.getContentType();
-			
-			// all possible failure case
-			if (!content_type.contains("text/")
-					|| !content_type.contains("application/")
-					&& !content_type.contains("ml")) {
+			result = "[Link Title] "
+					+ Jsoup.connect(newUri)
+							.header("User-Agent",
+									"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
+							.get().title().replaceAll("\\n", "")
+							.replaceAll("\\r", "")
+							.replaceAll("(\\s){2,}", " ");
+		}
+		catch (IOException e) {
+			logger.warn(e.getMessage(), e);
+			try {
 				result = "[Link Content-type] "
 						+ (new URL(newUri)).openConnection().getContentType();
-			} else {
-				result = "[Link Title] "
-						+ Jsoup.connect(newUri)
-								.header("User-Agent",
-										"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
-								.get().title().replaceAll("\\n", "")
-								.replaceAll("\\r", "")
-								.replaceAll("(\\s){2,}", " ");
-			}
-		}
-		catch (Exception e) {
-			logger.warn(e.getMessage(), e);
-			return null;
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				logger.warn(e1.getMessage(), e1);
+				result = null;
+			}			
 		}
 		
 		return result;
