@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.Connection.Response;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -62,33 +63,38 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 		return matcher.group(1);
 	}
 
-	private String getInfo(String newUri) {
-		
-		String result;		
-		Connection conn = Jsoup.connect(newUri);
-		
+	private String getInfo(String uri) {
+
+		String result;
+		Response resp = null;
+
 		try {
-			result = "[Link Title] "
-					+ 
-							conn.header("User-Agent",
-									"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
-							.get().title().replaceAll("\\n", "")
-							.replaceAll("\\r", "")
-							.replaceAll("(\\s){2,}", " ");
+			resp = Jsoup
+					.connect(uri)
+					.header("User-Agent",
+							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
+					.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
-		catch (IOException e) {
-			logger.warn(e.getMessage(), e);
+
+		try {
+
+			result = "[Link Title] "
+					+ resp.parse().title().replaceAll("\\n", "")
+							.replaceAll("\\r", "").replaceAll("(\\s){2,}", " ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			try {
-				result = "[Link Content-type] "
-						+ conn.execute().contentType();
-						
+				result = "[Link Content-type] " + resp.contentType();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				logger.warn(e1.getMessage(), e1);
+				e1.printStackTrace();
 				result = null;
-			}			
+			}
 		}
-		
+
 		return result;
 	}
 
