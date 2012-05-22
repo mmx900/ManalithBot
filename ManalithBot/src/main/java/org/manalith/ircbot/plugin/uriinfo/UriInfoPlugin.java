@@ -33,7 +33,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UriInfoPlugin extends AbstractBotPlugin {
+	
 	private Logger logger = Logger.getLogger(getClass());
+	private boolean enablePrintContentType;
 
 	public String getCommands() {
 		return null;
@@ -45,6 +47,16 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 	public String getHelp() {
 		return "대화 중 등장하는 URI의 타이틀을 표시합니다";
+	}
+	
+	public void setEnablePrintContentType ( boolean enable )
+	{
+		this.enablePrintContentType = enable;
+	}
+	
+	public boolean getEnablePrintContentType ( )
+	{
+		return this.enablePrintContentType;
 	}
 
 	private String findUri(String msg) {
@@ -83,10 +95,18 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 					+ resp.parse().title().replaceAll("\\n", "")
 							.replaceAll("\\r", "").replaceAll("(\\s){2,}", " ");
 		} catch (IOException e) {
-			try {
-				result = "[Link Content-type] " + resp.contentType();
-			} catch (Exception e1) {
-				logger.warn(e1.getMessage(),e1);
+			if ( this.getEnablePrintContentType() )
+			{
+				try {
+					result = "[Link Content-type] " + resp.contentType();
+				} catch (Exception e1) {
+					logger.warn(e1.getMessage(),e1);
+					result = null;
+				}
+			}
+			else
+			{
+				logger.warn(e.getMessage(), e);
 				result = null;
 			}
 		}
