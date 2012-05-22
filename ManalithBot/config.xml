@@ -44,6 +44,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<property name="password" value="CHANGE_ME" />
 	</bean>
 	-->
+
+	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
+		<property name="enablePrintContentType" value="true"/>
+	</bean>
 	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
