@@ -23,7 +23,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<!-- 릴레이 플러그인 설정 -->
 	<!--
-	<bean id="relayPluginConfigurationManager" class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
+	<bean id="relayPluginConfigurationManager"
+		class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
 		<property name="botLogin" value="LOGIN2" />
 		<property name="botName" value="NICK2" />
 		<property name="verbose" value="true" />
@@ -31,6 +32,14 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<property name="serverPort" value="6667" />
 		<property name="serverEncoding" value="CP949" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="outputFormat" value="&lt;%s&gt;  %s" />
+		<property name="ignorePattern" value="^&lt;\S+&gt;  " />
+	</bean>
+
+	<bean id="relayPlugin" class="org.manalith.ircbot.plugin.relay.RelayPlugin">
+		<constructor-arg>
+			<ref bean="relayPluginConfigurationManager" />
+		</constructor-arg>
 	</bean>
 	 -->
 	

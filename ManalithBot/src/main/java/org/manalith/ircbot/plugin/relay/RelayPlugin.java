@@ -2,8 +2,10 @@ package org.manalith.ircbot.plugin.relay;
 
 import java.util.StringTokenizer;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * 한 서버의 메시지를 다른 서버에 그대로 전달해주는 봇. 이 플러그인이 정상 작동하려면 isExecuted() 가 실행되지 않도록 반드시
@@ -12,12 +14,13 @@ import org.manalith.ircbot.resources.MessageEvent;
  * @author setzer
  * 
  */
+@Component
 public class RelayPlugin extends AbstractBotPlugin {
 	public static RelayBot RELAY_BOT;
 
-	public RelayPlugin() throws Exception {
-		RelayPluginConfigurationManager config = new RelayPluginConfigurationManager();
-		final RelayBot bot = new RelayBot(config.getBotName());
+	public RelayPlugin(RelayPluginConfigurationManager config) throws Exception {
+		final RelayBot bot = new RelayBot(config.getBotLogin(),
+				config.getBotName());
 		RELAY_BOT = bot;
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());
@@ -41,15 +44,21 @@ public class RelayPlugin extends AbstractBotPlugin {
 		return null;
 	}
 
+	@Override
+	public void setBot(ManalithBot bot) {
+		RELAY_BOT.setTargetbot(bot);
+		super.setBot(bot);
+	}
+
 	public void onMessage(MessageEvent event) {
 		String channel = event.getChannel().getName();
 
 		if (event.getMessage().equals("relay:stop")) {
 			setRelaying(false);
-			bot.sendLoggedMessage(channel, "릴레이를 강제로 종료합니다.");
+			event.getBot().sendLoggedMessage(channel, "릴레이를 강제로 종료합니다.");
 		} else if (event.getMessage().equals("relay:start")) {
 			setRelaying(true);
-			bot.sendLoggedMessage(channel, "릴레이를 강제로 시작합니다.");
+			event.getBot().sendLoggedMessage(channel, "릴레이를 강제로 시작합니다.");
 		}
 
 		if (isRelaying()) {
