@@ -12,6 +12,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
 		<!-- 봇 기본 설정 -->
+		<property name="botLogin" value="LOGIN" />
 		<property name="botName" value="NICK" />
 		<property name="verbose" value="true" />
 		<property name="server" value="SERVER" />
