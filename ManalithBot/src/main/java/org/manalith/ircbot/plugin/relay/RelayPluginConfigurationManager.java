@@ -1,12 +1,21 @@
 package org.manalith.ircbot.plugin.relay;
 
 public class RelayPluginConfigurationManager {
+	private String botLogin;
 	private String botName;
 	private boolean verbose;
 	private String server;
 	private int serverPort;
 	private String serverEncoding;
 	private String defaultChannels;
+
+	public String getBotLogin() {
+		return botLogin;
+	}
+
+	public void setBotLogin(String botLogin) {
+		this.botLogin = botLogin;
+	}
 
 	public String getBotName() {
 		return botName;
