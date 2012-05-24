@@ -16,19 +16,19 @@ public class Word {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	public Integer id;
+	private Integer id;
 
 	@Column(unique = false, nullable = false)
-	public String word;
+	private String word;
 
 	@Column(unique = false, nullable = false)
-	public String description;
+	private String description;
 
 	@Column(unique = false, nullable = false)
-	public Date date;
+	private Date date;
 
 	@Column(unique = false, nullable = false)
-	public String author;
+	private String author;
 
 	public String getAuthor() {
 		return author;
