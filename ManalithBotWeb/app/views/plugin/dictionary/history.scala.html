@@ -12,22 +12,53 @@
 			<a href="/word/@words.get(0).getWord()/history">@words.get(0).getWord() - 히스토리</a>
 		</li>
 	</ul>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>내용</th>
-				<th>날짜</th>
-				<th>저자</th>
-			</tr>
-		</thead>
-		<tbody>
-		@for(word<-words){
-			<tr>
-				<td><a href="/word/@word.getWord()">@word.getDescription()</a></td>
-				<td>@word.getDate()</td>
-				<td><a href="/words/list?author=@word.getAuthor()">@word.getAuthor()</a></td>
-			</tr>
-		}
-		</tbody>
-	</table>
+	<form id="diffForm" action="/word/@words.get(0).getWord()/diff" method="get">
+		<input type="hidden" name="rev1" />
+		<input type="hidden" name="rev2" />
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>내용</th>
+					<th>날짜</th>
+					<th>저자</th>
+				</tr>
+			</thead>
+			<tbody>
+			@for(word<-words){
+				<tr>
+					<td>
+						<input type="checkbox" name="revision" value="@word.getId()" />
+						@word.getId()
+					</td>
+					<td><a href="/word/@word.getWord()">@word.getDescription()</a></td>
+					<td>@word.getDate()</td>
+					<td><a href="/words/list?author=@word.getAuthor()">@word.getAuthor()</a></td>
+				</tr>
+			}
+			</tbody>
+		</table>
+		<div id="alertBox" class="alert alert-error" style="display:none;">
+		</div>
+		<button type="submit" name="diff">비교</button>
+	</form>
+	<script type="text/javascript">
+	$(function() {
+		$('button[name="diff"]').click(function() {
+			var revisions = new Array();
+			$('input[name="revision"]').each(function(index, value){
+				if(value.checked)
+					revisions.push(value);
+			});
+			
+			if(revisions.length != 2){
+				$('#alertBox').html("비교하기 위해서는 2개를 선택해야 합니다.").show();
+				return false;
+			}else{
+				$('input[name="rev1"]').val(revisions[0].value);
+				$('input[name="rev2"]').val(revisions[1].value);
+			}
+		});
+	});
+	</script>
 }
