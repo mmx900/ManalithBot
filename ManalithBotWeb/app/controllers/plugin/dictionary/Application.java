@@ -45,7 +45,7 @@ public class Application extends Controller {
 	@Transactional(readOnly = true)
 	public static Result show(String word) {
 		Query query = JPA.em().createQuery(
-				"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.date DESC");
+				"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC");
 		query.setParameter("word", word);
 		Word w = (Word) query.setMaxResults(1).getSingleResult();
 
@@ -57,7 +57,7 @@ public class Application extends Controller {
 		List<Word> words = JPA
 				.em()
 				.createQuery(
-						"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.date DESC")
+						"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC")
 				.setParameter("word", word).getResultList();
 		return ok(history.render(words));
 	}
@@ -67,7 +67,7 @@ public class Application extends Controller {
 		List<Word> words = JPA
 				.em()
 				.createQuery(
-						"SELECT w FROM Word w WHERE w.word=:word AND (w.id=:revision1 OR w.id=:revision2) ORDER BY w.date DESC")
+						"SELECT w FROM Word w WHERE w.word=:word AND (w.id=:revision1 OR w.id=:revision2) ORDER BY w.id DESC")
 				.setParameter("word", word)
 				.setParameter("revision1", revision1)
 				.setParameter("revision2", revision2).getResultList();
@@ -76,13 +76,13 @@ public class Application extends Controller {
 		// if (words.size() != 2)
 		// return error()
 
-		Word word1 = words.get(0);
-		Word word2 = words.get(1);
+		Word newWord = words.get(0);
+		Word oldWord = words.get(1);
 
 		diff_match_patch dmp = new diff_match_patch();
 
-		LinkedList<Diff> diffs = dmp.diff_main(word1.getDescription(),
-				word2.getDescription());
+		LinkedList<Diff> diffs = dmp.diff_main(oldWord.getDescription(),
+				newWord.getDescription());
 
 		return ok(diff.render(words, diffs));
 	}
