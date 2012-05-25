@@ -60,6 +60,7 @@ public class BotMain {
 
 		// 봇 구동
 		final ManalithBot bot = context.getBean(ManalithBot.class);
+		bot.setLogin(config.getBotLogin());
 		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());
 		bot.setEncoding(config.getServerEncoding());

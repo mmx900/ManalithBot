@@ -4,8 +4,11 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-GET     /words/list                 controllers.plugin.dictionary.Application.list()
-GET     /words/view/:word           controllers.plugin.dictionary.Application.view(word:String)
+GET     /words/list                 controllers.plugin.dictionary.Application.list(author:String?=null)
+GET     /word/:word                 controllers.plugin.dictionary.Application.show(word:String)
+GET     /word/:word/history         controllers.plugin.dictionary.Application.history(word:String)
+GET     /word/:word/diff            controllers.plugin.dictionary.Application.diff(word:String, rev1:Long, rev2:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+

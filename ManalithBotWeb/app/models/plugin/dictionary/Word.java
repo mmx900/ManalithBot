@@ -16,19 +16,19 @@ public class Word {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	public Integer id;
+	private Long id;
 
 	@Column(unique = false, nullable = false)
-	public String word;
+	private String word;
 
 	@Column(unique = false, nullable = false)
-	public String description;
+	private String description;
 
 	@Column(unique = false, nullable = false)
-	public Date date;
+	private Date date;
 
 	@Column(unique = false, nullable = false)
-	public String author;
+	private String author;
 
 	public String getAuthor() {
 		return author;
@@ -42,7 +42,7 @@ public class Word {
 		return description;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -62,7 +62,7 @@ public class Word {
 		this.description = description;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

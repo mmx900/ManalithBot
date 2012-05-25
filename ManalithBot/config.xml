@@ -12,6 +12,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
 		<!-- 봇 기본 설정 -->
+		<property name="botLogin" value="LOGIN" />
 		<property name="botName" value="NICK" />
 		<property name="verbose" value="true" />
 		<property name="server" value="SERVER" />
@@ -20,27 +21,38 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
 	</bean>
 	
-	<bean id="relayPluginConfigurationManager" class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
-		<!-- 릴레이 플러그인 설정 -->
+	<!-- 릴레이 플러그인 설정 -->
+	<!--
+	<bean id="relayPluginConfigurationManager"
+		class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
+		<property name="botLogin" value="LOGIN2" />
 		<property name="botName" value="NICK2" />
 		<property name="verbose" value="true" />
 		<property name="server" value="SERVER2" />
 		<property name="serverPort" value="6667" />
 		<property name="serverEncoding" value="CP949" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="outputFormat" value="&lt;%s&gt;  %s" />
+		<property name="ignorePattern" value="^&lt;\S+&gt;  " />
 	</bean>
+
+	<bean id="relayPlugin" class="org.manalith.ircbot.plugin.relay.RelayPlugin">
+		<constructor-arg>
+			<ref bean="relayPluginConfigurationManager" />
+		</constructor-arg>
+	</bean>
+	 -->
 	
+	<!-- 구글 플러그인 설정 -->
 	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
-		<!-- 구글 플러그인 설정 -->
 		<property name="apiKey" value="ABCDEFG" />
 		<property name="apiReferer" value="http://org" />
 	</bean>
 	
+	<!-- 관리자 플러그인 설정 -->
+	<!-- 주의 : 비밀번호를 반드시 변경해주세요. 변경하지 않으면 실행되지 않습니다. -->
 	<!--
 	<bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin">
-		<!-- 관리자 플러그인 설정 -->
-		<!-- 주의 : 비밀번호를 반드시 변경해주세요. 변경하지 않으면 실행되지 않습니다. -->
-		<!-- 
 		<property name="password" value="CHANGE_ME" />
 	</bean>
 	-->
@@ -53,6 +65,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<constructor-arg>
 			<list>
 				<!-- 사용할 플러그인 목록 -->
+				<!-- <ref bean="relayPlugin" /> -->
 				<!-- <ref bean="adminPlugin" />  -->
 				<ref bean="twitReaderPlugin" />
 				<ref bean="linuxPackageFinderPlugin" />

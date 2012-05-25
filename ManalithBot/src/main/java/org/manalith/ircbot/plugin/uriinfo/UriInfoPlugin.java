@@ -19,21 +19,22 @@
  */
 package org.manalith.ircbot.plugin.uriinfo;
 
-
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
+import org.jsoup.nodes.Document;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UriInfoPlugin extends AbstractBotPlugin {
-	
+
 	private Logger logger = Logger.getLogger(getClass());
 	private boolean enablePrintContentType;
 
@@ -48,15 +49,13 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	public String getHelp() {
 		return "대화 중 등장하는 URI의 타이틀을 표시합니다";
 	}
-	
-	public void setEnablePrintContentType ( boolean enable )
-	{
-		this.enablePrintContentType = enable;
+
+	public void setEnablePrintContentType(boolean enablePrintContentType) {
+		this.enablePrintContentType = enablePrintContentType;
 	}
-	
-	public boolean getEnablePrintContentType ( )
-	{
-		return this.enablePrintContentType;
+
+	public boolean enablePrintContentType() {
+		return enablePrintContentType;
 	}
 
 	private String findUri(String msg) {
@@ -74,41 +73,32 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	}
 
 	private String getInfo(String uri) {
-
-		String result;
-		Response resp = null;
+		String result = null;
 
 		try {
-			resp = Jsoup
+			Response response = Jsoup
 					.connect(uri)
-					.header("User-Agent",
+					.header("User-Agent", // 일부 사이트에서는 User Agent가 있어야 접근을 허용
 							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
 					.execute();
-		} catch (IOException e) {
-			logger.warn(e.getMessage(), e);
-			return null;
-		}
 
-		try {
+			if (StringUtils.equals(response.contentType(), "text/html")) {
+				Document document = response.parse();
 
-			result = "[Link Title] "
-					+ resp.parse().title().replaceAll("\\n", "")
-							.replaceAll("\\r", "").replaceAll("(\\s){2,}", " ");
-		} catch (IOException e) {
-			if ( this.getEnablePrintContentType() )
-			{
-				try {
-					result = "[Link Content-type] " + resp.contentType();
-				} catch (Exception e1) {
-					logger.warn(e1.getMessage(),e1);
-					result = null;
+				String title = document.title();
+
+				if (StringUtils.isNotBlank(title)) {
+					result = "[Link Title] "
+							+ title.replaceAll("\\n", "").replaceAll("\\r", "")
+									.replaceAll("(\\s){2,}", " ");
+				}
+			} else {
+				if (enablePrintContentType) {
+					result = "[Link Content-type] " + response.contentType();
 				}
 			}
-			else
-			{
-				logger.warn(e.getMessage(), e);
-				result = null;
-			}
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
 		}
 
 		return result;

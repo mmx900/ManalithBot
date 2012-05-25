@@ -1,10 +1,15 @@
 @(words: List[String])
 
 @main("ManalithBot") {
+	<ul class="nav nav-tabs">
+   		<li class="active">
+   			<a href="/words/list">목록</a>
+   		</li>
+	</ul>
     
     @for(word<-words){
     	<ul>
-    		<li><a href="/words/view/@word">@word</a></li>
+    		<li><a href="/word/@word">@word</a></li>
     	</ul>
     }
     

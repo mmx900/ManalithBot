@@ -1,0 +1,20 @@
+@(word: models.plugin.dictionary.Word)
+
+@main("ManalithBot") {
+	<ul class="nav nav-tabs">
+   		<li>
+   			<a href="/words/list">목록</a>
+   		</li>
+		<li class="active">
+			<a href="/word/@word.getWord()">@word.getWord()</a>
+		</li>
+		<li>
+			<a href="/word/@word.getWord()/history">@word.getWord() - 히스토리</a>
+		</li>
+	</ul>
+   	<h1>@word.getWord()</h1>
+    @word.getDescription()<br />
+    @word.getDate()<br />
+    - <a href="/words/list?author=@word.getAuthor()">@word.getAuthor()</a>
+    
+}

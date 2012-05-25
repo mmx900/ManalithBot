@@ -25,6 +25,7 @@ import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
+	@Deprecated
 	protected ManalithBot bot;
 
 	public AbstractBotPlugin() {

@@ -1,0 +1,64 @@
+@(
+	words: List[models.plugin.dictionary.Word],
+	diffs: LinkedList[name.fraser.neil.plaintext.diff_match_patch.Diff]
+)
+@import name.fraser.neil.plaintext.diff_match_patch.Diff
+@import name.fraser.neil.plaintext.diff_match_patch.Operation
+
+@main("ManalithBot") {
+	<ul class="nav nav-tabs">
+   		<li>
+   			<a href="/words/list">목록</a>
+   		</li>
+		<li>
+			<a href="/word/@words.get(0).getWord()">@words.get(0).getWord()</a>
+		</li>
+		<li class="active">
+			<a href="/word/@words.get(0).getWord()/history">@words.get(0).getWord() - 히스토리</a>
+		</li>
+	</ul>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>내용</th>
+				<th>날짜</th>
+				<th>저자</th>
+			</tr>
+		</thead>
+		<tbody>
+		@for(word<-words){
+			<tr>
+				<td>@word.getId()</td>
+				<td><a href="/word/@word.getWord()">@word.getDescription()</a></td>
+				<td>@word.getDate()</td>
+				<td><a href="/words/list?author=@word.getAuthor()">@word.getAuthor()</a></td>
+			</tr>
+		}
+		</tbody>
+	</table>
+	<style>
+		.inserted{
+			background-color: #DFF0D8;
+			color: #468847;
+		}
+		.deleted{
+			text-decoration: line-through;
+			background-color: #F2DEDE;
+			color: #B94A48;
+		}
+		.equal{
+		}
+	</style>
+	@for(diff<-diffs){
+		@if(diff.operation == Operation.INSERT){
+			<span class="inserted">@diff.text</span>
+		}
+		@if(diff.operation == Operation.DELETE){
+			<span class="deleted">@diff.text</span>
+		}
+		@if(diff.operation == Operation.EQUAL){
+			<span class="equal">@diff.text</span>
+		}
+	}
+}
