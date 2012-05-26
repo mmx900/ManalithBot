@@ -82,7 +82,8 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
 					.execute();
 
-			if (StringUtils.equals(response.contentType(), "text/html")) {
+			if (StringUtils.contains(response.contentType(), "text/html")
+					|| StringUtils.contains(response.contentType(), "text/xml")) {
 				Document document = response.parse();
 
 				String title = document.title();
