@@ -78,6 +78,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
 				<ref bean="helloPlugin" />
+				<ref bean="feedReaderPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
