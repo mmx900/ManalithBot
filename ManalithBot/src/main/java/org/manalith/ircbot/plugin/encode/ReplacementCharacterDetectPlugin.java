@@ -26,11 +26,8 @@ public class ReplacementCharacterDetectPlugin extends AbstractBotPlugin {
 	@Override
 	public void onMessage(MessageEvent event) {
 		if (event.getMessage().startsWith("\uFFFD")) {
-			event.getBot().sendLoggedMessage(
-					event.getChannel().getName(),
-					event.getUser().getNick()
-							+ ", You need to configure your client to UTF-8.");
+			event.respond(event.getUser().getNick()
+					+ ", You need to configure your client to UTF-8.");
 		}
 	}
-
 }

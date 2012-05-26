@@ -23,46 +23,41 @@ package org.manalith.ircbot.resources;
 import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class MessageEvent {
-	private final ManalithBot bot;
-	private final Channel channel;
-	private final User user;
+	private final GenericMessageEvent<ManalithBot> event;
 
-	private String message;
 	private boolean executed; // 실행 완료 여부
 
 	public MessageEvent(
 			org.pircbotx.hooks.events.PrivateMessageEvent<ManalithBot> event) {
-		this.bot = event.getBot();
-		this.user = event.getUser();
-		this.channel = null;
-		this.message = event.getMessage();
-
+		this.event = event;
 	}
 
 	public MessageEvent(
 			org.pircbotx.hooks.events.MessageEvent<ManalithBot> event) {
-		this.bot = event.getBot();
-		this.user = event.getUser();
-		this.channel = event.getChannel();
-		this.message = event.getMessage();
+		this.event = event;
 	}
 
 	public ManalithBot getBot() {
-		return bot;
+		return event.getBot();
 	}
 
 	public Channel getChannel() {
-		return channel;
+		if (event instanceof org.pircbotx.hooks.events.MessageEvent)
+			return ((org.pircbotx.hooks.events.MessageEvent<ManalithBot>) event)
+					.getChannel();
+		else
+			return null;
 	}
 
 	public String getMessage() {
-		return message;
+		return event.getMessage();
 	}
 
 	public User getUser() {
-		return user;
+		return event.getUser();
 	}
 
 	public boolean isExecuted() {
@@ -73,7 +68,21 @@ public class MessageEvent {
 		this.executed = executed;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	/**
+	 * 이벤트의 형식에 따라 발신 채널(OnMessage) 혹은 개인(OnPrivateMessage)에게 응답을 보낸다.
+	 * 
+	 * @param response
+	 *            응답 메시지
+	 */
+	public void respond(String response) {
+		if (event instanceof org.pircbotx.hooks.events.MessageEvent) {
+			event.getBot()
+					.sendLoggedMessage(
+							((org.pircbotx.hooks.events.MessageEvent<ManalithBot>) event)
+									.getChannel().getName(), response);
+		} else {
+			event.getBot().sendLoggedMessage(event.getUser().getNick(),
+					response);
+		}
 	}
 }

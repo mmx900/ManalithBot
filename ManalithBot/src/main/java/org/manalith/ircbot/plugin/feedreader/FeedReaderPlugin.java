@@ -44,8 +44,7 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 		if (segments[0].equalsIgnoreCase("!feed")) {
 
 			if (segments.length != 2) {
-				event.getBot().sendLoggedMessage(event.getChannel().getName(),
-						getCommands());
+				event.respond(getCommands());
 			} else {
 				try {
 					URL feedUrl = new URL(segments[1]);
@@ -55,22 +54,16 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 					List<SyndEntry> feedEntries = feed.getEntries();
 
 					if (feedEntries.size() == 0) {
-						event.getBot().sendLoggedMessage(
-								event.getChannel().getName(),
-								segments[1] + "에 컨텐츠가 없습니다.");
+						event.respond(segments[1] + "에 컨텐츠가 없습니다.");
 
 					} else {
 						SyndEntry entry = feedEntries.get(0);
-						event.getBot().sendLoggedMessage(
-								event.getChannel().getName(),
-								entry.getTitle() + " / " + entry.getUri() + "("
-										+ entry.getPublishedDate() + ")");
+						event.respond(entry.getTitle() + " / " + entry.getUri()
+								+ "(" + entry.getPublishedDate() + ")");
 					}
 
 				} catch (MalformedURLException e) {
-					event.getBot().sendLoggedMessage(
-							event.getChannel().getName(),
-							segments[1] + "은 지원하지 않는 URL입니다.");
+					event.respond(segments[1] + "은 지원하지 않는 URL입니다.");
 
 					logger.warn(e.getMessage(), e);
 				} catch (IllegalArgumentException e) {

@@ -123,7 +123,6 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		String channel = event.getChannel().getName();
 
 		String uri = findUri(message);
 		if (uri == null)
@@ -131,7 +130,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 		String info = getInfo(uri);
 		if (info != null) {
-			event.getBot().sendLoggedMessage(channel, info);
+			event.respond(info);
 		}
 
 		// This plugin runs implicitly; it does NOT need to call
