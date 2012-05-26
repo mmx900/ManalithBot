@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
@@ -38,16 +37,20 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private boolean enablePrintContentType;
 
+	private static final String USER_AGENT =
+		"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) " +
+		"Gecko/20100101 Firefox/12.0";
+
 	public String getCommands() {
 		return null;
 	}
 
 	public String getName() {
-		return "URI 타이틀";
+		return "URI 정보";
 	}
 
 	public String getHelp() {
-		return "대화 중 등장하는 URI의 타이틀을 표시합니다";
+		return "대화 중 등장하는 URI의 정보를 표시합니다";
 	}
 
 	public void setEnablePrintContentType(boolean enablePrintContentType) {
@@ -74,32 +77,45 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 	private String getInfo(String uri) {
 		String result = null;
+		Response response;
 
 		try {
-			Response response = Jsoup
+			// 일부 사이트에서는 User Agent가 있어야 접근을 허용
+			response = Jsoup
 					.connect(uri)
-					.header("User-Agent", // 일부 사이트에서는 User Agent가 있어야 접근을 허용
-							"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0")
+					.header("User-Agent", USER_AGENT)
 					.execute();
-
-			if (StringUtils.contains(response.contentType(), "text/html")
-					|| StringUtils.contains(response.contentType(), "text/xml")) {
-				Document document = response.parse();
-
-				String title = document.title();
-
-				if (StringUtils.isNotBlank(title)) {
-					result = "[Link Title] "
-							+ title.replaceAll("\\n", "").replaceAll("\\r", "")
-									.replaceAll("(\\s){2,}", " ");
-				}
-			} else {
-				if (enablePrintContentType) {
-					result = "[Link Content-type] " + response.contentType();
-				}
-			}
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
+			return null;
+		}
+
+		String contentType = response.contentType();
+
+		if (contentType.startsWith("text/html") ||
+			contentType.startsWith("text/xml")) {
+			// 일단 title이 나오는지 시도해 본다.
+			try {
+				Document document = response.parse();
+				String title = document.title();
+
+				if (title == null || title.matches("\\s*"))
+					throw new IOException();
+
+				title = title.trim()
+						.replaceAll("(\\s){1,}", " ");
+				result = "[링크 제목] " + title;
+			} catch (IOException e) {
+				// parse 오류 또는 빈 title -- HTML의
+				// 경우는 빈 제목이라도 표시하고 아니면
+				// content type 표시로 패스
+				if (contentType.startsWith("text/html"))
+					result = "[링크 제목]";
+			}
+		}
+
+		if (result == null && enablePrintContentType) {
+			result = "[링크 형식] " + contentType;
 		}
 
 		return result;
@@ -115,7 +131,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 		String info = getInfo(uri);
 		if (info != null) {
-			bot.sendLoggedMessage(channel, info);
+			event.getBot().sendLoggedMessage(channel, info);
 		}
 
 		// This plugin runs implicitly; it does NOT need to call
