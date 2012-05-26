@@ -18,7 +18,15 @@ import org.springframework.stereotype.Component;
 public class RelayPlugin extends AbstractBotPlugin {
 	public static RelayBot RELAY_BOT;
 
-	public RelayPlugin(RelayPluginConfigurationManager config) throws Exception {
+	public RelayPlugin(boolean enableRelay,
+			RelayPluginConfigurationManager config) throws Exception {
+		// TODO enableRelay 인자를 받지 않고도 플러그인 초기화를 막을 수 있도록 구조 개선
+		if (enableRelay) {
+			init(config);
+		}
+	}
+
+	private void init(RelayPluginConfigurationManager config) throws Exception {
 		final RelayBot bot = new RelayBot(config.getBotLogin(),
 				config.getBotName());
 		RELAY_BOT = bot;

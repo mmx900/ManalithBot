@@ -22,7 +22,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	</bean>
 	
 	<!-- 릴레이 플러그인 설정 -->
-	<!--
 	<bean id="relayPluginConfigurationManager"
 		class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
 		<property name="botLogin" value="LOGIN2" />
@@ -37,11 +36,11 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	</bean>
 
 	<bean id="relayPlugin" class="org.manalith.ircbot.plugin.relay.RelayPlugin">
+		<constructor-arg value="false" />
 		<constructor-arg>
 			<ref bean="relayPluginConfigurationManager" />
 		</constructor-arg>
 	</bean>
-	 -->
 	
 	<!-- 구글 플러그인 설정 -->
 	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
