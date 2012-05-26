@@ -43,11 +43,11 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	}
 
 	public String getName() {
-		return "URI 타이틀";
+		return "URI 정보";
 	}
 
 	public String getHelp() {
-		return "대화 중 등장하는 URI의 타이틀을 표시합니다";
+		return "대화 중 등장하는 URI의 정보를 표시합니다";
 	}
 
 	public void setEnablePrintContentType(boolean enablePrintContentType) {
