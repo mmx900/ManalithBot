@@ -60,6 +60,22 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<property name="enablePrintContentType" value="true"/>
 	</bean>
 	
+	<bean id="urlShortenerPlugin" class="org.manalith.ircbot.plugin.urlshortener.UrlShortenerPlugin">
+		<property name="provider">
+			<!-- <ref bean="bitLyProvider" /> -->
+			<ref bean="gooGlProvider" />
+		</property>
+	</bean>
+	
+	<bean id="bitLyProvider" class="org.manalith.ircbot.plugin.urlshortener.BitLyProvider">
+		<property name="apiLogin" value="YOUR_BITLY_API_LOGIN" />
+		<property name="apiKey" value="YOUR_BITLY_API_KEY" />
+	</bean>
+	
+	<bean id="gooGlProvider" class="org.manalith.ircbot.plugin.urlshortener.GooGlProvider">
+		<property name="apiKey" value="YOUR_GOOGLE_API_KEY" />
+	</bean>
+	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
 			<list>
@@ -79,6 +95,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="googlePlugin" />
 				<ref bean="helloPlugin" />
 				<ref bean="feedReaderPlugin" />
+				<ref bean="urlShortenerPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
