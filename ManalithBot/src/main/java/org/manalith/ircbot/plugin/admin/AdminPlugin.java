@@ -30,10 +30,12 @@ public class AdminPlugin extends AbstractBotPlugin {
 		this.password = password;
 	}
 
+	@Override
 	public String getName() {
 		return "AUTH";
 	}
 
+	@Override
 	public String getCommands() {
 		return null;
 	}
