@@ -12,13 +12,13 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
 		<!-- 봇 기본 설정 -->
-		<property name="botLogin" value="LOGIN" />
-		<property name="botName" value="NICK" />
+		<property name="botLogin" value="BABOBOT" />
+		<property name="botName" value="바보봇" />
 		<property name="verbose" value="true" />
-		<property name="server" value="SERVER" />
-		<property name="serverPort" value="8080" />
+		<property name="server" value="irc.ozinger.org" />
+		<property name="serverPort" value="6666" />
 		<property name="serverEncoding" value="UTF-8" />
-		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="defaultChannels" value="#setzer" />
 	</bean>
 	
 	<!-- 릴레이 플러그인 설정 -->
@@ -59,6 +59,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
 		<property name="enablePrintContentType" value="true"/>
 	</bean>
+	<bean id="typeConvPlugin" class="org.manalith.ircbot.plugin.typeconv.TypeConvPlugin">
+		<property name="enableParsingExceptionSyntax" value="true"/>
+	</bean>
 	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
@@ -78,7 +81,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
 				<ref bean="helloPlugin" />
-				<ref bean="feedReaderPlugin" />
+				<!-- <ref bean="feedReaderPlugin" /> -->
+				<ref bean="typeConvPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
