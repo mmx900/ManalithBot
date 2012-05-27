@@ -48,7 +48,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
 	 */
 	public String getName() {
-		return "영타 변환기(2벌)|한타 변환기(쿼티)";
+		return "타자 변환기(2벌,쿼티)";
 		// return null;
 	}
 	
@@ -59,7 +59,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	 */
 	
 	public String getCommands() {
-		return "!jq2k|!j2kq";
+		return "!q2|!2q";
 	}
 	
 	/*
@@ -68,7 +68,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		return "!jq2k 한글로 변환할 영문메시지,  \\변환하지 않을 영문 메시지\\ (백슬래시를 표시하려면 \\\\로 입력) | !j2kq 영문자로 변환할 한글메시지";
+		return "!q2 영문->한글, \\변환하지 않을 영문 메시지\\ (백슬래시를 표시하려면 \\\\로 입력) | !2q 한글->영문";
 	}
 	
 	/*
