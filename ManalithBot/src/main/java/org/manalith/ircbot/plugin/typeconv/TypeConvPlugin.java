@@ -96,7 +96,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 		
 		String cmd = msg.split("\\s")[0];
 		
-		if (cmd.equals("!jq2k")) {
+		if (cmd.equals("!q2")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
 			try
 			{
@@ -109,7 +109,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 				logger.warn(e.getMessage(), e);
 			}
 		}
-		else if (cmd.equals("!j2kq"))
+		else if (cmd.equals("!2q"))
 		{
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
 			try
