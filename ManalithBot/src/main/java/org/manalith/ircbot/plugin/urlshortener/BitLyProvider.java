@@ -7,12 +7,14 @@ import java.io.Reader;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
 @Component
 public class BitLyProvider implements UrlShortenerProvider {
+	private Logger logger = Logger.getLogger(getClass());
 	private String apiLogin;
 	private String apiKey;
 
@@ -29,8 +31,7 @@ public class BitLyProvider implements UrlShortenerProvider {
 
 			return data.getData().getUrl();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 
 		return null;

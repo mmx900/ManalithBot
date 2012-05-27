@@ -9,12 +9,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
 @Component
 public class GooGlProvider implements UrlShortenerProvider {
+	private Logger logger = Logger.getLogger(getClass());
 	private String apiKey;
 
 	@Override
@@ -43,8 +45,7 @@ public class GooGlProvider implements UrlShortenerProvider {
 
 			return data.getId();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return null;
