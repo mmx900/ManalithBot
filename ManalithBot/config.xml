@@ -97,14 +97,11 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
 				<ref bean="helloPlugin" />
-<<<<<<< HEAD
 				<!-- <ref bean="feedReaderPlugin" /> -->
 				<ref bean="typeConvPlugin" />
-=======
 				<ref bean="feedReaderPlugin" />
 				<ref bean="urlShortenerPlugin" />
 				<ref bean="timestampPlugin" />
->>>>>>> 4ce252e7226604a4bb7521bcd77b0586cb984075
 			</list>
 		</constructor-arg>
 	</bean>
