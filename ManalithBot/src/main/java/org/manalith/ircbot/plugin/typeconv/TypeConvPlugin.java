@@ -59,7 +59,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	 */
 	
 	public String getCommands() {
-		return "!q2|!2q";
+		return "!c2|!2c";
 	}
 	
 	/*
@@ -68,7 +68,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		return "!q2 영문->한글, \\변환하지 않을 영문 메시지\\ (백슬래시를 표시하려면 \\\\로 입력) | !2q 한글->영문";
+		return "!c2 영문->한글, \\변환하지 않을 영문 메시지\\ (백슬래시를 표시하려면 \\\\로 입력) | !2c 한글->영문";
 	}
 	
 	/*
@@ -96,7 +96,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 		
 		String cmd = msg.split("\\s")[0];
 		
-		if (cmd.equals("!q2")) {
+		if (cmd.equals("!c2")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
 			try
 			{
@@ -109,7 +109,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 				logger.warn(e.getMessage(), e);
 			}
 		}
-		else if (cmd.equals("!2q"))
+		else if (cmd.equals("!2c"))
 		{
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
 			try
