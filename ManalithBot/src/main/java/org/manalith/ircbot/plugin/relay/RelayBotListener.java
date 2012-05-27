@@ -20,7 +20,7 @@ public class RelayBotListener extends ListenerAdapter<ManalithBot> {
 	}
 
 	@Override
-	public void onMessage(MessageEvent<ManalithBot> event) throws Exception {
+	public void onMessage(MessageEvent<ManalithBot> event) {
 		String channel = event.getChannel().getName();
 		String message = event.getMessage();
 
