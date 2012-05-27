@@ -96,6 +96,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="helloPlugin" />
 				<ref bean="feedReaderPlugin" />
 				<ref bean="urlShortenerPlugin" />
+				<ref bean="timestampPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
