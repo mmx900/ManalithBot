@@ -1,4 +1,5 @@
 package org.manalith.ircbot.plugin.typeconv;
+
 /*
  org.manalith.ircbot.plugin.typeconv/DobeolAutomataEngine.java
  ManalithBot - An open source IRC bot based on the PircBot Framework.
@@ -18,23 +19,23 @@ package org.manalith.ircbot.plugin.typeconv;
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.typeconv.exceptions.BackSlashesDoNotMatchException;
 
 public class DobeolAutomataEngine {
-	
+
 	private boolean enableParseExceptionSyntax;
-	
-	public DobeolAutomataEngine() 
-	{
+
+	public DobeolAutomataEngine() {
 		;
 	}
-	
-	public void setEnableParsingExceptionSyntax ( boolean enable )
-	{
+
+	public void setEnableParsingExceptionSyntax(boolean enable) {
 		this.enableParseExceptionSyntax = enable;
 	}
-	public boolean isEnableParsingExceptionSyntax ()
-	{
+
+	public boolean isEnableParsingExceptionSyntax() {
 		return this.enableParseExceptionSyntax;
 	}
 
@@ -81,35 +82,19 @@ public class DobeolAutomataEngine {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private String getBinaryString(int data) {
-		String result = "";
-
-		while (data != 1 && data != 0) {
-			result = Integer.toString(data % 2) + result;
-
-			data /= 2;
-		}
-
-		if (data % 2 != 0)
-			result = Integer.toString(data % 2) + result;
-
-		return result;
-
-	}
-	
-	public String parseKoreanStringToEngSpell(String korean) throws BackSlashesDoNotMatchException {
+	public String parseKoreanStringToEngSpell(String korean)
+			throws BackSlashesDoNotMatchException {
 		String result = "";
 
 		for (int i = 0; i < korean.length(); i++) {
 			char ch = korean.charAt(i);
-			
+
 			// System.out.println(charVal);
 
 			if (ch >= '가' && ch <= '힣') {
 				byte[] bytes = Character.toString(ch).getBytes();
-				int charVal = ((bytes[0] & 0x0f) << 12) | ((bytes[1] & 0x3f) << 6)
-						| (bytes[2] & 0x3f);
+				int charVal = ((bytes[0] & 0x0f) << 12)
+						| ((bytes[1] & 0x3f) << 6) | (bytes[2] & 0x3f);
 				charVal -= 0xAC00;
 				int initialConsonant = charVal / (21 * 28);
 				charVal %= (21 * 28);
@@ -125,8 +110,8 @@ public class DobeolAutomataEngine {
 					result += DobeolSymbol.DobeolFConsonant.values()[finalConsonant];
 			} else if (ch >= 'ㄱ' && ch <= 'ㅣ') {
 				byte[] bytes = Character.toString(ch).getBytes();
-				int charVal = ((bytes[0] & 0x0f) << 12) | ((bytes[1] & 0x3f) << 6)
-						| (bytes[2] & 0x3f);
+				int charVal = ((bytes[0] & 0x0f) << 12)
+						| ((bytes[1] & 0x3f) << 6) | (bytes[2] & 0x3f);
 				charVal -= 0x3130;
 				result += DobeolSymbol.DobeolSingleLetter.values()[charVal - 1];
 			} else {
@@ -138,7 +123,8 @@ public class DobeolAutomataEngine {
 		return result;
 	}
 
-	public String parseKeySequenceToKorean(String keySequence) throws BackSlashesDoNotMatchException {
+	public String parseKeySequenceToKorean(String keySequence)
+			throws BackSlashesDoNotMatchException {
 		String result = "";
 
 		State stateFlag = State.Null;
@@ -156,8 +142,9 @@ public class DobeolAutomataEngine {
 		DobeolSymbol.DobeolIConsonant init = DobeolSymbol.DobeolIConsonant.nul;
 		DobeolSymbol.DobeolVowel vow = DobeolSymbol.DobeolVowel.nul;
 		DobeolSymbol.DobeolFConsonant fin = DobeolSymbol.DobeolFConsonant.nul;
-		
-		if ( this.isEnableParsingExceptionSyntax() && countSpecifiedChar(keySequence,'\\') % 2 == 1 )
+
+		if (this.isEnableParsingExceptionSyntax()
+				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
 			throw new BackSlashesDoNotMatchException();
 
 		for (int i = 0; i < keySequence.length(); i++) {
@@ -165,45 +152,31 @@ public class DobeolAutomataEngine {
 				stateFlag = State.IConsonant;
 			}
 
-			if (!isAlphabet(keySequence.charAt(i))) {
-				if ( keySequence.charAt(i) == '\\' && this.isEnableParsingExceptionSyntax() )
-				{
+			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
+				if (keySequence.charAt(i) == '\\'
+						&& this.isEnableParsingExceptionSyntax()) {
 					i++;
-					while ( true )
-					{
-						if ( i + 1 <= keySequence.length() - 1 )
-						{
-							if ( keySequence.charAt(i) == '\\' )
-							{
-								if ( keySequence.charAt(i + 1) == '\\' )
-								{
+					while (true) {
+						if (i + 1 <= keySequence.length() - 1) {
+							if (keySequence.charAt(i) == '\\') {
+								if (keySequence.charAt(i + 1) == '\\') {
 									i++;
 									result += '\\';
-								}
-								else 
+								} else
 									break;
-							}
-							else
-							{
+							} else {
 								result += keySequence.charAt(i);
 							}
-						}
-						else
-						{
-							if ( keySequence.charAt(i) == '\\' )
-							{
+						} else {
+							if (keySequence.charAt(i) == '\\') {
 								break;
-							}
-							else
-							{
+							} else {
 								result += keySequence.charAt(i);
 							}
 						}
 						i++;
 					}
-				}
-				else
-				{
+				} else {
 					result += keySequence.charAt(i);
 				}
 				continue;
@@ -211,16 +184,16 @@ public class DobeolAutomataEngine {
 			// 초성 (자음, 쌍자음)
 			if (stateFlag.equals(State.IConsonant)) {
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tICon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? 
-						Character.toString(keySequence.charAt(i)) : 
-						Character.toString(keySequence.charAt(i)).toLowerCase();
-				// 다음 키 시퀀스랑 조합 분석하기 위한 할당 
+				tICon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
+				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
 					// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
 					tIConLookahead = this.hasTwoSymbolinOneKey(keySequence
-							.charAt(i + 1)) ?
-						Character.toString(keySequence.charAt(i + 1)) : 
-						Character.toString(keySequence.charAt(i + 1)).toLowerCase(); 
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tIConLookaheadCombination = tICon + tIConLookahead;
 				}
 
@@ -229,37 +202,38 @@ public class DobeolAutomataEngine {
 
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
-						String lookOverTwoStep = 
-							this.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ?
-								Character.toString(keySequence.charAt(i + 2)) :
-								Character.toString(keySequence.charAt(i + 2)).toLowerCase(); 
+						String lookOverTwoStep = this
+								.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
 
 						// 자음 두번 입력 후, 자음 혹은 특수문자, 공백, 숫자
-						if (this.isIConsonant(lookOverTwoStep) || !this.isAlphabet(lookOverTwoStep.charAt(0)))
-						{
-							result += this.getSingleLetter(tIConLookaheadCombination);
+						if (this.isIConsonant(lookOverTwoStep)
+								|| !CharUtils.isAsciiAlpha(lookOverTwoStep
+										.charAt(0))) {
+							result += this
+									.getSingleLetter(tIConLookaheadCombination);
 							tICon = tIConLookahead = tIConLookaheadCombination = "";
 							i++;
 						}
 						// 자음 두번 입력 후 모음
-						else if (this.isVowel(lookOverTwoStep) )
-						{
+						else if (this.isVowel(lookOverTwoStep)) {
 							result += this.getSingleLetter(tICon);
 							tICon = tIConLookahead = tIConLookaheadCombination = "";
 							continue;
 						}
-						
-							
+
 					}
 					// 문장의 마지막에 (받침용) 겹자음 입력했을 경우 출력 후 종료
-					else
-					{
-						result += this.getSingleLetter(tIConLookaheadCombination);
+					else {
+						result += this
+								.getSingleLetter(tIConLookaheadCombination);
 						tICon = tIConLookahead = tIConLookaheadCombination = "";
 						stateFlag = State.Null;
 						break;
 					}
-				} 
+				}
 				// 쌍자음, 단자음인 경우 ( (받침용) 겹자음 제외)
 				else {
 					// 자음이면 대기 슬롯에 넣음
@@ -267,8 +241,7 @@ public class DobeolAutomataEngine {
 						init = DobeolSymbol.DobeolIConsonant.valueOf(tICon);
 					}
 					// 모음이면 독립모음을 찍기 위해 모음 단계부터 다시 처리
-					else if (this.isVowel(tICon)) 
-					{
+					else if (this.isVowel(tICon)) {
 						i--;
 						stateFlag = State.Vowel;
 						continue;
@@ -278,20 +251,19 @@ public class DobeolAutomataEngine {
 					if (i == keySequence.length() - 1) {
 						result += this.getSingleLetter(tICon);
 						tICon = tIConLookahead = tIConLookaheadCombination = "";
-						init = DobeolSymbol.DobeolIConsonant.nul;						
+						init = DobeolSymbol.DobeolIConsonant.nul;
 						stateFlag = State.Null;
-						
+
 						break;
 					}
-					
+
 					// 현재 자음이고 다음 글자가 모음이면 모음을 확인하기 위해 계속 진행
 					if (this.isVowel(tIConLookahead)) {
 						stateFlag = State.Vowel;
 						continue;
 					}
-					// 초성 자음이 뒤따라 오는 경우 
-					else
-					{
+					// 초성 자음이 뒤따라 오는 경우
+					else {
 						result += this.getSingleLetter(tICon);
 						tVow = tVowLookahead = tVowLookaheadCombination = "";
 						init = DobeolSymbol.DobeolIConsonant.nul;
@@ -299,19 +271,18 @@ public class DobeolAutomataEngine {
 				}
 			}
 			// 중성 (모음)
-			else if (stateFlag.equals(State.Vowel)) 
-			{
+			else if (stateFlag.equals(State.Vowel)) {
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tVow = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? 
-						Character.toString(keySequence.charAt(i)) : 
-						Character.toString(keySequence.charAt(i)).toLowerCase();
-				// 다음 키 시퀀스랑 조합 분석하기 위한 할당 
+				tVow = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
+				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
 					// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
 					tVowLookahead = this.hasTwoSymbolinOneKey(keySequence
-							.charAt(i + 1)) ? 
-					Character.toString(keySequence.charAt(i + 1)) :
-					Character.toString(keySequence.charAt(i + 1)).toLowerCase();
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tVowLookaheadCombination = tVow + tVowLookahead;
 				}
 
@@ -323,74 +294,67 @@ public class DobeolAutomataEngine {
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
 						// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-						String lookOverTwoStep = this.hasTwoSymbolinOneKey(keySequence.charAt(i + 2))?
-							Character.toString(keySequence.charAt(i + 2)) :
-							Character.toString(keySequence.charAt(i + 2)).toLowerCase();
-						
+						String lookOverTwoStep = this
+								.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
+
 						i++;
 						// 겹모음에 모음이 또 따라오면 현재 글자는 완성, 다음 모음은 독립적인 존재.
 						// 다음에 오는 자음은 받침에 쓸 수 없을 경우 이 과정을 밟는다
-						if (this.isVowel(lookOverTwoStep) || (this.isIConsonant(lookOverTwoStep) && !this.isFConsonant(lookOverTwoStep)) )
-						{
+						if (this.isVowel(lookOverTwoStep)
+								|| (this.isIConsonant(lookOverTwoStep) && !this
+										.isFConsonant(lookOverTwoStep))) {
 							tVow = tVowLookahead = tVowLookaheadCombination = "";
 							stateFlag = State.Finish;
 						}
-						// 겹모음에 받침이 따라오는 경우 받침을 찾을 차례, ex: 왠 
+						// 겹모음에 받침이 따라오는 경우 받침을 찾을 차례, ex: 왠
 						else if (this.isFConsonant(lookOverTwoStep)) {
-							if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) )
-							{
-								result += this.getSingleLetter(tVowLookaheadCombination);
+							if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
+								result += this
+										.getSingleLetter(tVowLookaheadCombination);
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.Null;
-							}
-							else
-							{
+							} else {
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.FConsonant;
 								continue;
 							}
-						}
-						else if ( !this.isAlphabet(lookOverTwoStep.charAt(0)) )
-						{
-							if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) )
-							{
-								result += this.getSingleLetter(tVowLookaheadCombination);
+						} else if (!CharUtils.isAsciiAlpha(lookOverTwoStep
+								.charAt(0))) {
+							if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
+								result += this
+										.getSingleLetter(tVowLookaheadCombination);
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								vow = DobeolSymbol.DobeolVowel.nul;
 								stateFlag = State.Null;
-							}
-							else
-							{
+							} else {
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.Finish;
 							}
 						}
 					}
 					// 다음 문자 밖에 볼 수 없을 경우 (시퀀스의 마지막)
-					else
-					{
+					else {
 						// 자음이 대기 슬롯에 없으면 독립 모음 출력
-						if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) )
-						{
-							result += this.getSingleLetter(tVowLookaheadCombination);
+						if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
+							result += this
+									.getSingleLetter(tVowLookaheadCombination);
 							i++;
-							tVow = tVowLookahead = tVowLookaheadCombination = "";	
+							tVow = tVowLookahead = tVowLookaheadCombination = "";
 							stateFlag = State.Null;
-						}
-						else
-						{
+						} else {
 							stateFlag = State.Finish;
 						}
-						
-						
+
 						// 포인터가 시퀀스의 마지막에 있으면 종료
-						if (i == keySequence.length() - 1) 
+						if (i == keySequence.length() - 1)
 							break;
 					}
 				}
 				// 겹모음이 아닌 경우, ㅏ ㅐ ㅑ ㅒ ㅓ ㅖ ㅕ ㅖ ㅗ ㅛ ㅜ ㅠ ㅡ ㅣ
-				else
-				{
+				else {
 					// 현재 키 시퀀스가 모음에 해당해야 함
 					if (this.isVowel(tVow)) {
 						// 모음을 대기 슬롯에 넣는다.
@@ -401,15 +365,13 @@ public class DobeolAutomataEngine {
 						// 키 시퀀스의 마지막이라면
 						if (i == keySequence.length() - 1) {
 							// 자음이 존재하지 않는다면 독립 모음 입력
-							if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) )
-							{
+							if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
 								result += this.getSingleLetter(tVow);
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.Null;
 							}
-							// 자음이 있으면 받침이 없는 완전한 글자 완성 
-							else
-							{
+							// 자음이 있으면 받침이 없는 완전한 글자 완성
+							else {
 								stateFlag = State.Finish;
 							}
 							break;
@@ -418,9 +380,9 @@ public class DobeolAutomataEngine {
 						// 2벌식 초성 중성 종성은 영문글자의 위치 영역에 있으므로
 						// 영문자가 아닌 문자를 별개문자 혹은 delimiter로 취급
 						// 뒤에 공백, 숫자, 특수문자 따라오는 경우.
-						if (!isAlphabet(tVowLookahead.charAt(0))) {
+						if (!CharUtils.isAsciiAlpha(tVowLookahead.charAt(0))) {
 
-							// 초성이 없다면 독립 모음 입력. 
+							// 초성이 없다면 독립 모음 입력.
 							if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
 								result += this.getSingleLetter(tVow);
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
@@ -430,36 +392,36 @@ public class DobeolAutomataEngine {
 							} else
 								stateFlag = State.Finish;
 						}
-						
-						//*// 접근이 안되는 코드인듯. 주석처리
+
+						// *// 접근이 안되는 코드인듯. 주석처리
 						// 자음이 입력되지 않았을 경우
-						if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) ) {
+						if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
 							// 독립 모음
 							result += this.getSingleLetter(tVow);
 							vow = DobeolSymbol.DobeolVowel.nul;
 
-							// 다음이 자음이면 자음으로 
+							// 다음이 자음이면 자음으로
 							if (this.isIConsonant(tVowLookahead)) {
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.IConsonant;
 							}
 							// 모음이면 모음으로 검색모드 전환
-							else if ( this.isVowel(tVowLookahead)) {
+							else if (this.isVowel(tVowLookahead)) {
 								tVow = tVowLookahead = tVowLookaheadCombination = "";
 								stateFlag = State.Vowel;
 							}
 							continue;
-						}
-						else
-						{
-							// 자음이 입력되었을 때 모음 다음 모음 오는 경우, 예: 거ㅣ 
+						} else {
+							// 자음이 입력되었을 때 모음 다음 모음 오는 경우, 예: 거ㅣ
 							// ㄸ 과 같은 자음은 받침으로 쓰이지 않는다.
-							if (this.isVowel(tVowLookahead) || (this.isIConsonant(tVowLookahead) && !this.isFConsonant(tVowLookahead)))
+							if (this.isVowel(tVowLookahead)
+									|| (this.isIConsonant(tVowLookahead) && !this
+											.isFConsonant(tVowLookahead)))
 								stateFlag = State.Finish;
 							// 자음 + 모음 + 받침 : good!
 							else if (this.isFConsonant(tVowLookahead))
 								stateFlag = State.FConsonant;
-							
+
 							tVow = tVowLookahead = tVowLookaheadCombination = "";
 						}
 					}
@@ -468,40 +430,44 @@ public class DobeolAutomataEngine {
 			// 종성
 			else if (stateFlag.equals(State.FConsonant)) {
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tFCon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ?
-					Character.toString(keySequence.charAt(i)) :
-					Character.toString(keySequence.charAt(i)).toLowerCase();
-				// 다음 키 시퀀스랑 조합 분석하기 위한 할당 
+				tFCon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
+				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
-					tFConLookahead = this.hasTwoSymbolinOneKey(keySequence.charAt(i + 1)) ? 
-						Character.toString(keySequence.charAt(i + 1)) :
-						Character.toString(keySequence.charAt(i + 1)).toLowerCase() ;
+					tFConLookahead = this.hasTwoSymbolinOneKey(keySequence
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tFConLookaheadCombination = tFCon + tFConLookahead;
 				}
-				
+
 				stateFlag = State.Finish; // 받침이 나오면 한 글자 완성이 끝남.
 
 				// 받침용 겹모음이라면?
 				if (this.isFConsonant(tFConLookaheadCombination)) {
-					
+
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
-						String lookOverTwoStep = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ?
-							Character.toString(keySequence.charAt(i + 2)) :
-							Character.toString(keySequence.charAt(i + 2)).toLowerCase();
-						
-						// (받침용) 겹자음에 자음이 뒤따라오는 모양새 
+						String lookOverTwoStep = this
+								.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
+
+						// (받침용) 겹자음에 자음이 뒤따라오는 모양새
 						if (this.isIConsonant(lookOverTwoStep)
-								|| !isAlphabet(lookOverTwoStep.charAt(0))) {
+								|| !CharUtils.isAsciiAlpha(lookOverTwoStep
+										.charAt(0))) {
 							// 받침을 대기 슬롯에 넣는다. 겹자음이므로 키 시퀀스를 하나 건너뛴다
 							fin = DobeolSymbol.DobeolFConsonant
 									.valueOf(tFConLookaheadCombination);
 							i++;
-						// 단자음 받침일 수도 있다. 받침, 자음 + 모음
+							// 단자음 받침일 수도 있다. 받침, 자음 + 모음
 						} else if (this.isVowel(lookOverTwoStep)) {
 							fin = DobeolSymbol.DobeolFConsonant.valueOf(tFCon);
 						}
-						
+
 						tFCon = tFConLookahead = tFConLookaheadCombination = "";
 					} else {
 						// 키 시퀀스의 마지막이라면 대기 슬롯 받침자리에 받침을 채우고 끝낸다.
@@ -509,7 +475,7 @@ public class DobeolAutomataEngine {
 							fin = DobeolSymbol.DobeolFConsonant
 									.valueOf(tFConLookaheadCombination);
 						}
-						
+
 						tFCon = tFConLookahead = tFConLookaheadCombination = "";
 						break;
 					}
@@ -518,9 +484,9 @@ public class DobeolAutomataEngine {
 					// 단자음 받침이나 쌍자음 받침을 슬롯에 넣는다.
 					if (this.isFConsonant(tFCon))
 						fin = DobeolSymbol.DobeolFConsonant.valueOf(tFCon);
-					
+
 					// 키 시퀀스의 끝이라면 끝낸다.
-					if (i == keySequence.length() - 1) 
+					if (i == keySequence.length() - 1)
 						break;
 
 					// 다음 글자가 모음이면 받침으로 간주하지 않고 backtracking.
@@ -536,7 +502,7 @@ public class DobeolAutomataEngine {
 
 			// 한 글자가 완성되었으니 대기 슬롯에서 글자를 빼내어 결과 스트링에 붙여준다
 			if (stateFlag == State.Finish) {
-				result += this.getSyllableChar( init.value(), vow.value(), fin.value() );
+				result += this.getSyllableChar(init, vow, fin);
 				init = DobeolSymbol.DobeolIConsonant.nul;
 				vow = DobeolSymbol.DobeolVowel.nul;
 				fin = DobeolSymbol.DobeolFConsonant.nul;
@@ -544,68 +510,32 @@ public class DobeolAutomataEngine {
 		}
 
 		// 마무리.
-		if (stateFlag == State.Finish) 
-			result += this.getSyllableChar(init.value(), vow.value(), fin.value());
+		if (stateFlag == State.Finish)
+			result += this.getSyllableChar(init, vow, fin);
 
 		return result;
 	}
 
-	private boolean isAlphabet(char ch) {
-		return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-	}
-	
-	private int countSpecifiedChar( String str, char ch )
-	{
-		int count = 0;
-		
-		for ( int i = 0 ; i < str.length() ; i++ )
-			if ( str.charAt(i) == ch ) count++;
-		
-		return count;
-	}
-	
+	private String getSingleLetter(String keySequence) {
+		char[] ch = new char[1];
+		ch[0] = (char) (DobeolSymbol.DobeolSingleLetter.valueOf(keySequence)
+				.value() + 0x3130);
 
-	public byte[] getSyllablebyBytes(int charVal) {
-		byte[] result = new byte[3];
-
-		charVal += 0xAC00;
-
-		result[0] = (byte) (0xE0 | ((charVal >> 12) & 0x0f));
-		result[1] = (byte) (0x80 | ((charVal >> 6) & 0x3f));
-		result[2] = (byte) (0x80 | (charVal & 0x3f));
-
-		return result;
+		return new String(ch);
 	}
 
-	public byte[] getSingleLetterBytes(DobeolSymbol.DobeolSingleLetter symbol) {
-		byte[] result = new byte[3];
-		int charVal = symbol.value() + 0x3130;
+	private String getSyllableChar(DobeolSymbol.DobeolIConsonant init,
+			DobeolSymbol.DobeolVowel vow, DobeolSymbol.DobeolFConsonant fin) {
+		char[] ch = new char[1];
+		ch[0] = (char) ((init.value() * 21 * 28 + vow.value() * 28 + fin
+				.value()) + 0xAC00);
 
-		result[0] = (byte) (0xE0 | ((charVal >> 12) & 0x0f));
-		result[1] = (byte) (0x80 | ((charVal >> 6) & 0x3f));
-		result[2] = (byte) (0x80 | (charVal & 0x3f));
+		return new String(ch);
+	}
 
-		return result;
-	}
-	
-	private String getSingleLetter ( String keySequence )
-	{
-		DobeolSymbol.DobeolSingleLetter s = DobeolSymbol.DobeolSingleLetter
-				.valueOf(keySequence);
-		
-		return new String(this.getSingleLetterBytes(s));
-	}
-	
-	private String getSyllableChar ( int init, int vow, int fin )
-	{
-		int charVal = init * 21 * 28 + vow * 28 + fin;
-		
-		return new String(this.getSyllablebyBytes(charVal));
-	}
-	
-	private boolean hasTwoSymbolinOneKey ( char ch )
-	{
-		return (( ch == 'q'  || ch == 'Q' ) || ( ch == 'w'  || ch == 'W' ) || ( ch == 'e'  || ch == 'E' ) || ( ch == 'r'  || ch == 'R' ) || ( ch == 't'  || ch == 'T' ))
-				|| ( ( ch == 'o' || ch == 'O' ) || (ch == 'p' || ch == 'P' ) );
+	private boolean hasTwoSymbolinOneKey(char ch) {
+		return ((ch == 'q' || ch == 'Q') || (ch == 'w' || ch == 'W')
+				|| (ch == 'e' || ch == 'E') || (ch == 'r' || ch == 'R') || (ch == 't' || ch == 'T'))
+				|| ((ch == 'o' || ch == 'O') || (ch == 'p' || ch == 'P'));
 	}
 }
