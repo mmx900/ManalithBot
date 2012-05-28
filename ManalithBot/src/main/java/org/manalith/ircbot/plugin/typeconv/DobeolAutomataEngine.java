@@ -18,6 +18,8 @@ package org.manalith.ircbot.plugin.typeconv;
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.typeconv.exceptions.BackSlashesDoNotMatchException;
 
 public class DobeolAutomataEngine {
@@ -80,23 +82,6 @@ public class DobeolAutomataEngine {
 			return false;
 		}
 	}
-
-	@SuppressWarnings("unused")
-	private String getBinaryString(int data) {
-		String result = "";
-
-		while (data != 1 && data != 0) {
-			result = Integer.toString(data % 2) + result;
-
-			data /= 2;
-		}
-
-		if (data % 2 != 0)
-			result = Integer.toString(data % 2) + result;
-
-		return result;
-
-	}
 	
 	public String parseKoreanStringToEngSpell(String korean) throws BackSlashesDoNotMatchException {
 		String result = "";
@@ -157,7 +142,8 @@ public class DobeolAutomataEngine {
 		DobeolSymbol.DobeolVowel vow = DobeolSymbol.DobeolVowel.nul;
 		DobeolSymbol.DobeolFConsonant fin = DobeolSymbol.DobeolFConsonant.nul;
 		
-		if ( this.isEnableParsingExceptionSyntax() && countSpecifiedChar(keySequence,'\\') % 2 == 1 )
+		
+		if ( this.isEnableParsingExceptionSyntax() && StringUtils.countMatches(keySequence,"\\") % 2 == 1 )
 			throw new BackSlashesDoNotMatchException();
 
 		for (int i = 0; i < keySequence.length(); i++) {
@@ -165,7 +151,7 @@ public class DobeolAutomataEngine {
 				stateFlag = State.IConsonant;
 			}
 
-			if (!isAlphabet(keySequence.charAt(i))) {
+			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
 				if ( keySequence.charAt(i) == '\\' && this.isEnableParsingExceptionSyntax() )
 				{
 					i++;
@@ -235,7 +221,7 @@ public class DobeolAutomataEngine {
 								Character.toString(keySequence.charAt(i + 2)).toLowerCase(); 
 
 						// 자음 두번 입력 후, 자음 혹은 특수문자, 공백, 숫자
-						if (this.isIConsonant(lookOverTwoStep) || !this.isAlphabet(lookOverTwoStep.charAt(0)))
+						if (this.isIConsonant(lookOverTwoStep) || !CharUtils.isAsciiAlpha(lookOverTwoStep.charAt(0)))
 						{
 							result += this.getSingleLetter(tIConLookaheadCombination);
 							tICon = tIConLookahead = tIConLookaheadCombination = "";
@@ -350,7 +336,7 @@ public class DobeolAutomataEngine {
 								continue;
 							}
 						}
-						else if ( !this.isAlphabet(lookOverTwoStep.charAt(0)) )
+						else if ( !CharUtils.isAsciiAlpha(lookOverTwoStep.charAt(0)) )
 						{
 							if ( init.equals(DobeolSymbol.DobeolIConsonant.nul) )
 							{
@@ -381,7 +367,6 @@ public class DobeolAutomataEngine {
 						{
 							stateFlag = State.Finish;
 						}
-						
 						
 						// 포인터가 시퀀스의 마지막에 있으면 종료
 						if (i == keySequence.length() - 1) 
@@ -418,7 +403,7 @@ public class DobeolAutomataEngine {
 						// 2벌식 초성 중성 종성은 영문글자의 위치 영역에 있으므로
 						// 영문자가 아닌 문자를 별개문자 혹은 delimiter로 취급
 						// 뒤에 공백, 숫자, 특수문자 따라오는 경우.
-						if (!isAlphabet(tVowLookahead.charAt(0))) {
+						if (!CharUtils.isAsciiAlpha(tVowLookahead.charAt(0))) {
 
 							// 초성이 없다면 독립 모음 입력. 
 							if (init.equals(DobeolSymbol.DobeolIConsonant.nul)) {
@@ -492,7 +477,7 @@ public class DobeolAutomataEngine {
 						
 						// (받침용) 겹자음에 자음이 뒤따라오는 모양새 
 						if (this.isIConsonant(lookOverTwoStep)
-								|| !isAlphabet(lookOverTwoStep.charAt(0))) {
+								|| !CharUtils.isAsciiAlpha(lookOverTwoStep.charAt(0))) {
 							// 받침을 대기 슬롯에 넣는다. 겹자음이므로 키 시퀀스를 하나 건너뛴다
 							fin = DobeolSymbol.DobeolFConsonant
 									.valueOf(tFConLookaheadCombination);
@@ -536,7 +521,7 @@ public class DobeolAutomataEngine {
 
 			// 한 글자가 완성되었으니 대기 슬롯에서 글자를 빼내어 결과 스트링에 붙여준다
 			if (stateFlag == State.Finish) {
-				result += this.getSyllableChar( init.value(), vow.value(), fin.value() );
+				result += this.getSyllableChar( init, vow, fin );
 				init = DobeolSymbol.DobeolIConsonant.nul;
 				vow = DobeolSymbol.DobeolVowel.nul;
 				fin = DobeolSymbol.DobeolFConsonant.nul;
@@ -545,30 +530,41 @@ public class DobeolAutomataEngine {
 
 		// 마무리.
 		if (stateFlag == State.Finish) 
-			result += this.getSyllableChar(init.value(), vow.value(), fin.value());
+			result += this.getSyllableChar(init, vow, fin);
 
 		return result;
 	}
 
-	private boolean isAlphabet(char ch) {
-		return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-	}
-	
-	private int countSpecifiedChar( String str, char ch )
+	private String getSingleLetter ( String keySequence )
 	{
-		int count = 0;
+		DobeolSymbol.DobeolSingleLetter s = DobeolSymbol.DobeolSingleLetter
+				.valueOf(keySequence);
 		
-		for ( int i = 0 ; i < str.length() ; i++ )
-			if ( str.charAt(i) == ch ) count++;
+		char [] ch = new char[1];
+		ch[0] = (char)(s.value() + 0x3130);
 		
-		return count;
+		return new String(ch);
 	}
 	
-
-	public byte[] getSyllablebyBytes(int charVal) {
+	private String getSyllableChar ( DobeolSymbol.DobeolIConsonant init, DobeolSymbol.DobeolVowel vow, DobeolSymbol.DobeolFConsonant fin )
+	{
+		char [] ch = new char[1];
+		ch[0] = (char)((init.value() * 21 * 28 + vow.value() * 28 + fin.value()) + 0xAC00);
+		
+		return new String(ch);
+	}
+	
+	private boolean hasTwoSymbolinOneKey ( char ch )
+	{
+		return (( ch == 'q'  || ch == 'Q' ) || ( ch == 'w'  || ch == 'W' ) || ( ch == 'e'  || ch == 'E' ) || ( ch == 'r'  || ch == 'R' ) || ( ch == 't'  || ch == 'T' ))
+				|| ( ( ch == 'o' || ch == 'O' ) || (ch == 'p' || ch == 'P' ) );
+	}
+	
+	@Deprecated
+	public byte[] getSyllablebyBytes(DobeolSymbol.DobeolSingleLetter symbol) {
 		byte[] result = new byte[3];
 
-		charVal += 0xAC00;
+		int charVal = symbol.value() + 0xAC00;
 
 		result[0] = (byte) (0xE0 | ((charVal >> 12) & 0x0f));
 		result[1] = (byte) (0x80 | ((charVal >> 6) & 0x3f));
@@ -577,6 +573,7 @@ public class DobeolAutomataEngine {
 		return result;
 	}
 
+	@Deprecated
 	public byte[] getSingleLetterBytes(DobeolSymbol.DobeolSingleLetter symbol) {
 		byte[] result = new byte[3];
 		int charVal = symbol.value() + 0x3130;
@@ -588,24 +585,19 @@ public class DobeolAutomataEngine {
 		return result;
 	}
 	
-	private String getSingleLetter ( String keySequence )
-	{
-		DobeolSymbol.DobeolSingleLetter s = DobeolSymbol.DobeolSingleLetter
-				.valueOf(keySequence);
-		
-		return new String(this.getSingleLetterBytes(s));
-	}
-	
-	private String getSyllableChar ( int init, int vow, int fin )
-	{
-		int charVal = init * 21 * 28 + vow * 28 + fin;
-		
-		return new String(this.getSyllablebyBytes(charVal));
-	}
-	
-	private boolean hasTwoSymbolinOneKey ( char ch )
-	{
-		return (( ch == 'q'  || ch == 'Q' ) || ( ch == 'w'  || ch == 'W' ) || ( ch == 'e'  || ch == 'E' ) || ( ch == 'r'  || ch == 'R' ) || ( ch == 't'  || ch == 'T' ))
-				|| ( ( ch == 'o' || ch == 'O' ) || (ch == 'p' || ch == 'P' ) );
+	@SuppressWarnings("unused")
+	private String getBinaryString(int data) {
+		String result = "";
+
+		while (data != 1 && data != 0) {
+			result = Integer.toString(data % 2) + result;
+			data /= 2;
+		}
+
+		if (data % 2 != 0)
+			result = Integer.toString(data % 2) + result;
+
+		return result;
+
 	}
 }
