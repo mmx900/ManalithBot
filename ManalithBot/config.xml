@@ -75,6 +75,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="gooGlProvider" class="org.manalith.ircbot.plugin.urlshortener.GooGlProvider">
 		<property name="apiKey" value="YOUR_GOOGLE_API_KEY" />
 	</bean>
+
+	<bean id="typeContPlugin" class="org.manalith.ircbot.plugin.typeconv.TypeConvPlugin">
+		<property name="enableParsingExceptionSyntax" value="true" />
+	</bean>
 	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
@@ -97,7 +101,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<ref bean="feedReaderPlugin" />
 				<ref bean="urlShortenerPlugin" />
 				<ref bean="timestampPlugin" />
+				<ref bean="typeConvPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
 </beans>
+
