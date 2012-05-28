@@ -73,15 +73,14 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 	public void onPrivateMessage(MessageEvent event) {
 
 	}
-
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
+	//*
+	public void onPart(MessageEvent event) {
 
 	}
+
+	public void onQuit(MessageEvent event) {
+
+	}
+	//*/
 
 }

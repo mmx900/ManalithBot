@@ -23,10 +23,15 @@ package org.manalith.ircbot.resources;
 import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.pircbotx.hooks.events.PartEvent;
+import org.pircbotx.hooks.events.QuitEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.hooks.Event;
 
 public class MessageEvent {
-	private final GenericMessageEvent<ManalithBot> event;
+	// private final GenericMessageEvent<ManalithBot> event;
+	// private final GenericEvent<ManalithBot> event;
+	private final Event<ManalithBot> event;
 
 	private boolean executed; // 실행 완료 여부
 
@@ -37,6 +42,16 @@ public class MessageEvent {
 
 	public MessageEvent(
 			org.pircbotx.hooks.events.MessageEvent<ManalithBot> event) {
+		this.event = event;
+	}
+	
+	public MessageEvent(
+			org.pircbotx.hooks.events.PartEvent<ManalithBot> event) {
+		this.event = event;
+	}
+	
+	public MessageEvent(
+			org.pircbotx.hooks.events.QuitEvent<ManalithBot> event) {
 		this.event = event;
 	}
 
@@ -52,12 +67,34 @@ public class MessageEvent {
 			return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getMessage() {
-		return event.getMessage();
+		if ( event instanceof org.pircbotx.hooks.events.MessageEvent)
+			return ((GenericMessageEvent<ManalithBot>)event).getMessage();
+		else
+			return "";
 	}
 
+	@SuppressWarnings("unchecked")
 	public User getUser() {
-		return event.getUser();
+		if ( event instanceof org.pircbotx.hooks.events.MessageEvent)
+			return ((GenericMessageEvent<ManalithBot>)event).getUser();
+		else if ( event instanceof org.pircbotx.hooks.events.PartEvent)
+			return ((PartEvent<ManalithBot>)event).getUser();
+		else if ( event instanceof org.pircbotx.hooks.events.QuitEvent)
+			return ((QuitEvent<ManalithBot>)event).getUser();
+		else 
+			return null;
+	}
+	
+	public String getReason()
+	{
+		if ( event instanceof PartEvent )
+			return ((PartEvent<ManalithBot>)event).getReason();
+		else if ( event instanceof QuitEvent )
+			return ((QuitEvent<ManalithBot>)event).getReason();
+		else 
+			return "";
 	}
 
 	public boolean isExecuted() {
@@ -81,7 +118,7 @@ public class MessageEvent {
 							((org.pircbotx.hooks.events.MessageEvent<ManalithBot>) event)
 									.getChannel().getName(), response);
 		} else {
-			event.getBot().sendLoggedMessage(event.getUser().getNick(),
+			event.getBot().sendLoggedMessage(this.getUser().getNick(),
 					response);
 		}
 	}

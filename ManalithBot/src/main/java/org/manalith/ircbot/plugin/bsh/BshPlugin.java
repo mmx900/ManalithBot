@@ -114,6 +114,7 @@ public class BshPlugin extends AbstractBotPlugin {
 	}
 
 	// 일반 유저등 누구나 호출 가능한 메서드
+	
 	private Object executeRemoteCommand(String command) {
 		Object result = null;
 		long started = System.currentTimeMillis();
@@ -133,6 +134,7 @@ public class BshPlugin extends AbstractBotPlugin {
 	}
 
 	// 봇의 지정된 소유주만 사용 가능
+	@SuppressWarnings("unused")
 	private Object executeRemoteOperation(String sender, String channel,
 			String command) {
 		Object result = null;

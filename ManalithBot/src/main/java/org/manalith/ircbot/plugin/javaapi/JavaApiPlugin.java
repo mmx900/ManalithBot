@@ -3,6 +3,7 @@ package org.manalith.ircbot.plugin.javaapi;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ public class JavaApiPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String channel = event.getChannel().getName();
 

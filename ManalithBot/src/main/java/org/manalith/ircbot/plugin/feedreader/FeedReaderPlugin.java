@@ -3,6 +3,8 @@ package org.manalith.ircbot.plugin.feedreader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +52,8 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 
 					SyndFeedInput input = new SyndFeedInput();
 					SyndFeed feed = input.build(new XmlReader(feedUrl));
-					List<SyndEntry> feedEntries = feed.getEntries();
+					
+					List<SyndEntry> feedEntries = this.castList(SyndEntry.class, feed.getEntries());
 
 					if (feedEntries.size() == 0) {
 						event.respond(segments[1] + "에 컨텐츠가 없습니다.");
@@ -77,4 +80,13 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 			event.setExecuted(true);
 		}
 	}
+	
+	// this method can eliminate warning from feed.getEntries();
+	public <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+	    List<T> r = new ArrayList<T>(c.size());
+	    for(Object o: c)
+	      r.add(clazz.cast(o));
+	    return r;
+	}
+
 }

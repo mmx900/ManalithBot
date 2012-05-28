@@ -19,6 +19,7 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,8 @@ public class PlainOldBotPlugin extends AbstractBotPlugin {
 	}
 
 	protected void onMessage(MessageEvent event, String target) {
+		// this.getBot() is deprecated. so we recommend as below.
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String channel = event.getChannel().getName();
 

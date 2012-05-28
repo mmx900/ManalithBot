@@ -55,7 +55,8 @@ public class ManalithBot extends PircBotX {
 
 	public void addPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
-		plugin.setBot(this);
+		// 
+		// plugin.setBot(this);
 	}
 
 	/**

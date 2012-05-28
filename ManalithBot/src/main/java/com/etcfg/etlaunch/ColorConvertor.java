@@ -78,13 +78,13 @@ public class ColorConvertor {
 		return returnValue.toString();
 	}
 
+	@Deprecated
+	@SuppressWarnings("unused")
 	public static void drawQuakeString(String inputString, Graphics2D g2d,
 			Point location) {
 		int i = 0;
 		for (i = 0; i < inputString.length(); i++) {
 			char curChar = inputString.charAt(i);
-
 		}
-
 	}
 }
