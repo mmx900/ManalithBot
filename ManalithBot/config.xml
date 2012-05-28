@@ -12,13 +12,13 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
 		<!-- 봇 기본 설정 -->
-		<property name="botLogin" value="BABOBOT" />
-		<property name="botName" value="바보봇" />
+		<property name="botLogin" value="LOGIN1" />
+		<property name="botName" value="NICK1" />
 		<property name="verbose" value="true" />
-		<property name="server" value="irc.ozinger.org" />
+		<property name="server" value="SERVER1" />
 		<property name="serverPort" value="6666" />
 		<property name="serverEncoding" value="UTF-8" />
-		<property name="defaultChannels" value="#setzer" />
+		<property name="defaultChannels" value="#CHANNEL,CHANNEL2" />
 	</bean>
 	
 	<!-- 릴레이 플러그인 설정 -->
