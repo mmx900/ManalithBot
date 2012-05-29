@@ -50,6 +50,7 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 
 					SyndFeedInput input = new SyndFeedInput();
 					SyndFeed feed = input.build(new XmlReader(feedUrl));
+					@SuppressWarnings("unchecked")
 					List<SyndEntry> feedEntries = feed.getEntries();
 
 					if (feedEntries.size() == 0) {
