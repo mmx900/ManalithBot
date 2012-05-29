@@ -2,7 +2,7 @@
  *  Created on 2005. 7. 26
  	org.manalith.ircbot.resources/MessageEvent.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2005  Ki-Beom, Kim
+ 	Copyright (C) 2005, 2012  Ki-Beom, Kim
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
