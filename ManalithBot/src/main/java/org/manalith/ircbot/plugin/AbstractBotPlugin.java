@@ -73,7 +73,7 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 	public void onPrivateMessage(MessageEvent event) {
 
 	}
-	//*
+
 	public void onPart(MessageEvent event) {
 
 	}
@@ -81,6 +81,4 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 	public void onQuit(MessageEvent event) {
 
 	}
-	//*/
-
 }
