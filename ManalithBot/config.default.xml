@@ -77,7 +77,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	</bean>
 
 	<bean id="typeConvPlugin" class="org.manalith.ircbot.plugin.typeconv.TypeConvPlugin">
-		<property name="enableParseExceptionSyntax" value="true" />
+		<property name="enableParsingExceptionSyntax" value="true" />
 	</bean>
 	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
