@@ -48,6 +48,8 @@ import org.pircbotx.hooks.events.VoiceEvent;
 
 public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 	private Logger logger = Logger.getLogger(getClass());
+	private final String[] helpCommands = new String[] { "!명령어", "!명령", "!도움",
+			"!help", "!plugins" };
 
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
@@ -98,8 +100,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 			message = CommandParser.convertRelayToLocalMessage(message);
 		}
 
-		if (ArrayUtils.contains(new String[] { "!도움", "!help", "!plugins" },
-				message)) {
+		if (ArrayUtils.contains(helpCommands, message)) {
 			bot.sendMessage(channel, bot.getPluginManager().getPluginInfo());
 		} else {
 			bot.getPluginManager().onMessage(event);
@@ -117,8 +118,7 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getUser().getNick(), event.getUser().getLogin(), event
 				.getUser().getHostmask(), event.getMessage()));
 
-		if (message.equals("!도움") || message.equals("!help")
-				|| message.equals("!plugins")) {
+		if (ArrayUtils.contains(helpCommands, message)) {
 			bot.sendMessage(sender, bot.getPluginManager().getPluginInfo());
 		} else {
 			bot.getPluginManager().onPrivateMessage(event);
