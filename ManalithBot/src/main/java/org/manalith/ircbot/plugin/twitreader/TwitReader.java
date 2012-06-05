@@ -18,23 +18,22 @@
  */
 package org.manalith.ircbot.plugin.twitreader;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.manalith.ircbot.util.MessageUtils;
+
+import com.google.gson.reflect.TypeToken;
 
 public class TwitReader {
 	private Logger logger = Logger.getLogger(getClass());
@@ -61,49 +60,46 @@ public class TwitReader {
 		if (type == null)
 			return null;
 
+		String[] PathnQuery = getJSONPathNQuery(twitterurl, type);
+		URI uri;
+		try {
+			uri = URIUtils.createURI("https", "api.twitter.com", -1,
+					PathnQuery[0], PathnQuery[1], null);
+		} catch (URISyntaxException e) {
+			logger.error(e);
+			return null;
+		}
+
 		String result = null;
 
-		try {
-			String[] PathnQuery = getJSONPathNQuery(twitterurl, type);
-			URI uri = URIUtils.createURI("https", "api.twitter.com", -1,
-					PathnQuery[0], PathnQuery[1], null);
-			HttpGet get = new HttpGet(uri);
-			DefaultHttpClient httpclient = new DefaultHttpClient();
-			JSONTokener tokener = new JSONTokener((new BufferedReader(
-					new InputStreamReader(httpclient.execute(get).getEntity()
-							.getContent()))).readLine());
+		switch (type) {
+		case TwitURL: {
+			Tweet tweet = MessageUtils.loadFromJson(uri, Tweet.class);
 
-			switch (type) {
-			case TwitURL: {
-				JSONObject obj = new JSONObject(tokener);
+			String body = tweet.text.trim().replaceAll("\\n", "")
+					.replaceAll("(\\s){2,}", " ");
 
-				String written_by = obj.getJSONObject("user").getString("name");
-				String body = obj.getString("text").trim().replaceAll("\\n","").replaceAll("(\\s){2,}", " ");
+			result = "작성자 : " + tweet.user.name + ", 본문 : " + body;
+		}
+			break;
+		case UserURL:
+			Type listType = new TypeToken<List<Tweet>>() {
+			}.getType();
 
-				result = "작성자 : " + written_by + ", 본문 : " + body;
+			List<Tweet> tweets = MessageUtils.loadFromJson(uri, listType);
+			Tweet tweet = tweets.get(0);
+
+			if (tweet.id == 0) {
+				result = "게시물이 존재하지 않습니다";
+			} else {
+				String body = tweet.text.trim().replaceAll("\\n", "")
+						.replaceAll("(\\s){2,}", " ");
+
+				result = "작성시각 : " + getDateTimeinKoreanFormat(tweet.createdAt)
+						+ ", 본문 : " + body;
 			}
-				break;
-			case UserURL:
-				System.out.println(tokener.toString());
-				JSONArray arr = new JSONArray(tokener);
 
-				if (arr.length() == 0) {
-					result = "게시물이 존재하지 않습니다";
-				} else {
-					JSONObject obj = arr.getJSONObject(0);
-
-					String written_datetime = obj.getString("created_at");
-					String body = obj.getString("text").trim().replaceAll("\\n","").replaceAll("(\\s){2,}", " ");
-
-					result = "작성시각 : "
-							+ getDateTimeinKoreanFormat(written_datetime)
-							+ ", 본문 : " + body;
-				}
-
-				break;
-			}
-		} catch (Exception e) {
-			logger.error(e);
+			break;
 		}
 
 		return result;
