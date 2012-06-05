@@ -20,15 +20,14 @@
 package org.manalith.ircbot.plugin.uriinfo;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.util.MessageUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -59,20 +58,6 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 	public boolean enablePrintContentType() {
 		return enablePrintContentType;
-	}
-
-	private String findUri(String msg) {
-		if (!msg.contains("http"))
-			return null;
-
-		String URI_REGEX = ".*(https?://\\S+).*";
-		Pattern pattern = Pattern.compile(URI_REGEX);
-		Matcher matcher = pattern.matcher(msg);
-
-		if (!matcher.matches())
-			return null;
-
-		return matcher.group(1);
 	}
 
 	private String getInfo(String uri) {
@@ -124,7 +109,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 
-		String uri = findUri(message);
+		String uri = MessageUtils.findUri(message);
 		if (uri == null)
 			return;
 
