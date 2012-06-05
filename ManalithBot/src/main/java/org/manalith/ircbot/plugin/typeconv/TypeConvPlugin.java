@@ -102,6 +102,8 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 				String dstmsg = engine.parseKeySequenceToKorean(srcmsg); 
 				
 				bot.sendLoggedMessage(target, dstmsg);
+				
+				event.setExecuted(true);
 			}
 			catch ( Exception e )
 			{
@@ -116,13 +118,14 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 				String dstmsg = engine.parseKoreanStringToEngSpell(srcmsg); 
 				
 				bot.sendLoggedMessage(target, dstmsg);
+				
+				event.setExecuted(true);
 			}
 			catch ( Exception e )
 			{
 				logger.warn(e.getMessage(), e);
 			}
 		}
-		event.setExecuted(true);
 	}
 }
 
