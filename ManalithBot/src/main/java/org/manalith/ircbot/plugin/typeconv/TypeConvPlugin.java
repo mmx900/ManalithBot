@@ -82,6 +82,7 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 	protected void onMessage(MessageEvent event, String target) {
 		ManalithBot bot = event.getBot();
 		String msg = event.getMessage();
+		String sender = event.getUser().getNick();
 
 		engine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
 
@@ -92,7 +93,8 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = engine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendLoggedMessage(target, dstmsg);
+				bot.sendLoggedMessage(target,
+						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
 			} catch (Exception e) {
@@ -103,7 +105,8 @@ public class TypeConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = engine.parseKoreanStringToEngSpell(srcmsg);
 
-				bot.sendLoggedMessage(target, dstmsg);
+				bot.sendLoggedMessage(target,
+						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
 			} catch (Exception e) {
