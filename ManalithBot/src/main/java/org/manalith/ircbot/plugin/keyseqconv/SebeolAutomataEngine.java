@@ -208,10 +208,12 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 				}
 				else if (keySequence.charAt(i) == ' ' )
 				{
+					// 완성 음절이면 음절단위 글자 출력
 					if ( syl.isCompleteSyllable() )
 					{
 						result += syl.getLetter();
 					}
+					// 미완성이면 자소 단위 출력
 					else
 					{
 						SebeolSymbol.SebeolIConsonant init = 
@@ -224,6 +226,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 						if ( syl.isAssignedFConstantFirst() )
 						{
 							result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
+							
 							if ( init != SebeolSymbol.SebeolIConsonant.nul )
 								result += this.getSingleChar(this.getSingleCharVal(init.toString()));
 							if ( vow != SebeolSymbol.SebeolVowel.nul )
@@ -237,7 +240,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 								result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
 						}
 					}
-					
+					// 슬롯을 비우고 특수문자 출력
 					syl.initLetter();
 					result += keySequence.charAt(i);
 					continue;
@@ -295,6 +298,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			else if ( this.isFConsonant(this.changeKeyValToInternalSymbol(tToken)) )
 				result += this.inputFConsonant( isLastPosition, tToken );
 			
+			// (공백을 제외한) 특수문자
 			else if ( this.isSpecialChar(this.changeKeyValToInternalSymbol(tToken)) )
 				result += this.inputSpecialChar( tToken );
 
@@ -486,17 +490,19 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 		SebeolSymbol.SebeolSpecialChar spec =
 			SebeolSymbol.SebeolSpecialChar.valueOf(internalSymbol);
 		
-		
+		// 완성 음절
 		if ( syl.isCompleteSyllable() )
 		{
 			result += syl.getLetter();
 			result += this.getSpecialChar(spec.value());
 		}
-		// 모음이 없다.
+		// 자음 또는 모음이 없다.
 		else
 		{
 			SebeolSymbol.SebeolIConsonant init = 
 				SebeolSymbol.SebeolIConsonant.valueOf(syl.getIConsonantKeySymbol());
+			SebeolSymbol.SebeolVowel vow =
+				SebeolSymbol.SebeolVowel.valueOf(syl.getVowelKeySymbol());
 			SebeolSymbol.SebeolFConsonant fin = 
 				SebeolSymbol.SebeolFConsonant.valueOf(syl.getFConsonantKeySymbol());
 			
@@ -504,15 +510,19 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			if ( syl.isAssignedFConstantFirst() )
 			{
 				result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
-				// 초성이 있으면
+				// 초성 혹은 중성이 있으면
 				if ( init != SebeolSymbol.SebeolIConsonant.nul )
 					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
 			}
-			// 초성만 있거나 아무것도 없다?
+			// 초성 혹은 중성만 있거나 아무것도 없다?
 			else
 			{
 				if ( init != SebeolSymbol.SebeolIConsonant.nul )
 					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
 			}
 			
 			result += this.getSpecialChar(spec.value());
