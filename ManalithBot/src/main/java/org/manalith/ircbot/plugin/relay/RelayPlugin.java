@@ -52,13 +52,12 @@ public class RelayPlugin extends AbstractBotPlugin {
 		return null;
 	}
 
-	@Override
 	public void setBot(ManalithBot bot) {
 		RELAY_BOT.setTargetbot(bot);
-		super.setBot(bot);
 	}
 
 	public void onMessage(MessageEvent event) {
+		
 		String channel = event.getChannel().getName();
 
 		if (event.getMessage().equals("relay:stop")) {

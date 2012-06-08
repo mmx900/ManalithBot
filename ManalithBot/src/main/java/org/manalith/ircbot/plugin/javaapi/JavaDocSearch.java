@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 
 
 public class JavaDocSearch implements SearchInterface{
+	@SuppressWarnings("unused")
 	private Logger logger = Logger.getLogger(getClass());
 	private final String baseUrl;
 	private static final String  JAVADOC_ALLCLASS_FRAME_URL = "allclasses-frame.html";
