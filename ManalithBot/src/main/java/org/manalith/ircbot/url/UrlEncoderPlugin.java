@@ -27,7 +27,7 @@ public class UrlEncoderPlugin extends AbstractBotPlugin {
 	@Override
 	public void onMessage(MessageEvent event) {
 		String[] segments = StringUtils.split(event.getMessage(), " ");
-		if (segments.length > 2) {
+		if (segments.length >= 2) {
 			String cmd = segments[0];
 			String txt = StringUtils.substring(event.getMessage(),
 					"!urlencode ".length());
