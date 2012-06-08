@@ -80,8 +80,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 		<property name="apiKey" value="YOUR_GOOGLE_API_KEY" />
 	</bean>
 
-	<bean id="typeConvPlugin" class="org.manalith.ircbot.plugin.typeconv.TypeConvPlugin">
-		<property name="enableParseExceptionSyntax" value="true" />
+	<bean id="keySeqConvPlugin" class="org.manalith.ircbot.plugin.keyseqconv.KeySeqConvPlugin">
+		<property name="enableParsingExceptionSyntax" value="true" />
 	</bean>
 	
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
@@ -105,7 +105,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 				<ref bean="feedReaderPlugin" />
 				<ref bean="urlShortenerPlugin" />
 				<ref bean="timestampPlugin" />
-				<ref bean="typeConvPlugin" />
+				<ref bean="keySeqConvPlugin" />
 				<ref bean="symbolPlugin" />
 				<ref bean="unicodePlugin" />
 				<ref bean="urlEncoderPlugin" />
