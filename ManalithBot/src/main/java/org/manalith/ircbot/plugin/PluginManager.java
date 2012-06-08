@@ -183,17 +183,18 @@ public class PluginManager {
 		}
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostName) {
+	public void onPart(org.pircbotx.hooks.events.PartEvent<ManalithBot> event) {
+		MessageEvent msg = new MessageEvent(event);
+		
 		for (IBotPlugin plugin : list)
-			plugin.onPart(channel, sender, login, hostName);
+			plugin.onPart(msg);
 	}
 
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-
+	public void onQuit(org.pircbotx.hooks.events.QuitEvent<ManalithBot> event) {
+		MessageEvent msg = new MessageEvent(event);
+		
 		for (IBotPlugin plugin : list)
-			plugin.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+			plugin.onQuit(msg);
 	}
 
 	public List<IBotPlugin> getList() {

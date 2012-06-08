@@ -20,6 +20,7 @@ package org.manalith.ircbot.plugin.relaybotabsencenotifier;
 
 import java.util.Set;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.User;
@@ -33,8 +34,11 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 		return null;
 	}
 
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
+	public void onJoin(MessageEvent event) {
+		ManalithBot bot = event.getBot();
+		String sender = event.getUser().getNick();
+		String channel = event.getChannel().getName();
+		
 		boolean beingBot = false;
 		if (sender.equals("DarkCircle")) {
 			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
@@ -51,6 +55,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		if (event.getUser().getNick().equals("DarkCircle")) {
 			boolean beingBot = false;
 			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
@@ -67,15 +72,21 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 		}
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-		if (sender.equals("♠한씨네"))
+	public void onPart(MessageEvent event) {
+		ManalithBot bot = event.getBot();
+		String sender = event.getUser().getNick();
+		String channel = event.getChannel().getName();
+		
+		if (sender.equals("♠"))
 			bot.sendLoggedMessage(channel, "DarkCircle: ...");
 	}
 
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-		if (sourceNick.equals("♠한씨네"))
-			bot.sendLoggedMessage("#gnome", "DarkCircle: ...");
+	public void onQuit(MessageEvent event) {
+		ManalithBot bot = event.getBot();
+		String sourceNick = event.getUser().getNick();
+		String channel = event.getChannel().getName();
+		
+		if (sourceNick.equals("♠"))
+			bot.sendLoggedMessage(channel, "DarkCircle: ...");
 	}
 }

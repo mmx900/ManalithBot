@@ -128,6 +128,14 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onAction(ActionEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
+		String message = event.getMessage();
+		String sender = event.getUser().getNick();
+		String userid = event.getUser().getLogin();
+		String hostmask = event.getUser().getHostmask();
+		
+		logger.trace(String.format("ACTION : %s / %s / %s / %s",
+				sender,userid,hostmask,message));
+		
 		super.onAction(event);
 	}
 
@@ -156,11 +164,16 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
+		/*
+		event.getBot()
+			.getPluginManager()
+			.onPart(event.getUser().getNick(), event.getUser().getLogin(),
+					event.getUser().getHostmask(), event.getReason());
+		//*/
+		
 		event.getBot()
 				.getPluginManager()
-				.onPart(event.getChannel().getName(),
-						event.getUser().getNick(), event.getUser().getLogin(),
-						event.getUser().getHostmask());
+				.onPart(event);
 	}
 
 	@Override
@@ -190,10 +203,16 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getNick(), event.getUser().getLogin(), event.getUser()
 				.getHostmask(), event.getReason()));
 
-		event.getBot()
-				.getPluginManager()
+		
+		/*
+		  event.getBot()
+		 		.getPluginManager()
 				.onQuit(event.getUser().getNick(), event.getUser().getLogin(),
 						event.getUser().getHostmask(), event.getReason());
+		//*/
+		event.getBot()
+			.getPluginManager()
+			.onQuit(event);
 	}
 
 	@Override
