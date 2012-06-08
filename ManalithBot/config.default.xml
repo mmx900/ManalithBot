@@ -108,6 +108,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 				<ref bean="typeConvPlugin" />
 				<ref bean="symbolPlugin" />
 				<ref bean="unicodePlugin" />
+				<ref bean="urlEncoderPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
