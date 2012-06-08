@@ -15,7 +15,7 @@ public class SymbolPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getCommands() {
-		return "!심볼";
+		return "!심볼 [필요한 심볼의 텍스트 표현]";
 	}
 
 	@Override
