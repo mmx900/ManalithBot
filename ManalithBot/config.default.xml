@@ -107,6 +107,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 				<ref bean="timestampPlugin" />
 				<ref bean="typeConvPlugin" />
 				<ref bean="symbolPlugin" />
+				<ref bean="unicodePlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
