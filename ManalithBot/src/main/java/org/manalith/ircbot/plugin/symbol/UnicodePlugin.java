@@ -29,9 +29,6 @@ public class UnicodePlugin extends AbstractBotPlugin {
 				if (text.startsWith("\\u") || text.startsWith("U+")) {
 					char ch = (char) Integer.parseInt(text.substring(2), 16);
 					event.respond(ch + " - " + Character.getName(ch));
-				} else if (text.startsWith("U+")) {
-					char ch = (char) Integer.parseInt(text.substring(2), 16);
-					event.respond(ch + " - " + Character.getName(ch));
 				} else {
 					char[] chars = text.toCharArray();
 					StringBuilder sb = new StringBuilder();
