@@ -77,8 +77,6 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * .MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
-		System.out.println(event.getChannel().getName());
-		System.out.println(event);
 		onMessage(event, event.getChannel().getName());
 	}
 
