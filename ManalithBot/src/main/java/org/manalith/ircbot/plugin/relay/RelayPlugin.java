@@ -63,15 +63,27 @@ public class RelayPlugin extends AbstractBotPlugin {
 		if (event.getMessage().equals("relay:stop")) {
 			setRelaying(false);
 			event.respond("릴레이를 강제로 종료합니다.");
+			// 타겟 채널 이름은 소스 채널 이름과 동일한 것으로 간주.
+			// 명령에 대한 안내에 대해 입력 명령은 전송하지 않음.
+			RELAY_BOT.sendMessage(event.getChannel().getName(),"릴레이를 강제로 종료합니다.");
+			event.setExecuted(true);
+			return;
 		} else if (event.getMessage().equals("relay:start")) {
 			setRelaying(true);
 			event.respond("릴레이를 강제로 시작합니다.");
+			// 타겟 채널 이름은 소스 채널 이름과 동일한 것으로 간주.
+			// 명령에 대한 안내에 대해 입력 명령은 전송하지 않음.
+			RELAY_BOT.sendMessage(event.getChannel().getName(),"릴레이를 강제로 시작합니다.");
+			event.setExecuted(true);
+			return;
 		}
 
 		if (isRelaying()) {
 			/**
 			 * 메인 봇에 메시지가 들어오면 릴레이 봇으로 전송한다.
 			 */
+			
+			/*
 			String targetChannel = "#setzer";
 
 			if (channel.equals("#gnome")) {
@@ -79,8 +91,10 @@ public class RelayPlugin extends AbstractBotPlugin {
 			} else if (channel.equals("#setzer")) {
 				targetChannel = "#setzer";
 			}
-
-			RELAY_BOT.sendMessage(targetChannel, "<"
+			*/
+			
+			// 타겟 서버의 타겟 채널 이름은 소스 서버의 소스 채널 이름과 동일한 것으로 간주.
+			RELAY_BOT.sendMessage(channel, "<"
 					+ event.getUser().getNick() + "> " + event.getMessage());
 		}
 	}

@@ -55,7 +55,10 @@ public class ManalithBot extends PircBotX {
 
 	public void addPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
-		plugin.setBot(this);
+		
+		// 릴레이 플러그인에 한해 봇 설정 메서드 실행
+		if ( plugin instanceof RelayPlugin )
+			((RelayPlugin)plugin).setBot(this);
 	}
 
 	/**
