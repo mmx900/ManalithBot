@@ -34,6 +34,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 
 	public KeySeqConvPlugin() {
 		dengine = new DubeolAutomataEngine();
+		sengine = new SebeolAutomataEngine();
 	}
 
 	public void setEnableParsingExceptionSyntax(boolean enable) {
@@ -76,6 +77,8 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * .MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
+		System.out.println(event.getChannel().getName());
+		System.out.println(event);
 		onMessage(event, event.getChannel().getName());
 	}
 
@@ -116,7 +119,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 		} else if (cmd.equals("!c3")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 			try {
-				String dstmsg = sengine.parseKoreanStringToEngSpell(srcmsg);
+				String dstmsg = sengine.parseKeySequenceToKorean(srcmsg);
 
 				bot.sendLoggedMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
