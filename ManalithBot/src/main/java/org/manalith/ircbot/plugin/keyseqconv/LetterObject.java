@@ -102,13 +102,13 @@ public class LetterObject {
 	{
 		if ( this.getLayout() == LayoutFlag.Dubeol )
 		{
-			if ( initd.value() == 99 || vowd.value() == 99 )
+			if ( initd.value() == 99 && vowd.value() == 99 )
 				this.assignedFConstantFirst = true;
 			find = DubeolSymbol.DubeolFConsonant.valueOf(keyVal);
 		}
 		else if ( this.getLayout() == LayoutFlag.Sebeol )
 		{
-			if ( inits.value() == 99 || vows.value() == 99 )
+			if ( inits.value() == 99 && vows.value() == 99 )
 				this.assignedFConstantFirst = true;
 			fins = SebeolSymbol.SebeolFConsonant.valueOf(keyVal);
 		}

@@ -26,10 +26,10 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 		String result = "";
 		String strbuf = "";
 		
-		// do not change an order both 1st and 2nd
 		
+		// do not change an order both 2nd and 3rd
 		
-		// 1st phrase : change number 0 and 1 to _0 and _1 respectivelly
+		// 1st phase : change number 0 and 1 to _0 and _1 respectivelly
 		strbuf = str.replaceAll("\\_","_0¯").replaceAll("0", "_0")
 				.replaceAll("1", "_1").replaceAll("¯","0");
 		
@@ -48,14 +48,14 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 				.replaceAll("\\(", "_99").replaceAll("\\)", "_00");
 		
 		// 4th phase : replaceable key sequence for Final Consonant combination
-				strbuf = strbuf.replaceAll("s\\_33", "E").replaceAll("s\\_1", "S")
-						.replaceAll("wx","_22").replaceAll("wz", "F")
-						.replaceAll("w\\_3", "D").replaceAll("wq", "T")
-						.replaceAll("wW","_55").replaceAll("w_1","R")
-						.replaceAll("_3q","X").replaceAll("qq","_2");
-						
-		
-		// ` ~ - = + [ ] { }  ; ' : " , . / < > ?  
+		strbuf = strbuf.replace("xq", "V").replaceAll("s\\_33", "E")
+				.replaceAll("s\\_1", "S").replaceAll("wx","_22")
+				.replaceAll("wz", "F").replaceAll("w\\_3", "D")
+				.replaceAll("wq", "T").replaceAll("wW","_55")
+				.replaceAll("w_1","R").replaceAll("_3q","X")
+				.replaceAll("qq","_2");
+				
+		// final phase : ` ~ - = + [ ] { }  ; ' : " , . / < > ?  
 		result = strbuf.replaceAll("\\`","_1_").replaceAll("\\~", "_11_")
 				.replaceAll("\\-","__0").replaceAll("\\=","___0")
 				.replaceAll("\\+", "___00").replaceAll("\\\\","____0")
@@ -65,8 +65,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 				.replaceAll("\\'", "__l").replaceAll("\\:", "_L")
 				.replaceAll("\\\"", "__L").replaceAll("[\\,\\<]", "_m")
 				.replaceAll("[\\.\\>]", "__m").replaceAll("\\/", "v")
-				.replaceAll("\\?", "___M");
-		
+				.replaceAll("\\?", "___M"); 
 		
 		return result;
 	}
@@ -196,42 +195,6 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 					}
 					continue;
 				}
-				else if (keySequence.charAt(i) == ' ' )
-				{
-					if ( syl.isCompleteSyllable() )
-					{
-						result += syl.getLetter();
-					}
-					else
-					{
-						SebeolSymbol.SebeolIConsonant init = 
-								SebeolSymbol.SebeolIConsonant.valueOf(syl.getIConsonantKeySymbol());
-						SebeolSymbol.SebeolVowel vow = 
-								SebeolSymbol.SebeolVowel.valueOf(syl.getVowelKeySymbol());
-						SebeolSymbol.SebeolFConsonant fin = 
-								SebeolSymbol.SebeolFConsonant.valueOf(syl.getFConsonantKeySymbol());
-						
-						if ( syl.isAssignedFConstantFirst() )
-						{
-							result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
-							if ( init != SebeolSymbol.SebeolIConsonant.nul )
-								result += this.getSingleChar(this.getSingleCharVal(init.toString()));
-							if ( vow != SebeolSymbol.SebeolVowel.nul )
-								result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
-						}
-						else
-						{
-							if ( init != SebeolSymbol.SebeolIConsonant.nul )
-								result += this.getSingleChar(this.getSingleCharVal(init.toString()));
-							if ( vow != SebeolSymbol.SebeolVowel.nul )
-								result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
-						}
-					}
-					
-					syl.initLetter();
-					result += keySequence.charAt(i);
-					continue;
-				}
 			}
 			
 			tTokenLookahead = tTokenLookaheadCombination = "";
@@ -298,6 +261,8 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			
 			else if ( this.isSpecialChar(this.changeKeyValToInternalSymbol(tToken)) )
 				result += this.inputSpecialChar( tToken );
+			else
+				result += this.inputOtherChar( tToken );
 
 			// 마지막이면 루프를 깨고 아니면 계속
 			if (isLastPosition) { syl.initLetter(); break; } else continue;
@@ -305,6 +270,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			// 끗.
 		}
 		
+		syl.initLetter();
 		return result;
 	}
 	
@@ -352,8 +318,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			// 마지막 입력이면
 			if ( isLastPosition )
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(
-						this.changeKeyValToInternalSymbol(token)));
+				result += this.getSingleChar(this.getSingleCharVal(this.changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else
 			{
@@ -410,8 +375,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			// 마지막 입력이면
 			if ( isLastPosition )
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(
-						this.changeKeyValToInternalSymbol(token)));
+				result += this.getSingleChar(this.getSingleCharVal(this.changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else
 			{
@@ -468,8 +432,7 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 			// 마지막 잉여 종성 입력이면
 			if ( isLastPosition )
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(
-						this.changeKeyValToInternalSymbol(token)));
+				result += this.getSingleChar(this.getSingleCharVal(this.changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else
 			{
@@ -492,13 +455,14 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 		if ( syl.isCompleteSyllable() )
 		{
 			result += syl.getLetter();
-			result += this.getSpecialChar(spec.value());
 		}
-		// 모음이 없다.
+		// 자음이나 모음이 없다.
 		else
 		{
 			SebeolSymbol.SebeolIConsonant init = 
 				SebeolSymbol.SebeolIConsonant.valueOf(syl.getIConsonantKeySymbol());
+			SebeolSymbol.SebeolVowel vow =
+				SebeolSymbol.SebeolVowel.valueOf(syl.getVowelKeySymbol());
 			SebeolSymbol.SebeolFConsonant fin = 
 				SebeolSymbol.SebeolFConsonant.valueOf(syl.getFConsonantKeySymbol());
 			
@@ -509,17 +473,69 @@ public class SebeolAutomataEngine extends InputSequenceAutomataEngine {
 				// 초성이 있으면
 				if ( init != SebeolSymbol.SebeolIConsonant.nul )
 					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
+			}
+			// 초성만 있거나 중성만 있거나 아무것도 없다?
+			else
+			{
+				if ( init != SebeolSymbol.SebeolIConsonant.nul )
+					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
+				if ( fin != SebeolSymbol.SebeolFConsonant.nul )
+					result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
+					
+			}
+			
+			
+		}
+		
+		result += this.getSpecialChar(spec.value());
+		syl.initLetter();
+		return result;
+	}
+	
+	private String inputOtherChar ( String token ) throws LayoutNotSpecifiedException 
+	{
+		String result = "";
+		
+		if ( syl.isCompleteSyllable() )
+		{
+			result += syl.getLetter();
+		}
+		else
+		{
+			SebeolSymbol.SebeolIConsonant init = 
+				SebeolSymbol.SebeolIConsonant.valueOf(syl.getIConsonantKeySymbol());
+			SebeolSymbol.SebeolVowel vow =
+				SebeolSymbol.SebeolVowel.valueOf(syl.getVowelKeySymbol());
+			SebeolSymbol.SebeolFConsonant fin = 
+				SebeolSymbol.SebeolFConsonant.valueOf(syl.getFConsonantKeySymbol());
+			
+			// 받침이 있으면
+			if ( syl.isAssignedFConstantFirst() )
+			{
+				result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
+				// 초성이 있으면
+				if ( init != SebeolSymbol.SebeolIConsonant.nul )
+					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
 			}
 			// 초성만 있거나 아무것도 없다?
 			else
 			{
 				if ( init != SebeolSymbol.SebeolIConsonant.nul )
 					result += this.getSingleChar(this.getSingleCharVal(init.toString()));
+				if ( vow != SebeolSymbol.SebeolVowel.nul )
+					result += this.getSingleChar(this.getSingleCharVal(vow.toString()));
+				if ( fin != SebeolSymbol.SebeolFConsonant.nul )
+					result += this.getSingleChar(this.getSingleCharVal(fin.toString()));
 			}
-			
-			result += this.getSpecialChar(spec.value());
 		}
 		
+		result += token;
 		syl.initLetter();
 		return result;
 	}
