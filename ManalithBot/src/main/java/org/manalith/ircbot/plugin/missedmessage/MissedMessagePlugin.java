@@ -20,10 +20,13 @@ package org.manalith.ircbot.plugin.missedmessage;
 
 import java.util.Set;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.User;
 import org.springframework.stereotype.Component;
+
+import org.apache.commons.lang.NotImplementedException;
 
 @Component
 public class MissedMessagePlugin extends AbstractBotPlugin {
@@ -41,6 +44,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 		String message = event.getMessage();
@@ -100,7 +104,9 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 	}
 
 	public void onJoin(String channel, String sender, String login,
-			String hostname) {
+			String hostname) throws NotImplementedException{
+		throw new NotImplementedException();
+		/*
 		MissedMessageRunner runner = new MissedMessageRunner(
 				this.getResourcePath());
 
@@ -113,7 +119,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 				for (int i = 0; i < msgs.length; i++) {
 					bot.sendLoggedMessage(channel, msgs[i]);
 				}
-		}
+		}*/
 	}
 
 	public void onPart(String channel, String sender, String login,

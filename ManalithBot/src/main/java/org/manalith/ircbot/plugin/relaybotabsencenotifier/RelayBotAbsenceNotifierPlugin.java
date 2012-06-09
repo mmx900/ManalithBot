@@ -20,6 +20,7 @@ package org.manalith.ircbot.plugin.relaybotabsencenotifier;
 
 import java.util.Set;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.User;
@@ -33,24 +34,8 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 		return null;
 	}
 
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		boolean beingBot = false;
-		if (sender.equals("DarkCircle")) {
-			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
-			for (User u : list) {
-				if (u.getNick().equals("♠한씨네")) {
-					beingBot = true;
-					break;
-				}
-			}
-
-			if (!beingBot)
-				bot.sendLoggedMessage(channel, "DarkCircle: ...");
-		}
-	}
-
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		if (event.getUser().getNick().equals("DarkCircle")) {
 			boolean beingBot = false;
 			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
@@ -66,6 +51,29 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 						"DarkCircle: ...");
 		}
 	}
+	
+	/*
+	 *   This code will not be cancelled from description
+	 *   until implement this methods of AbstractBotPlugin for the latest ManalithBotX.
+	 *   
+	public void onJoin(String channel, String sender, String login,
+			String hostname) {
+		
+		boolean beingBot = false;
+		if (sender.equals("DarkCircle")) {
+			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
+			for (User u : list) {
+				if (u.getNick().equals("♠한씨네")) {
+					beingBot = true;
+					break;
+				}
+			}
+
+			if (!beingBot)
+				bot.sendLoggedMessage(channel, "DarkCircle: ...");
+		}
+		
+	}
 
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
@@ -78,4 +86,5 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 		if (sourceNick.equals("♠한씨네"))
 			bot.sendLoggedMessage("#gnome", "DarkCircle: ...");
 	}
+	*/
 }

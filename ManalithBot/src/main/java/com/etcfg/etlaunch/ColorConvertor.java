@@ -1,8 +1,6 @@
 package com.etcfg.etlaunch;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +76,7 @@ public class ColorConvertor {
 		return returnValue.toString();
 	}
 
+	/* not used but needed for some cases.
 	public static void drawQuakeString(String inputString, Graphics2D g2d,
 			Point location) {
 		int i = 0;
@@ -85,6 +84,6 @@ public class ColorConvertor {
 			char curChar = inputString.charAt(i);
 
 		}
-
 	}
+	*/
 }

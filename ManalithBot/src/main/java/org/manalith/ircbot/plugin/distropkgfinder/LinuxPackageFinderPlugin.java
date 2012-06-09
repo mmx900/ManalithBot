@@ -20,6 +20,7 @@
 
 package org.manalith.ircbot.plugin.distropkgfinder;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,7 @@ public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event, String target) {
+		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String[] command = message.split("\\s");
 
