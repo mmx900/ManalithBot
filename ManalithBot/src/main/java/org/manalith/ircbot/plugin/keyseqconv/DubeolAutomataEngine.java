@@ -163,6 +163,12 @@ public class DubeolAutomataEngine implements IAutomataEngine {
 			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
 				if (keySequence.charAt(i) == '\\'
 						&& this.isEnableParsingExceptionSyntax()) {
+					if ( i < keySequence.length() - 1 )
+						if (keySequence.charAt(i+1) == '\\')
+						{
+							result += "\\";
+							continue;
+						}
 					i++;
 					while (true) {
 						if (i + 1 <= keySequence.length() - 1) {
