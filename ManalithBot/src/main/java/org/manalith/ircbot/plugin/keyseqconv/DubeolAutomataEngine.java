@@ -29,7 +29,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 	private boolean enableParseExceptionSyntax;
 
 	public DubeolAutomataEngine() {
-		;
+
 	}
 
 	public void setEnableParsingExceptionSyntax(boolean enable) {
@@ -52,7 +52,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 			return false;
 		}
 	}
-	
+
 	protected boolean isIDoubleConsonant(String tICon) {
 		try {
 			@SuppressWarnings("unused")
@@ -98,7 +98,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 
 		for (int i = 0; i < korean.length(); i++) {
 			int ch = korean.charAt(i);
-			if (((char)ch) >= '가' && ((char)ch) <= '힣') {
+			if (((char) ch) >= '가' && ((char) ch) <= '힣') {
 				ch -= 0xAC00;
 				int initialConsonant = ch / (21 * 28);
 				ch %= (21 * 28);
@@ -106,16 +106,18 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 				ch %= 28;
 				int finalConsonant = ch;
 
-				result += DubeolSymbol.DubeolIConsonant.values()[initialConsonant + 1].toString()
-						+ DubeolSymbol.DubeolVowel.values()[Vowel + 1].toString();
-				
+				result += DubeolSymbol.DubeolIConsonant.values()[initialConsonant + 1]
+						.toString()
+						+ DubeolSymbol.DubeolVowel.values()[Vowel + 1]
+								.toString();
+
 				if (finalConsonant != 0)
 					result += DubeolSymbol.DubeolFConsonant.values()[finalConsonant];
 			} else if (ch >= 'ㄱ' && ch <= 'ㅣ') {
 				ch -= 0x3130;
 				result += DubeolSymbol.DubeolSingleLetter.values()[ch - 1];
 			} else {
-				result += (char)ch;
+				result += (char) ch;
 			}
 
 		}
@@ -146,7 +148,8 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 			throw new BackSlashesDoNotMatchException();
 
 		for (int i = 0; i < keySequence.length(); i++) {
-			if (stateFlag.equals(LetterState.Null) || stateFlag.equals(LetterState.Finish)) {
+			if (stateFlag.equals(LetterState.Null)
+					|| stateFlag.equals(LetterState.Finish)) {
 				stateFlag = LetterState.IConsonant;
 			}
 
@@ -181,22 +184,20 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 			}
 			// 초성 (자음, 쌍자음)
 			if (stateFlag.equals(LetterState.IConsonant)) {
-				// 일단 초기화 
+				// 일단 초기화
 				tIConLookahead = tIConLookaheadCombination = "";
-				
+
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tICon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ?
-						Character.toString(keySequence.charAt(i)) :
-						Character.toString(keySequence.charAt(i))
-						.toLowerCase();
+				tICon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
 				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
 					// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
 					tIConLookahead = this.hasTwoSymbolinOneKey(keySequence
-							.charAt(i + 1)) ? 
-							Character.toString(keySequence.charAt(i + 1)) :
-							Character.toString(keySequence.charAt(i + 1))
-							.toLowerCase();
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tIConLookaheadCombination = tICon + tIConLookahead;
 				}
 
@@ -207,35 +208,36 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
 						String lookOverTwoStep = this
-								.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ? 
-								Character.toString(keySequence.charAt(i + 2))	:
-								Character.toString(keySequence.charAt(i + 2))
-								.toLowerCase();
+								.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
 
 						// 자음 두번 입력 후, 자음 혹은 특수문자, 공백, 숫자
 						if (this.isISingleConsonant(lookOverTwoStep)
 								|| this.isIDoubleConsonant(lookOverTwoStep)
 								|| !CharUtils.isAsciiAlpha(lookOverTwoStep
 										.charAt(0))) {
-							
-							result += this.getSingleChar(
-								this.getSingleCharVal(tIConLookaheadCombination));
-							
+
+							result += this
+									.getSingleChar(this
+											.getSingleCharVal(tIConLookaheadCombination));
+
 							i++;
 						}
 						// 자음 두번 입력 후 모음
 						else if (this.isVowel(lookOverTwoStep)) {
 							// 받침자음의 앞 자는 버리고 뒤 자를 살린다
-							result += this.getSingleChar(
-								this.getSingleCharVal(tICon));
+							result += this.getSingleChar(this
+									.getSingleCharVal(tICon));
 							continue;
 						}
 
 					}
 					// 문장의 마지막에 (받침용) 겹자음 입력했을 경우 출력 후 종료
 					else {
-						result += this.getSingleChar(
-							this.getSingleCharVal(tIConLookaheadCombination));
+						result += this.getSingleChar(this
+								.getSingleCharVal(tIConLookaheadCombination));
 						stateFlag = LetterState.Null;
 						break;
 					}
@@ -243,8 +245,8 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 				// 쌍자음, 단자음인 경우 ( (받침용) 겹자음 제외)
 				else {
 					// 자음이면 대기 슬롯에 넣음
-					if (this.isISingleConsonant(tICon) 
-						|| this.isIDoubleConsonant(tICon)) {
+					if (this.isISingleConsonant(tICon)
+							|| this.isIDoubleConsonant(tICon)) {
 						syl.setIConsonant(tICon);
 						// init = DubeolSymbol.DubeolIConsonant.valueOf(tICon);
 					}
@@ -257,9 +259,9 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 
 					// 문장의 마지막에 단일 자음 입력했을 경우 출력 후 종료
 					if (i == keySequence.length() - 1) {
-						
-						result += this.getSingleChar(
-							this.getSingleCharVal(tICon));
+
+						result += this.getSingleChar(this
+								.getSingleCharVal(tICon));
 						syl.initLetter();
 						stateFlag = LetterState.Null;
 						break;
@@ -272,9 +274,9 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 					}
 					// 초성 자음이 뒤따라 오는 경우
 					else {
-						
-						result += this.getSingleChar(
-								this.getSingleCharVal(tICon));
+
+						result += this.getSingleChar(this
+								.getSingleCharVal(tICon));
 						syl.initLetter();
 					}
 				}
@@ -283,52 +285,53 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 			else if (stateFlag.equals(LetterState.Vowel)) {
 				// 일단 초기화
 				tVowLookahead = tVowLookaheadCombination = "";
-				
+
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tVow = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? 
-						Character.toString(keySequence.charAt(i)) : 
-						Character.toString(keySequence.charAt(i))
-						.toLowerCase();
+				tVow = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
 				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
 					// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-					tVowLookahead = this.hasTwoSymbolinOneKey(keySequence	.charAt(i+1)) ?
-						Character.toString(keySequence.charAt(i+1)) :
-						Character.toString(keySequence.charAt(i+1))
-						.toLowerCase();
+					tVowLookahead = this.hasTwoSymbolinOneKey(keySequence
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tVowLookaheadCombination = tVow + tVowLookahead;
 				}
 
 				// 겹모음인 경우?
 				if (this.isVowel(tVowLookaheadCombination)) {
 					syl.setVowel(tVowLookaheadCombination);
-					// vow = DubeolSymbol.DubeolVowel.valueOf(tVowLookaheadCombination);
+					// vow =
+					// DubeolSymbol.DubeolVowel.valueOf(tVowLookaheadCombination);
 
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
 						// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-						String lookOverTwoStep = 
-								this.hasTwoSymbolinOneKey(keySequence.charAt(i+2)) ? 
-								Character.toString(keySequence.charAt(i + 2)) :
-								Character.toString(keySequence.charAt(i + 2))
-								.toLowerCase();
+						String lookOverTwoStep = this
+								.hasTwoSymbolinOneKey(keySequence.charAt(i + 2)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
 
 						i++;
-						
+
 						// 겹모음에 모음이 또 따라오면 현재 글자는 완성, 다음 모음은 독립적인 존재.
 						// 다음에 오는 자음은 받침에 쓸 수 없을 경우 이 과정을 밟는다
 						if (this.isVowel(lookOverTwoStep)
-								|| ((this.isISingleConsonant(lookOverTwoStep)
-								|| this.isIDoubleConsonant(lookOverTwoStep))
-										&& !this.isFConsonant(lookOverTwoStep))) {
+								|| ((this.isISingleConsonant(lookOverTwoStep) || this
+										.isIDoubleConsonant(lookOverTwoStep)) && !this
+										.isFConsonant(lookOverTwoStep))) {
 							stateFlag = LetterState.Finish;
 						}
 						// 겹모음에 받침이 따라오는 경우 받침을 찾을 차례, ex: 왠
 						else if (this.isFConsonant(lookOverTwoStep)) {
 							if (!syl.isCompleteSyllable()) {
-								
-								result += this.getSingleChar(
-										this.getSingleCharVal(tVowLookaheadCombination));
+
+								result += this
+										.getSingleChar(this
+												.getSingleCharVal(tVowLookaheadCombination));
 								stateFlag = LetterState.Null;
 							} else {
 								stateFlag = LetterState.FConsonant;
@@ -336,13 +339,15 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 							}
 						}
 						// 빈 칸 혹은 특수문자
-						else if (!CharUtils.isAsciiAlpha(lookOverTwoStep.charAt(0))) {
+						else if (!CharUtils.isAsciiAlpha(lookOverTwoStep
+								.charAt(0))) {
 							if (!syl.isCompleteSyllable()) {
-								result += this.getSingleChar(
-									this.getSingleCharVal(tVowLookaheadCombination));
+								result += this
+										.getSingleChar(this
+												.getSingleCharVal(tVowLookaheadCombination));
 								syl.initLetter();
 								stateFlag = LetterState.Null;
-							} else 
+							} else
 								stateFlag = LetterState.Finish;
 						}
 					}
@@ -350,8 +355,9 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 					else {
 						// 자음이 대기 슬롯에 없으면 독립 모음 출력
 						if (!syl.isCompleteSyllable()) {
-							result += this.getSingleChar(
-								this.getSingleCharVal(tVowLookaheadCombination));
+							result += this
+									.getSingleChar(this
+											.getSingleCharVal(tVowLookaheadCombination));
 							syl.initLetter();
 							i++;
 							stateFlag = LetterState.Null;
@@ -369,16 +375,16 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 					// 현재 키 시퀀스가 모음에 해당해야 함
 					if (this.isVowel(tVow)) {
 						// 모음을 대기 슬롯에 넣는다.
-						if (!syl.isCompleteSyllable()) 
+						if (!syl.isCompleteSyllable())
 							syl.setVowel(tVow);
 
 						// 키 시퀀스의 마지막이라면
 						if (i == keySequence.length() - 1) {
 							// 자음이 존재하지 않는다면 독립 모음 입력
 							if (!syl.isCompleteSyllable()) {
-								
-								result += this.getSingleChar(
-									this.getSingleCharVal(tVow));
+
+								result += this.getSingleChar(this
+										.getSingleCharVal(tVow));
 								syl.initLetter();
 								stateFlag = LetterState.Null;
 							}
@@ -396,9 +402,9 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 
 							// 초성이 없다면 독립 모음 입력.
 							if (!syl.isCompleteSyllable()) {
-								
-								result += this.getSingleChar(
-									this.getSingleCharVal(tVow));
+
+								result += this.getSingleChar(this
+										.getSingleCharVal(tVow));
 								syl.initLetter();
 								stateFlag = LetterState.IConsonant;
 								continue;
@@ -410,16 +416,16 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 						// 자음이 입력되지 않았을 경우
 						if (!syl.isCompleteSyllable()) {
 							// 독립 모음
-							result += this.getSingleChar(
-								this.getSingleCharVal(tVow));
+							result += this.getSingleChar(this
+									.getSingleCharVal(tVow));
 							syl.initLetter();
 
 							// 다음이 자음이면 자음으로
 							if (this.isISingleConsonant(tVowLookahead)
-							|| this.isIDoubleConsonant(tVowLookahead)) 
+									|| this.isIDoubleConsonant(tVowLookahead))
 								stateFlag = LetterState.IConsonant;
 							// 모음이면 모음으로 검색모드 전환
-							else if (this.isVowel(tVowLookahead)) 
+							else if (this.isVowel(tVowLookahead))
 								stateFlag = LetterState.Vowel;
 
 							continue;
@@ -429,7 +435,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 								stateFlag = LetterState.FConsonant;
 							// 자음이 입력되었을 때 모음 다음 모음 오는 경우, 예: 거ㅣ
 							// ㄸ 과 같은 자음은 받침으로 쓰이지 않는다.
-							else 
+							else
 								stateFlag = LetterState.Finish;
 						}
 					}
@@ -439,16 +445,17 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 			else if (stateFlag.equals(LetterState.FConsonant)) {
 				// 일단 초기화
 				tFConLookahead = tFConLookaheadCombination = "";
-				
+
 				// 대 소문자에 따라 값이 바뀌는 키라면 그냥 넣어주고 아니면 소문자로 바꿔준다
-				tFCon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? 
-						Character.toString(keySequence.charAt(i)) : 
-						Character.toString(keySequence.charAt(i)).toLowerCase();
+				tFCon = this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+						.toString(keySequence.charAt(i)) : Character.toString(
+						keySequence.charAt(i)).toLowerCase();
 				// 다음 키 시퀀스랑 조합 분석하기 위한 할당
 				if (i < keySequence.length() - 1) {
-					tFConLookahead = this.hasTwoSymbolinOneKey(keySequence.charAt(i + 1)) ?
-							Character.toString(keySequence.charAt(i + 1)) :
-							Character.toString(keySequence.charAt(i + 1)).toLowerCase();
+					tFConLookahead = this.hasTwoSymbolinOneKey(keySequence
+							.charAt(i + 1)) ? Character.toString(keySequence
+							.charAt(i + 1)) : Character.toString(
+							keySequence.charAt(i + 1)).toLowerCase();
 					tFConLookaheadCombination = tFCon + tFConLookahead;
 				}
 
@@ -459,15 +466,17 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 
 					// 2 step - lookahead가 가능하면 try
 					if (i + 2 <= keySequence.length() - 1) {
-						String lookOverTwoStep = 
-							this.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? 
-								Character.toString(keySequence.charAt(i + 2)) :
-								Character.toString(keySequence.charAt(i + 2)).toLowerCase();
+						String lookOverTwoStep = this
+								.hasTwoSymbolinOneKey(keySequence.charAt(i)) ? Character
+								.toString(keySequence.charAt(i + 2))
+								: Character.toString(keySequence.charAt(i + 2))
+										.toLowerCase();
 
 						// (받침용) 겹자음에 자음이 뒤따라오는 모양새
 						if (this.isISingleConsonant(lookOverTwoStep)
-						|| this.isIDoubleConsonant(lookOverTwoStep)
-						|| !CharUtils.isAsciiAlpha(lookOverTwoStep.charAt(0))) {
+								|| this.isIDoubleConsonant(lookOverTwoStep)
+								|| !CharUtils.isAsciiAlpha(lookOverTwoStep
+										.charAt(0))) {
 							// 받침을 대기 슬롯에 넣는다. 겹자음이므로 키 시퀀스를 하나 건너뛴다
 							syl.setFConsonant(tFConLookaheadCombination);
 							i++;
@@ -514,15 +523,14 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		if (stateFlag == LetterState.Finish)
 			result += syl.getLetter();
 
-
 		return result;
 	}
 
 	private boolean hasTwoSymbolinOneKey(char ch) {
 		return (ch == 'q' || ch == 'Q') || (ch == 'w' || ch == 'W')
 				|| (ch == 'e' || ch == 'E') || (ch == 'r' || ch == 'R')
-				|| (ch == 't' || ch == 'T') || ((ch == 'o' || ch == 'O')
-				|| (ch == 'p' || ch == 'P'));
+				|| (ch == 't' || ch == 'T')
+				|| ((ch == 'o' || ch == 'O') || (ch == 'p' || ch == 'P'));
 	}
 
 	@Override

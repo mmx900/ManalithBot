@@ -21,6 +21,8 @@ package org.manalith.ircbot.plugin.keyseqconv;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.keyseqconv.exceptions.BackSlashesDoNotMatchException;
+import org.manalith.ircbot.plugin.keyseqconv.exceptions.LayoutNotSpecifiedException;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
@@ -111,7 +113,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
-			} catch (Exception e) {
+			} catch (BackSlashesDoNotMatchException e) {
 				logger.warn(e.getMessage(), e);
 			}
 		} else if (cmd.equals("!c3")) {
@@ -123,7 +125,8 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
-			} catch (Exception e) {
+			} catch (LayoutNotSpecifiedException
+					| BackSlashesDoNotMatchException e) {
 				logger.warn(e.getMessage(), e);
 			}
 		}

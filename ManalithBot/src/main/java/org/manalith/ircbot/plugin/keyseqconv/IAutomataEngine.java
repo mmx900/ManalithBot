@@ -23,10 +23,12 @@ import org.manalith.ircbot.plugin.keyseqconv.exceptions.LayoutNotSpecifiedExcept
 
 public interface IAutomataEngine {
 	public void setEnableParsingExceptionSyntax(boolean enable);
+
 	public boolean isEnableParsingExceptionSyntax();
-	
+
 	public String parseKoreanStringToEngSpell(String korean)
 			throws BackSlashesDoNotMatchException;
+
 	public String parseKeySequenceToKorean(String keySequence)
 			throws BackSlashesDoNotMatchException, LayoutNotSpecifiedException;
 }
