@@ -18,17 +18,27 @@
  */
 package org.manalith.ircbot.plugin.keyseqconv;
 
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.BackSlashesDoNotMatchException;
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.LayoutNotSpecifiedException;
+import java.text.ParseException;
 
 public interface IAutomataEngine {
 	public void setEnableParsingExceptionSyntax(boolean enable);
 
 	public boolean isEnableParsingExceptionSyntax();
 
-	public String parseKoreanStringToEngSpell(String korean)
-			throws BackSlashesDoNotMatchException;
+	public boolean isISingleConsonant(String tICon);
+
+	public boolean isIDoubleConsonant(String tICon);
+
+	public boolean isVowel(String tVow);
+
+	public boolean isFConsonant(String tFCon);
+
+	public String parseKoreanStringToEngSpell(String korean);
 
 	public String parseKeySequenceToKorean(String keySequence)
-			throws BackSlashesDoNotMatchException, LayoutNotSpecifiedException;
+			throws ParseException, IllegalArgumentException;
+
+	public int getSingleCharVal(String keySequence);
+
+	public String getSingleChar(int charVal);
 }
