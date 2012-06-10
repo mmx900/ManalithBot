@@ -9,7 +9,6 @@ public class SebeolNoSftAutomataEngine extends SebeolAutomataEngine {
 			syl = new LetterObject(KeyboardLayout.SebeolNoSft);
 		} catch (IllegalArgumentException e) {
 			// Do Nothing.
-			// e.printStackTrace();
 		}
 	}
 
@@ -42,9 +41,8 @@ public class SebeolNoSftAutomataEngine extends SebeolAutomataEngine {
 		// 4th phase : replaceable key sequence for Final Consonant combination
 		// Final Consonant : ㅅ + ㅅ = ㅆ
 		strbuf = strbuf.replaceAll("qq", "_2").replaceAll("Q", "q")
-				.replaceAll("W", "w").replaceAll("E", "e")
-				.replaceAll("R", "r").replace("A", "a")
-				.replaceAll("F", "f").replaceAll("V", "v");
+				.replaceAll("W", "w").replaceAll("E", "e").replaceAll("R", "r")
+				.replace("A", "a").replaceAll("F", "f").replaceAll("V", "v");
 
 		// final phase : ` ~ - = + [ ] { } ; ' : " , . / < > ?
 		result = strbuf.replaceAll("\\`", "_1_").replaceAll("\\~", "_11_")
@@ -58,7 +56,6 @@ public class SebeolNoSftAutomataEngine extends SebeolAutomataEngine {
 				.replaceAll("\\.", "__m").replaceAll("\\/", "___m")
 				.replaceAll("\\<", "_M").replaceAll("\\>", "__M")
 				.replaceAll("\\?", "___M");
-
 
 		return result;
 	}
@@ -298,8 +295,8 @@ public class SebeolNoSftAutomataEngine extends SebeolAutomataEngine {
 		else {
 			SebeolNoSftSymbol.SebeolIConsonant init = SebeolNoSftSymbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			SebeolNoSftSymbol.SebeolVowel vow = SebeolNoSftSymbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			SebeolNoSftSymbol.SebeolVowel vow = SebeolNoSftSymbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			SebeolNoSftSymbol.SebeolFConsonant fin = SebeolNoSftSymbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 
@@ -344,8 +341,8 @@ public class SebeolNoSftAutomataEngine extends SebeolAutomataEngine {
 		} else {
 			SebeolNoSftSymbol.SebeolIConsonant init = SebeolNoSftSymbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			SebeolNoSftSymbol.SebeolVowel vow = SebeolNoSftSymbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			SebeolNoSftSymbol.SebeolVowel vow = SebeolNoSftSymbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			SebeolNoSftSymbol.SebeolFConsonant fin = SebeolNoSftSymbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 

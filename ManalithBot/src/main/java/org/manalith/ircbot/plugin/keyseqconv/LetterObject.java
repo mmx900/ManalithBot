@@ -67,15 +67,15 @@ public class LetterObject {
 			initd = DubeolSymbol.DubeolIConsonant.nul;
 			vowd = DubeolSymbol.DubeolVowel.nul;
 			find = DubeolSymbol.DubeolFConsonant.nul;
-		} else if(this.getLayout() == KeyboardLayout.SebeolFinal) {
+		} else if (this.getLayout() == KeyboardLayout.SebeolFinal) {
 			initsf = SebeolFinalSymbol.SebeolIConsonant.nul;
 			vowsf = SebeolFinalSymbol.SebeolVowel.nul;
 			finsf = SebeolFinalSymbol.SebeolFConsonant.nul;
-		} else if(this.getLayout() == KeyboardLayout.Sebeol390) {
+		} else if (this.getLayout() == KeyboardLayout.Sebeol390) {
 			inits3 = Sebeol390Symbol.SebeolIConsonant.nul;
 			vows3 = Sebeol390Symbol.SebeolVowel.nul;
 			fins3 = Sebeol390Symbol.SebeolFConsonant.nul;
-		} else if(this.getLayout() == KeyboardLayout.SebeolNoSft) {
+		} else if (this.getLayout() == KeyboardLayout.SebeolNoSft) {
 			initsn = SebeolNoSftSymbol.SebeolIConsonant.nul;
 			vowsn = SebeolNoSftSymbol.SebeolVowel.nul;
 			finsn = SebeolNoSftSymbol.SebeolFConsonant.nul;
@@ -172,7 +172,7 @@ public class LetterObject {
 
 	public int getIConsonantValue() {
 		int result = 99;
-		
+
 		if (this.getLayout() == KeyboardLayout.Dubeol)
 			result = initd.value();
 		else if (this.getLayout() == KeyboardLayout.SebeolFinal)

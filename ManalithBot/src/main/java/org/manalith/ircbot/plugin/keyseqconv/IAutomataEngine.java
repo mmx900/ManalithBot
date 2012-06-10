@@ -22,17 +22,23 @@ import java.text.ParseException;
 
 public interface IAutomataEngine {
 	public void setEnableParsingExceptionSyntax(boolean enable);
+
 	public boolean isEnableParsingExceptionSyntax();
-	
+
 	public boolean isISingleConsonant(String tICon);
+
 	public boolean isIDoubleConsonant(String tICon);
+
 	public boolean isVowel(String tVow);
+
 	public boolean isFConsonant(String tFCon);
 
 	public String parseKoreanStringToEngSpell(String korean);
+
 	public String parseKeySequenceToKorean(String keySequence)
 			throws ParseException, IllegalArgumentException;
-	
+
 	public int getSingleCharVal(String keySequence);
+
 	public String getSingleChar(int charVal);
 }

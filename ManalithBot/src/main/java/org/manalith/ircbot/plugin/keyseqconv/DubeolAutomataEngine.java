@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.keyseqconv.symboltable.DubeolSymbol;
 
 public class DubeolAutomataEngine implements IAutomataEngine {
-	
+
 	private enum LetterState {
 		Null, IConsonant, Vowel, FConsonant, Finish
 	}
@@ -150,8 +150,9 @@ public class DubeolAutomataEngine implements IAutomataEngine {
 
 		if (this.isEnableParsingExceptionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
-			
-			throw new ParseException("Back slashes do not match",keySequence.lastIndexOf("\\", 0));
+
+			throw new ParseException("Back slashes do not match",
+					keySequence.lastIndexOf("\\", 0));
 
 		for (int i = 0; i < keySequence.length(); i++) {
 			if (stateFlag.equals(LetterState.Null)

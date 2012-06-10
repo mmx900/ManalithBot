@@ -12,22 +12,31 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 	public SebeolAutomataEngine() {
 	}
-	
+
 	public abstract String changeKeyValToInternalSymbol(final String str);
 
 	public abstract boolean isISingleConsonant(String tICon);
+
 	public abstract boolean isIDoubleConsonant(String tICon);
+
 	public abstract boolean isVowel(String tVow);
+
 	public abstract boolean isFConsonant(String tFCon);
+
 	public abstract boolean isSpecialChar(String tChar);
 
-	protected abstract String inputIConsonant(boolean isLastPosition, String token);
+	protected abstract String inputIConsonant(boolean isLastPosition,
+			String token);
+
 	protected abstract String inputVowel(boolean isLastPosition, String token);
-	protected abstract String inputFConsonant(boolean isLastPosition, String token);
+
+	protected abstract String inputFConsonant(boolean isLastPosition,
+			String token);
+
 	protected abstract String inputSpecialChar(String token);
+
 	protected abstract String inputOtherChar(String token);
 
-	
 	// Example in body :
 	// return SebeolSymbol.SebeolSingleLetter.valueOf(keySymbol).value();
 	public abstract int getSingleCharVal(String keySymbol);
@@ -35,14 +44,16 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 	public final void setEnableParsingExceptionSyntax(boolean enable) {
 		this.enableParseExceptionSyntax = enable;
 	}
+
 	public final boolean isEnableParsingExceptionSyntax() {
 		return this.enableParseExceptionSyntax;
 	}
-	public final String parseKoreanStringToEngSpell(String korean)
-	{
+
+	public final String parseKoreanStringToEngSpell(String korean) {
 		String result = "";
 		return result;
 	}
+
 	public final String parseKeySequenceToKorean(String keySequence)
 			throws ParseException, IllegalArgumentException {
 		String result = "";
@@ -56,7 +67,8 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 		if (this.isEnableParsingExceptionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
-			throw new ParseException("Back slashes do not match", keySequence.lastIndexOf("\\", 0));
+			throw new ParseException("Back slashes do not match",
+					keySequence.lastIndexOf("\\", 0));
 
 		for (int i = 0; i < keySequence.length(); i++) {
 			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
@@ -185,6 +197,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 		return new String(ch);
 	}
+
 	public final String getSpecialChar(int charVal) {
 		char[] ch = new char[1];
 		ch[0] = (char) (charVal + 32);

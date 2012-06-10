@@ -126,39 +126,34 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
-			} catch (IllegalArgumentException
-					| ParseException e) {
+			} catch (IllegalArgumentException | ParseException e) {
 				logger.warn(e.getMessage(), e);
 			}
 		} else if (cmd.equals("!c33")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
-			
+			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
+
 			try {
 				String dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
-				
+
 				bot.sendLoggedMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
-				
+
 				event.setExecuted(true);
-			}
-			catch (IllegalArgumentException
-					| ParseException e) {
-				logger.warn(e.getMessage(),e);
+			} catch (IllegalArgumentException | ParseException e) {
+				logger.warn(e.getMessage(), e);
 			}
 		} else if (cmd.equals("!c3n")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
-			
+			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
+
 			try {
 				String dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
-				
+
 				bot.sendLoggedMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
-				
+
 				event.setExecuted(true);
-			}
-			catch (IllegalArgumentException
-					| ParseException e) {
-				logger.warn(e.getMessage(),e);
+			} catch (IllegalArgumentException | ParseException e) {
+				logger.warn(e.getMessage(), e);
 			}
 		}
 	}

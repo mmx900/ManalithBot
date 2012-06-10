@@ -61,7 +61,6 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 				// "ㅗ" -> v
 				.replaceAll("\\/", "v");
 
-
 		return result;
 	}
 
@@ -300,8 +299,8 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		else {
 			Sebeol390Symbol.SebeolIConsonant init = Sebeol390Symbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			Sebeol390Symbol.SebeolVowel vow = Sebeol390Symbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			Sebeol390Symbol.SebeolVowel vow = Sebeol390Symbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			Sebeol390Symbol.SebeolFConsonant fin = Sebeol390Symbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 
@@ -346,8 +345,8 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		} else {
 			Sebeol390Symbol.SebeolIConsonant init = Sebeol390Symbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			Sebeol390Symbol.SebeolVowel vow = Sebeol390Symbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			Sebeol390Symbol.SebeolVowel vow = Sebeol390Symbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			Sebeol390Symbol.SebeolFConsonant fin = Sebeol390Symbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 

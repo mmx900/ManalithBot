@@ -40,8 +40,8 @@ public class SebeolFinalAutomataEngine extends SebeolAutomataEngine {
 
 		// 4th phase : replaceable key sequence for Final Consonant combination
 		strbuf = strbuf.replaceAll("xx", "F").replaceAll("s\\_1", "S")
-				.replaceAll("wx","D").replaceAll("wz","C")
-				.replaceAll("w\\_1","V").replaceAll("\\_3q", "X");
+				.replaceAll("wx", "D").replaceAll("wz", "C")
+				.replaceAll("w\\_1", "V").replaceAll("\\_3q", "X");
 
 		// final phase : ` ~ - = + [ ] { } ; ' : " , . / < > ?
 		result = strbuf.replaceAll("\\`", "_1_").replaceAll("\\~", "_11_")
@@ -293,8 +293,8 @@ public class SebeolFinalAutomataEngine extends SebeolAutomataEngine {
 		else {
 			SebeolFinalSymbol.SebeolIConsonant init = SebeolFinalSymbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			SebeolFinalSymbol.SebeolVowel vow = SebeolFinalSymbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			SebeolFinalSymbol.SebeolVowel vow = SebeolFinalSymbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			SebeolFinalSymbol.SebeolFConsonant fin = SebeolFinalSymbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 
@@ -339,8 +339,8 @@ public class SebeolFinalAutomataEngine extends SebeolAutomataEngine {
 		} else {
 			SebeolFinalSymbol.SebeolIConsonant init = SebeolFinalSymbol.SebeolIConsonant
 					.valueOf(syl.getIConsonantKeySymbol());
-			SebeolFinalSymbol.SebeolVowel vow = SebeolFinalSymbol.SebeolVowel.valueOf(syl
-					.getVowelKeySymbol());
+			SebeolFinalSymbol.SebeolVowel vow = SebeolFinalSymbol.SebeolVowel
+					.valueOf(syl.getVowelKeySymbol());
 			SebeolFinalSymbol.SebeolFConsonant fin = SebeolFinalSymbol.SebeolFConsonant
 					.valueOf(syl.getFConsonantKeySymbol());
 
