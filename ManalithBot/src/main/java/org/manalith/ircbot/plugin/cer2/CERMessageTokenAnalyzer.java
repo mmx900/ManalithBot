@@ -117,49 +117,44 @@ public class CERMessageTokenAnalyzer {
 		return result;
 	}
 
-	public static String[] convertToCLICommandString(String [] args)
+	public static String[] convertToCLICommandString(String[] args)
 			throws InvalidArgumentException {
 		String[] result = null;
-		
-		for (int i = 0 ; i < args.length; i++)
-		{
-			if ( getTokenType(args[i]) == TokenType.IRCOption && getTokenSubtype(args[i],TokenType.IRCOption) != TokenSubtype.Unknown )
-			{
+
+		for (int i = 0; i < args.length; i++) {
+			if (getTokenType(args[i]) == TokenType.IRCOption
+					&& getTokenSubtype(args[i], TokenType.IRCOption) != TokenSubtype.Unknown) {
 				args[i] = "-" + args[i];
-			}
-			else if ( getTokenType(args[i]) == TokenType.IRCFieldAbbr )
-			{
-				if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FACentralRate )
+			} else if (getTokenType(args[i]) == TokenType.IRCFieldAbbr) {
+				if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FACentralRate)
 					args[i] = "cr";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FABuyCash )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FABuyCash)
 					args[i] = "cb";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FACellCash )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FACellCash)
 					args[i] = "cc";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FASendRemit )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FASendRemit)
 					args[i] = "rs";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FARecvRemit )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FARecvRemit)
 					args[i] = "rr";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FAECRate )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FAECRate)
 					args[i] = "ec";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FADollarExcRate )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FADollarExcRate)
 					args[i] = "de";
-				else if ( getTokenSubtype(args[i], TokenType.IRCFieldAbbr ) == TokenSubtype.FAAll )
+				else if (getTokenSubtype(args[i], TokenType.IRCFieldAbbr) == TokenSubtype.FAAll)
 					args[i] = "all";
-			}
-			else if ( ( getTokenType(args[i]) == TokenType.IRCCurrencyUnit || getTokenType(args[i]) == TokenType.Amount ) && 
-					( getTokenSubtype(args[i],TokenType.IRCCurrencyUnit ) != TokenSubtype.Unknown || getTokenSubtype(args[i],TokenType.Amount ) != TokenSubtype.Unknown ) )
-			{
+			} else if ((getTokenType(args[i]) == TokenType.IRCCurrencyUnit || getTokenType(args[i]) == TokenType.Amount)
+					&& (getTokenSubtype(args[i], TokenType.IRCCurrencyUnit) != TokenSubtype.Unknown || getTokenSubtype(
+							args[i], TokenType.Amount) != TokenSubtype.Unknown)) {
 				;
-			}
-			else
-			{
-				throw new InvalidArgumentException ( args[i] + " => " + TokenType.Unknown.toString() ); 
+			} else {
+				throw new InvalidArgumentException(args[i] + " => "
+						+ TokenType.Unknown.toString());
 			}
 		}
-		
+
 		result = new String[args.length];
 		System.arraycopy(args, 0, result, 0, args.length);
-		
+
 		return result;
 	}
 }

@@ -110,7 +110,6 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 
 			customsetlist.loadProperties();
 
-
 			String[] userlist = customsetlist.getKeyList();
 			if (userlist == null) {
 				;
@@ -118,9 +117,8 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
 			}
 
-			customsetlist.setKeyValue(
-					this.getChannel().substring(1) + "." + this.getUserNick(),
-					this.getCurrencyArgString());
+			customsetlist.setKeyValue(this.getChannel().substring(1) + "."
+					+ this.getUserNick(), this.getCurrencyArgString());
 			customsetlist.storeProperties();
 
 			result += this.getChannel() + "의 " + this.getUserNick()
@@ -141,9 +139,8 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 		try {
 			PropertyManager customsetlist = new PropertyManager(
 					this.getLocalPath(), "customsetlist.prop");
-			
+
 			customsetlist.loadProperties();
-			
 
 			String[] userlist = customsetlist.getKeyList();
 			if (userlist == null) {

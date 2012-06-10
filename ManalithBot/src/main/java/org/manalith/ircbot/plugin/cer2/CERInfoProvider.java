@@ -510,12 +510,10 @@ public class CERInfoProvider {
 			StringBuilder fieldName = new StringBuilder();
 			fieldName.append("country_name,");
 
-			if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAAll)
-			{
+			if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAAll) {
 				fieldName.delete(0, fieldName.length());
 				fieldName.append("*");
-			}
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACentralRate)
+			} else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACentralRate)
 				fieldName.append("currency_unit,central_rate");
 			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FABuyCash)
 				fieldName.append("currency_unit,cash_buy");
@@ -557,7 +555,7 @@ public class CERInfoProvider {
 			result = this.convert(value, args[1], args[2]);
 		} else if (cl.hasOption("buycash") || cl.hasOption("cellcash")
 				|| cl.hasOption("recvremit") || cl.hasOption("sendremit")) {
- 			String [] args = cl.getOptionValues(aargs[0].substring(1));
+			String[] args = cl.getOptionValues(aargs[0].substring(1));
 			String currencyUnit;
 			String value;
 
@@ -628,7 +626,7 @@ public class CERInfoProvider {
 
 		String[] datetime = dt.split("\\s");
 		String[] date = datetime[0].split("\\.");
-		
+
 		result.append("Last Updated : ");
 		result.append(month[NumberUtils.toInt(date[1]) - 1]);
 		result.append(" ");
@@ -777,7 +775,7 @@ public class CERInfoProvider {
 			central_rate = NumberUtils.toDouble(data[2]);
 			s_value = NumberUtils.toDouble(resval);
 
-			resval = String.format("%.2f", (s_value / central_rate )
+			resval = String.format("%.2f", (s_value / central_rate)
 					* currency_unit);
 			// result = "￦" + value + " => " + resval + " " + CurrencyUnit;
 		}
