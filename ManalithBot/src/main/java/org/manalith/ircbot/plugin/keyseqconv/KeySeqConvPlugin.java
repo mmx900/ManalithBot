@@ -18,11 +18,11 @@
  */
 package org.manalith.ircbot.plugin.keyseqconv;
 
+import java.text.ParseException;
+
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.BackSlashesDoNotMatchException;
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.LayoutNotSpecifiedException;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +31,16 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 
 	private Logger logger = Logger.getLogger(getClass());
 	private DubeolAutomataEngine dengine;
-	private SebeolAutomataEngine sengine;
+	private SebeolFinalAutomataEngine sfengine;
+	private Sebeol390AutomataEngine stengine;
+	private SebeolNoSftAutomataEngine snengine;
 	private boolean enableParsingExceptionSyntax;
 
 	public KeySeqConvPlugin() {
 		dengine = new DubeolAutomataEngine();
-		sengine = new SebeolAutomataEngine();
+		sfengine = new SebeolFinalAutomataEngine();
+		stengine = new Sebeol390AutomataEngine();
+		snengine = new SebeolNoSftAutomataEngine();
 	}
 
 	public void setEnableParsingExceptionSyntax(boolean enable) {
@@ -49,7 +53,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
 	 */
 	public String getName() {
-		return "입력 변환기(2벌,3벌 <-> 쿼티)";
+		return "입력 변환기(2벌,3벌[최종,390,순아래] <-> 쿼티)";
 	}
 
 	/*
@@ -59,7 +63,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 */
 
 	public String getCommands() {
-		return "!c2|!c2r";
+		return "!c2|!c3|!c33|!c3n|!c2r";
 	}
 
 	/*
@@ -68,7 +72,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		return "!c2|!c3 한글로 변환할 영문메시지, \\변환하지 않을 영문메시지\\ (백슬래시 표시: \\\\) | !c2r 영문자로 변환할 한글메시지";
+		return "!c2|!c3|!c33|!c3n 한글로 변환할 영문메시지, \\변환하지 않을 영문메시지\\ (백슬래시 표시: \\\\) | !c2r 영문자로 변환할 한글메시지";
 	}
 
 	/*
@@ -88,7 +92,8 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 		String sender = event.getUser().getNick();
 
 		dengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
-		sengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
+		sfengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
+		stengine.setEnableParsingExceptionSyntax(false);
 
 		String cmd = msg.split("\\s")[0];
 
@@ -106,28 +111,54 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			}
 		} else if (cmd.equals("!c2r")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-			try {
-				String dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
+			String dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
 
-				bot.sendLoggedMessage(target,
-						String.format("<%s> %s", sender, dstmsg));
+			bot.sendLoggedMessage(target,
+					String.format("<%s> %s", sender, dstmsg));
 
-				event.setExecuted(true);
-			} catch (BackSlashesDoNotMatchException e) {
-				logger.warn(e.getMessage(), e);
-			}
+			event.setExecuted(true);
 		} else if (cmd.equals("!c3")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 			try {
-				String dstmsg = sengine.parseKeySequenceToKorean(srcmsg);
+				String dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
 
 				bot.sendLoggedMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
-			} catch (LayoutNotSpecifiedException
-					| BackSlashesDoNotMatchException e) {
+			} catch (IllegalArgumentException
+					| ParseException e) {
 				logger.warn(e.getMessage(), e);
+			}
+		} else if (cmd.equals("!c33")) {
+			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
+			
+			try {
+				String dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
+				
+				bot.sendLoggedMessage(target,
+						String.format("<%s> %s", sender, dstmsg));
+				
+				event.setExecuted(true);
+			}
+			catch (IllegalArgumentException
+					| ParseException e) {
+				logger.warn(e.getMessage(),e);
+			}
+		} else if (cmd.equals("!c3n")) {
+			String srcmsg = msg.substring(msg.indexOf(' ') + 1,msg.length());
+			
+			try {
+				String dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
+				
+				bot.sendLoggedMessage(target,
+						String.format("<%s> %s", sender, dstmsg));
+				
+				event.setExecuted(true);
+			}
+			catch (IllegalArgumentException
+					| ParseException e) {
+				logger.warn(e.getMessage(),e);
 			}
 		}
 	}

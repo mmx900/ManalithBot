@@ -16,13 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.keyseqconv;
+package org.manalith.ircbot.plugin.keyseqconv.symboltable;
 
-public class SebeolSymbol {
+public class SebeolNoSftSymbol {
 
 	public static enum SebeolIConsonant {
+		// ㅋ의 위치가 0 -> 9 로 바뀜.
 		nul(99), k(0), kk(1), h(2), u(3), uu(4), y(5), i(6), _l(7), _l_l(8), n(
-				9), nn(10), j(11), l(12), ll(13), o(14), _0(15), __l(16), p(17), m(
+				9), nn(10), j(11), l(12), ll(13), o(14), _9(15), __l(16), p(17), m(
 				18);
 
 		private int value;
@@ -41,7 +42,8 @@ public class SebeolSymbol {
 	}
 
 	public static enum SebeolISingleConsonant {
-		nul(99), k(0), h(2), u(3), y(5), i(6), _l(7), n(9), j(11), l(12), o(14), _0(
+		// ㅋ의 위치가 0 -> 9로 바뀜
+		nul(99), k(0), h(2), u(3), y(5), i(6), _l(7), n(9), j(11), l(12), o(14), _9(
 				15), __l(16), p(17), m(18);
 
 		private int value;
@@ -60,6 +62,7 @@ public class SebeolSymbol {
 	}
 
 	public static enum SebeolIDoubleConsonant {
+		// ㅋ를 제외한 자음은 세벌식 최종과 동일
 		nul(99), kk(1), uu(4), _l_l(8), nn(10), ll(13);
 
 		private int value;
@@ -78,7 +81,8 @@ public class SebeolSymbol {
 	}
 
 	public static enum SebeolVowel {
-		nul(99), f(0), r(1), _6(2), G(3), t(4), c(5), e(6), _7(7), v(8), vf(9), vr(
+		// G -> R -> 0 (ㅒ) : 최종->390->순아래. 이외에는 390과 동일.
+		nul(99), f(0), r(1), _6(2), _0(3), t(4), c(5), e(6), _7(7), v(8), vf(9), vr(
 				10), vd(11), _4(12), b(13), bt(14), bc(15), bd(16), _5(17), g(
 				18), gd(19), d(20);
 
@@ -98,9 +102,11 @@ public class SebeolSymbol {
 	}
 
 	public static enum SebeolFConsonant {
-		nul(0), x(1), _11(2), V(3), s(4), E(5), S(6), A(7), w(8), _22(9), F(10), D(
-				11), T(12), _55(13), _44(14), R(15), z(16), _3(17), X(18), q(19), _2(
-				20), a(21), _33(22), Z(23), C(24), W(25), Q(26), _1(27);
+		// 순아래용 종성 재배치
+		nul(0), x(1), xx(2), xq(3), s(4), s__0(5), s_11(6), ___m(7),
+		w(8), wx(9), wz(10), w_3(11), wq(12), wW(13), wQ(14), w_1(15),
+		z(16), _3(17), _3q(18), q(19), _2(20), a(21), __0(22), ___0(23),
+		____0(24), _p(25), __p(26), _1(27);
 		private int value;
 
 		SebeolFConsonant(int initial) {
@@ -118,15 +124,23 @@ public class SebeolSymbol {
 
 	public static enum SebeolSingleLetter {
 		// U+1100 ~ U+11FF HANGUL JAMO
-		k(0), kk(1), h(2), u(3), uu(4), y(5), i(6), _l(7), _l_l(8), n(9), nn(10), j(
-				11), l(12), ll(13), o(14), _0(15), __l(16), p(17), m(18), f(97), r(
-				98), _6(99), G(100), t(101), c(102), e(103), _7(104), v(105), vf(
-				106), vr(107), vd(108), _4(109), b(110), bt(111), bc(112), bd(
-				113), _5(114), g(115), gd(116), d(117), x(168), _11(169), V(170), s(
-				171), E(172), S(173), A(174), w(175), _22(176), F(177), D(178), T(
-				179), _55(180), _44(181), R(182), z(183), _3(184), X(185), q(
-				186), _2(187), a(188), _33(189), Z(190), C(191), W(192), Q(193), _1(
-				194);
+		// Initial Consonant : 0 ~ 18 (세벌식 최종과 동일)
+		// ㅋ의 위치가 0 -> 9 로 바뀜.
+		k(0), kk(1), h(2), u(3), uu(4), y(5), i(6), _l(7), _l_l(8), 
+		n(9), nn(10), j(11), l(12), ll(13), o(14), _9(15), __l(16), 
+		p(17), m(18),
+				
+		// Vowel : 97 ~ 117
+		f(97), r(98), _6(99), _0(100), t(101), c(102), e(103), _7(104),
+		v(105), vf(106), vr(107), vd(108), _4(109), b(110), bt(111),
+		bc(112), bd(113), _5(114), g(115), gd(116), d(117),
+		
+		// Final Consonant : 168 ~ 194
+		x(168), xx(169), xq(170), s(171), s__0(172), s_11(173),
+		___m(174), w(175), wx(176), wz(177), w_3(178), wq(179),
+		wW(180), wQ(181), w_1(182), z(183), _3(184), _3q(185),
+		q(186), _2(187), a(188), __0(189), ___0(190), ____0(191),
+		_p(192), __p(193), _1(194);
 
 		private int value;
 
@@ -146,26 +160,28 @@ public class SebeolSymbol {
 	public static enum SebeolSpecialChar {
 		// +32
 
-		// excl, quotation, percent, apostrophe, left paren, right paren,
-		// asterisk
-		___M(1), M(2), _P(5), _99(7), _p(8), __0(9), _1_(10),
+		// excl, quotation, sharp, dollar, percent, ampersand, apostrophe, 
+		// left paren, right paren, asterisk
+		B(1), __L(2), _33(3), _44(4), _55(5), _77(6), H(7), 
+		_99(8), _00(9), _88(10),
 
 		// plus, comma, hyphen-minus, period, slash
-		___00(11), _m(12), N(13), __m(14), __P(15),
+		___00(11), _m(12), Z(13), __m(14), G(15),
 
 		// number zero to nine. which means, these are real Arabic number.
-		H(16), J(17), K(18), L(19), _L(20), Y(21), U(22), I(23), O(24), P(25),
+		N(16), M(17), _M(18), __M(19), J(20), K(21), L(22), U(23), I(24), O(25),
 
-		// colon, semicolon,gt, eq, lt, question (commercial at mark is not
-		// being in sebeol)
-		____0(26), __00(27), __p(28), _66(29), ___0(30), B(31),
+		// colon, semicolon, gt, eq, lt, question, commercial at 
+		_L(26), T(27), P(28), X(29), Y(30), ___M(31), _22(32),
 
-		____00(60), _00(94), // back slash, tilde
+		// open square bracket, back slash, close square bracket,
+		// circumflex accent(hat), low line, grave accent
+		S(59), C(60), D(61), _66(62), __00(63), _1_(64),
+		
+		// curly open, vertline, curly close, tilde
+		_P(91), ____00(92), __P(93), _11_(94);
+		
 
-		__L(151), // middle dot
-
-		_77(8188), _88(8189), // left, right double quotation mark
-		_11_(8219); // refer
 
 		private int value;
 

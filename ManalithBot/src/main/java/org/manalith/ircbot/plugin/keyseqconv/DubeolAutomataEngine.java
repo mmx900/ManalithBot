@@ -18,13 +18,18 @@
  */
 package org.manalith.ircbot.plugin.keyseqconv;
 
+import java.text.ParseException;
+import java.util.IllegalFormatException;
+
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.plugin.keyseqconv.symboltable.DubeolSymbol;
 
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.BackSlashesDoNotMatchException;
-import org.manalith.ircbot.plugin.keyseqconv.exceptions.LayoutNotSpecifiedException;
-
-public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
+public class DubeolAutomataEngine implements IAutomataEngine {
+	
+	private enum LetterState {
+		Null, IConsonant, Vowel, FConsonant, Finish
+	}
 
 	private boolean enableParseExceptionSyntax;
 
@@ -40,7 +45,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		return this.enableParseExceptionSyntax;
 	}
 
-	protected boolean isISingleConsonant(String tICon) {
+	public boolean isISingleConsonant(String tICon) {
 		try {
 			@SuppressWarnings("unused")
 			DubeolSymbol.DubeolISingleConsonant check1 = DubeolSymbol.DubeolISingleConsonant
@@ -53,7 +58,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		}
 	}
 
-	protected boolean isIDoubleConsonant(String tICon) {
+	public boolean isIDoubleConsonant(String tICon) {
 		try {
 			@SuppressWarnings("unused")
 			DubeolSymbol.DubeolIDoubleConsonant check1 = DubeolSymbol.DubeolIDoubleConsonant
@@ -66,7 +71,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		}
 	}
 
-	protected boolean isVowel(String tVow) {
+	public boolean isVowel(String tVow) {
 		try {
 			@SuppressWarnings("unused")
 			DubeolSymbol.DubeolVowel check1 = DubeolSymbol.DubeolVowel
@@ -79,7 +84,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		}
 	}
 
-	protected boolean isFConsonant(String tFCon) {
+	public boolean isFConsonant(String tFCon) {
 		try {
 			@SuppressWarnings("unused")
 			DubeolSymbol.DubeolFConsonant check1 = DubeolSymbol.DubeolFConsonant
@@ -93,7 +98,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 	}
 
 	public String parseKoreanStringToEngSpell(String korean)
-			throws BackSlashesDoNotMatchException {
+			throws IllegalFormatException {
 		String result = "";
 
 		for (int i = 0; i < korean.length(); i++) {
@@ -126,7 +131,7 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 	}
 
 	public String parseKeySequenceToKorean(String keySequence)
-			throws BackSlashesDoNotMatchException, LayoutNotSpecifiedException {
+			throws ParseException, IllegalArgumentException {
 		String result = "";
 
 		LetterState stateFlag = LetterState.Null;
@@ -141,11 +146,12 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 		String tFConLookahead = "";
 		String tFConLookaheadCombination = "";
 
-		LetterObject syl = new LetterObject(LetterObject.LayoutFlag.Dubeol);
+		LetterObject syl = new LetterObject(KeyboardLayout.Dubeol);
 
 		if (this.isEnableParsingExceptionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
-			throw new BackSlashesDoNotMatchException();
+			
+			throw new ParseException("Back slashes do not match",keySequence.lastIndexOf("\\", 0));
 
 		for (int i = 0; i < keySequence.length(); i++) {
 			if (stateFlag.equals(LetterState.Null)
@@ -533,13 +539,11 @@ public class DubeolAutomataEngine extends InputSequenceAutomataEngine {
 				|| ((ch == 'o' || ch == 'O') || (ch == 'p' || ch == 'P'));
 	}
 
-	@Override
-	protected int getSingleCharVal(String keySequence) {
+	public int getSingleCharVal(String keySequence) {
 		return DubeolSymbol.DubeolSingleLetter.valueOf(keySequence).value();
 	}
 
-	@Override
-	protected String getSingleChar(int charVal) {
+	public String getSingleChar(int charVal) {
 		char[] ch = new char[1];
 		// single char value starts from 0x3130
 		ch[0] = (char) (charVal + 0x3130);
