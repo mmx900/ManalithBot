@@ -93,7 +93,8 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 
 		dengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
 		sfengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
-		stengine.setEnableParsingExceptionSyntax(false);
+		stengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
+		snengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
 
 		String cmd = msg.split("\\s")[0];
 
