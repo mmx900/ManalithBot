@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.typeconv.exceptions;
+package org.manalith.ircbot.plugin.keyseqconv.exceptions;
 
 public class BackSlashesDoNotMatchException extends Exception {
 
