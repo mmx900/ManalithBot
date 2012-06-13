@@ -63,7 +63,6 @@ public class ManalithBot extends PircBotX {
 	public void addPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
 		// TODO init 등 라이프사이클 관련 메서드 삽입
-		plugin.setBot(this);
 	}
 
 	// TODO sendMessage 오버라이드

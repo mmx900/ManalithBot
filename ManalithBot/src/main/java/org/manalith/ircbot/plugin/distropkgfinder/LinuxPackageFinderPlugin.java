@@ -20,6 +20,7 @@
 
 package org.manalith.ircbot.plugin.distropkgfinder;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,7 @@ public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
+		ManalithBot bot = event.getBot();
 		String[] command = message.split("\\s");
 
 		if ((command[0].equals("!deb") || command[0].equals("!ubu")

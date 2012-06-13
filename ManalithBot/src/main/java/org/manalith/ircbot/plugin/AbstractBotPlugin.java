@@ -21,31 +21,9 @@ package org.manalith.ircbot.plugin;
 
 import java.io.File;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
-	@Deprecated
-	protected ManalithBot bot;
-
-	public AbstractBotPlugin() {
-
-	}
-
-	public AbstractBotPlugin(ManalithBot bot) {
-		this.bot = bot;
-	}
-
-	@Deprecated
-	public void setBot(ManalithBot bot) {
-		this.bot = bot;
-	}
-
-	@Deprecated
-	public ManalithBot getBot() {
-		return bot;
-	}
-
 	public String getResourcePath() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(System.getProperty("user.dir"));

@@ -18,6 +18,7 @@
  */
 package org.manalith.ircbot.plugin.kvl;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -51,6 +52,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 	protected void onMessage(MessageEvent event, String target) {
 		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
+		ManalithBot bot = event.getBot();
 
 		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
 			if (command.length >= 3) {

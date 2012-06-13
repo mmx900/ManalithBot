@@ -19,20 +19,9 @@
  */
 package org.manalith.ircbot.plugin;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public interface IBotPlugin {
-	@Deprecated
-	public void setBot(ManalithBot bot);
-
-	/**
-	 * 이 메서드는 PircBotX 구조에 적합하지 않다. 따라서 MessageEvent.getBot() 을 대신 사용해야 한다.
-	 * @return
-	 */
-	@Deprecated
-	public ManalithBot getBot();
-
 	public String getName();
 
 	public String getCommands();
