@@ -1,5 +1,7 @@
 package org.manalith.ircbot.console;
 
+import jline.console.ConsoleReader;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -38,21 +40,32 @@ public class Launcher {
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				configFile);
 
-		Launcher launcher = context.getBean(Launcher.class);
-		launcher.test();
-	}
-
-	private void test() {
-		// FIXME method stub
+		// FIXME 인증 수행
 		UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
 				"admin", "admin");
 		SecurityContextHolder.getContext().setAuthentication(userToken);
+		Launcher launcher = context.getBean(Launcher.class);
 
+		ConsoleReader reader = new ConsoleReader();
+		String line;
+		while (!StringUtils
+				.equals((line = reader.readLine("prompt> ")), "exit")) {
+			String[] strs = StringUtils.split(line, " ");
+			launcher.sendMessage(strs[0], strs[1]);
+
+			// System.out.println(line);
+		}
+
+	}
+
+	private void sendMessage(String target, String message) {
 		try {
-			remoteService.sendMessage("#setzer", "test");
+			remoteService.sendMessage(target, message);
 		} catch (BadCredentialsException e) {
+			System.out.println("인증이 올바르지 않습니다.");
 			Logger.getLogger(Launcher.class).error(e);
 		}
+
 	}
 
 }
