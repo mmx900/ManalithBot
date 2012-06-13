@@ -27,10 +27,12 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.util.AppContextUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class BotMain {
+
 	public static void main(String[] args) throws Exception {
 		// 인코딩 검사
 		if (!Charset.defaultCharset().toString().equals("UTF-8")) {
@@ -54,12 +56,13 @@ public class BotMain {
 		// 설정 초기화
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				configFile);
+		AppContextUtil.setApplicationContext(context);
 
 		ConfigurationManager config = context
 				.getBean(ConfigurationManager.class);
 
 		// 봇 구동
-		final ManalithBot bot = context.getBean(ManalithBot.class);
+		ManalithBot bot = context.getBean(ManalithBot.class);
 		bot.setLogin(config.getBotLogin());
 		bot.setNickname(config.getBotName());
 		bot.setVerbose(config.getVerbose());

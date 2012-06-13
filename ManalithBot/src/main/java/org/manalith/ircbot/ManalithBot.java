@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
+import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.exception.NickAlreadyInUseException;
@@ -39,9 +40,15 @@ public class ManalithBot extends PircBotX {
 	public ManalithBot(List<IBotPlugin> plugins) {
 		getListenerManager().addListener(new ManalithBotListener());
 
+		// FIXME 멀티쓰레드로 전환 (ThreadedListenerManager.dispatchEvent 참조
 		for (IBotPlugin plugin : plugins) {
 			addPlugin(plugin);
 		}
+	}
+
+	public static ManalithBot getInstance() {
+		return AppContextUtil.getApplicationContext()
+				.getBean(ManalithBot.class);
 	}
 
 	public PluginManager getPluginManager() {
@@ -55,8 +62,11 @@ public class ManalithBot extends PircBotX {
 
 	public void addPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
+		// TODO init 등 라이프사이클 관련 메서드 삽입
 		plugin.setBot(this);
 	}
+
+	// TODO sendMessage 오버라이드
 
 	/**
 	 * sendMessage(target, message)가 final 메서드이므로 로깅을 위해 이 메시지를 사용한다.
