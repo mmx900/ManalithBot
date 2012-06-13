@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:context="http://www.springframework.org/schema/context"
-xmlns:task="http://www.springframework.org/schema/task"
-xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 	<!-- 데이터베이스 설정 -->
-	<import resource="datasource.xml"/>
-	
+	<import resource="datasource.xml" />
+
 	<context:component-scan base-package="org.manalith.ircbot" />
 
 	<task:annotation-driven />
-	
+
 	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
 		<!-- 봇 기본 설정 -->
 		<property name="botLogin" value="LOGIN" />
@@ -24,7 +24,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 		<property name="serverEncoding" value="UTF-8" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
 	</bean>
-	
+
 	<!-- 릴레이 플러그인 설정 -->
 	<bean id="relayPluginConfigurationManager"
 		class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
@@ -45,37 +45,35 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			<ref bean="relayPluginConfigurationManager" />
 		</constructor-arg>
 	</bean>
-	
+
 	<!-- 구글 플러그인 설정 -->
 	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
 		<property name="apiKey" value="ABCDEFG" />
 		<property name="apiReferer" value="http://org" />
 	</bean>
-	
+
 	<!-- 관리자 플러그인 설정 -->
 	<!-- 주의 : 비밀번호를 반드시 변경해주세요. 변경하지 않으면 실행되지 않습니다. -->
-	<!--
-	<bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin">
-		<property name="password" value="CHANGE_ME" />
-	</bean>
-	-->
+	<!-- <bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin"> 
+		<property name="password" value="CHANGE_ME" /> </bean> -->
 
 	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
-		<property name="enablePrintContentType" value="true"/>
+		<property name="enablePrintContentType" value="true" />
 	</bean>
-	
-	<bean id="urlShortenerPlugin" class="org.manalith.ircbot.plugin.urlshortener.UrlShortenerPlugin">
+
+	<bean id="urlShortenerPlugin"
+		class="org.manalith.ircbot.plugin.urlshortener.UrlShortenerPlugin">
 		<property name="provider">
 			<!-- <ref bean="bitLyProvider" /> -->
 			<ref bean="gooGlProvider" />
 		</property>
 	</bean>
-	
+
 	<bean id="bitLyProvider" class="org.manalith.ircbot.plugin.urlshortener.BitLyProvider">
 		<property name="apiLogin" value="YOUR_BITLY_API_LOGIN" />
 		<property name="apiKey" value="YOUR_BITLY_API_KEY" />
 	</bean>
-	
+
 	<bean id="gooGlProvider" class="org.manalith.ircbot.plugin.urlshortener.GooGlProvider">
 		<property name="apiKey" value="YOUR_GOOGLE_API_KEY" />
 	</bean>
@@ -83,13 +81,13 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean id="keySeqConvPlugin" class="org.manalith.ircbot.plugin.keyseqconv.KeySeqConvPlugin">
 		<property name="enableParsingExceptionSyntax" value="true" />
 	</bean>
-	
+
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
 			<list>
 				<!-- 사용할 플러그인 목록 -->
 				<!-- <ref bean="relayPlugin" /> -->
-				<!-- <ref bean="adminPlugin" />  -->
+				<!-- <ref bean="adminPlugin" /> -->
 				<ref bean="twitReaderPlugin" />
 				<ref bean="linuxPackageFinderPlugin" />
 				<ref bean="weatherPlugin" />
@@ -112,4 +110,26 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			</list>
 		</constructor-arg>
 	</bean>
+
+	<!-- 인증 관리 -->
+	<!-- 
+	<security:global-method-security
+		jsr250-annotations="enabled" />
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user authorities="ROLE_ADMIN" name="admin"
+					password="admin" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="RemoteService" />
+		<property name="service" ref="remoteService" />
+		<property name="serviceInterface" value="org.manalith.ircbot.remote.RemoteService" />
+		<property name="registryPort" value="1199" />
+	</bean>
+	-->
 </beans>
