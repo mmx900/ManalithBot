@@ -10,5 +10,11 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="accountService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
 		<property name="serviceUrl" value="rmi://localhost:1199/RemoteService" />
 		<property name="serviceInterface" value="org.manalith.ircbot.remote.RemoteService" />
+		<property name="remoteInvocationFactory">
+			<ref bean="remoteInvocationFactory" />
+		</property>
 	</bean>
+
+	<bean id="remoteInvocationFactory"
+		class="org.springframework.security.remoting.rmi.ContextPropagatingRemoteInvocationFactory" />
 </beans>
