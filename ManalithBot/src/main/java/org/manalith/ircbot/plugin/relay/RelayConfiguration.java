@@ -1,6 +1,6 @@
 package org.manalith.ircbot.plugin.relay;
 
-public class RelayPluginConfigurationManager {
+public class RelayConfiguration {
 	private String botLogin;
 	private String botName;
 	private boolean verbose;

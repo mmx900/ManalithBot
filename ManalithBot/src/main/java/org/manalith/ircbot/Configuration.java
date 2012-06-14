@@ -18,7 +18,7 @@
  */
 package org.manalith.ircbot;
 
-public class ConfigurationManager {
+public class Configuration {
 	private String botLogin;
 	private String botName;
 	private boolean verbose;
@@ -26,6 +26,7 @@ public class ConfigurationManager {
 	private int serverPort;
 	private String serverEncoding;
 	private String defaultChannels;
+	private boolean tryToReconnect;
 
 	public String getBotLogin() {
 		return botLogin;
@@ -83,16 +84,11 @@ public class ConfigurationManager {
 		this.defaultChannels = defaultChannels;
 	}
 
-	public static boolean isWindows() {
-		return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
+	public boolean isTryToReconnect() {
+		return tryToReconnect;
 	}
 
-	public static boolean isMac() {
-		return (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0);
-	}
-
-	public static boolean isUnix() {
-		String os = System.getProperty("os.name").toLowerCase();
-		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
+	public void setTryToReconnect(boolean tryToReconnect) {
+		this.tryToReconnect = tryToReconnect;
 	}
 }

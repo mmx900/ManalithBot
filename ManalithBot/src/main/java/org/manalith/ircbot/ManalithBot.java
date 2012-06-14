@@ -20,7 +20,6 @@
 
 package org.manalith.ircbot;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,8 +29,6 @@ import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
-import org.pircbotx.exception.IrcException;
-import org.pircbotx.exception.NickAlreadyInUseException;
 import org.pircbotx.hooks.managers.ListenerManager;
 
 public class ManalithBot extends PircBotX {
@@ -54,11 +51,6 @@ public class ManalithBot extends PircBotX {
 
 	public PluginManager getPluginManager() {
 		return pluginManager;
-	}
-
-	public void setNickname(String name) throws NickAlreadyInUseException,
-			IOException, IrcException {
-		this.setName(name);
 	}
 
 	/**

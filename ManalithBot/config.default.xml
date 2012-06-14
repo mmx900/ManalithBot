@@ -14,7 +14,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
 	<task:annotation-driven />
 
-	<bean id="configurationManager" class="org.manalith.ircbot.ConfigurationManager">
+	<bean id="configuration" class="org.manalith.ircbot.Configuration">
 		<!-- 봇 기본 설정 -->
 		<property name="botLogin" value="LOGIN" />
 		<property name="botName" value="NICK" />
@@ -23,11 +23,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="serverPort" value="8080" />
 		<property name="serverEncoding" value="UTF-8" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="tryToReconnect" value="true" />
 	</bean>
 
 	<!-- 릴레이 플러그인 설정 -->
-	<bean id="relayPluginConfigurationManager"
-		class="org.manalith.ircbot.plugin.relay.RelayPluginConfigurationManager">
+	<bean id="relayConfiguration"
+		class="org.manalith.ircbot.plugin.relay.RelayConfiguration">
 		<property name="botLogin" value="LOGIN2" />
 		<property name="botName" value="NICK2" />
 		<property name="verbose" value="true" />
@@ -42,7 +43,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	<bean id="relayPlugin" class="org.manalith.ircbot.plugin.relay.RelayPlugin">
 		<constructor-arg value="false" />
 		<constructor-arg>
-			<ref bean="relayPluginConfigurationManager" />
+			<ref bean="relayConfiguration" />
 		</constructor-arg>
 	</bean>
 
@@ -54,8 +55,11 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
 	<!-- 관리자 플러그인 설정 -->
 	<!-- 주의 : 비밀번호를 반드시 변경해주세요. 변경하지 않으면 실행되지 않습니다. -->
-	<!-- <bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin"> 
-		<property name="password" value="CHANGE_ME" /> </bean> -->
+	<!-- 
+	<bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin"> 
+		<property name="password" value="CHANGE_ME" />
+	</bean>
+	-->
 
 	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
 		<property name="enablePrintContentType" value="true" />
