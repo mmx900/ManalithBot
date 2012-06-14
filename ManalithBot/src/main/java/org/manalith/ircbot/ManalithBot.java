@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
@@ -31,6 +32,7 @@ import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.exception.NickAlreadyInUseException;
+import org.pircbotx.hooks.managers.ListenerManager;
 
 public class ManalithBot extends PircBotX {
 	private Logger logger = Logger.getLogger(getClass());
@@ -38,12 +40,11 @@ public class ManalithBot extends PircBotX {
 	private PluginManager pluginManager = new PluginManager();
 
 	public ManalithBot(List<IBotPlugin> plugins) {
-		getListenerManager().addListener(new ManalithBotListener());
+		@SuppressWarnings("unchecked")
+		ListenerManager<ManalithBot> mgr = (ListenerManager<ManalithBot>) getListenerManager();
+		mgr.addListener(new EventDispatcher(pluginManager));
 
-		// FIXME 멀티쓰레드로 전환 (ThreadedListenerManager.dispatchEvent 참조
-		for (IBotPlugin plugin : plugins) {
-			loadPlugin(plugin);
-		}
+		pluginManager.load(plugins);
 	}
 
 	public static ManalithBot getInstance() {
@@ -60,29 +61,6 @@ public class ManalithBot extends PircBotX {
 		this.setName(name);
 	}
 
-	public void loadPlugin(IBotPlugin plugin) {
-		pluginManager.add(plugin);
-
-		try {
-			plugin.start(null);
-		} catch (Exception e) {
-			logger.error(e);
-			pluginManager.remove(plugin);
-		}
-	}
-
-	public void unloadPlugin(IBotPlugin plugin) {
-		try {
-			plugin.stop(null);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-
-		pluginManager.remove(plugin);
-	}
-
-	// TODO sendMessage 오버라이드
-
 	/**
 	 * sendMessage(target, message)가 final 메서드이므로 로깅을 위해 이 메시지를 사용한다.
 	 * 
@@ -91,6 +69,7 @@ public class ManalithBot extends PircBotX {
 	 */
 	public void sendLoggedMessage(String target, String message,
 			boolean redirectToRelayBot) {
+		// TODO sendMessage 오버라이드
 		logger.trace(String.format("MESSAGE(LOCAL) : %s / %s", target, message));
 
 		sendMessage(target, message);
