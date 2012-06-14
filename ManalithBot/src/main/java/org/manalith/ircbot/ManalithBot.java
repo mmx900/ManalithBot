@@ -42,7 +42,7 @@ public class ManalithBot extends PircBotX {
 
 		// FIXME 멀티쓰레드로 전환 (ThreadedListenerManager.dispatchEvent 참조
 		for (IBotPlugin plugin : plugins) {
-			addPlugin(plugin);
+			loadPlugin(plugin);
 		}
 	}
 
@@ -60,9 +60,25 @@ public class ManalithBot extends PircBotX {
 		this.setName(name);
 	}
 
-	public void addPlugin(IBotPlugin plugin) {
+	public void loadPlugin(IBotPlugin plugin) {
 		pluginManager.add(plugin);
-		// TODO init 등 라이프사이클 관련 메서드 삽입
+
+		try {
+			plugin.start(null);
+		} catch (Exception e) {
+			logger.error(e);
+			pluginManager.remove(plugin);
+		}
+	}
+
+	public void unloadPlugin(IBotPlugin plugin) {
+		try {
+			plugin.stop(null);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+
+		pluginManager.remove(plugin);
 	}
 
 	// TODO sendMessage 오버라이드

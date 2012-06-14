@@ -20,8 +20,9 @@
 package org.manalith.ircbot.plugin;
 
 import org.manalith.ircbot.resources.MessageEvent;
+import org.osgi.framework.BundleActivator;
 
-public interface IBotPlugin {
+public interface IBotPlugin extends BundleActivator {
 	public String getName();
 
 	public String getCommands();

@@ -22,6 +22,7 @@ package org.manalith.ircbot.plugin;
 import java.io.File;
 
 import org.manalith.ircbot.resources.MessageEvent;
+import org.osgi.framework.BundleContext;
 
 public abstract class AbstractBotPlugin implements IBotPlugin {
 	public String getResourcePath() {
@@ -35,30 +36,46 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 		return builder.toString();
 	}
 
+	@Override
 	public String getHelp() {
 		return null;
 	}
 
+	@Override
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
 
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 
 	}
 
+	@Override
 	public void onPrivateMessage(MessageEvent event) {
 
 	}
 
+	@Override
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
 
 	}
 
+	@Override
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
+
+	}
+
+	@Override
+	public void start(BundleContext arg0) throws Exception {
+
+	}
+
+	@Override
+	public void stop(BundleContext arg0) throws Exception {
 
 	}
 
