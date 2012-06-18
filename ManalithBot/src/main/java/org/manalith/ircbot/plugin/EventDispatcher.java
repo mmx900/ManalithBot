@@ -1,8 +1,15 @@
-package org.manalith.ircbot;
+package org.manalith.ircbot.plugin;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.command.CommandParser;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ChannelInfoEvent;
@@ -46,10 +53,13 @@ import org.pircbotx.hooks.events.UserListEvent;
 import org.pircbotx.hooks.events.UserModeEvent;
 import org.pircbotx.hooks.events.VoiceEvent;
 
-public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
-	private Logger logger = Logger.getLogger(getClass());
-	private final String[] helpCommands = new String[] { "!명령어", "!명령", "!도움",
-			"!help", "!plugins" };
+public class EventDispatcher extends ListenerAdapter<ManalithBot> {
+	private final Logger logger = Logger.getLogger(getClass());
+	private PluginManager pluginManager;
+
+	public EventDispatcher(PluginManager pluginManager) {
+		this.pluginManager = pluginManager;
+	}
 
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
@@ -100,29 +110,108 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 			message = CommandParser.convertRelayToLocalMessage(message);
 		}
 
-		if (ArrayUtils.contains(helpCommands, message)) {
-			bot.sendMessage(channel, bot.getPluginManager().getPluginInfo());
-		} else {
-			bot.getPluginManager().onMessage(event);
+		if (StringUtils.isEmpty(message))
+			return;
+
+		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
+				event);
+
+		// 어노테이션(@BotCommand) 기반 플러그인 실행
+		for (Method method : pluginManager.getCommands().keySet()) {
+			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
+
+			String[] segments = StringUtils
+					.splitByWholeSeparator(message, null);
+
+			if (!ArrayUtils.contains(commandMeta.listeners(),
+					BotEvent.ON_MESSAGE))
+				continue;
+
+			if (!ArrayUtils.contains(commandMeta.value(), segments[0]))
+				continue;
+
+			IBotPlugin plugin = (IBotPlugin) pluginManager.getCommands().get(
+					method);
+
+			if (segments.length - 1 < commandMeta.minimumArguments()) {
+				bot.sendLoggedMessage(
+						channel,
+						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
+								commandMeta.minimumArguments()));
+
+				msg.setExecuted(true);
+			} else {
+				try {
+					String result = null;
+
+					// TODO MethodUtils 사용
+					if (method.getParameterTypes().length == 0) {
+						result = (String) method.invoke(plugin);
+					} else if (method.getParameterTypes().length == 1) {
+						if (method.getParameterTypes()[0] == MessageEvent.class) {
+							result = (String) method.invoke(plugin, msg);
+						} else {
+							result = (String) method.invoke(plugin,
+									(Object) ArrayUtils.subarray(segments, 1,
+											segments.length));
+						}
+					} else {
+						result = (String) method.invoke(plugin, msg, ArrayUtils
+								.subarray(segments, 1, segments.length));
+					}
+
+					if (StringUtils.isNotBlank(result)) {
+						bot.sendLoggedMessage(channel, result);
+					}
+
+					msg.setExecuted(commandMeta.stopEvent());
+				} catch (IllegalArgumentException e) {
+					logger.error(e);
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
+					msg.setExecuted(true);
+				} catch (IllegalAccessException e) {
+					logger.error(e);
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
+					msg.setExecuted(true);
+				} catch (InvocationTargetException e) {
+					logger.error(e);
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
+					msg.setExecuted(true);
+				}
+			}
+
+			if (msg.isExecuted())
+				return;
+		}
+
+		// 비 어노테이션 기반 플러그인 실행
+		for (IBotPlugin plugin : pluginManager.getPlugins()) {
+			plugin.onMessage(msg);
+
+			if (msg.isExecuted())
+				return;
 		}
 	}
 
 	@Override
 	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event)
 			throws Exception {
-		ManalithBot bot = event.getBot();
-		String message = event.getMessage();
-		String sender = event.getUser().getNick();
 
 		logger.trace(String.format("PRIVMSG : %s / %s / %s / %s", event
 				.getUser().getNick(), event.getUser().getLogin(), event
 				.getUser().getHostmask(), event.getMessage()));
 
-		if (ArrayUtils.contains(helpCommands, message)) {
-			bot.sendMessage(sender, bot.getPluginManager().getPluginInfo());
-		} else {
-			bot.getPluginManager().onPrivateMessage(event);
+		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
+				event);
+		for (IBotPlugin plugin : pluginManager.getPlugins()) {
+			plugin.onPrivateMessage(msg);
+			if (msg.isExecuted())
+				break;
 		}
+
 	}
 
 	@Override
@@ -143,11 +232,10 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		event.getBot()
-				.getPluginManager()
-				.onJoin(event.getChannel().getName(),
-						event.getUser().getNick(), event.getUser().getLogin(),
-						event.getUser().getHostmask());
+		for (IBotPlugin plugin : pluginManager.getPlugins())
+			plugin.onJoin(event.getChannel().getName(), event.getUser()
+					.getNick(), event.getUser().getLogin(), event.getUser()
+					.getHostmask());
 	}
 
 	@Override
@@ -156,11 +244,10 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getChannel().getName(), event.getUser().getNick(), event
 				.getUser().getLogin(), event.getUser().getHostmask()));
 
-		event.getBot()
-				.getPluginManager()
-				.onPart(event.getChannel().getName(),
-						event.getUser().getNick(), event.getUser().getLogin(),
-						event.getUser().getHostmask());
+		for (IBotPlugin plugin : pluginManager.getPlugins())
+			plugin.onPart(event.getChannel().getName(), event.getUser()
+					.getNick(), event.getUser().getLogin(), event.getUser()
+					.getHostmask());
 	}
 
 	@Override
@@ -190,10 +277,10 @@ public class ManalithBotListener extends ListenerAdapter<ManalithBot> {
 				.getNick(), event.getUser().getLogin(), event.getUser()
 				.getHostmask(), event.getReason()));
 
-		event.getBot()
-				.getPluginManager()
-				.onQuit(event.getUser().getNick(), event.getUser().getLogin(),
-						event.getUser().getHostmask(), event.getReason());
+		for (IBotPlugin plugin : pluginManager.getPlugins())
+			plugin.onQuit(event.getUser().getNick(),
+					event.getUser().getLogin(), event.getUser().getHostmask(),
+					event.getReason());
 	}
 
 	@Override

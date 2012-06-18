@@ -20,6 +20,7 @@ package org.manalith.ircbot.plugin.missedmessage;
 
 import java.util.Set;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.User;
@@ -41,6 +42,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
+		ManalithBot bot = event.getBot();
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 		String message = event.getMessage();
@@ -111,7 +113,8 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 
 			if (msgs != null)
 				for (int i = 0; i < msgs.length; i++) {
-					bot.sendLoggedMessage(channel, msgs[i]);
+					ManalithBot.getInstance().sendLoggedMessage(channel,
+							msgs[i]);
 				}
 		}
 	}

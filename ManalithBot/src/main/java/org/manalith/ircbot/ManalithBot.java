@@ -20,16 +20,16 @@
 
 package org.manalith.ircbot;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
+import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
-import org.pircbotx.exception.IrcException;
-import org.pircbotx.exception.NickAlreadyInUseException;
+import org.pircbotx.hooks.managers.ListenerManager;
 
 public class ManalithBot extends PircBotX {
 	private Logger logger = Logger.getLogger(getClass());
@@ -37,25 +37,20 @@ public class ManalithBot extends PircBotX {
 	private PluginManager pluginManager = new PluginManager();
 
 	public ManalithBot(List<IBotPlugin> plugins) {
-		getListenerManager().addListener(new ManalithBotListener());
+		@SuppressWarnings("unchecked")
+		ListenerManager<ManalithBot> mgr = (ListenerManager<ManalithBot>) getListenerManager();
+		mgr.addListener(new EventDispatcher(pluginManager));
 
-		for (IBotPlugin plugin : plugins) {
-			addPlugin(plugin);
-		}
+		pluginManager.load(plugins);
+	}
+
+	public static ManalithBot getInstance() {
+		return AppContextUtil.getApplicationContext()
+				.getBean(ManalithBot.class);
 	}
 
 	public PluginManager getPluginManager() {
 		return pluginManager;
-	}
-
-	public void setNickname(String name) throws NickAlreadyInUseException,
-			IOException, IrcException {
-		this.setName(name);
-	}
-
-	public void addPlugin(IBotPlugin plugin) {
-		pluginManager.add(plugin);
-		plugin.setBot(this);
 	}
 
 	/**
@@ -66,6 +61,7 @@ public class ManalithBot extends PircBotX {
 	 */
 	public void sendLoggedMessage(String target, String message,
 			boolean redirectToRelayBot) {
+		// TODO sendMessage 오버라이드
 		logger.trace(String.format("MESSAGE(LOCAL) : %s / %s", target, message));
 
 		sendMessage(target, message);

@@ -1,5 +1,6 @@
 package org.manalith.ircbot.plugin.rss;
 
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
@@ -21,6 +22,7 @@ public class SlashdotReaderPlugin extends AbstractBotPlugin {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String channel = event.getChannel().getName();
+		ManalithBot bot = event.getBot();
 
 		if (message.equals(NAMESPACE))
 			bot.sendLoggedMessage(channel, getLastestSlashdot());

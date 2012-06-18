@@ -23,6 +23,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,7 @@ public class PingPlugin extends AbstractBotPlugin {
 
 	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
+		ManalithBot bot = event.getBot();
 
 		if (StringUtils.startsWith(message, "!ping ")) {
 			String uri = StringUtils.substringAfter(message, " ");
