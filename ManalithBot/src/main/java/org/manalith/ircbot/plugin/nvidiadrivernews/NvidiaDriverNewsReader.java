@@ -19,6 +19,7 @@
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import java.io.IOException;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -30,17 +31,18 @@ public class NvidiaDriverNewsReader {
 
 		try {
 			Connection conn = Jsoup
-					.connect("http://www.nvnews.net/vbulletin/showthread.php?t=122606");
+					.connect("http://www.nvidia.com/object/unix.html");
 			conn.timeout(10000);
 
-			Elements e = conn.get().select("div#post_message_1836667").get(0)
-					.select("a");
-			result.append("Current long-lived branch release: ");
-			result.append(e.get(0).text());
-			result.append(", Current official release: ");
-			result.append(e.get(1).text());
-			result.append(", Current beta release: ");
-			result.append(e.get(2).text());
+			Elements e = conn.get().select("div").get(0).select("p");
+			Elements ex86 = e.get(2).select("a");
+			Elements ex86_64 = e.get(3).select("a");
+			result.append("Long-lived branch: ");
+			result.append("(x86: " + ex86.get(0).text() + ", " + "x86_64: "
+					+ ex86_64.get(0).text() + ")");
+			result.append(", Official: ");
+			result.append("(x86: " + ex86.get(1).text() + ", " + "x86_64: "
+					+ ex86_64.get(1).text() + ")");
 		} catch (IOException ioe) {
 			result.append(ioe.getMessage());
 		}
