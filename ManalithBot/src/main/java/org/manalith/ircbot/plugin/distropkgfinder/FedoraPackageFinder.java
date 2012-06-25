@@ -51,7 +51,7 @@ public class FedoraPackageFinder implements PackageFinder {
 		String result = "";
 
 		if (this.getKeyword().equals("")) {
-			result = "Keyword is not specified";
+			result = "키워드를 지정하지 않았습니다";
 			return result;
 		}
 
@@ -66,7 +66,7 @@ public class FedoraPackageFinder implements PackageFinder {
 			Elements tables = conn.get().select("table");
 
 			if (tables.size() < 2) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -138,7 +138,7 @@ public class FedoraPackageFinder implements PackageFinder {
 
 			// need to give result into result.
 			if (!dist.contains("Fedora")) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 			} else {
 				result = NamenVer + " : " + description;
 			}

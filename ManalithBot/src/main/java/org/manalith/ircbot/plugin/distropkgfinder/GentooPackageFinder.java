@@ -18,9 +18,10 @@
  */
 package org.manalith.ircbot.plugin.distropkgfinder;
 
-import org.jsoup.Connection;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class GentooPackageFinder implements PackageFinder {
 
@@ -44,45 +45,28 @@ public class GentooPackageFinder implements PackageFinder {
 
 	public String find() {
 		String result = "";
-		String url = "http://gentoo-portage.com/Search?search="
-				+ this.getKeyword();
-
-		String pkgname = "";
-		String description = "";
-
-		Connection conn = Jsoup.connect(url);
-		conn.timeout(120000); // timeout : 60s. This is to slow - -;
+		String url = "http://darkcircle.myhome.tv/phportage/phportage.xml?k="
+				+ this.getKeyword() + "&limit=1&similarity=exact"
+				+ "&showmasked=true&livebuild=false";
 
 		try {
-			Elements e = conn.get().select("#search_results").select("a");
+			Document d = Jsoup.connect(url).get();
+			System.out.println(d.select("result>code").get(0).text());
+			if (NumberUtils.toInt(d.select("result>code").get(0).text()) == 0) {
+				if (NumberUtils.toInt(d.select("result>actualnumofres").get(0)
+						.text()) == 0)
+					result = "결과가 없습니다";
+				else {
+					Element e = d.select("result>packages>pkg").get(0);
+					String pkgname = e.select("category").get(0).text() + "/"
+							+ e.select("name").get(0).text();
 
-			int result_size = e.size();
-			if (result_size == 0) {
-				result = "There is no result";
-				return result;
+					String ver = e.select("version").get(0).text();
+					String description = e.select("description").get(0).text();
+
+					result = pkgname + "  " + ver + " : " + description;
+				}
 			}
-
-			pkgname = e.select("div").text().split("\\s")[0];
-			if (!pkgname.split("\\/")[1].equals(this.getKeyword())) {
-				result = "There is no result";
-				return result;
-			}
-
-			description = e.select("div").get(1).text();
-
-			String detail_url = "http://gentoo-portage.com/" + pkgname;
-			Connection conn2 = Jsoup.connect(detail_url);
-			conn2.timeout(120000); // timeout : 60s.
-
-			Elements ee = conn2.get().select("#ebuild_list>ul>li");
-
-			if (ee.size() == 0) {
-				result = "There is no result";
-				return result;
-			}
-
-			result = ee.get(0).select("div").get(0).select("b").text();
-			result += " : " + description;
 
 		} catch (Exception e) {
 			result = e.getMessage();

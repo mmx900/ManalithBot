@@ -22,6 +22,8 @@ package org.manalith.ircbot.plugin.distropkgfinder;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -29,7 +31,7 @@ import org.jsoup.select.Elements;
 
 public class ArchPackageFinder implements PackageFinder {
 	private Logger logger = Logger.getLogger(getClass());
-	
+
 	private String keyword;
 
 	public ArchPackageFinder() {
@@ -53,39 +55,68 @@ public class ArchPackageFinder implements PackageFinder {
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
 		int len = arch_keywords.length;
+		int pages = 100000000;
 		String description = "";
 
 		String url = "";
 		try {
 			String infostr = "";
 			for (int i = 0; i < len; i++) {
-				url = "http://www.archlinux.org/packages/?arch="
-						+ arch_keywords[i] + "&q=" + this.getKeyword();
-				Iterator<Element> e = Jsoup.connect(url).get()
-						.select("table.results>tbody>tr").iterator();
+				for (int j = 0; j < pages; j++) {
+					url = "http://www.archlinux.org/packages/"
+							+ (new Integer(j + 1)).toString() + "/?arch="
+							+ arch_keywords[i] + "&q=" + this.getKeyword();
 
-				while (e.hasNext()) {
-					Elements ee = e.next().select("td");
-					if (ee.get(2).select("a").get(0).text()
-							.equals(this.getKeyword())) {
-						if (!infostr.equals(""))
-							infostr += ", ";
-						infostr += "[main-" + ee.get(0).text() + "] ";
-						infostr += ee.get(2).select("a").get(0).text() + "  ";
+					if (j == 0 && pages == 100000000) {
+						String pageinfo = Jsoup
+								.connect(url)
+								.get()
+								.select("div#pkglist-results>div.pkglist-stats>p")
+								.get(0).text();
 
-						if (ee.get(3).select("span.flagged").size() > 0)
-							infostr += ee.get(3).select("span.flagged").get(0)
-									.text();
-						else
-							infostr += ee.get(3).text();
+						if (StringUtils.countMatches(pageinfo, ".") == 1)
+							pages = 1;
+						else {
+							if (pageinfo.charAt(pageinfo.length() - 1) == '.')
+								pageinfo = pageinfo.substring(0,
+										pageinfo.length() - 1);
+							String[] piarray = pageinfo.split("\\s");
+							pages = NumberUtils
+									.toInt(piarray[piarray.length - 1]);
+						}
 
-						infostr += "(" + ee.get(1).text() + ")";
-						if (description.equals(""))
-							description = ee.get(4).text();
+						j--;
+						continue;
+					}
 
-						break;
+					Iterator<Element> e = Jsoup.connect(url).get()
+							.select("table.results>tbody>tr").iterator();
+
+					while (e.hasNext()) {
+						Elements ee = e.next().select("td");
+						if (ee.get(2).select("a").get(0).text()
+								.equals(this.getKeyword())) {
+							if (!infostr.equals(""))
+								infostr += ", ";
+							infostr += "[main-" + ee.get(0).text() + "] ";
+							infostr += ee.get(2).select("a").get(0).text()
+									+ "  ";
+
+							if (ee.get(3).select("span.flagged").size() > 0)
+								infostr += ee.get(3).select("span.flagged")
+										.get(0).text();
+							else
+								infostr += ee.get(3).text();
+
+							infostr += "(" + ee.get(1).text() + ")";
+							if (description.equals(""))
+								description = ee.get(4).text();
+
+							break;
+						}
 					}
 				}
+				pages = 100000000;
 			}
 
 			if (!infostr.equals(""))
@@ -124,7 +155,7 @@ public class ArchPackageFinder implements PackageFinder {
 			if (!infostr.equals(""))
 				result = infostr;
 			else
-				result = "There is no result";
+				result = "결과가 없습니다";
 
 		} catch (IOException e) {
 			logger.error(e);

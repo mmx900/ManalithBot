@@ -63,7 +63,7 @@ public class UbuntuPackageFinder implements PackageFinder {
 			Elements div = conn.get().select("#psearchres");
 
 			if (div.size() == 0) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -80,7 +80,7 @@ public class UbuntuPackageFinder implements PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 

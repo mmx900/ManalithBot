@@ -19,7 +19,6 @@
  */
 package org.manalith.ircbot.plugin.distropkgfinder;
 
-import java.lang.ArrayIndexOutOfBoundsException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +57,7 @@ public class DebianPackageFinder implements PackageFinder {
 				dist = e.select("a").text();
 			}
 
-			String version = "UNKNOWN";
+			String version = "알 수 없음";
 			String[] versionLines = e.toString().split("\\<br\\s\\/>");
 
 			for (String line : versionLines) {
@@ -91,7 +90,7 @@ public class DebianPackageFinder implements PackageFinder {
 			Document doc = conn.get();
 
 			if (doc.select("#psearchres").size() == 0) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -99,7 +98,7 @@ public class DebianPackageFinder implements PackageFinder {
 			int hsize = hits.size();
 
 			if (hsize == 0)
-				result = "There is no result";
+				result = "결과가 없습니다";
 			for (int i = 0; i < hsize; i++) {
 				if (hits.get(i).text().equals("Exact hits")) {
 					hasExacthits = true;
@@ -108,7 +107,7 @@ public class DebianPackageFinder implements PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -125,7 +124,7 @@ public class DebianPackageFinder implements PackageFinder {
 			result = pkgname + " - " + description + "\n";
 			result += parseVersionInfo(doc);
 		} catch (Exception e) {
-			result = "ERROR: " + e.getMessage();
+			result = "오류: " + e.getMessage();
 			return result;
 		}
 

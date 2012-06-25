@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 
 	public String getCommands() {
-		return "deb|ubu|fed|gen|ar";
+		return "!deb|!ubu|!fed|!gen|!ar";
 	}
 
 	public String getName() {
@@ -37,7 +37,7 @@ public class LinuxPackageFinderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "!deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
+		return "[사용방법] !deb (pkg_name) | !ubu (pkg_name) | !fed (pkg_name) | !gen (pkg_name) | !ar (pkg_name)";
 	}
 
 	public void onMessage(MessageEvent event) {
