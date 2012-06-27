@@ -111,6 +111,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="symbolPlugin" />
 				<ref bean="unicodePlugin" />
 				<ref bean="urlEncoderPlugin" />
+				<ref bean="regexPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
