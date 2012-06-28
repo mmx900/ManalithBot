@@ -16,36 +16,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.distropkgfinder;
+package org.manalith.ircbot.plugin.linuxpkgfinder;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
-public class GentooPackageFinder implements PackageFinder {
+@Component
+public class GentooPortageProvider implements GentooSearchEngineProvider {
+	private Logger logger = Logger.getLogger(getClass());
 
-	private String keyword;
-
-	public GentooPackageFinder() {
-		this.setKeyword("");
+	public String find(MessageEvent event, String... args) {
+		return this.find(args[0]);
 	}
 
-	public GentooPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
-	}
-
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
-	}
-
-	public String getKeyword() {
-		return this.keyword;
-	}
-
-	public String find() {
+	public String find(String arg) {
 		String result = "";
-		String url = "http://gentoo-portage.com/Search?search="
-				+ this.getKeyword();
+		String url = "http://gentoo-portage.com/Search?search=" + arg;
 
 		String pkgname = "";
 		String description = "";
@@ -63,7 +53,7 @@ public class GentooPackageFinder implements PackageFinder {
 			}
 
 			pkgname = e.select("div").text().split("\\s")[0];
-			if (!pkgname.split("\\/")[1].equals(this.getKeyword())) {
+			if (!pkgname.split("\\/")[1].equals(arg)) {
 				result = "There is no result";
 				return result;
 			}
@@ -85,8 +75,8 @@ public class GentooPackageFinder implements PackageFinder {
 			result += " : " + description;
 
 		} catch (Exception e) {
-			result = e.getMessage();
-			return result;
+			logger.error(e.getMessage(), e);
+			result = "오류: " + e.getMessage();
 		}
 
 		return result;

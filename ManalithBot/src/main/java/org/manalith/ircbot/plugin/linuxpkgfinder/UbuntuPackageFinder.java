@@ -16,40 +16,49 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.distropkgfinder;
+package org.manalith.ircbot.plugin.linuxpkgfinder;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
-public class UbuntuPackageFinder implements PackageFinder {
+@Component
+public class UbuntuPackageFinder extends PackageFinder {
+	private Logger logger = Logger.getLogger(getClass());
 
-	private String keyword;
-
-	public UbuntuPackageFinder() {
-		this.setKeyword("");
+	@Override
+	public String getName() {
+		return "우분투";
 	}
 
-	public UbuntuPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
+	@Override
+	public String getCommands() {
+		return "!ubu [PKG]";
 	}
 
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
+	@BotCommand(value = { "!ubu" }, minimumArguments = 1)
+	public String find(MessageEvent event, String... args) {
+		return this.find(args[0]);
 	}
 
-	public String getKeyword() {
-		return this.keyword;
-	}
-
-	public String find() {
+	public String find(String arg) {
 		String result = "";
-		String latestPkgName = this.getLatestPkgName();
-		String url = "http://packages.ubuntu.com/search?keywords="
-				+ this.getKeyword() + "&searchon=names&suite=" + latestPkgName
-				+ "&section=all";
+		String latestPkgName = "";
+		try {
+			latestPkgName = this.getLatestPkgName();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			result = "오류: " + e.getMessage();
+			return result;
+		}
+		String url = "http://packages.ubuntu.com/search?keywords=" + arg
+				+ "&searchon=names&suite=" + latestPkgName + "&section=all";
 
 		boolean hasExacthits = false;
 
@@ -63,7 +72,7 @@ public class UbuntuPackageFinder implements PackageFinder {
 			Elements div = conn.get().select("#psearchres");
 
 			if (div.size() == 0) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -80,7 +89,7 @@ public class UbuntuPackageFinder implements PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "There is no result";
+				result = "결과가 없습니다";
 				return result;
 			}
 
@@ -109,32 +118,28 @@ public class UbuntuPackageFinder implements PackageFinder {
 			result += description;
 
 		} catch (Exception e) {
-			result = e.getMessage();
-			return result;
+			logger.error(e.getMessage(), e);
+			result = "오류: " + e.getMessage();
 		}
 
 		return result;
 	}
 
-	private String getLatestPkgName() {
+	private String getLatestPkgName() throws Exception {
 		String result = "";
 		String url = "http://packages.ubuntu.com";
 		String tmp;
-		try {
-			Document doc = Jsoup.connect(url).get();
-			Elements e = doc.select("select#distro>option");
 
-			int esize = e.size();
-			for (int i = 0; i < esize; i++) {
-				tmp = e.get(i).attr("selected");
-				if (tmp.equals("selected")) {
-					result = e.get(i).text();
-					break;
-				}
+		Document doc = Jsoup.connect(url).get();
+		Elements e = doc.select("select#distro>option");
+
+		int esize = e.size();
+		for (int i = 0; i < esize; i++) {
+			tmp = e.get(i).attr("selected");
+			if (tmp.equals("selected")) {
+				result = e.get(i).text();
+				break;
 			}
-		} catch (Exception e) {
-			result = e.getMessage();
-			;
 		}
 
 		return result;
