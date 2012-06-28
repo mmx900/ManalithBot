@@ -41,11 +41,15 @@ public class RegexPlugin extends AbstractBotPlugin {
 				Matcher matcher = pattern.matcher(fixture);
 
 				if (matcher.matches()) {
-					StringBuilder sb = new StringBuilder();
-					for (int i = 0; i < matcher.groupCount(); i++) {
-						sb.append(" " + i + ":" + matcher.group(i));
+					if (matcher.groupCount() > 0) {
+						StringBuilder sb = new StringBuilder();
+						for (int i = 0; i < matcher.groupCount(); i++) {
+							sb.append(" " + i + ":" + matcher.group(i));
+						}
+						event.respond(sb.toString());
+					} else {
+						event.respond(matcher.toString());
 					}
-					event.respond(sb.toString());
 				} else {
 					event.respond("매치된 문자열이 없습니다.");
 				}
