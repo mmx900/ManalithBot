@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.manalith.ircbot.plugin.distropkgfinder;
+package org.manalith.ircbot.plugin.linuxpkgfinder;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -28,29 +28,30 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
-public class ArchPackageFinder implements PackageFinder {
+@Component
+public class ArchPackageFinder extends PackageFinder {
 	private Logger logger = Logger.getLogger(getClass());
 
-	private String keyword;
-
-	public ArchPackageFinder() {
-		this.setKeyword("");
+	@Override
+	public String getName() {
+		return "아치";
 	}
 
-	public ArchPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
+	@Override
+	public String getCommands() {
+		return "!ar [PKG]";
 	}
 
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
+	@BotCommand(value = { "!ar" }, minimumArguments = 1)
+	public String find(MessageEvent event, String... args) {
+		return this.find(args[0]);
 	}
 
-	public String getKeyword() {
-		return this.keyword;
-	}
-
-	public String find() {
+	public String find(String arg) {
 		String result = "";
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
@@ -65,7 +66,7 @@ public class ArchPackageFinder implements PackageFinder {
 				for (int j = 0; j < pages; j++) {
 					url = "http://www.archlinux.org/packages/"
 							+ (new Integer(j + 1)).toString() + "/?arch="
-							+ arch_keywords[i] + "&q=" + this.getKeyword();
+							+ arch_keywords[i] + "&q=" + arg;
 
 					if (j == 0 && pages == 100000000) {
 						String pageinfo = Jsoup
@@ -94,8 +95,7 @@ public class ArchPackageFinder implements PackageFinder {
 
 					while (e.hasNext()) {
 						Elements ee = e.next().select("td");
-						if (ee.get(2).select("a").get(0).text()
-								.equals(this.getKeyword())) {
+						if (ee.get(2).select("a").get(0).text().equals(arg)) {
 							if (!infostr.equals(""))
 								infostr += ", ";
 							infostr += "[main-" + ee.get(0).text() + "] ";
@@ -122,8 +122,7 @@ public class ArchPackageFinder implements PackageFinder {
 			if (!infostr.equals(""))
 				infostr += " : " + description;
 
-			url = "http://aur.archlinux.org/packages.php?K="
-					+ this.getKeyword();
+			url = "http://aur.archlinux.org/packages.php?K=" + arg;
 			Iterator<Element> e = Jsoup.connect(url).get()
 					.select("table>tbody>tr").iterator();
 
@@ -137,7 +136,7 @@ public class ArchPackageFinder implements PackageFinder {
 				}
 				Elements ee = e.next().select("td");
 				if (ee.get(1).select("span>a>span").get(0).text().split("\\s")[0]
-						.equals(this.getKeyword())) {
+						.equals(arg)) {
 					String[] namenver = ee.get(1).select("span>a>span").get(0)
 							.text().split("\\s");
 					if (!infostr.equals(""))
@@ -158,8 +157,10 @@ public class ArchPackageFinder implements PackageFinder {
 				result = "결과가 없습니다";
 
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
+			result = "오류: " + e.getMessage();
 		}
+
 		return result;
 	}
 }

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.distropkgfinder;
+package org.manalith.ircbot.plugin.linuxpkgfinder;
 
 import java.util.Iterator;
 
@@ -25,32 +25,33 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
-public class FedoraPackageFinder implements PackageFinder {
+@Component
+public class FedoraPackageFinder extends PackageFinder {
 	private Logger logger = Logger.getLogger(getClass());
 
-	private String keyword;
-
-	public FedoraPackageFinder() {
-		this.setKeyword("");
+	@Override
+	public String getName() {
+		return "페도라";
 	}
 
-	public FedoraPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
+	@Override
+	public String getCommands() {
+		return "!fed [PKG]";
 	}
 
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
+	@BotCommand(value = { "!fed" }, minimumArguments = 1)
+	public String find(MessageEvent event, String... args) {
+		return this.find(args[0]);
 	}
 
-	public String getKeyword() {
-		return this.keyword;
-	}
-
-	public String find() {
+	public String find(String arg) {
 		String result = "";
 
-		if (this.getKeyword().equals("")) {
+		if (arg.equals("")) {
 			result = "키워드를 지정하지 않았습니다";
 			return result;
 		}
@@ -58,7 +59,7 @@ public class FedoraPackageFinder implements PackageFinder {
 		try {
 
 			String url = "http://rpmfind.net/linux/rpm2html/search.php?query="
-					+ this.getKeyword() + "&submit=Search";
+					+ arg + "&submit=Search";
 
 			Connection conn = Jsoup.connect(url);
 			conn.timeout(5000);
@@ -144,7 +145,8 @@ public class FedoraPackageFinder implements PackageFinder {
 			}
 
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
+			result = "오류: " + e.getMessage();
 		}
 
 		return result;

@@ -17,31 +17,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.distropkgfinder;
+package org.manalith.ircbot.plugin.linuxpkgfinder;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.stereotype.Component;
 
-public class DebianPackageFinder implements PackageFinder {
-	private String keyword;
+@Component
+public class DebianPackageFinder extends PackageFinder {
+	private Logger logger = Logger.getLogger(getClass());
 
-	public DebianPackageFinder() {
-		this.setKeyword("");
+	@Override
+	public String getName() {
+		return "데비안";
 	}
 
-	public DebianPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
-	}
-
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
-	}
-
-	public String getKeyword() {
-		return this.keyword;
+	@Override
+	public String getCommands() {
+		return "!deb [PKG]";
 	}
 
 	public String parseVersionInfo(Document doc) {
@@ -76,10 +75,15 @@ public class DebianPackageFinder implements PackageFinder {
 		return result;
 	}
 
-	public String find() {
+	@BotCommand(value = { "!deb" }, minimumArguments = 1)
+	public String find(MessageEvent event, String... args) {
+		return this.find(args[0]);
+	}
+
+	public String find(String arg) {
 		String result = "";
-		String url = "http://packages.debian.org/search?keywords="
-				+ this.getKeyword() + "&searchon=names&suite=all&section=all";
+		String url = "http://packages.debian.org/search?keywords=" + arg
+				+ "&searchon=names&suite=all&section=all";
 
 		boolean hasExacthits = false;
 
@@ -123,9 +127,10 @@ public class DebianPackageFinder implements PackageFinder {
 
 			result = pkgname + " - " + description + "\n";
 			result += parseVersionInfo(doc);
+			System.out.println(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			result = "오류: " + e.getMessage();
-			return result;
 		}
 
 		return result;
