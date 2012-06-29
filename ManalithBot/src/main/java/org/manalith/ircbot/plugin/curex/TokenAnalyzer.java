@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/TokenAnalyzer.java
+ 	org.manalith.ircbot.plugin.curex/TokenAnalyzer.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,9 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
-import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 
 public abstract class TokenAnalyzer {
 	protected String data;

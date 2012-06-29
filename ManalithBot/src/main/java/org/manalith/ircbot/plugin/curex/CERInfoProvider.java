@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/CERInfoProvider.java
+ 	org.manalith.ircbot.plugin.curex/CERInfoProvider.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,8 +31,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.manalith.ircbot.common.PropertyManager;
-import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
-import org.manalith.ircbot.plugin.cer2.exceptions.InvalidArgumentException;
+import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.curex.exceptions.InvalidArgumentException;
 
 public class CERInfoProvider {
 

@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/CERRunner.java
+ 	org.manalith.ircbot.plugin.curex/CurexRunner.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import java.io.File;
 
@@ -24,24 +24,24 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.common.PropertyManager;
 
-public class CERRunner {
+public class CurexRunner {
 
 	private String[] arguments;
 	private String dataPath;
 	private String userNick;
 
-	public CERRunner() {
+	public CurexRunner() {
 		arguments = null;
 		dataPath = "";
 	}
 
-	public CERRunner(String userNick, String[] arguments) {
+	public CurexRunner(String userNick, String[] arguments) {
 		this.userNick = userNick;
 		this.arguments = arguments;
 		dataPath = "";
 	}
 
-	public CERRunner(String userNick, String dataPath, String[] arguments) {
+	public CurexRunner(String userNick, String dataPath, String[] arguments) {
 		this.userNick = userNick;
 		this.dataPath = dataPath;
 		File path = new File(dataPath);
@@ -55,7 +55,7 @@ public class CERRunner {
 	public String run() throws Exception {
 		String result = "";
 
-		CERTableUpdater updater = new CERTableUpdater(dataPath);
+		CurexTableUpdater updater = new CurexTableUpdater(dataPath);
 		updater.update();
 
 		String[] cmd = null;
@@ -93,7 +93,7 @@ public class CERRunner {
 
 				String[] args = new String[1];
 				args[0] = default_currency[i];
-				cmd = CERMessageTokenAnalyzer.convertToCLICommandString(args);
+				cmd = CurexMessageTokenAnalyzer.convertToCLICommandString(args);
 				info = new CERInfoProvider(dataPath, cmd);
 
 				if (i != 0)
@@ -102,7 +102,7 @@ public class CERRunner {
 					result += info.commandInterpreter();
 			}
 		} else {
-			cmd = CERMessageTokenAnalyzer.convertToCLICommandString(arguments);
+			cmd = CurexMessageTokenAnalyzer.convertToCLICommandString(arguments);
 			info = new CERInfoProvider(dataPath, cmd);
 
 			result = info.commandInterpreter();

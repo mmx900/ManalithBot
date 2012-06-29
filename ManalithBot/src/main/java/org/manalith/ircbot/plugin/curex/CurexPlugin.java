@@ -1,5 +1,5 @@
 /*
-	org.manalith.ircbot.plugin.cer2/CERPlugin.java
+	org.manalith.ircbot.plugin.curex/CurexPlugin.java
 	ManalithBot - An open source IRC bot based on the PircBot Framework.
 	Copyright (C) 2011, 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
 	Copyright (C) 2012  Changwoo Ryu <cwryu@debian.org>
@@ -17,7 +17,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -25,7 +25,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component("cerPlugin")
-public class CERPlugin extends AbstractBotPlugin {
+public class CurexPlugin extends AbstractBotPlugin {
 
 	/*
 	 * (non-Javadoc)
@@ -87,7 +87,7 @@ public class CERPlugin extends AbstractBotPlugin {
 			System.arraycopy(command, 1, mergedcmd, 0, command.length - 1);
 
 			try {
-				CERRunner runner = new CERRunner(event.getUser().getNick(),
+				CurexRunner runner = new CurexRunner(event.getUser().getNick(),
 						this.getResourcePath(), mergedcmd);
 
 				String result = runner.run();
@@ -120,7 +120,7 @@ public class CERPlugin extends AbstractBotPlugin {
 				arg += command[i];
 			}
 
-			CERCustomSettingManager csMan = new CERCustomSettingManager(
+			CurexCustomSettingManager csMan = new CurexCustomSettingManager(
 					this.getResourcePath(), target, userNick, arg);
 
 			if (subcmd[1].equals("sub"))

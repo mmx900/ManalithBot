@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.cer2.exceptions;
+package org.manalith.ircbot.plugin.curex.exceptions;
 
 public class FileDoesntSpecifiedException extends Exception {
 
