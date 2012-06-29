@@ -25,9 +25,8 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
 		<property name="tryToReconnect" value="true" />
 	</bean>
-	<!-- 봇 연결 설정 끝 -->
 
-	<!-- 릴레이 플러그인 설정 -->
+	<!-- 릴레이 플러그인 설정 시작 -->
 	<bean id="relayConfiguration"
 		class="org.manalith.ircbot.plugin.relay.RelayConfiguration">
 		<!-- 릴레이 연결 설정 -->
@@ -64,15 +63,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="password" value="CHANGE_ME" />
 	</bean>
 	-->
-	<!-- 관리자 플러그인 설정 끝 -->
 
 	<!-- 주소 정보 플러그인 설정 -->
 	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
 		<!-- 내용 형식 출력 여부 -->
 		<property name="enablePrintContentType" value="true" />
 	</bean>
-	<!-- 주소 정보 플러그인 설정 끝 -->
-
 
 	<!-- 주소 단축 플러그인 설정 내용 시작 -->
 	<bean id="urlShortenerPlugin"
@@ -101,14 +97,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 			<!-- <ref bean="phPortageProvider" /> -->
 		</property>
 	</bean>
-	<!-- 젠투 검색 프로바이더 확장 설정 끝 -->
 
 	<!-- 영타 변환 플러그인 설정 -->
 	<bean id="keySeqConvPlugin" class="org.manalith.ircbot.plugin.keyseqconv.KeySeqConvPlugin">
 		<!-- 영타 변환 제외구역 설정 문법 적용여부 -->
 		<property name="enableParsingExceptionSyntax" value="true" />
 	</bean>
-	<!-- 영타 변환 플러그인 설정 끝 -->
 
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
