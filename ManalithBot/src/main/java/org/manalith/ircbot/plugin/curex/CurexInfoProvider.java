@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.curex/CERInfoProvider.java
+ 	org.manalith.ircbot.plugin.curex/CurexInfoProvider.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -34,7 +34,7 @@ import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.curex.exceptions.InvalidArgumentException;
 
-public class CERInfoProvider {
+public class CurexInfoProvider {
 
 	private String[] args;
 	private String path;
@@ -45,19 +45,19 @@ public class CERInfoProvider {
 	/**
 	 * 3 types of Constructors
 	 */
-	public CERInfoProvider() {
+	public CurexInfoProvider() {
 		this.setArgs(null);
 		this.setPath("");
 		this.initArgumentParser();
 	}
 
-	public CERInfoProvider(String[] newArgs) {
+	public CurexInfoProvider(String[] newArgs) {
 		this.setArgs(newArgs);
 		this.setPath("");
 		this.initArgumentParser();
 	}
 
-	public CERInfoProvider(String newPath, String[] newArgs) {
+	public CurexInfoProvider(String newPath, String[] newArgs) {
 		this.setArgs(newArgs);
 		this.setPath(newPath);
 		this.initArgumentParser();
