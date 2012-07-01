@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String NAMESPACE = "구글";
+	private static final String NAMESPACE = "!구글";
 	private String apiKey;
 	private String apiReferer;
 
@@ -51,7 +51,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "사용법 : !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
+		return "설 명: 구글 검색 결과를 보여줍니다, 사용법: !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -63,14 +63,14 @@ public class GooglePlugin extends AbstractBotPlugin {
 			bot.sendLoggedMessage(channel, getHelp());
 			event.setExecuted(true);
 		} else if (message.length() >= 12
-				&& (message.substring(0, 9).equals("!구글:match ") || message
+				&& (message.substring(0, 9).equals(NAMESPACE + ":match ") || message
 						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
 			bot.sendLoggedMessage(channel,
 					getGoogleMatch(keywords[0], keywords[1]));
 			event.setExecuted(true);
 		} else if (message.length() >= 5
-				&& (message.substring(0, 4).equals("!구글 ") || message
+				&& (message.substring(0, 4).equals(NAMESPACE + " ") || message
 						.substring(0, 4).equals("!gg "))) {
 			bot.sendLoggedMessage(channel,
 					getGoogleTopResult(message.substring(4)));

@@ -1,4 +1,4 @@
-package org.manalith.ircbot.url;
+package org.manalith.ircbot.plugin.url;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -16,12 +16,16 @@ public class UrlEncoderPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getName() {
-		return "URL 변환 플러그인";
+		return "URL 변환";
 	}
 
 	@Override
 	public String getCommands() {
-		return "!urlencode [url] 혹은 !urldecode [url]";
+		return "!urlencode|!urldecode";
+	}
+
+	public String getHelp() {
+		return "설  명: URL을 유니코드값 문자열로 인코딩하거나 반대로 디코딩 해줍니다, 사용법: !urlencode|!urldecode [URL]";
 	}
 
 	@Override
@@ -42,6 +46,10 @@ public class UrlEncoderPlugin extends AbstractBotPlugin {
 				// impossible
 				logger.error(e);
 			}
+		} else if (segments.length == 1) {
+			String cmd = segments[0];
+			if (cmd.equals("!urlencode") || cmd.equals("!urldecode"))
+				event.respond("!urlencode [url] 혹은 !urldecode [url]");
 		}
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JavaApiPlugin extends AbstractBotPlugin {
-	private static final String NAMESPACE = "java-api";
+	private static final String NAMESPACE = "!japi";
 
 	public String getName() {
 		return "Java API Viewer";
@@ -21,7 +21,7 @@ public class JavaApiPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "사용법 : java-api [클래스명]";
+		return "설  명: 지정한 클래스 이름에 대한 자바문서 연결을 보여줍니다, 사용법: !japi [클래스명]";
 	}
 
 	public void onMessage(MessageEvent event) {

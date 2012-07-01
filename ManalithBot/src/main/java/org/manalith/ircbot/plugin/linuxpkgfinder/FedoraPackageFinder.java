@@ -40,7 +40,11 @@ public class FedoraPackageFinder extends PackageFinder {
 
 	@Override
 	public String getCommands() {
-		return "!fed [PKG]";
+		return "!fed";
+	}
+
+	public String getHelp() {
+		return "설  명: 지정한 이름을 가진 페도라의 패키지를 검색합니다, 사용법: !fed [키워드]";
 	}
 
 	@BotCommand(value = { "!fed" }, minimumArguments = 1)

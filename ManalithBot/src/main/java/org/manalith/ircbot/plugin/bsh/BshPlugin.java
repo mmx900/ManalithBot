@@ -18,7 +18,7 @@ import bsh.TargetError;
 
 public class BshPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String NAMESPACE = "eval";
+	private static final String NAMESPACE = "!bsh";
 	private OwnerExecute internalExecute = null;
 	private Properties commands;
 
@@ -35,7 +35,7 @@ public class BshPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "사용법 : eval [코드]";
+		return "설  명: 빈 쉘 명령에 따른 결과를 시뮬레이션 합니다, 사용법: !bsh [코드]";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -83,8 +83,7 @@ public class BshPlugin extends AbstractBotPlugin {
 			String s = commands.getProperty(message.substring(0, 6).replace(
 					":", "."));
 			if (s != null) {
-				bot.sendLoggedMessage(channel,
-						executeInternalCommand(s));
+				bot.sendLoggedMessage(channel, executeInternalCommand(s));
 			} else {
 				bot.sendLoggedMessage(channel, "해당 명령은 없습니다.");
 			}

@@ -1,5 +1,5 @@
 /*
-	org.manalith.ircbot.plugin.cer2/CERPlugin.java
+	org.manalith.ircbot.plugin.curex/CurexPlugin.java
 	ManalithBot - An open source IRC bot based on the PircBot Framework.
 	Copyright (C) 2011, 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
 	Copyright (C) 2012  Changwoo Ryu <cwryu@debian.org>
@@ -17,7 +17,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -25,7 +25,7 @@ import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component("cerPlugin")
-public class CERPlugin extends AbstractBotPlugin {
+public class CurexPlugin extends AbstractBotPlugin {
 
 	/*
 	 * (non-Javadoc)
@@ -33,7 +33,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
 	 */
 	public String getName() {
-		return "환율 계산기";
+		return "환율계산";
 		// return null;
 	}
 
@@ -44,7 +44,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 */
 
 	public String getCommands() {
-		return "환율|curex";
+		return "!환율";
 	}
 
 	/*
@@ -53,7 +53,7 @@ public class CERPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		return null;
+		return "설  명: 환율 정보를 보여주고 환율 계산을 도와줍니다, 사용법: !환율 (자세한 사용법은 !curex help를 실행하세요)";
 	}
 
 	/*
@@ -75,9 +75,7 @@ public class CERPlugin extends AbstractBotPlugin {
 		ManalithBot bot = event.getBot();
 		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
-		if (!command[0].equals("!curex") && !command[0].equals("!환율")
-				&& !command[0].startsWith("!curex:")
-				&& !command[0].startsWith("!환율:"))
+		if (!command[0].equals("!환율") && !command[0].startsWith("!환율:"))
 			return;
 
 		String[] subcmd = command[0].split("\\:");
@@ -87,20 +85,20 @@ public class CERPlugin extends AbstractBotPlugin {
 			System.arraycopy(command, 1, mergedcmd, 0, command.length - 1);
 
 			try {
-				CERRunner runner = new CERRunner(event.getUser().getNick(),
+				CurexRunner runner = new CurexRunner(event.getUser().getNick(),
 						this.getResourcePath(), mergedcmd);
 
 				String result = runner.run();
 				if (result.equals("Help!")) {
 					bot.sendLoggedMessage(target,
-							CERInfoProvider.getIRCHelpMessagePart1());
+							CurexInfoProvider.getIRCHelpMessagePart1());
 					bot.sendLoggedMessage(target,
-							CERInfoProvider.getIRCHelpMessagePart2());
+							CurexInfoProvider.getIRCHelpMessagePart2());
 				} else if (result.equals("unitlist")) {
 					bot.sendLoggedMessage(target,
-							CERInfoProvider.getUnitListPart1());
+							CurexInfoProvider.getUnitListPart1());
 					bot.sendLoggedMessage(target,
-							CERInfoProvider.getUnitListPart2());
+							CurexInfoProvider.getUnitListPart2());
 				} else {
 					bot.sendLoggedMessage(target, result);
 				}
@@ -120,7 +118,7 @@ public class CERPlugin extends AbstractBotPlugin {
 				arg += command[i];
 			}
 
-			CERCustomSettingManager csMan = new CERCustomSettingManager(
+			CurexCustomSettingManager csMan = new CurexCustomSettingManager(
 					this.getResourcePath(), target, userNick, arg);
 
 			if (subcmd[1].equals("sub"))
