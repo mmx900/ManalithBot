@@ -27,15 +27,15 @@ import org.springframework.stereotype.Component;
 public class CalcPlugin extends AbstractBotPlugin {
 
 	public String getName() {
-		return "뒷북 계산기";
+		return "뒷북계산기";
 	}
 
 	public String getCommands() {
-		return "계산|eval";
+		return "!계산";
 	}
 
 	public String getHelp() {
-		return "!(계산|eval) (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
+		return "설  명: 계산식을 입력하면 답을 구해줍니다, 사용법: !계산 (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 
 	public void onMessage(MessageEvent event) {
@@ -51,7 +51,7 @@ public class CalcPlugin extends AbstractBotPlugin {
 		String message = event.getMessage();
 		String[] command = message.split("\\s");
 
-		if (command[0].equals("!계산") || command[0].equals("!eval")) {
+		if (command[0].equals("!계산")) {
 			if (command.length == 1) {
 				bot.sendLoggedMessage(target, "입력한 식이 없습니다.");
 				bot.sendLoggedMessage(target, this.getHelp());

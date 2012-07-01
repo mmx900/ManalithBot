@@ -12,12 +12,16 @@ import org.springframework.stereotype.Component;
 public class TimestampPlugin extends AbstractBotPlugin {
 	@Override
 	public String getName() {
-		return "유닉스 타임스탬프 변환 플러그인";
+		return "유닉스 타임스탬프 변환";
 	}
 
 	@Override
 	public String getCommands() {
-		return "!timestamp [timestamp]";
+		return "!timestamp";
+	}
+
+	public String getHelp() {
+		return "설  명: 유닉스 타임스탬프 문자열을 ISO 날짜형식으로 변환합니다, 사용법: !timestamp [timestamp]";
 	}
 
 	@BotCommand(value = { "!timestamp" }, minimumArguments = 1)

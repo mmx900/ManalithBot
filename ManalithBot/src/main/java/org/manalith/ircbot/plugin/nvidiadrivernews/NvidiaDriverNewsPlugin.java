@@ -27,15 +27,15 @@ public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
 	private NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
 
 	public String getName() {
-		return "Nvidia최신버전";
+		return "Nvidia최신";
 	}
 
 	public String getCommands() {
-		return "nvidia";
+		return "!nvidia";
 	}
 
 	public String getHelp() {
-		return "!nvidia";
+		return "설  명: Nvidia 그래픽 디스플레이 드라이버의 최신 버전을 보여줍니다, 사용법: !nvidia";
 	}
 
 	@BotCommand({ "!nvidia" })

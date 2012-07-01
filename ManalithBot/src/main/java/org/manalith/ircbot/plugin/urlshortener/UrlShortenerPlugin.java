@@ -16,7 +16,11 @@ public class UrlShortenerPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getCommands() {
-		return "!짧게 [URL]";
+		return "!짧게";
+	}
+
+	public String getHelp() {
+		return "설  명: URL을 짧게 줄여줍니다, 사용법: !짧게 [URL]";
 	}
 
 	public UrlShortenerProvider getProvider() {

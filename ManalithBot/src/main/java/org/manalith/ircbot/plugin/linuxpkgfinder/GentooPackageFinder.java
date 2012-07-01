@@ -35,7 +35,11 @@ public class GentooPackageFinder extends PackageFinder {
 
 	@Override
 	public String getCommands() {
-		return "!gen [PKG]";
+		return "!gen";
+	}
+
+	public String getHelp() {
+		return "설  명: 지정한 이름을 가진 젠투의 패키지를 검색합니다, 사용법: !gen [키워드]";
 	}
 
 	public GentooPackageFinder() {

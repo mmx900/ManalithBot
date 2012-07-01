@@ -59,7 +59,7 @@ public class CurexRunner {
 		updater.update();
 
 		String[] cmd = null;
-		CERInfoProvider info = null;
+		CurexInfoProvider info = null;
 
 		if (ArrayUtils.isEmpty(arguments)) {
 			String[] default_currency = null;
@@ -94,7 +94,7 @@ public class CurexRunner {
 				String[] args = new String[1];
 				args[0] = default_currency[i];
 				cmd = CurexMessageTokenAnalyzer.convertToCLICommandString(args);
-				info = new CERInfoProvider(dataPath, cmd);
+				info = new CurexInfoProvider(dataPath, cmd);
 
 				if (i != 0)
 					result += ", " + info.commandInterpreter();
@@ -103,7 +103,7 @@ public class CurexRunner {
 			}
 		} else {
 			cmd = CurexMessageTokenAnalyzer.convertToCLICommandString(arguments);
-			info = new CERInfoProvider(dataPath, cmd);
+			info = new CurexInfoProvider(dataPath, cmd);
 
 			result = info.commandInterpreter();
 		}

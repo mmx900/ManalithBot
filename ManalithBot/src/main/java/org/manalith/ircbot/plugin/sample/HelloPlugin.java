@@ -36,11 +36,11 @@ public class HelloPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getCommands() {
-		return "!hello, !bye";
+		return "!hello|!bye";
 	}
 
 	public String getHelp() {
-		return "!hello, !bye";
+		return "설 명: 예제 플러그인 입니다, 사용법: !hello|!bye|!count|!채널인사 [인사말]";
 	}
 
 	@BotCommand({ "!hello", "!인사" })
@@ -66,6 +66,7 @@ public class HelloPlugin extends AbstractBotPlugin {
 
 	@BotCommand(value = { "!채널인사" }, minimumArguments = 1)
 	public String sayHelloWithCount(MessageEvent event, String... args) {
-		return String.format("%s 방 여러분 %s", event.getChannel(), args[0]);
+		return String.format("%s 방 여러분 %s", event.getChannel().getName(),
+				args[0]);
 	}
 }
