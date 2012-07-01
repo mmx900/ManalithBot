@@ -5,7 +5,7 @@ import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class SlashdotReaderPlugin extends AbstractBotPlugin {
-	private static final String NAMESPACE = "slashdot";
+	private static final String NAMESPACE = "!slashdot";
 
 	public String getName() {
 		return "Slashdot";
@@ -16,7 +16,7 @@ public class SlashdotReaderPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "호출하면 슬래시닷의 가장 최근 글을 출력합니다.";
+		return "설  명: 호출하면 슬래시닷의 가장 최근 글을 출력합니다, 사용법: !slashdot";
 	}
 
 	public void onMessage(MessageEvent event) {

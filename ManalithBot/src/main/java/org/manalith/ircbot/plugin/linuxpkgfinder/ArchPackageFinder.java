@@ -43,7 +43,11 @@ public class ArchPackageFinder extends PackageFinder {
 
 	@Override
 	public String getCommands() {
-		return "!ar [PKG]";
+		return "!ar";
+	}
+
+	public String getHelp() {
+		return "설  명: 지정한 이름을 가진 아치의 패키지를 검색합니다, 사용법: !ar [키워드]";
 	}
 
 	@BotCommand(value = { "!ar" }, minimumArguments = 1)
@@ -68,13 +72,18 @@ public class ArchPackageFinder extends PackageFinder {
 							+ (new Integer(j + 1)).toString() + "/?arch="
 							+ arch_keywords[i] + "&q=" + arg;
 
-					if (j == 0 && pages == 100000000) {
-						String pageinfo = Jsoup
+					String pageinfo = "";
+					try {
+						pageinfo = Jsoup
 								.connect(url)
 								.get()
 								.select("div#pkglist-results>div.pkglist-stats>p")
 								.get(0).text();
+					} catch (Exception e) {
+						pages = 1;
+					}
 
+					if (j == 0 && pages == 100000000) {
 						if (StringUtils.countMatches(pageinfo, ".") == 1)
 							pages = 1;
 						else {

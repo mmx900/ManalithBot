@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/TokenSubtype.java
+ 	org.manalith.ircbot.plugin.curex/TokenSubtype.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 public enum TokenSubtype {
 	TextString, CommandHelp, CommandLastRound, CommandUnitList, CommandShow, CommandConvert, CommandBuyCash, CommandCellCash, CommandSendRemit, CommandRecvRemit, CurrencyKRW, CurrencyUSD, CurrencyEUR, CurrencyJPY, CurrencyCNY, CurrencyHKD, CurrencyTWD, CurrencyGBP, CurrencyCAD, CurrencyCHF, CurrencySEK, CurrencyAUD, CurrencyNZD, CurrencyILS, CurrencyDKK, CurrencyNOK, CurrencySAR, CurrencyKWD, CurrencyBHD, CurrencyAED, CurrencyJOD, CurrencyEGP, CurrencyTHB, CurrencySGD, CurrencyMYR, CurrencyIDR, CurrencyBND, CurrencyINR, CurrencyPKR, CurrencyBDT, CurrencyPHP, CurrencyMXN, CurrencyBRL, CurrencyVND, CurrencyZAR, CurrencyRUB, CurrencyHUF, CurrencyPLN, FAAll, FACentralRate, FABuyCash, FACellCash, FASendRemit, FARecvRemit, FAECRate, FADollarExcRate, AmountNatural, AmountFp, Unknown

@@ -40,7 +40,11 @@ public class DebianPackageFinder extends PackageFinder {
 
 	@Override
 	public String getCommands() {
-		return "!deb [PKG]";
+		return "!deb";
+	}
+
+	public String getHelp() {
+		return "설  명: 지정한 이름을 가진 데비안의 패키지를 검색합니다, 사용법: !deb [키워드]";
 	}
 
 	public String parseVersionInfo(Document doc) {
@@ -125,7 +129,7 @@ public class DebianPackageFinder extends PackageFinder {
 			String description = latestElement.toString().split("\\<br\\s\\/>")[0]
 					.split("\\:")[1].trim();
 
-			result = pkgname + " - " + description + "\n";
+			result = pkgname + " - " + description + ", ";
 			result += parseVersionInfo(doc);
 			System.out.println(result);
 		} catch (Exception e) {

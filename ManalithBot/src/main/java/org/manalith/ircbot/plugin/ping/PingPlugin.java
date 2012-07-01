@@ -35,12 +35,12 @@ public class PingPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return "ping";
+		return "!ping";
 	}
 
 	@Override
 	public String getHelp() {
-		return "서버에 ICMP ECHO 요청을 보내고 결과를 표시합니다.";
+		return "설  명: 서버에 ICMP ECHO 요청을 보내고 결과를 표시합니다, 사용법: !ping [URL]";
 	}
 
 	@Override

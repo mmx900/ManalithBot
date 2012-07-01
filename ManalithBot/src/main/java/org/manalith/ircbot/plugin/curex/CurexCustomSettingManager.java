@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/CERCustomSettingManager.java
+ 	org.manalith.ircbot.plugin.curex/CurexCustomSettingManager.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,23 +24,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.manalith.ircbot.common.PropertyManager;
-import org.manalith.ircbot.plugin.cer2.exceptions.EmptyTokenStreamException;
+import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 
-public class CERCustomSettingManager extends TokenAnalyzer {
+public class CurexCustomSettingManager extends TokenAnalyzer {
 
 	private String LocalPath;
 	private String channel;
 	private String userNick;
 	private String CurrencyArgString;
 
-	public CERCustomSettingManager(String newLocalPath) {
+	public CurexCustomSettingManager(String newLocalPath) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel("");
 		this.setUserNick("");
 		this.setCurrencyArgString("");
 	}
 
-	public CERCustomSettingManager(String newLocalPath, String newChannel,
+	public CurexCustomSettingManager(String newLocalPath, String newChannel,
 			String newUserNick) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel(newChannel);
@@ -48,7 +48,7 @@ public class CERCustomSettingManager extends TokenAnalyzer {
 		this.setCurrencyArgString("");
 	}
 
-	public CERCustomSettingManager(String newLocalPath, String newChannel,
+	public CurexCustomSettingManager(String newLocalPath, String newChannel,
 			String newUserNick, String newArgs) {
 		this.setLocalPath(newLocalPath);
 		this.setChannel(newChannel);

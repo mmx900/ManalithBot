@@ -217,6 +217,10 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onAction(ActionEvent<ManalithBot> event) throws Exception {
 		// TODO Auto-generated method stub
+		logger.trace(String.format("ACTION : %s / %s / %s / %s / %s", event
+				.getChannel().getName(), event.getUser().getNick(), event
+				.getUser().getLogin(), event.getUser().getHostmask(), event
+				.getAction()));
 		super.onAction(event);
 	}
 

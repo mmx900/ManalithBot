@@ -39,11 +39,11 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public String getCommands() {
-		return COMMAND.substring(1);
+		return COMMAND;
 	}
 
 	public String getHelp() {
-		return "사용법 : !날씨 [영문 지명]";
+		return "설  명: 지정한 지역의 날씨를 보여줍니다, 사용법: !날씨 [한글/영문 지명]";
 	}
 
 	public void onMessage(MessageEvent event) {

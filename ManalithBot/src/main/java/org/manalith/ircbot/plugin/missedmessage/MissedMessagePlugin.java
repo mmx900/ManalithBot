@@ -38,7 +38,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return "!msg [닉] [150자 메시지] // 3개 까지 남길 수 있습니다";
+		return "설  명: 부재중인 분께 메시지를 남겨드립니다, 사용법: !msg [닉] [150자 메시지] // 3개 까지 남길 수 있습니다";
 	}
 
 	public void onMessage(MessageEvent event) {

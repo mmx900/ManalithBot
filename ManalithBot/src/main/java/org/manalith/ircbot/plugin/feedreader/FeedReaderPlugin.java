@@ -23,27 +23,27 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getName() {
-		return "피드 리더 플러그인";
+		return "피드리더";
 	}
 
 	@Override
 	public String getCommands() {
-		return "!feed [명령]";
+		return "!feed";
 	}
 
 	@Override
 	public String getHelp() {
-		return getCommands();
+		return "설  명: RSS 피드를 읽어옵니다, 사용법: !feed [피드주소]";
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
 		String[] segments = StringUtils.split(event.getMessage(), " ");
 
-		if (segments[0].equalsIgnoreCase("!feed")) {
+		if (segments[0].equalsIgnoreCase(getCommands())) {
 
 			if (segments.length != 2) {
-				event.respond(getCommands());
+				event.respond(getHelp());
 			} else {
 				try {
 					URL feedUrl = new URL(segments[1]);

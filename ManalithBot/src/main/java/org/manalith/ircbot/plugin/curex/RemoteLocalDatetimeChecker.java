@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/RemoteLocalDatetimeChecker.java
+ 	org.manalith.ircbot.plugin.curex/RemoteLocalDatetimeChecker.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -27,7 +27,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import org.manalith.ircbot.common.PropertyManager;
-import org.manalith.ircbot.plugin.cer2.exceptions.FileDoesntSpecifiedException;
+import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
 public class RemoteLocalDatetimeChecker {
 

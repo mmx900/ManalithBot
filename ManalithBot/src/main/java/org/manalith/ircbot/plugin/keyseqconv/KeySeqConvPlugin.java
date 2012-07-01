@@ -53,7 +53,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
 	 */
 	public String getName() {
-		return "입력 변환기(2벌,3벌[최종,390,순아래] <-> 쿼티)";
+		return "입력 변환기(2벌,3벌[최종,390,순아래])";
 	}
 
 	/*
@@ -72,7 +72,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
 	 */
 	public String getHelp() {
-		return "!c2|!c3|!c33|!c3n 한글로 변환할 영문메시지, \\변환하지 않을 영문메시지\\ (백슬래시 표시: \\\\) | !c2r 영문자로 변환할 한글메시지";
+		return "!c2|!c3|!c33|!c3n 영문문자열, \\변환하지 않을 영문문자열\\ (백슬래시 표시: \\\\) | !c2r 한글문자열";
 	}
 
 	/*

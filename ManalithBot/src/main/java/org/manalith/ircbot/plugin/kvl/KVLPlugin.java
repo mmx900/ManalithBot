@@ -27,16 +27,16 @@ import org.springframework.stereotype.Component;
 public class KVLPlugin extends AbstractBotPlugin {
 
 	public String getName() {
-		return "커널버전리스트";
+		return "커널버전";
 	}
 
 	public String getCommands() {
-		return "커널|kernel";
+		return "!커널";
 	}
 
 	@Override
 	public String getHelp() {
-		return "!커널 (latest[default]|all|help), !kernel (latest[default]|all|help)";
+		return "설  명: 커널 버전의 목록을 보여줍니다, 사용법: !커널 (latest[default]|all|help)";
 	}
 
 	@Override
@@ -50,6 +50,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 	}
 
 	protected void onMessage(MessageEvent event, String target) {
+
 		String msg = event.getMessage();
 		String[] command = msg.split("\\s");
 		ManalithBot bot = event.getBot();

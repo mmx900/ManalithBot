@@ -1,5 +1,5 @@
 /*
- 	org.manalith.ircbot.plugin.cer2/CERTableUpdater.java
+ 	org.manalith.ircbot.plugin.curex/CurexTableUpdater.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
  	Copyright (C) 2011  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
@@ -16,16 +16,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.cer2;
+package org.manalith.ircbot.plugin.curex;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 
 import org.manalith.ircbot.common.PropertyManager;
-import org.manalith.ircbot.plugin.cer2.exceptions.FileDoesntSpecifiedException;
+import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
-public class CERTableUpdater {
+public class CurexTableUpdater {
 
 	private String LocalPath;
 	private String propFileName;
@@ -34,7 +34,7 @@ public class CERTableUpdater {
 	private DateTimeRound local;
 	private DateTimeRound remote;
 
-	public CERTableUpdater() {
+	public CurexTableUpdater() {
 		this.setLocalPath("");
 		propFileName = "LatestUpdatedDatetime.prop";
 		sqlman = null;
@@ -42,7 +42,7 @@ public class CERTableUpdater {
 		remote = null;
 	}
 
-	public CERTableUpdater(String newLocalPath) {
+	public CurexTableUpdater(String newLocalPath) {
 		this.setLocalPath(newLocalPath);
 		propFileName = "LatestUpdatedDatetime.prop";
 		sqlman = null;
