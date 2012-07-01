@@ -10,8 +10,8 @@ import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class HelpPlugin extends AbstractBotPlugin {
-	private final String[] helpCommands = new String[] { "!명령어", "!명령", "!도움",
-			"!help", "!plugins" };
+	private static final String[] HELP_COMMANDS = new String[] { "!명령어", "!명령",
+			"!도움", "!도움말", "!help", "!plugins" };
 	private PluginManager pluginManager;
 
 	public HelpPlugin(PluginManager pluginManager) {
@@ -25,7 +25,7 @@ public class HelpPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getCommands() {
-		return StringUtils.join(helpCommands, ", ");
+		return StringUtils.join(HELP_COMMANDS, ", ");
 	}
 
 	@Override
@@ -35,90 +35,55 @@ public class HelpPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String[] msgs = event.getMessage().split(" ");
-		if (ArrayUtils.contains(helpCommands, msgs[0])) {
-			String[] arr;
-			if (msgs.length == 1 || msgs.length == 2) {
-				arr = (msgs.length == 1) ? getPluginInfo("")
-						: getPluginInfo(msgs[1]);
-				for (String s : arr)
-					event.respond(s);
-			} else {
-				event.respond("너무 많은 값이 있습니다.");
-			}
-		}
+		String result = onMessage(event.getMessage());
+		if (result != null)
+			event.respond(result);
 	}
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		if (ArrayUtils.contains(helpCommands, event.getMessage())) {
-			String[] arr;
-			String[] msgs = event.getMessage().split(" ");
-			if (msgs.length == 1 || msgs.length == 2) {
-				arr = (msgs.length == 1) ? getPluginInfo("")
-						: getPluginInfo(msgs[1]);
-				for (String s : arr)
-					event.respond(s);
+		String result = onMessage(event.getMessage());
+		if (result != null)
+			event.respond(result);
+	}
+
+	private String onMessage(String message) {
+		String[] msgs = StringUtils.splitByWholeSeparator(message, null);
+		if (ArrayUtils.contains(HELP_COMMANDS, msgs[0])) {
+			if (msgs.length == 1) {
+				return getPluginInfo();
+			} else if (msgs.length == 2) {
+				return getPluginInfo(msgs[1]);
 			} else {
-				event.respond("너무 많은 값이 있습니다.");
+				return "너무 많은 값이 있습니다.";
 			}
+		} else {
+			return null;
 		}
 	}
 
-	private String[] getPluginInfo(String arg) {
-		ArrayList<String> arr = new ArrayList<String>();
-		String[] result = null;
-		StringBuilder sb = new StringBuilder();
-		String name = "";
-		// To make well-formed message
-		int i = 0;
+	private String getPluginInfo() {
+		ArrayList<String> plugins = new ArrayList<String>();
 
-		if (arg.equals("")) {
-			for (IBotPlugin p : pluginManager.getPlugins()) {
-				name = p.getName();
-				if (name != null) {
+		for (IBotPlugin p : pluginManager.getPlugins()) {
+			String name = p.getName();
+			String commands = p.getCommands();
 
-					if (sb.length() > 250) {
-						sb.append(",");
-						arr.add(sb.toString());
-						sb.delete(0, sb.length());
-						i = 0;
-					}
-
-					if (i != 0)
-						// To make well-formed message
-						sb.append(", ");
-					else
-						i++;
-
-					sb.append(name);
-
-					String commands = p.getCommands();
-					if (StringUtils.isNotBlank(commands))
-						sb.append("(" + commands + ")");
-
-				}
-			}
-			arr.add(sb.toString());
-			result = new String[arr.size()];
-			arr.toArray(result);
-		} else {
-			for (IBotPlugin p : pluginManager.getPlugins()) {
-				if (p.getCommands() != null) {
-					if (p.getCommands().contains(arg)) {
-						result = new String[1];
-						result[0] = p.getHelp();
-						break;
-					}
-				}
-			}
-
-			if (result == null) {
-				result = new String[1];
-				result[0] = "그런 명령어가 존재하지 않습니다: " + arg;
+			if (StringUtils.isNotBlank(commands)) {
+				plugins.add(String.format("%s(%s)", name, commands));
+			} else {
+				plugins.add(name);
 			}
 		}
 
-		return result;
+		return StringUtils.join(plugins, ", ");
+	}
+
+	private String getPluginInfo(String command) {
+		for (IBotPlugin p : pluginManager.getPlugins())
+			if (StringUtils.contains(p.getCommands(), command))
+				return p.getHelp();
+
+		return String.format("그런 명령어가 존재하지 않습니다: %s", command);
 	}
 }
