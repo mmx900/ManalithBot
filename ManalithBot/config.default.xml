@@ -134,6 +134,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="unicodePlugin" />
 				<ref bean="urlEncoderPlugin" />
 				<ref bean="regexPlugin" />
+				<ref bean="replacementCharacterDetectPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
