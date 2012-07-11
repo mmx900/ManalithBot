@@ -20,7 +20,9 @@ public class KVLRunner {
 	}
 
 	private void initKVLRun() throws Exception {
-
+		KVLTableBuilder tBuilder = new KVLTableBuilder(
+				"http://kernel.org/index.shtml"/* array */);
+		kvlTable = tBuilder.generateKernelVersionTable();
 	}
 
 	public String run(String arg) {
