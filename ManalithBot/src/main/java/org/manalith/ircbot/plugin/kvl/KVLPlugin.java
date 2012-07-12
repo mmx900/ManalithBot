@@ -18,6 +18,7 @@
  */
 package org.manalith.ircbot.plugin.kvl;
 
+import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 @Component("kvlPlugin")
 public class KVLPlugin extends AbstractBotPlugin {
+	private Logger logger = Logger.getLogger(getClass());
 
 	public String getName() {
 		return "커널버전";
@@ -64,10 +66,14 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 			KVLRunner runner = new KVLRunner();
 
-			if (command.length >= 2)
-				bot.sendLoggedMessage(target, runner.run(command[1]));
-			else
-				bot.sendLoggedMessage(target, runner.run(""));
+			try {
+				if (command.length >= 2)
+					bot.sendLoggedMessage(target, runner.run(command[1]));
+				else
+					bot.sendLoggedMessage(target, runner.run(""));
+			} catch (Exception e) {
+				logger.warn(e.getMessage(), e);
+			}
 
 			event.setExecuted(true);
 		}
