@@ -103,6 +103,11 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<!-- 영타 변환 제외구역 설정 문법 적용여부 -->
 		<property name="enableParsingExceptionSyntax" value="true" />
 	</bean>
+	
+	<!-- 온오프믹스 플러그인 설정 -->
+	<bean id="onOffMixPlugin" class="org.manalith.ircbot.plugin.onoffmix.OnOffMixPlugin">
+		<property name="apiKey" value="YOUR_ONOFFMIX_API_KEY" />
+	</bean>
 
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
 		<constructor-arg>
@@ -136,6 +141,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="regexPlugin" />
 				<ref bean="replacementCharacterDetectPlugin" />
 				<ref bean="cryptoPlugin" />
+				<ref bean="onOffMixPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
