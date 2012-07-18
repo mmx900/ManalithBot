@@ -135,6 +135,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="urlEncoderPlugin" />
 				<ref bean="regexPlugin" />
 				<ref bean="replacementCharacterDetectPlugin" />
+				<ref bean="cryptoPlugin" />
 			</list>
 		</constructor-arg>
 	</bean>
