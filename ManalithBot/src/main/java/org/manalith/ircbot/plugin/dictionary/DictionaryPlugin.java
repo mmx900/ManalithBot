@@ -33,13 +33,12 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 	}
 
 	public String getHelp() {
-		return null;
+		return "사용법 : 배워 [단어] [해석]";
 	}
 
 	public void onMessage(MessageEvent event) {
 		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
-		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 
 		String cmd = CommandParser.checkMessageAndRemoveNick(bot.getName(),
@@ -49,9 +48,9 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 
 			if (cmd.equals("그치?")) {
 				if (((int) (Math.random() * 10)) % 2 == 0)
-					bot.sendLoggedMessage(channel, "응응!");
+					event.respond("응응!");
 				else
-					bot.sendLoggedMessage(channel, "(먼산)");
+					event.respond("(먼산)");
 			} else {
 				Word w = null;
 				if (cmd.startsWith("배워 ")) {
@@ -69,18 +68,18 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 						w.date = new Date();
 						dictionaryManager.add(w);
 
-						bot.sendLoggedMessage(channel, "단어를 배웠습니다.");
+						event.respond("단어를 배웠습니다.");
 					} else {
-						bot.sendLoggedMessage(channel, "사용법 : 배워 [단어] [해석]");
+						event.respond(getHelp());
 					}
 
 				} else if ((w = dictionaryManager.getWord(cmd)) != null) {
-					bot.sendLoggedMessage(channel, "[" + w.word + "] "
-							+ w.description + " -" + w.author + "("
+					event.respond("[" + w.word + "] " + w.description + " -"
+							+ w.author + "("
 							+ DateFormatUtils.format(w.date, "yyyy-MM-dd")
 							+ ")");
 				} else {
-					bot.sendLoggedMessage(channel, "(먼산)");
+					event.respond("(먼산)");
 				}
 			}
 		}
