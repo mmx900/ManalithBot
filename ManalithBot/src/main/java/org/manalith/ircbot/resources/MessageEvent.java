@@ -40,6 +40,12 @@ public class MessageEvent {
 		this.event = event;
 	}
 
+	public MessageEvent(ManalithBot bot, Channel channel, User user,
+			String message) {
+		this.event = (GenericMessageEvent<ManalithBot>) new org.pircbotx.hooks.events.MessageEvent<ManalithBot>(
+				bot, channel, user, message);
+	}
+
 	public ManalithBot getBot() {
 		return event.getBot();
 	}
