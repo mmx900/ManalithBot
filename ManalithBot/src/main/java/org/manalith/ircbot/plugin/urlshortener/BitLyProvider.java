@@ -19,12 +19,11 @@ public class BitLyProvider implements UrlShortenerProvider {
 	private String apiKey;
 
 	public String shorten(String url) {
-		try {
-			InputStream input = new URL(
-					String.format(
-							"http://api.bitly.com/v3/shorten?login=%s&apiKey=%s&longUrl=%s",
-							apiLogin, apiKey, URLEncoder.encode(url, "UTF-8")))
-					.openStream();
+		try (InputStream input = new URL(
+				String.format(
+						"http://api.bitly.com/v3/shorten?login=%s&apiKey=%s&longUrl=%s",
+						apiLogin, apiKey, URLEncoder.encode(url, "UTF-8")))
+				.openStream()) {
 			Reader reader = new InputStreamReader(input, "UTF-8");
 			ShortenApiResponse data = new Gson().fromJson(reader,
 					ShortenApiResponse.class);
