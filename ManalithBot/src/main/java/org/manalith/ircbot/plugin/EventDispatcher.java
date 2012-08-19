@@ -103,18 +103,24 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 		logger.trace(String.format("MESSAGE : %s / %s / %s / %s / %s", channel,
 				sender, login, hostname, message));
 
+		org.manalith.ircbot.resources.MessageEvent msg = null;
+
 		// 릴레이 메시지일 경우 로컬 메시지로 변환한다.
 		// TODO 메시지 필터 구현
 		if (sender.equals("♠") || sender.equals("♠_")) {
 			sender = CommandParser.getSenderByRelayMessage(message);
 			message = CommandParser.convertRelayToLocalMessage(message);
+			org.pircbotx.hooks.events.MessageEvent<ManalithBot> newEvent = new org.pircbotx.hooks.events.MessageEvent<ManalithBot>(
+					bot, event.getChannel(), event.getUser(), message);
+			msg = new org.manalith.ircbot.resources.MessageEvent(newEvent);
 		}
 
 		if (StringUtils.isEmpty(message))
 			return;
 
-		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
-				event);
+		if (msg == null) {
+			msg = new org.manalith.ircbot.resources.MessageEvent(event);
+		}
 
 		// 어노테이션(@BotCommand) 기반 플러그인 실행
 		for (Method method : pluginManager.getCommands().keySet()) {
