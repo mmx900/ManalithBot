@@ -39,8 +39,10 @@ import org.springframework.stereotype.Component;
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "!구글";
-	private static final String HIGH_INTENSITY = "\u001B[1m";
-	private static final String LOW_INTENSITY = "\u001B[2m";
+	private static final String HIGH_INTENSITY = "\u0002";
+	private static final String LOW_INTENSITY = "\u000f";
+	// private static final String HIGH_INTENSITY = "\u001B[1m";
+	// private static final String LOW_INTENSITY = "\u001B[2m";
 	private String apiKey;
 	private String apiReferer;
 
