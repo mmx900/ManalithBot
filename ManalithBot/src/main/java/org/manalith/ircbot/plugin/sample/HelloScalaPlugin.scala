@@ -1,7 +1,7 @@
 package org.manalith.ircbot.plugin.sample
-import org.manalith.ircbot.plugin.AbstractBotPlugin
-import org.manalith.ircbot.resources.MessageEvent
+
 import org.manalith.ircbot.common.stereotype.BotCommand
+import org.manalith.ircbot.plugin.AbstractBotPlugin
 import org.springframework.stereotype.Component
 
 @Component
