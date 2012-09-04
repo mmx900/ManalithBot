@@ -39,6 +39,8 @@ import org.springframework.stereotype.Component;
 public class GooglePlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "!구글";
+	private static final String HIGH_INTENSITY = "\u001B[1m";
+	private static final String LOW_INTENSITY = "\u001B[2m";
 	private String apiKey;
 	private String apiReferer;
 
@@ -144,10 +146,10 @@ public class GooglePlugin extends AbstractBotPlugin {
 					+ firstResult.getString("url");
 
 			// HTML 코드 처리
-			result = result.replace("<b>", "[").replace("</b>", "]")
-					.replace("&quot;", "\"").replace("&amp;", "&")
-					.replace("&#39;", "'").replace("&gt;", ">")
-					.replace("&lt;", "<");
+			result = result.replace("<b>", HIGH_INTENSITY)
+					.replace("</b>", LOW_INTENSITY).replace("&quot;", "\"")
+					.replace("&amp;", "&").replace("&#39;", "'")
+					.replace("&gt;", ">").replace("&lt;", "<");
 
 			return result;
 
