@@ -23,21 +23,24 @@ package org.manalith.ircbot.resources;
 import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class MessageEvent {
 	private final GenericMessageEvent<ManalithBot> event;
 
 	private boolean executed; // 실행 완료 여부
+	private String message;
 
-	public MessageEvent(
-			org.pircbotx.hooks.events.PrivateMessageEvent<ManalithBot> event) {
+	public MessageEvent(PrivateMessageEvent<ManalithBot> event) {
 		this.event = event;
+		this.message = event.getMessage();
 	}
 
 	public MessageEvent(
 			org.pircbotx.hooks.events.MessageEvent<ManalithBot> event) {
 		this.event = event;
+		this.message = event.getMessage();
 	}
 
 	public ManalithBot getBot() {
@@ -52,8 +55,12 @@ public class MessageEvent {
 			return null;
 	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public String getMessage() {
-		return event.getMessage();
+		return message;
 	}
 
 	public User getUser() {

@@ -115,6 +115,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
 				event);
+		msg.setMessage(message);
 
 		// 어노테이션(@BotCommand) 기반 플러그인 실행
 		for (Method method : pluginManager.getCommands().keySet()) {
@@ -166,17 +167,17 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 					msg.setExecuted(commandMeta.stopEvent());
 				} catch (IllegalArgumentException e) {
-					logger.error(e);
+					logger.debug(e.getMessage(), e);
 					bot.sendLoggedMessage(channel,
 							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
 				} catch (IllegalAccessException e) {
-					logger.error(e);
+					logger.debug(e.getMessage(), e);
 					bot.sendLoggedMessage(channel,
 							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
 				} catch (InvocationTargetException e) {
-					logger.error(e);
+					logger.debug(e.getMessage(), e);
 					bot.sendLoggedMessage(channel,
 							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
