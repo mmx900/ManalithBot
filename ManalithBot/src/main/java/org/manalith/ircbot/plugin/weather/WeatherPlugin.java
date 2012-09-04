@@ -19,11 +19,11 @@
 package org.manalith.ircbot.plugin.weather;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -68,44 +68,52 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		} else if (message.startsWith(COMMAND)
 				&& message.length() >= COMMAND.length() + 2) {
 			bot.sendLoggedMessage(target,
-					getGoogleWeather(message.substring(COMMAND.length() + 1)));
+					getYahooWeather(message.substring(COMMAND.length() + 1)));
 			event.setExecuted(true);
 		}
 	}
 
-	public String getGoogleWeather(String keyword) {
-		final String url = "http://www.google.com/ig/api?hl=ko&weather=";
-
+	public String getYahooWeather(String keyword) {
 		try {
-			Document doc = Jsoup.connect(url + keyword).get();
-			/*
-			 * <current_conditions> <condition data="부분적으로 흐림"/> <temp_f
-			 * data="84"/> <temp_c data="29"/> <humidity data="습도: 59%"/> <icon
-			 * data="/ig/images/weather/partly_cloudy.gif"/> <wind_condition
-			 * data="바람: 서풍, 10 km/h"/> </current_conditions>
-			 */
-			Elements conditions = doc.select("current_conditions");
+			// TODO WOEID 로컬 캐싱
+			final String url_woeid = "http://query.yahooapis.com/v1/public/yql"
+					+ "?q=select%20woeid%20from%20geo.places%20where%20text%3D%22"
+					+ URLEncoder.encode(keyword, "UTF-8")
+					+ "%20ko-KR%22%20limit%201";
+			final String url_forecast = "http://weather.yahooapis.com/forecastrss?w=%s&u=c";
+			final String error_woeid = "23424868";
 
-			if (!conditions.isEmpty()) {
-				String condition = conditions.select("condition").attr("data");
-				int temp = Integer.parseInt(conditions.select("temp_c").attr(
-						"data"));
-				String humidity = conditions.select("humidity").attr("data");
-				String wind_condition = conditions.select("wind_condition")
-						.attr("data");
+			Document doc = Jsoup.connect(url_woeid).get();
+			// example : http://query.yahooapis.com/v1/public/yql?q=select woeid
+			// from geo.places where text%3D\"서울%2C ko-KR\" limit 1
+			String woeid = doc.select("woeid").text();
 
-				return "[" + keyword + "] " + condition + ". 온도: " + temp
-						+ "℃, " + humidity + ", " + wind_condition;
+			if (!woeid.equals(error_woeid)) {
+				// example:
+				// http://weather.yahooapis.com/forecastrss?w=1132599&u=c
+				doc = Jsoup.connect(String.format(url_forecast, woeid)).get();
+				String location = doc.getElementsByTag("yweather:location")
+						.attr("city");
+				String condition = doc.getElementsByTag("yweather:condition")
+						.attr("text");
+				String temp = doc.getElementsByTag("yweather:condition").attr(
+						"temp");
+				String humidity = doc.getElementsByTag("yweather:atmosphere")
+						.attr("humidity");
+				String windCondition = doc.getElementsByTag("yweather:wind")
+						.attr("speed");
+
+				return String.format("[%s] %s 온도 %s℃, 습도 %s%%, 풍속 %skm/h",
+						location, condition, temp, humidity, windCondition);
+
 			} else {
-				return "[" + keyword
-						+ "] 지명을 찾을 수 없습니다. 영문 지명이 정확한지 다시 확인해주세요.";
+				return String.format("[%s] 지명을 찾을 수 없습니다. 지명이 정확한지 다시 확인해주세요.",
+						keyword);
 			}
 
 		} catch (IOException e) {
 			logger.error(e);
+			return "오류가 발생했습니다 : " + e.getMessage();
 		}
-
-		return null;
 	}
-
 }
