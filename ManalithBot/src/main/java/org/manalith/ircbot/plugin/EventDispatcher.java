@@ -145,7 +145,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 				try {
 					String result = null;
 
-					// TODO MethodUtils 사용
 					if (method.getParameterTypes().length == 0) {
 						result = (String) method.invoke(plugin);
 					} else if (method.getParameterTypes().length == 1) {
@@ -166,18 +165,11 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					}
 
 					msg.setExecuted(commandMeta.stopEvent());
-				} catch (IllegalArgumentException e) {
-					logger.debug(e.getMessage(), e);
-					bot.sendLoggedMessage(channel,
-							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
-					msg.setExecuted(true);
-				} catch (IllegalAccessException e) {
-					logger.debug(e.getMessage(), e);
-					bot.sendLoggedMessage(channel,
-							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
-					msg.setExecuted(true);
-				} catch (InvocationTargetException e) {
-					logger.debug(e.getMessage(), e);
+				} catch (IllegalArgumentException | IllegalAccessException
+						| InvocationTargetException e) {
+					if (logger.isDebugEnabled())
+						logger.debug(e.getMessage(), e);
+
 					bot.sendLoggedMessage(channel,
 							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					msg.setExecuted(true);
