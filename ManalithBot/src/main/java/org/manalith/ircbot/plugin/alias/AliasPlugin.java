@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,6 @@ public class AliasPlugin extends AbstractBotPlugin {
 			return;
 		}
 
-		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();
 
