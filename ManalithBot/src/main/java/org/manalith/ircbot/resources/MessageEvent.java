@@ -29,7 +29,16 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 public class MessageEvent {
 	private final GenericMessageEvent<ManalithBot> event;
 
-	private boolean executed; // 실행 완료 여부
+	/**
+	 * 실행 완료 여부
+	 */
+	private boolean executed;
+
+	/**
+	 * 재귀 호출 여부. 안전을 기하기 위해 외부 setter는 제공되지 않는다.
+	 */
+	private boolean recursive;
+
 	private String message;
 
 	public MessageEvent(PrivateMessageEvent<ManalithBot> event) {
@@ -55,10 +64,17 @@ public class MessageEvent {
 			return null;
 	}
 
+	/**
+	 * @param message
+	 *            the message to set
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	/**
+	 * @return the message
+	 */
 	public String getMessage() {
 		return message;
 	}
@@ -73,6 +89,21 @@ public class MessageEvent {
 
 	public void setExecuted(boolean executed) {
 		this.executed = executed;
+	}
+
+	/**
+	 * @return the recursive
+	 */
+	public boolean isRecursive() {
+		return recursive;
+	}
+
+	/**
+	 * 현재 상태로 이벤트를 재시작한다.
+	 */
+	public void restart() {
+		recursive = true;
+		getBot().invokeMessageEvent(this);
 	}
 
 	/**

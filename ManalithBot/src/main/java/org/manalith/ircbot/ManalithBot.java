@@ -27,6 +27,7 @@ import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.IBotPlugin;
 import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
+import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.managers.ListenerManager;
@@ -35,11 +36,12 @@ public class ManalithBot extends PircBotX {
 	private Logger logger = Logger.getLogger(getClass());
 
 	private PluginManager pluginManager = new PluginManager();
+	private EventDispatcher eventDispatcher = new EventDispatcher(pluginManager);
 
 	public ManalithBot(List<IBotPlugin> plugins) {
 		@SuppressWarnings("unchecked")
 		ListenerManager<ManalithBot> mgr = (ListenerManager<ManalithBot>) getListenerManager();
-		mgr.addListener(new EventDispatcher(pluginManager));
+		mgr.addListener(eventDispatcher);
 
 		pluginManager.load(plugins);
 	}
@@ -51,6 +53,10 @@ public class ManalithBot extends PircBotX {
 
 	public PluginManager getPluginManager() {
 		return pluginManager;
+	}
+
+	public void invokeMessageEvent(MessageEvent event) {
+		eventDispatcher.dispatchMessageEvent(event);
 	}
 
 	/**

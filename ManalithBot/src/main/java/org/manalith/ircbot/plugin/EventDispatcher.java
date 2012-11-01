@@ -61,6 +61,85 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 		this.pluginManager = pluginManager;
 	}
 
+	public void dispatchMessageEvent(
+			org.manalith.ircbot.resources.MessageEvent event) {
+		ManalithBot bot = event.getBot();
+		String channel = event.getChannel().getName();
+		String message = event.getMessage();
+
+		// 어노테이션(@BotCommand) 기반 플러그인 실행
+		for (Method method : pluginManager.getCommands().keySet()) {
+			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
+
+			String[] segments = StringUtils
+					.splitByWholeSeparator(message, null);
+
+			if (!ArrayUtils.contains(commandMeta.listeners(),
+					BotEvent.ON_MESSAGE))
+				continue;
+
+			if (!ArrayUtils.contains(commandMeta.value(), segments[0]))
+				continue;
+
+			IBotPlugin plugin = (IBotPlugin) pluginManager.getCommands().get(
+					method);
+
+			if (segments.length - 1 < commandMeta.minimumArguments()) {
+				bot.sendLoggedMessage(
+						channel,
+						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
+								commandMeta.minimumArguments()));
+
+				event.setExecuted(true);
+			} else {
+				try {
+					String result = null;
+
+					if (method.getParameterTypes().length == 0) {
+						result = (String) method.invoke(plugin);
+					} else if (method.getParameterTypes().length == 1) {
+						if (method.getParameterTypes()[0] == MessageEvent.class) {
+							result = (String) method.invoke(plugin, event);
+						} else {
+							result = (String) method.invoke(plugin,
+									(Object) ArrayUtils.subarray(segments, 1,
+											segments.length));
+						}
+					} else {
+						result = (String) method.invoke(plugin, event,
+								ArrayUtils.subarray(segments, 1,
+										segments.length));
+					}
+
+					if (StringUtils.isNotBlank(result)) {
+						bot.sendLoggedMessage(channel, result);
+					}
+
+					event.setExecuted(commandMeta.stopEvent());
+				} catch (IllegalArgumentException | IllegalAccessException
+						| InvocationTargetException e) {
+					if (logger.isDebugEnabled())
+						logger.debug(e.getMessage(), e);
+
+					bot.sendLoggedMessage(channel,
+							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
+					event.setExecuted(true);
+				}
+			}
+
+			if (event.isExecuted())
+				return;
+		}
+
+		// 비 어노테이션 기반 플러그인 실행
+		for (IBotPlugin plugin : pluginManager.getPlugins()) {
+			plugin.onMessage(event);
+
+			if (event.isExecuted())
+				return;
+		}
+	}
+
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
 		logger.trace("CONNECT");
@@ -93,7 +172,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onMessage(MessageEvent<ManalithBot> event) {
-		ManalithBot bot = event.getBot();
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
 		String login = event.getUser().getLogin();
@@ -117,76 +195,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 				event);
 		msg.setMessage(message);
 
-		// 어노테이션(@BotCommand) 기반 플러그인 실행
-		for (Method method : pluginManager.getCommands().keySet()) {
-			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
-
-			String[] segments = StringUtils
-					.splitByWholeSeparator(message, null);
-
-			if (!ArrayUtils.contains(commandMeta.listeners(),
-					BotEvent.ON_MESSAGE))
-				continue;
-
-			if (!ArrayUtils.contains(commandMeta.value(), segments[0]))
-				continue;
-
-			IBotPlugin plugin = (IBotPlugin) pluginManager.getCommands().get(
-					method);
-
-			if (segments.length - 1 < commandMeta.minimumArguments()) {
-				bot.sendLoggedMessage(
-						channel,
-						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
-								commandMeta.minimumArguments()));
-
-				msg.setExecuted(true);
-			} else {
-				try {
-					String result = null;
-
-					if (method.getParameterTypes().length == 0) {
-						result = (String) method.invoke(plugin);
-					} else if (method.getParameterTypes().length == 1) {
-						if (method.getParameterTypes()[0] == MessageEvent.class) {
-							result = (String) method.invoke(plugin, msg);
-						} else {
-							result = (String) method.invoke(plugin,
-									(Object) ArrayUtils.subarray(segments, 1,
-											segments.length));
-						}
-					} else {
-						result = (String) method.invoke(plugin, msg, ArrayUtils
-								.subarray(segments, 1, segments.length));
-					}
-
-					if (StringUtils.isNotBlank(result)) {
-						bot.sendLoggedMessage(channel, result);
-					}
-
-					msg.setExecuted(commandMeta.stopEvent());
-				} catch (IllegalArgumentException | IllegalAccessException
-						| InvocationTargetException e) {
-					if (logger.isDebugEnabled())
-						logger.debug(e.getMessage(), e);
-
-					bot.sendLoggedMessage(channel,
-							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
-					msg.setExecuted(true);
-				}
-			}
-
-			if (msg.isExecuted())
-				return;
-		}
-
-		// 비 어노테이션 기반 플러그인 실행
-		for (IBotPlugin plugin : pluginManager.getPlugins()) {
-			plugin.onMessage(msg);
-
-			if (msg.isExecuted())
-				return;
-		}
+		dispatchMessageEvent(msg);
 	}
 
 	@Override
