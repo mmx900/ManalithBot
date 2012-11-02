@@ -103,7 +103,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendLoggedMessage(target,
+				bot.sendMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
@@ -114,8 +114,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 			String dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
 
-			bot.sendLoggedMessage(target,
-					String.format("<%s> %s", sender, dstmsg));
+			bot.sendMessage(target, String.format("<%s> %s", sender, dstmsg));
 
 			event.setExecuted(true);
 		} else if (cmd.equals("!c3")) {
@@ -123,7 +122,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendLoggedMessage(target,
+				bot.sendMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
@@ -136,7 +135,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendLoggedMessage(target,
+				bot.sendMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);
@@ -149,7 +148,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendLoggedMessage(target,
+				bot.sendMessage(target,
 						String.format("<%s> %s", sender, dstmsg));
 
 				event.setExecuted(true);

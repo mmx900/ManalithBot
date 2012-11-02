@@ -64,20 +64,18 @@ public class GooglePlugin extends AbstractBotPlugin {
 		ManalithBot bot = event.getBot();
 
 		if (message.equals(NAMESPACE + ":help")) {
-			bot.sendLoggedMessage(channel, getHelp());
+			bot.sendMessage(channel, getHelp());
 			event.setExecuted(true);
 		} else if (message.length() >= 12
 				&& (message.substring(0, 9).equals(NAMESPACE + ":match ") || message
 						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
-			bot.sendLoggedMessage(channel,
-					getGoogleMatch(keywords[0], keywords[1]));
+			bot.sendMessage(channel, getGoogleMatch(keywords[0], keywords[1]));
 			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals(NAMESPACE + " ") || message
 						.substring(0, 4).equals("!gg "))) {
-			bot.sendLoggedMessage(channel,
-					getGoogleTopResult(message.substring(4)));
+			bot.sendMessage(channel, getGoogleTopResult(message.substring(4)));
 			event.setExecuted(true);
 		}
 
@@ -155,11 +153,9 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 			return result;
 
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException | JSONException e) {
 			logger.error(e);
 		} catch (IOException e) {
-			logger.error(e);
-		} catch (JSONException e) {
 			logger.error(e);
 		}
 

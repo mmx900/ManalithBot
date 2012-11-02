@@ -48,7 +48,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 			}
 
 			if (!beingBot)
-				bot.sendLoggedMessage(channel, "DarkCircle: ...");
+				bot.sendMessage(channel, "DarkCircle: ...");
 		}
 	}
 
@@ -65,7 +65,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 			}
 
 			if (!beingBot)
-				ManalithBot.getInstance().sendLoggedMessage(
+				ManalithBot.getInstance().sendMessage(
 						event.getChannel().getName(), "DarkCircle: ...");
 		}
 	}
@@ -73,14 +73,12 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
 		if (sender.equals("♠한씨네"))
-			ManalithBot.getInstance().sendLoggedMessage(channel,
-					"DarkCircle: ...");
+			ManalithBot.getInstance().sendMessage(channel, "DarkCircle: ...");
 	}
 
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
 		if (sourceNick.equals("♠한씨네"))
-			ManalithBot.getInstance().sendLoggedMessage("#gnome",
-					"DarkCircle: ...");
+			ManalithBot.getInstance().sendMessage("#gnome", "DarkCircle: ...");
 	}
 }

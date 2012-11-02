@@ -86,7 +86,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					method);
 
 			if (segments.length - 1 < commandMeta.minimumArguments()) {
-				bot.sendLoggedMessage(
+				bot.sendMessage(
 						channel,
 						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
 								commandMeta.minimumArguments()));
@@ -113,7 +113,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					}
 
 					if (StringUtils.isNotBlank(result)) {
-						bot.sendLoggedMessage(channel, result);
+						bot.sendMessage(channel, result);
 					}
 
 					event.setExecuted(commandMeta.stopEvent());
@@ -122,7 +122,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					if (logger.isDebugEnabled())
 						logger.debug(e.getMessage(), e);
 
-					bot.sendLoggedMessage(channel,
+					bot.sendMessage(channel,
 							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
 					event.setExecuted(true);
 				}

@@ -115,12 +115,11 @@ public class MessageEvent {
 	public void respond(String response) {
 		if (event instanceof org.pircbotx.hooks.events.MessageEvent) {
 			event.getBot()
-					.sendLoggedMessage(
+					.sendMessage(
 							((org.pircbotx.hooks.events.MessageEvent<ManalithBot>) event)
 									.getChannel().getName(), response);
 		} else {
-			event.getBot().sendLoggedMessage(event.getUser().getNick(),
-					response);
+			event.getBot().sendMessage(event.getUser().getNick(), response);
 		}
 	}
 }

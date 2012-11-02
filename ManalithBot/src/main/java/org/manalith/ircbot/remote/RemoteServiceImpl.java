@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class RemoteServiceImpl implements RemoteService {
 	@Override
 	public void sendMessage(String target, String message) {
-		ManalithBot.getInstance().sendLoggedMessage(target, message);
+		ManalithBot.getInstance().sendMessage(target, message);
 	}
 
 }

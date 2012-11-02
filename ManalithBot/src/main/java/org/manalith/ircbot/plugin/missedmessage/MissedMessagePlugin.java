@@ -52,7 +52,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 
 		if (cmdnmsg[0].equals("!msg")) {
 			if (cmdnmsg.length == 1) {
-				bot.sendLoggedMessage(channel, this.getHelp());
+				bot.sendMessage(channel, this.getHelp());
 			} else if (cmdnmsg.length == 2) {
 				String recv = cmdnmsg[1];
 
@@ -60,13 +60,13 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 					if (u.getNick().equals(recv))
 					// check someone who has a matched nick
 					{
-						bot.sendLoggedMessage(channel, sender + ", ...(물끄럼)...");
+						bot.sendMessage(channel, sender + ", ...(물끄럼)...");
 						event.setExecuted(true);
 						return;
 					}
 				}
 
-				bot.sendLoggedMessage(channel, "남길 메시지가 없습니다");
+				bot.sendMessage(channel, "남길 메시지가 없습니다");
 				event.setExecuted(true);
 			} else if (cmdnmsg.length >= 3) {
 				String recv = cmdnmsg[1];
@@ -75,7 +75,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 					if (u.getNick().equals(recv))
 					// check someone who has a matched nick
 					{
-						bot.sendLoggedMessage(channel, sender + ", ...(물끄럼)...");
+						bot.sendMessage(channel, sender + ", ...(물끄럼)...");
 						event.setExecuted(true);
 						return;
 					}
@@ -91,7 +91,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 
 				MissedMessageRunner runner = new MissedMessageRunner(
 						this.getResourcePath());
-				bot.sendLoggedMessage(channel, runner.addMsg(sender,
+				bot.sendMessage(channel, runner.addMsg(sender,
 						channel.substring(1) + "." + recv, msg.toString()));
 				// exclude # in the channel name.
 			}
@@ -113,8 +113,7 @@ public class MissedMessagePlugin extends AbstractBotPlugin {
 
 			if (msgs != null)
 				for (int i = 0; i < msgs.length; i++) {
-					ManalithBot.getInstance().sendLoggedMessage(channel,
-							msgs[i]);
+					ManalithBot.getInstance().sendMessage(channel, msgs[i]);
 				}
 		}
 	}

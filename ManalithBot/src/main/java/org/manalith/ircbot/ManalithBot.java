@@ -94,31 +94,24 @@ public class ManalithBot extends PircBotX {
 		eventDispatcher.dispatchMessageEvent(event);
 	}
 
-	/**
-	 * sendMessage(target, message)가 final 메서드이므로 로깅을 위해 이 메시지를 사용한다.
-	 * 
-	 * @param target
-	 * @param message
-	 */
-	public void sendLoggedMessage(String target, String message,
-			boolean redirectToRelayBot) {
-		// TODO sendMessage 오버라이드
-		logger.trace(String.format("MESSAGE(LOCAL) : %s / %s", target, message));
+	@Override
+	public void sendMessage(String target, String message) {
+		sendMessage(target, message, true);
+	}
 
-		sendMessage(target, message);
+	public void sendMessage(String target, String message, boolean needRelay) {
+		// //너무 긴 문자는 자른다.
+		// if(m.getMessage().length() > 180)
+		// m.setMessage(m.getMessage().substring(0, 179));
+		// sendMessage(m.getChannel(), m.getSender() + ", " + m.getMessage());
 
-		if (redirectToRelayBot && RelayPlugin.RELAY_BOT != null)
+		super.sendMessage(target, message);
+
+		if (logger.isTraceEnabled())
+			logger.trace(String.format("MESSAGE(LOCAL) : %s / %s", target,
+					message));
+
+		if (needRelay && RelayPlugin.RELAY_BOT != null)
 			RelayPlugin.RELAY_BOT.sendMessage(target, message);
 	}
-
-	public void sendLoggedMessage(String target, String message) {
-		sendLoggedMessage(target, message, true);
-	}
-
-	// private void sendMessage(Message m){
-	// //너무 긴 문자는 자른다.
-	// if(m.getMessage().length() > 180)
-	// m.setMessage(m.getMessage().substring(0, 179));
-	// sendMessage(m.getChannel(), m.getSender() + ", " + m.getMessage());
-	// }
 }

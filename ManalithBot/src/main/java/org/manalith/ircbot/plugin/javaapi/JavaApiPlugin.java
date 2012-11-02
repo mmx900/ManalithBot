@@ -30,10 +30,10 @@ public class JavaApiPlugin extends AbstractBotPlugin {
 		ManalithBot bot = event.getBot();
 
 		if (message.equals(NAMESPACE + ":help"))
-			bot.sendLoggedMessage(channel, getHelp());
+			bot.sendMessage(channel, getHelp());
 		else if (message.length() >= 8
 				&& message.substring(0, 8).equals("java-api")) {
-			bot.sendLoggedMessage(channel, getApiDocument(message));
+			bot.sendMessage(channel, getApiDocument(message));
 		}
 	}
 

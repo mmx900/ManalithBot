@@ -53,14 +53,14 @@ public class CalcPlugin extends AbstractBotPlugin {
 
 		if (command[0].equals("!계산")) {
 			if (command.length == 1) {
-				bot.sendLoggedMessage(target, "입력한 식이 없습니다.");
-				bot.sendLoggedMessage(target, this.getHelp());
+				bot.sendMessage(target, "입력한 식이 없습니다.");
+				bot.sendMessage(target, this.getHelp());
 			} else {
 				String expr = "";
 				for (int i = 1; i < command.length; i++) {
 					expr += command[i];
 				}
-				bot.sendLoggedMessage(target, CalcRunner.run(expr));
+				bot.sendMessage(target, CalcRunner.run(expr));
 			}
 			event.setExecuted(true);
 		}

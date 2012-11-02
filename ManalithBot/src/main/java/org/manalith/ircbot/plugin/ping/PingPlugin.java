@@ -60,7 +60,7 @@ public class PingPlugin extends AbstractBotPlugin {
 		if (StringUtils.startsWith(message, "!ping ")) {
 			String uri = StringUtils.substringAfter(message, " ");
 			if (StringUtils.isBlank(uri)) {
-				bot.sendLoggedMessage(target, "[Ping] 사용법 : !ping DOMAIN/IP");
+				bot.sendMessage(target, "[Ping] 사용법 : !ping DOMAIN/IP");
 				return;
 			}
 
@@ -68,16 +68,15 @@ public class PingPlugin extends AbstractBotPlugin {
 			try {
 				addr = InetAddress.getByName(uri);
 			} catch (UnknownHostException e) {
-				bot.sendLoggedMessage(target, "[Ping] 올바른 주소가 아닙니다.");
+				bot.sendMessage(target, "[Ping] 올바른 주소가 아닙니다.");
 			}
 
 			try {
-				bot.sendLoggedMessage(target, String.format(
-						"[Ping] %s(%s) is %s: ", addr.getHostName(), addr
-								.getHostAddress(),
+				bot.sendMessage(target, String.format("[Ping] %s(%s) is %s: ",
+						addr.getHostName(), addr.getHostAddress(),
 						addr.isReachable(3000) ? "reachable" : "not reachable"));
 			} catch (IOException e) {
-				bot.sendLoggedMessage(
+				bot.sendMessage(
 						target,
 						String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
 								e.getMessage()));

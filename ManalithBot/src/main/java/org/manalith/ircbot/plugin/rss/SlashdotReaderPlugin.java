@@ -25,9 +25,9 @@ public class SlashdotReaderPlugin extends AbstractBotPlugin {
 		ManalithBot bot = event.getBot();
 
 		if (message.equals(NAMESPACE))
-			bot.sendLoggedMessage(channel, getLastestSlashdot());
+			bot.sendMessage(channel, getLastestSlashdot());
 		else if (message.equals(NAMESPACE + ":help"))
-			bot.sendLoggedMessage(channel, getHelp());
+			bot.sendMessage(channel, getHelp());
 	}
 
 	private String getLastestSlashdot() {

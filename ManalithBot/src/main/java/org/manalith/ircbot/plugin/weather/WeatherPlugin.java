@@ -60,14 +60,14 @@ public class WeatherPlugin extends AbstractBotPlugin {
 		ManalithBot bot = event.getBot();
 
 		if (message.equals(COMMAND + ":help")) {
-			bot.sendLoggedMessage(target, getHelp());
+			bot.sendMessage(target, getHelp());
 			event.setExecuted(true);
 		} else if (message.equals(COMMAND)) {
-			bot.sendLoggedMessage(target, this.getHelp());
+			bot.sendMessage(target, this.getHelp());
 			event.setExecuted(true);
 		} else if (message.startsWith(COMMAND)
 				&& message.length() >= COMMAND.length() + 2) {
-			bot.sendLoggedMessage(target,
+			bot.sendMessage(target,
 					getYahooWeather(message.substring(COMMAND.length() + 1)));
 			event.setExecuted(true);
 		}

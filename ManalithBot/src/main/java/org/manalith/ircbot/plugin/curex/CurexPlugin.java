@@ -90,23 +90,23 @@ public class CurexPlugin extends AbstractBotPlugin {
 
 				String result = runner.run();
 				if (result.equals("Help!")) {
-					bot.sendLoggedMessage(target,
+					bot.sendMessage(target,
 							CurexInfoProvider.getIRCHelpMessagePart1());
-					bot.sendLoggedMessage(target,
+					bot.sendMessage(target,
 							CurexInfoProvider.getIRCHelpMessagePart2());
 				} else if (result.equals("unitlist")) {
-					bot.sendLoggedMessage(target,
+					bot.sendMessage(target,
 							CurexInfoProvider.getUnitListPart1());
-					bot.sendLoggedMessage(target,
+					bot.sendMessage(target,
 							CurexInfoProvider.getUnitListPart2());
 				} else {
-					bot.sendLoggedMessage(target, result);
+					bot.sendMessage(target, result);
 				}
 			} catch (Exception e) {
-				bot.sendLoggedMessage(target, e.getMessage());
+				bot.sendMessage(target, e.getMessage());
 			}
 		} else if (subcmd.length > 2) {
-			bot.sendLoggedMessage(target, "옵션이 너무 많습니다");
+			bot.sendMessage(target, "옵션이 너무 많습니다");
 		} else {
 			// remerge strings separated by space.
 			String userNick = event.getUser().getNick();
@@ -122,11 +122,11 @@ public class CurexPlugin extends AbstractBotPlugin {
 					this.getResourcePath(), target, userNick, arg);
 
 			if (subcmd[1].equals("sub"))
-				bot.sendLoggedMessage(target, csMan.addUserSetting());
+				bot.sendMessage(target, csMan.addUserSetting());
 			else if (subcmd[1].equals("unsub")) {
-				bot.sendLoggedMessage(target, csMan.removeUserSetting());
+				bot.sendMessage(target, csMan.removeUserSetting());
 			} else
-				bot.sendLoggedMessage(target, "그런 옵션은 없습니다.");
+				bot.sendMessage(target, "그런 옵션은 없습니다.");
 
 		}
 		event.setExecuted(true);

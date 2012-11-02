@@ -99,9 +99,9 @@ public class AdminPlugin extends AbstractBotPlugin {
 		if (StringUtils.left(message, 3).equals("pw ")) {
 			if (StringUtils.substring(message, 3).equals(password)) {
 				admins.add(new Admin(event.getUser()));
-				bot.sendLoggedMessage(sender, "인증되었습니다.");
+				bot.sendMessage(sender, "인증되었습니다.");
 			} else {
-				bot.sendLoggedMessage(sender, "비밀번호가 잘못되었습니다.");
+				bot.sendMessage(sender, "비밀번호가 잘못되었습니다.");
 			}
 
 			event.setExecuted(true);

@@ -44,10 +44,10 @@ public class BshPlugin extends AbstractBotPlugin {
 		String channel = event.getChannel().getName();
 
 		if (message.equals(NAMESPACE + ":help"))
-			bot.sendLoggedMessage(channel, getHelp());
+			bot.sendMessage(channel, getHelp());
 		else if (message.equalsIgnoreCase("reload")) {
 			loadInternalCommands();
-			bot.sendLoggedMessage(channel, "명령어 목록을 재구성합니다.");
+			bot.sendMessage(channel, "명령어 목록을 재구성합니다.");
 		} else if (message.length() > 4
 				&& message.substring(0, 4).equalsIgnoreCase("eval")) {
 			Object o = executeRemoteCommand(message.substring(4));
@@ -55,10 +55,10 @@ public class BshPlugin extends AbstractBotPlugin {
 				if (o instanceof Empty) {
 					// nothing
 				} else {
-					bot.sendLoggedMessage(channel, o.toString());
+					bot.sendMessage(channel, o.toString());
 				}
 			} else {
-				bot.sendLoggedMessage(channel, "응답 결과가 없습니다.");
+				bot.sendMessage(channel, "응답 결과가 없습니다.");
 			}
 		} else if (message.length() > 6
 				&& message.substring(0, 6).equalsIgnoreCase("j:oper")) {
@@ -70,22 +70,22 @@ public class BshPlugin extends AbstractBotPlugin {
 			// if(o instanceof Empty){
 			// //nothing
 			// }else{
-			// BotMain.BOT.sendLoggedMessage(channel, o.toString());
+			// BotMain.BOT.sendMessage(channel, o.toString());
 			// }
 			// }else{
-			// BotMain.BOT.sendLoggedMessage(channel, "응답 결과가 없습니다.");
+			// BotMain.BOT.sendMessage(channel, "응답 결과가 없습니다.");
 			// }
 			// }else{
-			// BotMain.BOT.sendLoggedMessage(channel, "주인에게만 반응합니다.");
+			// BotMain.BOT.sendMessage(channel, "주인에게만 반응합니다.");
 			// }
 		} else if (message.length() >= 6
 				&& message.substring(0, 2).equals("j:")) {
 			String s = commands.getProperty(message.substring(0, 6).replace(
 					":", "."));
 			if (s != null) {
-				bot.sendLoggedMessage(channel, executeInternalCommand(s));
+				bot.sendMessage(channel, executeInternalCommand(s));
 			} else {
-				bot.sendLoggedMessage(channel, "해당 명령은 없습니다.");
+				bot.sendMessage(channel, "해당 명령은 없습니다.");
 			}
 		}
 	}

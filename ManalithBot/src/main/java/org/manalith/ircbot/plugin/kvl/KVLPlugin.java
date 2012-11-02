@@ -59,7 +59,7 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
 			if (command.length >= 3) {
-				bot.sendLoggedMessage(target, "Too many arguments!");
+				bot.sendMessage(target, "Too many arguments!");
 				event.setExecuted(true);
 				return;
 			}
@@ -68,9 +68,9 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 			try {
 				if (command.length >= 2)
-					bot.sendLoggedMessage(target, runner.run(command[1]));
+					bot.sendMessage(target, runner.run(command[1]));
 				else
-					bot.sendLoggedMessage(target, runner.run(""));
+					bot.sendMessage(target, runner.run(""));
 			} catch (Exception e) {
 				logger.warn(e.getMessage(), e);
 			}
