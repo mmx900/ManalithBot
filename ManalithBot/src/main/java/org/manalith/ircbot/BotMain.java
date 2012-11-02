@@ -19,27 +19,20 @@
 
 package org.manalith.ircbot;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.util.StringTokenizer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.util.AppContextUtil;
-import org.pircbotx.exception.IrcException;
-import org.pircbotx.exception.NickAlreadyInUseException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class BotMain {
 
-	public static void main(String[] args) throws ParseException, IOException,
-			IrcException {
+	public static void main(String[] args) throws Exception {
 		// 인코딩 검사
 		if (!Charset.defaultCharset().toString().equals("UTF-8")) {
 			System.out.println("-Dfile.encoding=UTF-8 옵션으로 실행시켜 주세요.");
@@ -64,33 +57,8 @@ public class BotMain {
 				configFile);
 		AppContextUtil.setApplicationContext(context);
 
-		Configuration config = context.getBean(Configuration.class);
-
 		// 봇 구동
 		ManalithBot bot = context.getBean(ManalithBot.class);
-		bot.setLogin(config.getBotLogin());
-		bot.setName(config.getBotName());
-		bot.setVerbose(config.getVerbose());
-
-		try {
-			bot.setEncoding(config.getServerEncoding());
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("지원되지 않는 인코딩입니다.");
-			return;
-		}
-
-		try {
-			bot.connect(config.getServer(), config.getServerPort());
-		} catch (NickAlreadyInUseException e) {
-			System.out.println("닉네임이 이미 사용중입니다.");
-			return;
-		} catch (IOException | IrcException e) {
-			throw e;
-		}
-
-		StringTokenizer st = new StringTokenizer(config.getDefaultChannels(),
-				",");
-		while (st.hasMoreTokens())
-			bot.joinChannel(st.nextToken());
+		bot.start();
 	}
 }

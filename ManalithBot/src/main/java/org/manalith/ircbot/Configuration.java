@@ -18,6 +18,10 @@
  */
 package org.manalith.ircbot;
 
+import java.util.List;
+
+import org.manalith.ircbot.plugin.IBotPlugin;
+
 public class Configuration {
 	private String botLogin;
 	private String botName;
@@ -27,68 +31,140 @@ public class Configuration {
 	private String serverEncoding;
 	private String defaultChannels;
 	private boolean tryToReconnect;
+	private List<IBotPlugin> plugins;
 
+	/**
+	 * @return the botLogin
+	 */
 	public String getBotLogin() {
 		return botLogin;
 	}
 
+	/**
+	 * @param botLogin
+	 *            the botLogin to set
+	 */
 	public void setBotLogin(String botLogin) {
 		this.botLogin = botLogin;
 	}
 
+	/**
+	 * @return the botName
+	 */
 	public String getBotName() {
 		return botName;
 	}
 
+	/**
+	 * @param botName
+	 *            the botName to set
+	 */
 	public void setBotName(String botName) {
 		this.botName = botName;
 	}
 
-	public boolean getVerbose() {
+	/**
+	 * @return the verbose
+	 */
+	public boolean isVerbose() {
 		return verbose;
 	}
 
+	/**
+	 * @param verbose
+	 *            the verbose to set
+	 */
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
 
+	/**
+	 * @return the server
+	 */
 	public String getServer() {
 		return server;
 	}
 
+	/**
+	 * @param server
+	 *            the server to set
+	 */
 	public void setServer(String server) {
 		this.server = server;
 	}
 
+	/**
+	 * @return the serverPort
+	 */
 	public int getServerPort() {
 		return serverPort;
 	}
 
+	/**
+	 * @param serverPort
+	 *            the serverPort to set
+	 */
 	public void setServerPort(int serverPort) {
 		this.serverPort = serverPort;
 	}
 
+	/**
+	 * @return the serverEncoding
+	 */
 	public String getServerEncoding() {
 		return serverEncoding;
 	}
 
+	/**
+	 * @param serverEncoding
+	 *            the serverEncoding to set
+	 */
 	public void setServerEncoding(String serverEncoding) {
 		this.serverEncoding = serverEncoding;
 	}
 
+	/**
+	 * @return the defaultChannels
+	 */
 	public String getDefaultChannels() {
 		return defaultChannels;
 	}
 
+	/**
+	 * @param defaultChannels
+	 *            the defaultChannels to set
+	 */
 	public void setDefaultChannels(String defaultChannels) {
 		this.defaultChannels = defaultChannels;
 	}
 
+	/**
+	 * @return the tryToReconnect
+	 */
 	public boolean isTryToReconnect() {
 		return tryToReconnect;
 	}
 
+	/**
+	 * @param tryToReconnect
+	 *            the tryToReconnect to set
+	 */
 	public void setTryToReconnect(boolean tryToReconnect) {
 		this.tryToReconnect = tryToReconnect;
+	}
+
+	/**
+	 * @return the plugins
+	 */
+	public List<IBotPlugin> getPlugins() {
+		return plugins;
+	}
+
+	/**
+	 * @param plugins
+	 *            the plugins to set
+	 */
+	public void setPlugins(List<IBotPlugin> plugins) {
+		this.plugins = plugins;
 	}
 }

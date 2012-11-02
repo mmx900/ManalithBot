@@ -20,30 +20,36 @@
 
 package org.manalith.ircbot;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.StringTokenizer;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.EventDispatcher;
-import org.manalith.ircbot.plugin.IBotPlugin;
-import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.AppContextUtil;
 import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.managers.ListenerManager;
+import org.pircbotx.exception.IrcException;
+import org.pircbotx.exception.NickAlreadyInUseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ManalithBot extends PircBotX {
 	private Logger logger = Logger.getLogger(getClass());
 
-	private PluginManager pluginManager = new PluginManager();
-	private EventDispatcher eventDispatcher = new EventDispatcher(pluginManager);
+	@Autowired
+	private Configuration configuration;
 
-	public ManalithBot(List<IBotPlugin> plugins) {
-		@SuppressWarnings("unchecked")
-		ListenerManager<ManalithBot> mgr = (ListenerManager<ManalithBot>) getListenerManager();
-		mgr.addListener(eventDispatcher);
+	@Autowired
+	private EventDispatcher eventDispatcher;
 
-		pluginManager.load(plugins);
+	@PostConstruct
+	public void onPostConstruct() {
+		getListenerManager().addListener(eventDispatcher);
 	}
 
 	public static ManalithBot getInstance() {
@@ -51,8 +57,37 @@ public class ManalithBot extends PircBotX {
 				.getBean(ManalithBot.class);
 	}
 
-	public PluginManager getPluginManager() {
-		return pluginManager;
+	/**
+	 * Configuration으로부터 설정을 읽어들여 봇을 시작한다.
+	 * 
+	 * @throws Exception
+	 *             봇을 설정하고 구동할 때 발생하는 예외
+	 */
+	public void start() throws IOException, IrcException {
+		setLogin(configuration.getBotLogin());
+		setName(configuration.getBotName());
+		setVerbose(configuration.isVerbose());
+
+		try {
+			setEncoding(configuration.getServerEncoding());
+		} catch (UnsupportedEncodingException e) {
+			logger.error("지원되지 않는 인코딩입니다.");
+			return;
+		}
+
+		try {
+			connect(configuration.getServer(), configuration.getServerPort());
+		} catch (NickAlreadyInUseException e) {
+			logger.error("닉네임이 이미 사용중입니다.");
+			return;
+		} catch (IOException | IrcException e) {
+			throw e;
+		}
+
+		StringTokenizer st = new StringTokenizer(
+				configuration.getDefaultChannels(), ",");
+		while (st.hasMoreTokens())
+			joinChannel(st.nextToken());
 	}
 
 	public void invokeMessageEvent(MessageEvent event) {

@@ -25,12 +25,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.Configuration;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotFilter;
 import org.manalith.ircbot.common.stereotype.BotTimer;
 import org.manalith.ircbot.plugin.admin.HelpPlugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PluginManager {
 	private Logger logger = Logger.getLogger(getClass());
 	private List<IBotPlugin> list = new ArrayList<IBotPlugin>();
@@ -41,6 +47,14 @@ public class PluginManager {
 	public PluginManager() {
 		load(new HelpPlugin(this));
 	}
+
+	@PostConstruct
+	public void onPostConstruct() {
+		load(configuration.getPlugins());
+	}
+
+	@Autowired
+	private Configuration configuration;
 
 	public void load(List<IBotPlugin> plugins) {
 		for (IBotPlugin plugin : plugins) {

@@ -24,6 +24,42 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="serverEncoding" value="UTF-8" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
 		<property name="tryToReconnect" value="true" />
+		<property name="plugins">
+			<list>
+				<!-- 사용할 플러그인 목록 -->
+				<!-- <ref bean="relayPlugin" /> -->
+				<!-- <ref bean="adminPlugin" /> -->
+				<ref bean="twitReaderPlugin" />
+				<ref bean="archPackageFinder" />
+				<ref bean="debianPackageFinder" />
+				<ref bean="fedoraPackageFinder" />
+				<ref bean="ubuntuPackageFinder" />
+				<ref bean="gentooPackageFinder" />
+				<ref bean="weatherPlugin" />
+				<ref bean="nvidiaDriverNewsPlugin" />
+				<ref bean="calcPlugin" />
+				<ref bean="kvlPlugin" />
+				<ref bean="cerPlugin" />
+				<ref bean="uriInfoPlugin" />
+				<ref bean="dictionaryPlugin" />
+				<ref bean="pingPlugin" />
+				<ref bean="googlePlugin" />
+				<ref bean="helloPlugin" />
+				<ref bean="feedReaderPlugin" />
+				<ref bean="urlShortenerPlugin" />
+				<ref bean="timestampPlugin" />
+				<ref bean="keySeqConvPlugin" />
+				<ref bean="symbolPlugin" />
+				<ref bean="unicodePlugin" />
+				<ref bean="urlEncoderPlugin" />
+				<ref bean="regexPlugin" />
+				<ref bean="replacementCharacterDetectPlugin" />
+				<ref bean="cryptoPlugin" />
+				<ref bean="onOffMixPlugin" />
+				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
+				<ref bean="aliasPlugin" />
+			</list>
+		</property>
 	</bean>
 
 	<!-- 릴레이 플러그인 설정 시작 -->
@@ -107,45 +143,6 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	<!-- 온오프믹스 플러그인 설정 -->
 	<bean id="onOffMixPlugin" class="org.manalith.ircbot.plugin.onoffmix.OnOffMixPlugin">
 		<property name="apiKey" value="YOUR_ONOFFMIX_API_KEY" />
-	</bean>
-
-	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
-		<constructor-arg>
-			<list>
-				<!-- 사용할 플러그인 목록 -->
-				<!-- <ref bean="relayPlugin" /> -->
-				<!-- <ref bean="adminPlugin" /> -->
-				<ref bean="twitReaderPlugin" />
-				<ref bean="archPackageFinder" />
-				<ref bean="debianPackageFinder" />
-				<ref bean="fedoraPackageFinder" />
-				<ref bean="ubuntuPackageFinder" />
-				<ref bean="gentooPackageFinder" />
-				<ref bean="weatherPlugin" />
-				<ref bean="nvidiaDriverNewsPlugin" />
-				<ref bean="calcPlugin" />
-				<ref bean="kvlPlugin" />
-				<ref bean="cerPlugin" />
-				<ref bean="uriInfoPlugin" />
-				<ref bean="dictionaryPlugin" />
-				<ref bean="pingPlugin" />
-				<ref bean="googlePlugin" />
-				<ref bean="helloPlugin" />
-				<ref bean="feedReaderPlugin" />
-				<ref bean="urlShortenerPlugin" />
-				<ref bean="timestampPlugin" />
-				<ref bean="keySeqConvPlugin" />
-				<ref bean="symbolPlugin" />
-				<ref bean="unicodePlugin" />
-				<ref bean="urlEncoderPlugin" />
-				<ref bean="regexPlugin" />
-				<ref bean="replacementCharacterDetectPlugin" />
-				<ref bean="cryptoPlugin" />
-				<ref bean="onOffMixPlugin" />
-				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
-				<ref bean="aliasPlugin" />
-			</list>
-		</constructor-arg>
 	</bean>
 
 	<!-- 인증 관리 -->

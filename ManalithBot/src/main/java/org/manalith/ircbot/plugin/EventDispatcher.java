@@ -52,14 +52,15 @@ import org.pircbotx.hooks.events.TopicEvent;
 import org.pircbotx.hooks.events.UserListEvent;
 import org.pircbotx.hooks.events.UserModeEvent;
 import org.pircbotx.hooks.events.VoiceEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	private final Logger logger = Logger.getLogger(getClass());
-	private PluginManager pluginManager;
 
-	public EventDispatcher(PluginManager pluginManager) {
-		this.pluginManager = pluginManager;
-	}
+	@Autowired
+	private PluginManager pluginManager;
 
 	public void dispatchMessageEvent(
 			org.manalith.ircbot.resources.MessageEvent event) {
