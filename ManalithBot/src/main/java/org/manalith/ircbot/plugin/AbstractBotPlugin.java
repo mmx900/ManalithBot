@@ -79,4 +79,9 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 
 	}
 
+	@Override
+	public boolean test() {
+		return true;
+	}
+
 }

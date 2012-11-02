@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	<!-- 데이터베이스 설정 -->
+	<import resource="datasource.test.xml" />
+
+	<context:component-scan base-package="org.manalith.ircbot" />
+
+	<task:annotation-driven />
+
+	<!-- 봇 연결 설정 -->
+	<bean id="configuration" class="org.manalith.ircbot.Configuration">
+		<property name="botLogin" value="LOGIN" />
+		<property name="botName" value="NICK" />
+		<property name="verbose" value="true" />
+		<property name="server" value="SERVER" />
+		<property name="serverPort" value="8080" />
+		<property name="serverEncoding" value="UTF-8" />
+		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="tryToReconnect" value="true" />
+	</bean>
+
+	<!-- 릴레이 플러그인 설정 시작 -->
+	<bean id="relayConfiguration"
+		class="org.manalith.ircbot.plugin.relay.RelayConfiguration">
+		<!-- 릴레이 연결 설정 -->
+		<property name="botLogin" value="LOGIN2" />
+		<property name="botName" value="NICK2" />
+		<property name="verbose" value="true" />
+		<property name="server" value="SERVER2" />
+		<property name="serverPort" value="6667" />
+		<property name="serverEncoding" value="CP949" />
+		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
+		<property name="outputFormat" value="&lt;%s&gt;  %s" />
+		<property name="ignorePattern" value="^&lt;\S+&gt;  " />
+	</bean>
+
+	<bean id="relayPlugin" class="org.manalith.ircbot.plugin.relay.RelayPlugin">
+		<!-- 릴레이 환경 설정 -->
+		<constructor-arg value="false" />
+		<constructor-arg>
+			<ref bean="relayConfiguration" />
+		</constructor-arg>
+	</bean>
+	<!-- 릴레이 플러그인 설정 끝 -->
+
+	<!-- 구글 플러그인 설정 -->
+	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
+		<property name="apiKey" value="ABCDEFG" />
+		<property name="apiReferer" value="http://org" />
+	</bean>
+
+	<!-- 관리자 플러그인 설정 -->
+	<!-- 주의 : 비밀번호를 반드시 변경해주세요. 변경하지 않으면 실행되지 않습니다. -->
+	<!-- 
+	<bean id="adminPlugin" class="org.manalith.ircbot.plugin.admin.AdminPlugin"> 
+		<property name="password" value="CHANGE_ME" />
+	</bean>
+	-->
+
+	<!-- 주소 정보 플러그인 설정 -->
+	<bean id="uriInfoPlugin" class="org.manalith.ircbot.plugin.uriinfo.UriInfoPlugin">
+		<!-- 내용 형식 출력 여부 -->
+		<property name="enablePrintContentType" value="true" />
+	</bean>
+
+	<!-- 주소 단축 플러그인 설정 내용 시작 -->
+	<bean id="urlShortenerPlugin"
+		class="org.manalith.ircbot.plugin.urlshortener.UrlShortenerPlugin">
+		<property name="provider">
+			<!-- <ref bean="bitLyProvider" /> -->	<!-- bit.ly -->
+			<ref bean="gooGlProvider" />			<!-- goo.gl -->
+		</property>
+	</bean>
+
+	<bean id="bitLyProvider" class="org.manalith.ircbot.plugin.urlshortener.BitLyProvider">
+		<property name="apiLogin" value="YOUR_BITLY_API_LOGIN" />
+		<property name="apiKey" value="YOUR_BITLY_API_KEY" />
+	</bean>
+
+	<bean id="gooGlProvider" class="org.manalith.ircbot.plugin.urlshortener.GooGlProvider">
+		<property name="apiKey" value="YOUR_GOOGLE_API_KEY" />
+	</bean>
+	<!-- 주소 단축 플러그인 설정 내용 끝 -->
+
+	<!-- 젠투 검색 프로바이더 확장 설정 -->
+	<bean id="gentooPackageFinder"
+		class="org.manalith.ircbot.plugin.linuxpkgfinder.GentooPackageFinder">
+		<property name="provider">
+			<ref bean="gentooPortageProvider" /> <!-- as a default -->
+			<!-- <ref bean="phPortageProvider" /> -->
+		</property>
+	</bean>
+
+	<!-- 영타 변환 플러그인 설정 -->
+	<bean id="keySeqConvPlugin" class="org.manalith.ircbot.plugin.keyseqconv.KeySeqConvPlugin">
+		<!-- 영타 변환 제외구역 설정 문법 적용여부 -->
+		<property name="enableParsingExceptionSyntax" value="true" />
+	</bean>
+	
+	<!-- 온오프믹스 플러그인 설정 -->
+	<bean id="onOffMixPlugin" class="org.manalith.ircbot.plugin.onoffmix.OnOffMixPlugin">
+		<property name="apiKey" value="YOUR_ONOFFMIX_API_KEY" />
+	</bean>
+
+	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
+		<constructor-arg>
+			<list>
+				<!-- 사용할 플러그인 목록 -->
+				<!-- <ref bean="relayPlugin" /> -->
+				<!-- <ref bean="adminPlugin" /> -->
+				<ref bean="twitReaderPlugin" />
+				<ref bean="archPackageFinder" />
+				<ref bean="debianPackageFinder" />
+				<ref bean="fedoraPackageFinder" />
+				<ref bean="ubuntuPackageFinder" />
+				<ref bean="gentooPackageFinder" />
+				<ref bean="weatherPlugin" />
+				<ref bean="nvidiaDriverNewsPlugin" />
+				<ref bean="calcPlugin" />
+				<ref bean="kvlPlugin" />
+				<ref bean="cerPlugin" />
+				<ref bean="uriInfoPlugin" />
+				<ref bean="dictionaryPlugin" />
+				<ref bean="pingPlugin" />
+				<ref bean="googlePlugin" />
+				<ref bean="helloPlugin" />
+				<ref bean="feedReaderPlugin" />
+				<ref bean="urlShortenerPlugin" />
+				<ref bean="timestampPlugin" />
+				<ref bean="keySeqConvPlugin" />
+				<ref bean="symbolPlugin" />
+				<ref bean="unicodePlugin" />
+				<ref bean="urlEncoderPlugin" />
+				<ref bean="regexPlugin" />
+				<ref bean="replacementCharacterDetectPlugin" />
+				<ref bean="cryptoPlugin" />
+				<ref bean="onOffMixPlugin" />
+				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
+				<ref bean="aliasPlugin" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 인증 관리 -->
+	<!-- 
+	<security:global-method-security
+		jsr250-annotations="enabled" />
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user authorities="ROLE_ADMIN" name="admin"
+					password="admin" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="RemoteService" />
+		<property name="service" ref="remoteService" />
+		<property name="serviceInterface" value="org.manalith.ircbot.remote.RemoteService" />
+		<property name="registryPort" value="1199" />
+	</bean>
+	-->
+</beans>

@@ -41,4 +41,6 @@ public interface IBotPlugin extends BundleActivator {
 
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason);
+
+	public boolean test();
 }
