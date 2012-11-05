@@ -1,36 +1,45 @@
 package org.manalith.ircbot.plugin.alias;
 
+import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Repository
-public class AliasDao extends HibernateDaoSupport {
-	@Autowired
-	public void anyMethodName(SessionFactory sessionFactory) {
-		setSessionFactory(sessionFactory);
-	}
+public class AliasDao {
 
+	@Resource
+	private SessionFactory sessionFactory;
+
+	@Transactional
 	public void save(Alias alias) {
-		getHibernateTemplate().save(alias);
+		sessionFactory.getCurrentSession().save(alias);
 	}
 
-	public void update(Alias alias) {
-		getHibernateTemplate().update(alias);
-	}
-
+	@Transactional
 	public void delete(Alias alias) {
-		getHibernateTemplate().delete(alias);
+		sessionFactory.getCurrentSession().delete(alias);
 	}
 
+	@Transactional(readOnly = true)
 	public Alias findByWord(String alias) {
-		@SuppressWarnings("rawtypes")
-		List list = getHibernateTemplate().find(
-				"from Alias where alias=? order by date desc", alias);
-		return CollectionUtils.isEmpty(list) ? null : (Alias) list.get(0);
+		@SuppressWarnings("unchecked")
+		List<Alias> aliases = Collections
+				.checkedList(
+						sessionFactory
+								.getCurrentSession()
+								.createQuery(
+										"from Alias where alias=:alias order by date desc")
+								.setParameter("alias", alias).list(),
+						Alias.class);
+		if (CollectionUtils.isEmpty(aliases))
+			return null;
+		else
+			return aliases.get(0);
 	}
 }

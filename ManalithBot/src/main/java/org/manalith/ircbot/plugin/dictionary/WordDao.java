@@ -1,35 +1,44 @@
 package org.manalith.ircbot.plugin.dictionary;
 
+import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Repository
-public class WordDao extends HibernateDaoSupport {
-	@Autowired
-	public void anyMethodName(SessionFactory sessionFactory) {
-		setSessionFactory(sessionFactory);
-	}
+public class WordDao {
 
+	@Resource
+	private SessionFactory sessionFactory;
+
+	@Transactional
 	public void save(Word word) {
-		getHibernateTemplate().save(word);
+		sessionFactory.getCurrentSession().save(word);
 	}
 
-	public void update(Word word) {
-		getHibernateTemplate().update(word);
-	}
-
+	@Transactional
 	public void delete(Word word) {
-		getHibernateTemplate().delete(word);
+		sessionFactory.getCurrentSession().delete(word);
 	}
 
+	@Transactional(readOnly = true)
 	public Word findByWord(String word) {
-		@SuppressWarnings("rawtypes")
-		List list = getHibernateTemplate().find("from Word where word=? order by date desc", word);
-		return CollectionUtils.isEmpty(list) ? null : (Word) list.get(0);
+		@SuppressWarnings("unchecked")
+		List<Word> words = Collections
+				.checkedList(
+						sessionFactory
+								.getCurrentSession()
+								.createQuery(
+										"from Word where word=:word order by date desc")
+								.setParameter("word", word).list(), Word.class);
+		if (CollectionUtils.isEmpty(words))
+			return null;
+		else
+			return words.get(0);
 	}
 }

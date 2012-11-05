@@ -12,15 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AliasPlugin extends AbstractBotPlugin {
 	@Autowired
-	private AliasManager aliasManager;
-
-	public AliasManager getAliasManager() {
-		return aliasManager;
-	}
-
-	public void setAliasManager(AliasManager aliasManager) {
-		this.aliasManager = aliasManager;
-	}
+	private AliasDao aliasDao;
 
 	public String getName() {
 		return "Alias 플러그인";
@@ -58,11 +50,11 @@ public class AliasPlugin extends AbstractBotPlugin {
 					a.script = arr[2];
 				a.author = sender;
 				a.date = new Date();
-				aliasManager.add(a);
+				aliasDao.save(a);
 
 				event.respond("Alias를 배웠습니다.");
 			} else if (arr.length == 2) {
-				a = aliasManager.getAlias(arr[1]);
+				a = aliasDao.findByWord(arr[1]);
 				if (a != null) {
 					event.respond(String.format("[%s] %s -%s(%s) ", a.alias,
 							a.script, a.author,
@@ -72,7 +64,7 @@ public class AliasPlugin extends AbstractBotPlugin {
 				event.respond(getHelp());
 			}
 		} else if (message.startsWith("!")) {
-			a = aliasManager.getAlias(StringUtils.substring(message, 1));
+			a = aliasDao.findByWord(StringUtils.substring(message, 1));
 			if (a != null) {
 				event.setMessage(a.getScript());
 				event.restart();

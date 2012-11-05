@@ -14,15 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DictionaryPlugin extends AbstractBotPlugin {
 	@Autowired
-	private DictionaryManager dictionaryManager;
-
-	public DictionaryManager getDictionaryManager() {
-		return dictionaryManager;
-	}
-
-	public void setDictionaryManager(DictionaryManager dictionaryManager) {
-		this.dictionaryManager = dictionaryManager;
-	}
+	private WordDao wordDao;
 
 	public String getName() {
 		return "FAQ 플러그인";
@@ -45,7 +37,7 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 				message);
 
 		if (cmd != null) {
-
+			// TODO 랜덤 응답 기능을 별도 플러그인으로 추출할 것
 			if (cmd.equals("그치?")) {
 				if (((int) (Math.random() * 10)) % 2 == 0)
 					event.respond("응응!");
@@ -66,23 +58,21 @@ public class DictionaryPlugin extends AbstractBotPlugin {
 							w.description = arr[2];
 						w.author = sender;
 						w.date = new Date();
-						dictionaryManager.add(w);
+						wordDao.save(w);
 
 						event.respond("단어를 배웠습니다.");
 					} else {
 						event.respond(getHelp());
 					}
 
-				} else if ((w = dictionaryManager.getWord(cmd)) != null) {
-					event.respond("[" + w.word + "] " + w.description + " -"
-							+ w.author + "("
-							+ DateFormatUtils.format(w.date, "yyyy-MM-dd")
-							+ ")");
+				} else if ((w = wordDao.findByWord(cmd)) != null) {
+					event.respond(String.format("[%s] %s -%s(%s) ", w.word,
+							w.description, w.author,
+							DateFormatUtils.format(w.date, "yyyy-MM-dd")));
 				} else {
 					event.respond("(먼산)");
 				}
 			}
 		}
 	}
-
 }
