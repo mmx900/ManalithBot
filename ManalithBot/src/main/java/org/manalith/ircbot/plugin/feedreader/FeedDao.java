@@ -47,6 +47,24 @@ public class FeedDao {
 	}
 
 	@Transactional(readOnly = true)
+	public Feed findByUrl(String url, String channel) {
+		@SuppressWarnings("unchecked")
+		List<Feed> feeds = Collections
+				.checkedList(
+						sessionFactory
+								.getCurrentSession()
+								.createQuery(
+										"from Feed where url=:url and channel=:channel order by date desc")
+								.setParameter("url", url)
+								.setParameter("channel", channel).list(),
+						Feed.class);
+		if (CollectionUtils.isEmpty(feeds))
+			return null;
+		else
+			return feeds.get(0);
+	}
+
+	@Transactional(readOnly = true)
 	public List<Feed> findAll() {
 		@SuppressWarnings("unchecked")
 		List<Feed> feeds = Collections

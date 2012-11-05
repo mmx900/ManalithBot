@@ -94,7 +94,8 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 				}
 			} else if (segments.length == 2 && segments[0].equals("!feedrm")) {
 				String url = segments[1];
-				Feed feed = feedDao.findByUrl(url);
+				Feed feed = feedDao
+						.findByUrl(url, event.getChannel().getName());
 
 				if (feed != null) {
 					feedDao.delete(feed);
