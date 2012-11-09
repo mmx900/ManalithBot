@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
@@ -45,7 +44,7 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String[] segments = StringUtils.split(event.getMessage(), " ");
+		String[] segments = event.getMessageSegments();
 
 		if (segments.length >= 1 && segments[0].startsWith("!feed")) {
 			if (segments.length == 2 && segments[0].equals("!feed")) {

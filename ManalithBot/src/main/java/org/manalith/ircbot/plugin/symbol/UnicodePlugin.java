@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.symbol;
 
-import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class UnicodePlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String[] segments = StringUtils.split(event.getMessage(), " ");
+		String[] segments = event.getMessageSegments();
 		if (segments.length == 2
 				&& (segments[0].equals("!유니코드") || segments[0]
 						.equals("!unicode"))) {

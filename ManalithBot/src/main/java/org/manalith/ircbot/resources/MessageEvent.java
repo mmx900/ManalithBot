@@ -20,6 +20,7 @@
 
 package org.manalith.ircbot.resources;
 
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
@@ -39,17 +40,25 @@ public class MessageEvent {
 	 */
 	private boolean recursive;
 
+	/**
+	 * 사용자가 보낸 메시지
+	 */
 	private String message;
+
+	/**
+	 * 사용자 메시지를 공백으로 쪼갠 배열
+	 */
+	private String[] segments;
 
 	public MessageEvent(PrivateMessageEvent<ManalithBot> event) {
 		this.event = event;
-		this.message = event.getMessage();
+		setMessage(event.getMessage());
 	}
 
 	public MessageEvent(
 			org.pircbotx.hooks.events.MessageEvent<ManalithBot> event) {
 		this.event = event;
-		this.message = event.getMessage();
+		setMessage(event.getMessage());
 	}
 
 	public ManalithBot getBot() {
@@ -70,6 +79,7 @@ public class MessageEvent {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
+		segments = StringUtils.split(message);
 	}
 
 	/**
@@ -77,6 +87,13 @@ public class MessageEvent {
 	 */
 	public String getMessage() {
 		return message;
+	}
+
+	/**
+	 * @return the segments
+	 */
+	public String[] getMessageSegments() {
+		return segments;
 	}
 
 	public User getUser() {

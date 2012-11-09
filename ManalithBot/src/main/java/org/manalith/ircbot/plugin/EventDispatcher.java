@@ -72,8 +72,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 		for (Method method : pluginManager.getCommands().keySet()) {
 			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
 
-			String[] segments = StringUtils
-					.splitByWholeSeparator(message, null);
+			String[] segments = StringUtils.split(message);
 
 			if (!ArrayUtils.contains(commandMeta.listeners(),
 					BotEvent.ON_MESSAGE))

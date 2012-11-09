@@ -28,9 +28,9 @@ public class RegexPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String message = event.getMessage();
-		if (StringUtils.startsWith(message, "!regex")) {
-			String[] segments = StringUtils.split(message, " ");
+		String[] segments = event.getMessageSegments();
+
+		if (StringUtils.startsWith(segments[0], "!regex")) {
 			if (segments.length < 3) {
 				event.respond(getHelp());
 			} else {

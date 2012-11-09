@@ -48,7 +48,7 @@ public class HelpPlugin extends AbstractBotPlugin {
 	}
 
 	private String onMessage(String message) {
-		String[] msgs = StringUtils.splitByWholeSeparator(message, null);
+		String[] msgs = StringUtils.split(message);
 		if (ArrayUtils.contains(HELP_COMMANDS, msgs[0])) {
 			if (msgs.length == 1) {
 				return getPluginInfo();
