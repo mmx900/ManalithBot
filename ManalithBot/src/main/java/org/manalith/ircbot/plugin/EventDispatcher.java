@@ -143,25 +143,18 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
-		logger.trace("CONNECT");
-
 		// pluginManager.onConnect();
 	}
 
 	@Override
 	public void onDisconnect(DisconnectEvent<ManalithBot> event)
 			throws Exception {
-		logger.trace("DISCONNECT");
-
 		// pluginManager.onDisconnect();
 	}
 
 	@Override
 	public void onServerResponse(ServerResponseEvent<ManalithBot> event)
 			throws Exception {
-		logger.trace(String.format("SERVER_RESPONSE: %s / %s", event.getCode(),
-				event.getResponse()));
-
 		// pluginManager.onServerResponse(code, response);
 	}
 
@@ -173,14 +166,8 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onMessage(MessageEvent<ManalithBot> event) {
-		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
-		String login = event.getUser().getLogin();
-		String hostname = event.getUser().getHostmask();
 		String message = event.getMessage();
-
-		logger.trace(String.format("MESSAGE : %s / %s / %s / %s / %s", channel,
-				sender, login, hostname, message));
 
 		// 릴레이 메시지일 경우 로컬 메시지로 변환한다.
 		// TODO 메시지 필터 구현
@@ -203,10 +190,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event)
 			throws Exception {
 
-		logger.trace(String.format("PRIVMSG : %s / %s / %s / %s", event
-				.getUser().getNick(), event.getUser().getLogin(), event
-				.getUser().getHostmask(), event.getMessage()));
-
 		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
 				event);
 		for (IBotPlugin plugin : pluginManager.getPlugins()) {
@@ -219,10 +202,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onAction(ActionEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("ACTION : %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask(), event
-				.getAction()));
 		super.onAction(event);
 	}
 
@@ -234,10 +213,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onJoin(JoinEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("JOIN : %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask()));
-
 		for (IBotPlugin plugin : pluginManager.getPlugins())
 			plugin.onJoin(event.getChannel().getName(), event.getUser()
 					.getNick(), event.getUser().getLogin(), event.getUser()
@@ -246,10 +221,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onPart(PartEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("PART : %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask()));
-
 		for (IBotPlugin plugin : pluginManager.getPlugins())
 			plugin.onPart(event.getChannel().getName(), event.getUser()
 					.getNick(), event.getUser().getLogin(), event.getUser()
@@ -259,30 +230,17 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onNickChange(NickChangeEvent<ManalithBot> event)
 			throws Exception {
-		logger.trace(String.format("NICK_CHANGE : %s / %s / %s / %s", event
-				.getOldNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask(), event.getNewNick()));
-
 		// pluginManager.onNickChange(oldNick, login, hostname, newNick);
 	}
 
 	@Override
 	public void onKick(KickEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("KICK : %s / %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getSource().getNick(), event
-				.getSource().getLogin(), event.getSource().getHostmask(), event
-				.getRecipient().getNick(), event.getReason()));
-
 		// pluginManager.onKick(channel, kickerNick, kickerLogin,
 		// kickerHostname, recipientNick, reason);
 	}
 
 	@Override
 	public void onQuit(QuitEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("QUIT : %s / %s / %s / %s", event.getUser()
-				.getNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask(), event.getReason()));
-
 		for (IBotPlugin plugin : pluginManager.getPlugins())
 			plugin.onQuit(event.getUser().getNick(),
 					event.getUser().getLogin(), event.getUser().getHostmask(),
@@ -291,10 +249,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onTopic(TopicEvent<ManalithBot> event) throws Exception {
-		logger.trace(String.format("TOPIC : %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getTopic(), event.getChannel()
-				.getTopicSetter(), event.getTimestamp(), event.isChanged()));
-
 		// pluginManager.onTopic(channel, topic, setBy, date, changed);
 	}
 

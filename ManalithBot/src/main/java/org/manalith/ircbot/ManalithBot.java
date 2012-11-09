@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.EventDispatcher;
+import org.manalith.ircbot.plugin.EventLogger;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.AppContextUtil;
@@ -45,10 +46,14 @@ public class ManalithBot extends PircBotX {
 	private Configuration configuration;
 
 	@Autowired
+	private EventLogger eventLogger;
+
+	@Autowired
 	private EventDispatcher eventDispatcher;
 
 	@PostConstruct
 	public void onPostConstruct() {
+		getListenerManager().addListener(eventLogger);
 		getListenerManager().addListener(eventDispatcher);
 	}
 
