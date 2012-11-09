@@ -31,7 +31,7 @@ import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.EventLogger;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
-import org.manalith.ircbot.util.AppContextUtil;
+import org.manalith.ircbot.util.AppContextUtils;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.exception.NickAlreadyInUseException;
@@ -58,7 +58,7 @@ public class ManalithBot extends PircBotX {
 	}
 
 	public static ManalithBot getInstance() {
-		return AppContextUtil.getApplicationContext()
+		return AppContextUtils.getApplicationContext()
 				.getBean(ManalithBot.class);
 	}
 

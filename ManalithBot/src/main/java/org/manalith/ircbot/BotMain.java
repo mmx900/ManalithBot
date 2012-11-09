@@ -26,7 +26,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.util.AppContextUtil;
+import org.manalith.ircbot.util.AppContextUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -55,7 +55,7 @@ public class BotMain {
 		// 설정 초기화
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				configFile);
-		AppContextUtil.setApplicationContext(context);
+		AppContextUtils.setApplicationContext(context);
 
 		// 봇 구동
 		ManalithBot bot = context.getBean(ManalithBot.class);
