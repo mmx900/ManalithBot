@@ -68,6 +68,11 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 		String channel = event.getChannel().getName();
 		String message = event.getMessage();
 
+		// 공백으로 구성된 메시지는 처리하지 않는다.
+		if (StringUtils.isBlank(message)) {
+			return;
+		}
+
 		// 어노테이션(@BotCommand) 기반 플러그인 실행
 		for (Method method : pluginManager.getCommands().keySet()) {
 			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
