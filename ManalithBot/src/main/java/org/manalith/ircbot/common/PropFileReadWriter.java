@@ -15,36 +15,30 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.common;
 
-import java.util.Properties;
 import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.util.Properties;
 
 public class PropFileReadWriter extends FileReadWriter {
-	public PropFileReadWriter() throws FileNotFoundException {
-		super();
-	}
-
-	public PropFileReadWriter(String newFilename) throws FileNotFoundException {
-		super(newFilename);
+	public PropFileReadWriter(String fileName) {
+		super(fileName);
 	}
 
 	public Properties bringUpPropertyFromFile() throws IOException {
-		this.allocateStreamReader();
+		allocateStreamReader();
 		Properties result = new Properties();
-		result.load(this.getStreamReaderResource());
+		result.load(getStreamReaderResource());
 
 		return result;
 	}
 
-	public void pushUpPropertyToFile(Properties newProperties)
-			throws IOException {
-		if (!this.exists())
-			this.createFile();
+	public void pushUpPropertyToFile(Properties properties) throws IOException {
+		if (!exists())
+			createFile();
 
-		this.allocateStreamWriter();
-		newProperties.store(this.getStreamWriterResource(), "");
+		allocateStreamWriter();
+		properties.store(getStreamWriterResource(), "");
 	}
 }

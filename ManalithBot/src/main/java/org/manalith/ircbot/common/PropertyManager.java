@@ -18,105 +18,59 @@
  */
 package org.manalith.ircbot.common;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+
+import org.apache.log4j.Logger;
 
 public class PropertyManager {
+	private Logger logger = Logger.getLogger(getClass());
 
 	private String path;
-	private String filename;
-	private Properties prop;
+	private String fileName;
+	private Properties properties;
 
-	public PropertyManager() {
-		this.setPath("");
-		this.setFilename("");
-		this.setProp(null);
-	}
-
-	public PropertyManager(String newFilename) {
-		this.setPath("");
-		this.setFilename(newFilename);
-		this.setProp(null);
-	}
-
-	public PropertyManager(String newPath, String newFilename) {
-		this.setPath(newPath);
-		this.setFilename(newFilename);
-		this.setProp(null);
-	}
-
-	public void setPath(String newPath) {
-		this.path = newPath;
-	}
-
-	public String getPath() {
-		return this.path;
-	}
-
-	public void setFilename(String newFilename) {
-		this.filename = newFilename;
-	}
-
-	public String getFilename() {
-		return this.filename;
-	}
-
-	public void initProp() {
-		this.setProp(new Properties());
-	}
-
-	public void setProp(Properties newProperty) {
-		this.prop = newProperty;
-	}
-
-	public Properties getProp() {
-		return this.prop;
+	public PropertyManager(String path, String fileName) {
+		this.path = path;
+		this.fileName = fileName;
 	}
 
 	public void loadProperties() {
-
 		try {
-			PropFileReadWriter fr = new PropFileReadWriter(this.getPath()
-					+ this.getFilename());
-			this.setProp(fr.bringUpPropertyFromFile());
-
-			if (this.getProp() == null)
-				this.initProp();
+			PropFileReadWriter fr = new PropFileReadWriter(path + fileName);
+			properties = fr.bringUpPropertyFromFile();
 		} catch (IOException ioe) {
-			this.setProp(new Properties());
+			properties = new Properties();
+
 			try {
-				this.storeProperties();
-			} catch (Exception e) {
-				;
+				storeProperties();
+			} catch (IOException e) {
+				logger.warn(e.getMessage(), e);
 			}
 		}
 	}
 
 	public void storeProperties() throws FileNotFoundException, IOException {
-		PropFileReadWriter fw = new PropFileReadWriter(this.getPath()
-				+ this.getFilename());
-		fw.pushUpPropertyToFile(this.getProp());
+		PropFileReadWriter fw = new PropFileReadWriter(path + fileName);
+		fw.pushUpPropertyToFile(properties);
 	}
 
 	public String getValue(String key) {
-		return (String) this.getProp().get(key);
-	}
-
-	public void setKey(String key) {
-		this.getProp().setProperty(key, "");
+		return (String) properties.get(key);
 	}
 
 	public void setKeyValue(String key, String value) {
-		this.getProp().setProperty(key, value);
+		properties.setProperty(key, value);
 	}
 
 	public String[] getKeyList() {
-		Set<String> ss = this.getProp().stringPropertyNames();
-		if (ss.size() == 0)
+		Set<String> ss = properties.stringPropertyNames();
+
+		if (ss.size() == 0) {
 			return null;
-		else {
+		} else {
 			String[] result = new String[ss.size()];
 			Object[] o = ss.toArray();
 
@@ -128,6 +82,6 @@ public class PropertyManager {
 	}
 
 	public void removeKeyValue(String key) {
-		this.getProp().remove(key);
+		properties.remove(key);
 	}
 }

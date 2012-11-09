@@ -15,118 +15,70 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.manalith.ircbot.common;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class FileReadWriter {
-	private File f;
-	private String filename;
-	private String filestream;
-
-	private FileInputStream fis;
+	private File file;
 	private InputStreamReader isr;
-	private FileOutputStream fos;
 	private OutputStreamWriter osw;
 
-	public FileReadWriter() throws FileNotFoundException {
-		f = null;
-		filename = "";
-		filestream = "";
-
-		fis = null;
-		isr = null;
-		fos = null;
-		osw = null;
-
-		this.openFile();
+	public FileReadWriter(String fileName) {
+		file = allocateFileObject(fileName);
 	}
 
-	public FileReadWriter(String newFilename) {
-		this.setFilename(newFilename);
-		f = null;
-		filestream = "";
-
-		fis = null;
-		isr = null;
-		fos = null;
-		osw = null;
-
-		this.openFile();
-	}
-
-	public void setFilename(String newFilename) {
-		this.filename = newFilename;
-	}
-
-	public String getFilename() {
-		return this.filename;
-	}
-
-	public void setFileStream(String newFileStream) {
-		this.filestream = newFileStream;
-	}
-
-	public String getFileStream() {
-		return this.filestream;
-	}
-
-	protected File allocateFileObject() {
-		
+	private File allocateFileObject(String fileName) {
 		String dir = "";
-		
-		if ( this.getFilename().contains(Character.toString(File.separatorChar)) )
-		{
-			int len = this.getFilename().split("\\" + Character.toString(File.separatorChar)).length - 1;
-			
-			for ( int i = 0 ; i < len; i++ )
-			{
-				if ( i != 0 ) dir += "/";
-				dir += this.getFilename().split("\\/")[i];
+
+		if (fileName.contains(Character.toString(File.separatorChar))) {
+			int len = fileName.split("\\"
+					+ Character.toString(File.separatorChar)).length - 1;
+
+			for (int i = 0; i < len; i++) {
+				if (i != 0)
+					dir += "/";
+
+				dir += fileName.split("\\/")[i];
 			}
 		}
-			
+
 		File t = new File(dir);
-		if ( !t.exists() ) t.mkdirs();
-		
-		return new File(this.filename);
+		if (!t.exists())
+			t.mkdirs();
+
+		return new File(fileName);
 	}
 
 	protected boolean exists() {
-		return f.exists();
-	}
-
-	protected void openFile() {
-		f = this.allocateFileObject();
+		return file.exists();
 	}
 
 	protected void createFile() throws FileNotFoundException, IOException {
-		f.createNewFile();
-		this.allocateStreamWriter();
+		file.createNewFile();
+		allocateStreamWriter();
 	}
 
 	protected void allocateStreamReader() throws FileNotFoundException {
-		fis = new FileInputStream(f);
-		isr = new InputStreamReader(fis);
+		isr = new InputStreamReader(new FileInputStream(file));
 	}
 
 	protected void allocateStreamWriter() throws FileNotFoundException {
-		fos = new FileOutputStream(f);
-		osw = new OutputStreamWriter(fos);
+		osw = new OutputStreamWriter(new FileOutputStream(file));
 	}
 
 	public InputStreamReader getStreamReaderResource() {
-		return this.isr;
+		return isr;
 	}
 
 	public OutputStreamWriter getStreamWriterResource() {
-		return this.osw;
+		return osw;
 	}
 }
