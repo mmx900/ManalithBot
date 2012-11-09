@@ -1,18 +1,13 @@
 package org.manalith.ircbot.plugin.url;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.util.UrlUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UrlEncoderPlugin extends AbstractBotPlugin {
-	private Logger logger = Logger.getLogger(getClass());
 
 	@Override
 	public String getName() {
@@ -36,15 +31,10 @@ public class UrlEncoderPlugin extends AbstractBotPlugin {
 			String txt = StringUtils.substring(event.getMessage(),
 					"!urlencode ".length());
 
-			try {
-				if (cmd.equals("!urlencode")) {
-					event.respond(URLEncoder.encode(txt, "UTF-8"));
-				} else if (cmd.equals("!urldecode")) {
-					event.respond(URLDecoder.decode(txt, "UTF-8"));
-				}
-			} catch (UnsupportedEncodingException e) {
-				// impossible
-				logger.error(e);
+			if (cmd.equals("!urlencode")) {
+				UrlUtils.encode(txt);
+			} else if (cmd.equals("!urldecode")) {
+				UrlUtils.decode(txt);
 			}
 		} else if (segments.length == 1) {
 			String cmd = segments[0];
@@ -52,5 +42,4 @@ public class UrlEncoderPlugin extends AbstractBotPlugin {
 				event.respond("!urlencode [url] 혹은 !urldecode [url]");
 		}
 	}
-
 }
