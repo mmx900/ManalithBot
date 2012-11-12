@@ -25,7 +25,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.util.AppContextUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -46,11 +45,7 @@ public class BotMain {
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = parser.parse(options, args);
 
-		String configFile = "config.xml";
-		String configFileOptionArg = cmd.getOptionValue("c");
-		if (StringUtils.isNotBlank(configFileOptionArg)) {
-			configFile = configFileOptionArg;
-		}
+		String configFile = cmd.getOptionValue("c", "config.xml");
 
 		// 설정 초기화
 		ApplicationContext context = new FileSystemXmlApplicationContext(
