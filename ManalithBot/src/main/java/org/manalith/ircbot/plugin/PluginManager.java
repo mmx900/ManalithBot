@@ -69,8 +69,10 @@ public class PluginManager {
 
 		try {
 			plugin.start(null);
+			logger.info(String.format("%s 플러그인이 시작되었습니다.", plugin.getName()));
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(String.format("%s 플러그인을 시작하지 못했습니다.", plugin.getName()));
+			logger.error(e.getMessage(), e);
 			unload(plugin);
 		}
 	}
