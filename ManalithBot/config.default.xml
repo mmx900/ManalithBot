@@ -56,6 +56,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="replacementCharacterDetectPlugin" />
 				<ref bean="cryptoPlugin" />
 				<ref bean="onOffMixPlugin" />
+				<ref bean="timePlugin" />
 				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
 				<ref bean="aliasPlugin" />
 			</list>
