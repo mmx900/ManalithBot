@@ -105,9 +105,9 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 			} else {
 				event.respond(getHelp());
 			}
-		}
 
-		event.setExecuted(true);
+			event.setExecuted(true);
+		}
 	}
 
 	@Scheduled(fixedDelay = 1000 * 60 * 5)
