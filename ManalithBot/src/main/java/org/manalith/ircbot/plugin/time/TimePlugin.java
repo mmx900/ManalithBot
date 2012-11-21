@@ -6,18 +6,16 @@ import java.util.Date;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimePlugin extends AbstractBotPlugin {
-	private Logger logger = Logger.getLogger(getClass().getName());
 	private final String[] commands = { "!시간", "!time", "!월요일", "!금요일", "!토요일",
 			"!일요일", "!주말" };
 	private final SimpleDateFormat format = new SimpleDateFormat(
-			"yyyy년 MM월 dd일 hh시 mm분 ss초");
+			"yyyy년 MM월 dd일 HH시 mm분 ss초");
 
 	@Override
 	public String getName() {
@@ -75,7 +73,7 @@ public class TimePlugin extends AbstractBotPlugin {
 	public Date getNextDate(Date today, int day) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(today);
-		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 
@@ -91,10 +89,6 @@ public class TimePlugin extends AbstractBotPlugin {
 
 	// http://stackoverflow.com/questions/635935/how-can-i-calculate-a-time-span-in-java-and-format-the-output
 	private String getDiff(Date now, int day) {
-		logger.info(getNextDate(now, day).toString());
-		logger.info(getNextDate(now, day).getTime());
-		logger.info(now.toString());
-		logger.info(now.getTime());
 		long diffInSeconds = (getNextDate(now, day).getTime() - now.getTime()) / 1000;
 		long diff[] = new long[] { 0, 0, 0, 0 };
 		/* sec */diff[3] = (diffInSeconds >= 60 ? diffInSeconds % 60
