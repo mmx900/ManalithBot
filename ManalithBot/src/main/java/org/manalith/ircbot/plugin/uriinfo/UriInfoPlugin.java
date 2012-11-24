@@ -72,7 +72,7 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 					.execute();
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
-			return null;
+			return String.format("URL \"%s\"을 찾을 수가 없습니다 ㅠㅠ", uri);
 		}
 
 		String contentType = response.contentType();
