@@ -79,10 +79,10 @@ public class TimePlugin extends AbstractBotPlugin {
 
 		int dow = cal.get(Calendar.DAY_OF_WEEK);
 
-		while (dow != day) {
+		do {
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 			dow = cal.get(Calendar.DAY_OF_WEEK);
-		}
+		} while (dow != day);
 
 		return cal.getTime();
 	}
