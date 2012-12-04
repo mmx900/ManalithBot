@@ -21,9 +21,11 @@ package org.manalith.ircbot.plugin.uriinfo;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -36,9 +38,8 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private boolean enablePrintContentType;
 
-	private static final String USER_AGENT =
-		"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) " +
-		"Gecko/20100101 Firefox/12.0";
+	private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) "
+			+ "Gecko/20100101 Firefox/12.0";
 
 	public String getCommands() {
 		return null;
@@ -66,10 +67,9 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 		try {
 			// 일부 사이트에서는 User Agent가 있어야 접근을 허용
-			response = Jsoup
-					.connect(uri)
-					.header("User-Agent", USER_AGENT)
-					.execute();
+			response = Jsoup.connect(uri).userAgent(USER_AGENT).execute();
+		} catch (UnsupportedMimeTypeException e) {
+			return enablePrintContentType ? "[링크 형식] " + e.getMimeType() : null;
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
 			return null;
@@ -77,26 +77,22 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 		String contentType = response.contentType();
 
-		if (contentType.startsWith("text/html") ||
-			contentType.startsWith("text/xml")) {
-			// 일단 title이 나오는지 시도해 본다.
-			try {
-				Document document = response.parse();
-				String title = document.title();
+		// 일단 title이 나오는지 시도해 본다.
+		try {
+			Document document = response.parse();
+			String title = document.title();
 
-				if (title == null || title.matches("\\s*"))
-					throw new IOException();
+			if (StringUtils.isBlank(title))
+				throw new IOException();
 
-				title = title.trim()
-						.replaceAll("(\\s){1,}", " ");
-				result = "[링크 제목] " + title;
-			} catch (IOException e) {
-				// parse 오류 또는 빈 title -- HTML의
-				// 경우는 빈 제목이라도 표시하고 아니면
-				// content type 표시로 패스
-				if (contentType.startsWith("text/html"))
-					result = "[링크 제목]";
-			}
+			title = title.trim().replaceAll("(\\s){1,}", " ");
+			result = "[링크 제목] " + title;
+		} catch (IOException e) {
+			// parse 오류 또는 빈 title -- HTML의
+			// 경우는 빈 제목이라도 표시하고 아니면
+			// content type 표시로 패스
+			if (contentType.startsWith("text/html"))
+				result = "[링크 제목]";
 		}
 
 		if (result == null && enablePrintContentType) {
