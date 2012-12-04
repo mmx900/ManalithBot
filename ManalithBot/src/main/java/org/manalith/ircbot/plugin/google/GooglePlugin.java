@@ -26,14 +26,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.Collections;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class GooglePlugin extends AbstractBotPlugin {
@@ -60,22 +66,20 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		String channel = event.getChannel().getName();
-		ManalithBot bot = event.getBot();
 
 		if (message.equals(NAMESPACE + ":help")) {
-			bot.sendMessage(channel, getHelp());
+			event.respond(getHelp());
 			event.setExecuted(true);
 		} else if (message.length() >= 12
 				&& (message.substring(0, 9).equals(NAMESPACE + ":match ") || message
 						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
-			bot.sendMessage(channel, getGoogleMatch(keywords[0], keywords[1]));
+			event.respond(getGoogleMatch(keywords[0], keywords[1]));
 			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals(NAMESPACE + " ") || message
 						.substring(0, 4).equals("!gg "))) {
-			bot.sendMessage(channel, getGoogleTopResult(message.substring(4)));
+			event.respond(getGoogleTopResult(message.substring(4)));
 			event.setExecuted(true);
 		}
 
@@ -123,40 +127,36 @@ public class GooglePlugin extends AbstractBotPlugin {
 	public String getGoogleTopResult(String keyword) {
 		try {
 			// http://code.google.com/apis/websearch/docs/#fonje
-			URL url = new URL(
-					"https://ajax.googleapis.com/ajax/services/search/web?v=1.0&"
-							+ "q=" + URLEncoder.encode(keyword, "UTF-8")
-							+ "&key=" + apiKey + "&userip="
-							+ InetAddress.getLocalHost().getHostAddress());
-			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("Referer", "http://manalith.org");
+			final String url = "https://ajax.googleapis.com/ajax/services/search/web?v=1.0" //
+					+ "&q=" + keyword //
+					+ "&key=" + apiKey //
+					+ "&userip=" + InetAddress.getLocalHost().getHostAddress();
 
-			String line;
-			StringBuilder builder = new StringBuilder();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
+			MappingJacksonHttpMessageConverter conv = new MappingJacksonHttpMessageConverter();
+			conv.setSupportedMediaTypes(Collections
+					.singletonList(new MediaType("text", "javascript", Charset
+							.forName("UTF-8"))));
+
+			RestTemplate restTemplate = new RestTemplate();
+			restTemplate.getMessageConverters().add(conv);
+
+			SearchResponse res = restTemplate.getForObject(url,
+					SearchResponse.class);
+
+			if (res.responseData != null
+					&& ArrayUtils.isNotEmpty(res.responseData.results)) {
+
+				SearchResult result = res.responseData.results[0];
+
+				// HTML 코드 처리
+				return result.content.replace("<b>", HIGH_INTENSITY)
+						.replace("</b>", LOW_INTENSITY).replace("&quot;", "\"")
+						.replace("&amp;", "&").replace("&#39;", "'")
+						.replace("&gt;", ">").replace("&lt;", "<")
+						+ " : " + result.url;
 			}
-
-			JSONObject firstResult = new JSONObject(builder.toString())
-					.getJSONObject("responseData").getJSONArray("results")
-					.getJSONObject(0);
-			String result = firstResult.getString("content") + " : "
-					+ firstResult.getString("url");
-
-			// HTML 코드 처리
-			result = result.replace("<b>", HIGH_INTENSITY)
-					.replace("</b>", LOW_INTENSITY).replace("&quot;", "\"")
-					.replace("&amp;", "&").replace("&#39;", "'")
-					.replace("&gt;", ">").replace("&lt;", "<");
-
-			return result;
-
-		} catch (MalformedURLException | JSONException e) {
-			logger.error(e);
 		} catch (IOException e) {
-			logger.error(e);
+			logger.warn(e);
 		}
 
 		return null;
@@ -176,5 +176,30 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 	public void setApiReferer(String apiReferer) {
 		this.apiReferer = apiReferer;
+	}
+
+	@SuppressWarnings("unused")
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	private static class SearchResponse {
+		public SearchResponseData responseData;
+		public int responseStatus;
+	}
+
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	private static class SearchResponseData {
+		public SearchResult[] results;
+	}
+
+	@SuppressWarnings("unused")
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	private static class SearchResult {
+		public String GsearchResultClass;
+		public String unescapedUrl;
+		public String url;
+		public String visibleUrl;
+		public String cacheUrl;
+		public String title;
+		public String titleNoFormatting;
+		public String content;
 	}
 }
