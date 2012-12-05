@@ -23,7 +23,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -45,22 +44,12 @@ public class PingPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
-	}
-
-	@Override
-	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getUser().getNick());
-	}
-
-	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
-		ManalithBot bot = event.getBot();
 
 		if (StringUtils.startsWith(message, "!ping ")) {
 			String uri = StringUtils.substringAfter(message, " ");
 			if (StringUtils.isBlank(uri)) {
-				bot.sendMessage(target, "[Ping] 사용법 : !ping DOMAIN/IP");
+				event.respond("[Ping] 사용법 : !ping DOMAIN/IP");
 				return;
 			}
 
@@ -68,18 +57,16 @@ public class PingPlugin extends AbstractBotPlugin {
 			try {
 				addr = InetAddress.getByName(uri);
 			} catch (UnknownHostException e) {
-				bot.sendMessage(target, "[Ping] 올바른 주소가 아닙니다.");
+				event.respond("[Ping] 올바른 주소가 아닙니다.");
 			}
 
 			try {
-				bot.sendMessage(target, String.format("[Ping] %s(%s) is %s: ",
+				event.respond(String.format("[Ping] %s(%s) is %s: ",
 						addr.getHostName(), addr.getHostAddress(),
 						addr.isReachable(3000) ? "reachable" : "not reachable"));
 			} catch (IOException e) {
-				bot.sendMessage(
-						target,
-						String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
-								e.getMessage()));
+				event.respond(String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
+						e.getMessage()));
 			}
 
 			event.setExecuted(true);
