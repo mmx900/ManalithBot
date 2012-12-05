@@ -41,7 +41,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 		if (sender.equals("DarkCircle")) {
 			Set<User> list = bot.getUsers(bot.getChannel("#gnome"));
 			for (User u : list) {
-				if (u.getNick().equals("♠한씨네")) {
+				if (u.getNick().equals("♠")) {
 					beingBot = true;
 					break;
 				}
@@ -58,7 +58,7 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 			Set<User> list = ManalithBot.getInstance().getUsers(
 					event.getBot().getChannel("#gnome"));
 			for (User u : list) {
-				if (u.getNick().equals("♠한씨네")) {
+				if (u.getNick().equals("♠")) {
 					beingBot = true;
 					break;
 				}
@@ -72,13 +72,13 @@ public class RelayBotAbsenceNotifierPlugin extends AbstractBotPlugin {
 
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
-		if (sender.equals("♠한씨네"))
+		if (sender.equals("♠"))
 			ManalithBot.getInstance().sendMessage(channel, "DarkCircle: ...");
 	}
 
 	public void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
-		if (sourceNick.equals("♠한씨네"))
+		if (sourceNick.equals("♠"))
 			ManalithBot.getInstance().sendMessage("#gnome", "DarkCircle: ...");
 	}
 }

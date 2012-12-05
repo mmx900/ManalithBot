@@ -24,7 +24,6 @@ import java.net.URLEncoder;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -47,29 +46,15 @@ public class WeatherPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
-
-	}
-
-	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getUser().getNick());
-	}
-
-	protected void onMessage(MessageEvent event, String target) {
 		String message = event.getMessage();
-		ManalithBot bot = event.getBot();
 
 		if (message.equals(COMMAND + ":help")) {
-			bot.sendMessage(target, getHelp());
-			event.setExecuted(true);
+			event.respond(getHelp());
 		} else if (message.equals(COMMAND)) {
-			bot.sendMessage(target, this.getHelp());
-			event.setExecuted(true);
+			event.respond(this.getHelp());
 		} else if (message.startsWith(COMMAND)
 				&& message.length() >= COMMAND.length() + 2) {
-			bot.sendMessage(target,
-					getYahooWeather(message.substring(COMMAND.length() + 1)));
-			event.setExecuted(true);
+			event.respond(getYahooWeather(message.substring(COMMAND.length() + 1)));
 		}
 	}
 

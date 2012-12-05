@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.Empty;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -39,15 +38,13 @@ public class BshPlugin extends AbstractBotPlugin {
 	}
 
 	public void onMessage(MessageEvent event) {
-		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
-		String channel = event.getChannel().getName();
 
 		if (message.equals(NAMESPACE + ":help"))
-			bot.sendMessage(channel, getHelp());
+			event.respond(getHelp());
 		else if (message.equalsIgnoreCase("reload")) {
 			loadInternalCommands();
-			bot.sendMessage(channel, "명령어 목록을 재구성합니다.");
+			event.respond("명령어 목록을 재구성합니다.");
 		} else if (message.length() > 4
 				&& message.substring(0, 4).equalsIgnoreCase("eval")) {
 			Object o = executeRemoteCommand(message.substring(4));
@@ -55,10 +52,10 @@ public class BshPlugin extends AbstractBotPlugin {
 				if (o instanceof Empty) {
 					// nothing
 				} else {
-					bot.sendMessage(channel, o.toString());
+					event.respond(o.toString());
 				}
 			} else {
-				bot.sendMessage(channel, "응답 결과가 없습니다.");
+				event.respond("응답 결과가 없습니다.");
 			}
 		} else if (message.length() > 6
 				&& message.substring(0, 6).equalsIgnoreCase("j:oper")) {
@@ -70,22 +67,22 @@ public class BshPlugin extends AbstractBotPlugin {
 			// if(o instanceof Empty){
 			// //nothing
 			// }else{
-			// BotMain.BOT.sendMessage(channel, o.toString());
+			// event.respond(o.toString());
 			// }
 			// }else{
-			// BotMain.BOT.sendMessage(channel, "응답 결과가 없습니다.");
+			// event.respond("응답 결과가 없습니다.");
 			// }
 			// }else{
-			// BotMain.BOT.sendMessage(channel, "주인에게만 반응합니다.");
+			// event.respond("주인에게만 반응합니다.");
 			// }
 		} else if (message.length() >= 6
 				&& message.substring(0, 2).equals("j:")) {
 			String s = commands.getProperty(message.substring(0, 6).replace(
 					":", "."));
 			if (s != null) {
-				bot.sendMessage(channel, executeInternalCommand(s));
+				event.respond(executeInternalCommand(s));
 			} else {
-				bot.sendMessage(channel, "해당 명령은 없습니다.");
+				event.respond("해당 명령은 없습니다.");
 			}
 		}
 	}

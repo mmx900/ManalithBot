@@ -65,8 +65,6 @@ public class TimePlugin extends AbstractBotPlugin {
 				break;
 			}
 			}
-
-			event.setExecuted(true);
 		}
 	}
 

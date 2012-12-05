@@ -19,7 +19,6 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -64,17 +63,15 @@ public class CurexPlugin extends AbstractBotPlugin {
 	 * .MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
+		parseMessage(event, event.getChannel().getName());
 	}
 
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getUser().getNick());
+		parseMessage(event, event.getUser().getNick());
 	}
 
-	protected void onMessage(MessageEvent event, String target) {
-		ManalithBot bot = event.getBot();
-		String msg = event.getMessage();
-		String[] command = msg.split("\\s");
+	protected void parseMessage(MessageEvent event, String target) {
+		String[] command = event.getMessageSegments();
 		if (!command[0].equals("!환율") && !command[0].startsWith("!환율:"))
 			return;
 
@@ -90,23 +87,19 @@ public class CurexPlugin extends AbstractBotPlugin {
 
 				String result = runner.run();
 				if (result.equals("Help!")) {
-					bot.sendMessage(target,
-							CurexInfoProvider.getIRCHelpMessagePart1());
-					bot.sendMessage(target,
-							CurexInfoProvider.getIRCHelpMessagePart2());
+					event.respond(CurexInfoProvider.getIRCHelpMessagePart1());
+					event.respond(CurexInfoProvider.getIRCHelpMessagePart2());
 				} else if (result.equals("unitlist")) {
-					bot.sendMessage(target,
-							CurexInfoProvider.getUnitListPart1());
-					bot.sendMessage(target,
-							CurexInfoProvider.getUnitListPart2());
+					event.respond(CurexInfoProvider.getUnitListPart1());
+					event.respond(CurexInfoProvider.getUnitListPart2());
 				} else {
-					bot.sendMessage(target, result);
+					event.respond(result);
 				}
 			} catch (Exception e) {
-				bot.sendMessage(target, e.getMessage());
+				event.respond(e.getMessage());
 			}
 		} else if (subcmd.length > 2) {
-			bot.sendMessage(target, "옵션이 너무 많습니다");
+			event.respond("옵션이 너무 많습니다");
 		} else {
 			// remerge strings separated by space.
 			String userNick = event.getUser().getNick();
@@ -122,13 +115,12 @@ public class CurexPlugin extends AbstractBotPlugin {
 					this.getResourcePath(), target, userNick, arg);
 
 			if (subcmd[1].equals("sub"))
-				bot.sendMessage(target, csMan.addUserSetting());
+				event.respond(csMan.addUserSetting());
 			else if (subcmd[1].equals("unsub")) {
-				bot.sendMessage(target, csMan.removeUserSetting());
+				event.respond(csMan.removeUserSetting());
 			} else
-				bot.sendMessage(target, "그런 옵션은 없습니다.");
+				event.respond("그런 옵션은 없습니다.");
 
 		}
-		event.setExecuted(true);
 	}
 }

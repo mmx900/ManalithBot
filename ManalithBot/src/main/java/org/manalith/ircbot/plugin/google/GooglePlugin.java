@@ -69,18 +69,15 @@ public class GooglePlugin extends AbstractBotPlugin {
 
 		if (message.equals(NAMESPACE + ":help")) {
 			event.respond(getHelp());
-			event.setExecuted(true);
 		} else if (message.length() >= 12
 				&& (message.substring(0, 9).equals(NAMESPACE + ":match ") || message
 						.substring(0, 9).equals("!gg:match "))) {
 			String[] keywords = message.substring(9).split(" ");
 			event.respond(getGoogleMatch(keywords[0], keywords[1]));
-			event.setExecuted(true);
 		} else if (message.length() >= 5
 				&& (message.substring(0, 4).equals(NAMESPACE + " ") || message
 						.substring(0, 4).equals("!gg "))) {
 			event.respond(getGoogleTopResult(message.substring(4)));
-			event.setExecuted(true);
 		}
 
 	}

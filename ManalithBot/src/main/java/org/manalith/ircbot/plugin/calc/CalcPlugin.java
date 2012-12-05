@@ -18,7 +18,6 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -38,31 +37,30 @@ public class CalcPlugin extends AbstractBotPlugin {
 		return "설  명: 계산식을 입력하면 답을 구해줍니다, 사용법: !계산 (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
+		parseEvent(event);
 	}
 
+	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getUser().getNick());
+		parseEvent(event);
 	}
 
-	protected void onMessage(MessageEvent event, String target) {
-		ManalithBot bot = event.getBot();
-		String message = event.getMessage();
-		String[] command = message.split("\\s");
+	protected void parseEvent(MessageEvent event) {
+		String[] command = event.getMessageSegments();
 
 		if (command[0].equals("!계산")) {
 			if (command.length == 1) {
-				bot.sendMessage(target, "입력한 식이 없습니다.");
-				bot.sendMessage(target, this.getHelp());
+				event.respond("입력한 식이 없습니다.");
+				event.respond(this.getHelp());
 			} else {
 				String expr = "";
 				for (int i = 1; i < command.length; i++) {
 					expr += command[i];
 				}
-				bot.sendMessage(target, CalcRunner.run(expr));
+				event.respond(CalcRunner.run(expr));
 			}
-			event.setExecuted(true);
 		}
 	}
 }

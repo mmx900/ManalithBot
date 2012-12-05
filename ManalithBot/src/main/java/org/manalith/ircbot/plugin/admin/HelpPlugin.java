@@ -35,19 +35,19 @@ public class HelpPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String result = onMessage(event.getMessage());
+		String result = parseMessage(event.getMessage());
 		if (result != null)
 			event.respond(result);
 	}
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		String result = onMessage(event.getMessage());
+		String result = parseMessage(event.getMessage());
 		if (result != null)
 			event.respond(result);
 	}
 
-	private String onMessage(String message) {
+	private String parseMessage(String message) {
 		String[] msgs = StringUtils.split(message);
 		if (ArrayUtils.contains(HELP_COMMANDS, msgs[0])) {
 			if (msgs.length == 1) {

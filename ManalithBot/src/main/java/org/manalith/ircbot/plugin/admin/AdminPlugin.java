@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.Channel;
@@ -47,14 +46,14 @@ public class AdminPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String message = event.getMessage();
-		Channel channel = event.getChannel();
-
 		if (isAdmin(event.getUser())) {
+			String message = event.getMessage();
+
 			if (message.equals("!@")) {
 				int i = 0;
 
 				// 모든 사용자에게 옵을 준다
+				Channel channel = event.getChannel();
 				for (User user : channel.getUsers()) {
 					if (!channel.getOps().contains(user)
 							&& !channel.getSuperOps().contains(user)
@@ -92,19 +91,15 @@ public class AdminPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		ManalithBot bot = event.getBot();
 		String message = event.getMessage();
-		String sender = event.getUser().getNick();
 
 		if (StringUtils.left(message, 3).equals("pw ")) {
 			if (StringUtils.substring(message, 3).equals(password)) {
 				admins.add(new Admin(event.getUser()));
-				bot.sendMessage(sender, "인증되었습니다.");
+				event.respond("인증되었습니다.");
 			} else {
-				bot.sendMessage(sender, "비밀번호가 잘못되었습니다.");
+				event.respond("비밀번호가 잘못되었습니다.");
 			}
-
-			event.setExecuted(true);
 		}
 	}
 }

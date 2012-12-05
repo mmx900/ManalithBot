@@ -19,7 +19,6 @@
 package org.manalith.ircbot.plugin.kvl;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -43,24 +42,20 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
+		parseEvent(event);
 	}
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		onMessage(event, event.getUser().getNick());
+		parseEvent(event);
 	}
 
-	protected void onMessage(MessageEvent event, String target) {
-
-		String msg = event.getMessage();
-		String[] command = msg.split("\\s");
-		ManalithBot bot = event.getBot();
+	protected void parseEvent(MessageEvent event) {
+		String[] command = event.getMessageSegments();
 
 		if (command[0].equals("!커널") || command[0].equals("!kernel")) {
 			if (command.length >= 3) {
-				bot.sendMessage(target, "Too many arguments!");
-				event.setExecuted(true);
+				event.respond("Too many arguments!");
 				return;
 			}
 
@@ -68,14 +63,12 @@ public class KVLPlugin extends AbstractBotPlugin {
 
 			try {
 				if (command.length >= 2)
-					bot.sendMessage(target, runner.run(command[1]));
+					event.respond(runner.run(command[1]));
 				else
-					bot.sendMessage(target, runner.run(""));
+					event.respond(runner.run(""));
 			} catch (Exception e) {
 				logger.warn(e.getMessage(), e);
 			}
-
-			event.setExecuted(true);
 		}
 	}
 

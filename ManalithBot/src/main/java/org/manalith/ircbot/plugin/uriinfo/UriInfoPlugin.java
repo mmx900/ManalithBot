@@ -111,10 +111,8 @@ public class UriInfoPlugin extends AbstractBotPlugin {
 
 		String info = getInfo(uri);
 		if (info != null) {
-			event.respond(info);
+			// This plugin runs implicitly
+			event.respond(info, false);
 		}
-
-		// This plugin runs implicitly; it does NOT need to call
-		// event.setExecuted(true)
 	}
 }

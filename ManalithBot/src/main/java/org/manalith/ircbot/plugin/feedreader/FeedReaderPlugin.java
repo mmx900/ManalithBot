@@ -105,8 +105,6 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 			} else {
 				event.respond(getHelp());
 			}
-
-			event.setExecuted(true);
 		}
 	}
 

@@ -21,7 +21,6 @@ package org.manalith.ircbot.plugin.keyseqconv;
 import java.text.ParseException;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
@@ -83,11 +82,6 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 	 * .MessageEvent)
 	 */
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
-	}
-
-	protected void onMessage(MessageEvent event, String target) {
-		ManalithBot bot = event.getBot();
 		String msg = event.getMessage();
 		String sender = event.getUser().getNick();
 
@@ -103,10 +97,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendMessage(target,
-						String.format("<%s> %s", sender, dstmsg));
-
-				event.setExecuted(true);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
 			} catch (Exception e) {
 				logger.warn(e.getMessage(), e);
 			}
@@ -114,18 +105,13 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 			String dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
 
-			bot.sendMessage(target, String.format("<%s> %s", sender, dstmsg));
-
-			event.setExecuted(true);
+			event.respond(String.format("<%s> %s", sender, dstmsg));
 		} else if (cmd.equals("!c3")) {
 			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 			try {
 				String dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendMessage(target,
-						String.format("<%s> %s", sender, dstmsg));
-
-				event.setExecuted(true);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
 			} catch (IllegalArgumentException | ParseException e) {
 				logger.warn(e.getMessage(), e);
 			}
@@ -135,10 +121,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendMessage(target,
-						String.format("<%s> %s", sender, dstmsg));
-
-				event.setExecuted(true);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
 			} catch (IllegalArgumentException | ParseException e) {
 				logger.warn(e.getMessage(), e);
 			}
@@ -148,10 +131,7 @@ public class KeySeqConvPlugin extends AbstractBotPlugin {
 			try {
 				String dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
 
-				bot.sendMessage(target,
-						String.format("<%s> %s", sender, dstmsg));
-
-				event.setExecuted(true);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
 			} catch (IllegalArgumentException | ParseException e) {
 				logger.warn(e.getMessage(), e);
 			}

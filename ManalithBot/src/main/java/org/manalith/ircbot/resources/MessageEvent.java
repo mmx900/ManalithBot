@@ -124,12 +124,29 @@ public class MessageEvent {
 	}
 
 	/**
+	 * 이벤트의 형식에 따라 발신 채널(OnMessage) 혹은 개인(OnPrivateMessage)에게 응답을 보내며, 실행 완료 표시를
+	 * 한다.
+	 * 
+	 * @param response
+	 *            응답 메시지
+	 * @see #respond(String, boolean)
+	 * @see #setExecuted(boolean)
+	 */
+	public void respond(String response) {
+		respond(response, true);
+	}
+
+	/**
 	 * 이벤트의 형식에 따라 발신 채널(OnMessage) 혹은 개인(OnPrivateMessage)에게 응답을 보낸다.
 	 * 
 	 * @param response
 	 *            응답 메시지
+	 * @param markAsExecuted
+	 *            실행 완료 표시 여부
+	 * @see #respond
+	 * @see #setExecuted(boolean)
 	 */
-	public void respond(String response) {
+	public void respond(String response, boolean markAsExecuted) {
 		if (event instanceof org.pircbotx.hooks.events.MessageEvent) {
 			event.getBot()
 					.sendMessage(
@@ -138,5 +155,7 @@ public class MessageEvent {
 		} else {
 			event.getBot().sendMessage(event.getUser().getNick(), response);
 		}
+
+		setExecuted(markAsExecuted);
 	}
 }

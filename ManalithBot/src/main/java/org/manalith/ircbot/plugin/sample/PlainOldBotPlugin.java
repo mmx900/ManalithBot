@@ -42,15 +42,8 @@ public class PlainOldBotPlugin extends AbstractBotPlugin {
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		onMessage(event, event.getChannel().getName());
-	}
-
-	protected void onMessage(MessageEvent event, String target) {
-		String message = event.getMessage();
-
-		if (message.equals("!hello")) {
+		if (event.getMessage().equals("!hello")) {
 			event.respond("Hello World!");
-			event.setExecuted(true);
 		}
 	}
 }

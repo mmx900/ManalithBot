@@ -68,8 +68,6 @@ public class PingPlugin extends AbstractBotPlugin {
 				event.respond(String.format("[Ping] 네트웍 오류가 발생했습니다.(%s)",
 						e.getMessage()));
 			}
-
-			event.setExecuted(true);
 		}
 	}
 }
