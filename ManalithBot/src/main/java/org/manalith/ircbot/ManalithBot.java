@@ -102,6 +102,11 @@ public class ManalithBot extends PircBotX {
 
 	public void sendRawLineSplit(String prefix, String message, String suffix) {
 		// Make sure suffix is valid
+		if (this.getEncoding().toString() != "UTF-8") {
+			super.sendRawLineSplit(prefix, message, suffix);
+			return;
+		}
+
 		if (suffix == null)
 			suffix = "";
 
