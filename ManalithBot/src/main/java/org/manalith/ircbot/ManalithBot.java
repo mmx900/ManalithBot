@@ -58,8 +58,8 @@ public class ManalithBot extends PircBotX {
 	}
 
 	public static ManalithBot getInstance() {
-		return AppContextUtils.getApplicationContext()
-				.getBean(ManalithBot.class);
+		return AppContextUtils.getApplicationContext().getBean(
+				ManalithBot.class);
 	}
 
 	/**
@@ -112,8 +112,8 @@ public class ManalithBot extends PircBotX {
 
 		super.sendMessage(target, message);
 
-		if (logger.isTraceEnabled())
-			logger.trace(String.format("MESSAGE(LOCAL) : %s / %s", target,
+		if (logger.isInfoEnabled())
+			logger.info(String.format("MESSAGE(LOCAL) : %s / %s", target,
 					message));
 
 		if (needRelay && RelayPlugin.RELAY_BOT != null)
