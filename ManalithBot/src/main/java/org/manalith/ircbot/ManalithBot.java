@@ -192,11 +192,6 @@ public class ManalithBot extends PircBotX {
 	}
 
 	public void sendMessage(String target, String message, boolean needRelay) {
-		// //너무 긴 문자는 자른다.
-		// if(m.getMessage().length() > 180)
-		// m.setMessage(m.getMessage().substring(0, 179));
-		// sendMessage(m.getChannel(), m.getSender() + ", " + m.getMessage());
-
 		super.sendMessage(target, message);
 
 		if (logger.isInfoEnabled())
