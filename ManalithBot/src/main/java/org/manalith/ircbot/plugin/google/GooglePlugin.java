@@ -148,9 +148,9 @@ public class GooglePlugin extends AbstractBotPlugin {
 				// HTML 코드 처리
 				return result.content.replace("<b>", HIGH_INTENSITY)
 						.replace("</b>", LOW_INTENSITY).replace("&quot;", "\"")
-						.replace("&amp;", "&").replace("&#39;", "'")
-						.replace("&gt;", ">").replace("&lt;", "<")
-						+ " : " + result.url;
+						.replace("&#39;", "'").replace("&gt;", ">")
+						.replace("&lt;", "<").replace("&amp;", "&")
+						+ " : " + result.unescapedUrl;
 			}
 		} catch (IOException e) {
 			logger.warn(e);
