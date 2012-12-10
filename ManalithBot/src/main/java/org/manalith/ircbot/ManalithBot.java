@@ -156,10 +156,10 @@ public class ManalithBot extends PircBotX {
 
 				val = (byte) (messageByteArray[endPoint] & 0xC0);
 
-				if (val == 0x80) {
+				if (val == (byte) 0x80) {
 					// upper ASCII area
 					endPoint--;
-				} else if (val == 0x40 || val == 0x0) {
+				} else if (val == (byte) 0x40 || val == 0x0) {
 					// within ASCII area
 					break;
 				} else {
