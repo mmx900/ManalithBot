@@ -26,6 +26,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.manalith.ircbot.util.AppContextUtils;
+import org.manalith.ircbot.util.UrlUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -46,6 +47,9 @@ public class BotMain {
 		CommandLine cmd = parser.parse(options, args);
 
 		String configFile = cmd.getOptionValue("c", "config.xml");
+
+		// SSL/HTTPS 설정
+		UrlUtils.setTrustAllHosts();
 
 		// 설정 초기화
 		ApplicationContext context = new FileSystemXmlApplicationContext(
