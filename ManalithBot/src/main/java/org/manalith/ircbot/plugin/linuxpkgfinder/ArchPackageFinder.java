@@ -138,24 +138,14 @@ public class ArchPackageFinder extends PackageFinder {
 			boolean firstrow = false;
 
 			while (e.hasNext()) {
-				if (!firstrow) {
-					firstrow = true;
-					e.next();
-					continue;
-				}
 				Elements ee = e.next().select("td");
-				if (ee.get(1).select("span>a>span").get(0).text().split("\\s")[0]
-						.equals(arg)) {
-					String[] namenver = ee.get(1).select("span>a>span").get(0)
-							.text().split("\\s");
+				if (ee.get(1).select("td").get(0).text().equals(arg)) {
 					if (!infostr.equals(""))
 						infostr += " | ";
-					infostr += "[AUR-"
-							+ ee.get(0).select("span>span").get(0).text()
-							+ "] ";
-					infostr += namenver[0] + "  " + namenver[1];
-					infostr += " : "
-							+ ee.get(3).select("span>span").get(0).text();
+					infostr += "[AUR-" + ee.get(0).text() + "] ";
+					infostr += ee.get(1).select("a").text() + "  "
+							+ ee.get(2).text();
+					infostr += " : " + ee.get(4).text();
 					break;
 				}
 			}
