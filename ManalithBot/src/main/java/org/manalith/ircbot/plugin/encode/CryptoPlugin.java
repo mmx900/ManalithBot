@@ -1,6 +1,6 @@
 package org.manalith.ircbot.plugin.encode;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -30,12 +30,8 @@ public class CryptoPlugin extends AbstractBotPlugin {
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
 			return Hex.encodeHexString(messageDigest.digest(input
-					.getBytes("UTF-8")));
+					.getBytes(Charset.forName("UTF-8"))));
 		} catch (NoSuchAlgorithmException e) {
-			// impossible
-			e.printStackTrace();
-			return null;
-		} catch (UnsupportedEncodingException e) {
 			// impossible
 			e.printStackTrace();
 			return null;
@@ -49,12 +45,8 @@ public class CryptoPlugin extends AbstractBotPlugin {
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			return Hex.encodeHexString(messageDigest.digest(input
-					.getBytes("UTF-8")));
+					.getBytes(Charset.forName("UTF-8"))));
 		} catch (NoSuchAlgorithmException e) {
-			// impossible
-			e.printStackTrace();
-			return null;
-		} catch (UnsupportedEncodingException e) {
 			// impossible
 			e.printStackTrace();
 			return null;
