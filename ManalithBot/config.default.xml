@@ -57,6 +57,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 				<ref bean="cryptoPlugin" />
 				<ref bean="onOffMixPlugin" />
 				<ref bean="timePlugin" />
+				<!-- <ref bean="replPlugin" /> -->
 				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
 				<ref bean="aliasPlugin" />
 			</list>
@@ -145,6 +146,13 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	<bean id="onOffMixPlugin" class="org.manalith.ircbot.plugin.onoffmix.OnOffMixPlugin">
 		<property name="apiKey" value="YOUR_ONOFFMIX_API_KEY" />
 	</bean>
+	
+	<!-- Repl 플러그인 설정 -->
+	<!--
+	<bean id="replPlugin" class="org.manalith.ircbot.plugin.repl.ReplPlugin">
+		<property name="serverAddress" value="YOUR_SERVER_ADDRESS" />
+	</bean>
+	 -->
 
 	<!-- 인증 관리 -->
 	<!-- 
