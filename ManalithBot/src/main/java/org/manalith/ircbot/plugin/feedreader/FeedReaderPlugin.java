@@ -120,8 +120,10 @@ public class FeedReaderPlugin extends AbstractBotPlugin {
 				SyndEntry entry = getNewestEntry(f.getUrl());
 				if (!entry.getTitle().equals(f.getLatestContents())) {
 					// TODO 단축 주소로 변환
-					ManalithBot.getInstance().sendMessage(f.getChannel(),
-							entry.getTitle() + " - " + entry.getLink());
+					ManalithBot.getInstance().sendMessage(
+							f.getChannel(),
+							"[Feed]" + entry.getTitle() + " - "
+									+ entry.getLink());
 					f.setLatestContents(entry.getTitle());
 					feedDao.update(f);
 				}
