@@ -76,7 +76,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 			Elements div = conn.get().select("#psearchres");
 
 			if (div.size() == 0) {
-				result = "결과가 없습니다";
+				result = "[Ubuntu] 결과가 없습니다";
 				return result;
 			}
 
@@ -84,7 +84,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 			int hsize = hits.size();
 
 			if (hsize == 0)
-				result = "There is no result";
+				result = "[Ubuntu] 결과가 없습니다";
 			for (int i = 0; i < hsize; i++) {
 				if (hits.get(i).text().equals("Exact hits")) {
 					hasExacthits = true;
@@ -93,7 +93,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "결과가 없습니다";
+				result = "[Ubuntu] 결과가 없습니다";
 				return result;
 			}
 

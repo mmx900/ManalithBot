@@ -71,7 +71,7 @@ public class FedoraPackageFinder extends PackageFinder {
 			Elements tables = conn.get().select("table");
 
 			if (tables.size() < 2) {
-				result = "결과가 없습니다";
+				result = "[Fedora] 결과가 없습니다";
 				return result;
 			}
 
@@ -143,7 +143,7 @@ public class FedoraPackageFinder extends PackageFinder {
 
 			// need to give result into result.
 			if (!dist.contains("Fedora")) {
-				result = "결과가 없습니다";
+				result = "[Fedora] 결과가 없습니다";
 			} else {
 				result = NamenVer + " : " + description;
 			}

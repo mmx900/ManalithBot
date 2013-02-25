@@ -46,7 +46,7 @@ public class PhPortageProvider implements GentooSearchEngineProvider {
 			if (NumberUtils.toInt(d.select("result>code").get(0).text()) == 0) {
 				if (NumberUtils.toInt(d.select("result>actualnumofres").get(0)
 						.text()) == 0)
-					result = "결과가 없습니다";
+					result = "[Gentoo] 결과가 없습니다";
 				else {
 					Element e = d.select("result>packages>pkg").get(0);
 					String pkgname = e.select("category").get(0).text() + "/"
