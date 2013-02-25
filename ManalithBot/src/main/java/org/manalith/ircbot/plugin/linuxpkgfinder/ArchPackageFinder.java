@@ -55,87 +55,110 @@ public class ArchPackageFinder extends PackageFinder {
 		return this.find(args[0]);
 	}
 
-	public String find(String arg) {
-		String result = "";
+	private String getResultFromMainPkgDB(String arg) throws IOException {
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
 		int len = arch_keywords.length;
 		int pages = 100000000;
+
+		String infostr = "";
 		String description = "";
-
 		String url = "";
-		try {
-			String infostr = "";
-			for (int i = 0; i < len; i++) {
-				for (int j = 0; j < pages; j++) {
-					url = "http://www.archlinux.org/packages/"
-							+ (new Integer(j + 1)).toString() + "/?arch="
-							+ arch_keywords[i] + "&q=" + arg;
 
-					String pageinfo = "";
-					try {
-						pageinfo = Jsoup
-								.connect(url)
-								.get()
-								.select("div#pkglist-results>div.pkglist-stats>p")
-								.get(0).text();
-					} catch (Exception e) {
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < pages; j++) {
+				url = "http://www.archlinux.org/packages/?page="
+						+ (new Integer(j + 1)).toString() + "&arch="
+						+ arch_keywords[i] + "&q=" + arg;
+
+				String pageinfo = "";
+				try {
+					pageinfo = Jsoup.connect(url).get()
+							.select("div#pkglist-results>div.pkglist-stats>p")
+							.get(0).text();
+				} catch (Exception e) {
+					pages = 1;
+				}
+
+				if (j == 0 && pages == 100000000) {
+					if (StringUtils.countMatches(pageinfo, ".") == 1)
 						pages = 1;
-					}
-
-					if (j == 0 && pages == 100000000) {
-						if (StringUtils.countMatches(pageinfo, ".") == 1)
-							pages = 1;
-						else {
-							if (pageinfo.charAt(pageinfo.length() - 1) == '.')
-								pageinfo = pageinfo.substring(0,
-										pageinfo.length() - 1);
-							String[] piarray = pageinfo.split("\\s");
-							pages = NumberUtils
-									.toInt(piarray[piarray.length - 1]);
-						}
-
-						j--;
-						continue;
-					}
-
-					Iterator<Element> e = Jsoup.connect(url).get()
-							.select("table.results>tbody>tr").iterator();
-
-					while (e.hasNext()) {
-						Elements ee = e.next().select("td");
-						if (ee.get(2).select("a").get(0).text().equals(arg)) {
-							if (!infostr.equals(""))
-								infostr += ", ";
-							infostr += "[main-" + ee.get(0).text() + "] ";
-							infostr += ee.get(2).select("a").get(0).text()
-									+ "  ";
-
-							if (ee.get(3).select("span.flagged").size() > 0)
-								infostr += ee.get(3).select("span.flagged")
-										.get(0).text();
-							else
-								infostr += ee.get(3).text();
-
-							infostr += "(" + ee.get(1).text() + ")";
-							if (description.equals(""))
-								description = ee.get(4).text();
-
-							break;
-						}
+					else {
+						if (pageinfo.charAt(pageinfo.length() - 1) == '.')
+							pageinfo = pageinfo.substring(0,
+									pageinfo.length() - 1);
+						String[] piarray = pageinfo.split("\\s");
+						pages = NumberUtils.toInt(piarray[piarray.length - 1]);
 					}
 				}
-				pages = 100000000;
+
+				Iterator<Element> e = Jsoup.connect(url).get()
+						.select("table.results>tbody>tr").iterator();
+
+				while (e.hasNext()) {
+					Elements ee = e.next().select("td");
+					if (ee.get(2).select("a").get(0).text().equals(arg)) {
+						if (!infostr.equals(""))
+							infostr += ", ";
+						infostr += "[main-" + ee.get(0).text() + "] ";
+						infostr += ee.get(2).select("a").get(0).text() + "  ";
+
+						if (ee.get(3).select("span.flagged").size() > 0)
+							infostr += ee.get(3).select("span.flagged").get(0)
+									.text();
+						else
+							infostr += ee.get(3).text();
+
+						infostr += "(" + ee.get(1).text() + ")";
+
+						if (description.equals(""))
+							description = ee.get(4).text();
+
+						break;
+					}
+				}
+			}
+			pages = 100000000;
+		}
+
+		if (!infostr.equals(""))
+			infostr += " : " + description;
+
+		return infostr;
+	}
+
+	private String getResultFromAUR(String arg) throws IOException {
+
+		String infostr = "";
+		String pageinfo = "";
+		String url = "";
+
+		int pages = 100000000;
+
+		for (int i = 0; i < pages; i++) {
+
+			url = "http://aur.archlinux.org/packages.php?K=" + arg
+					+ "&PP=50&O=" + (i * 50);
+
+			pageinfo = Jsoup.connect(url).get()
+					.select("div#pkglist-results>div.pkglist-stats>p").get(0)
+					.text();
+
+			System.out.println(pageinfo);
+
+			if (i == 0 && pages == 100000000) {
+				if (StringUtils.countMatches(pageinfo, ".") == 1)
+					pages = 1;
+				else {
+					if (pageinfo.charAt(pageinfo.length() - 1) == '.')
+						pageinfo = pageinfo.substring(0, pageinfo.length() - 1);
+					String[] piarray = pageinfo.split("\\s");
+					pages = NumberUtils.toInt(piarray[piarray.length - 1]);
+				}
 			}
 
-			if (!infostr.equals(""))
-				infostr += " : " + description;
-
-			url = "http://aur.archlinux.org/packages.php?K=" + arg;
 			Iterator<Element> e = Jsoup.connect(url).get()
 					.select("table>tbody>tr").iterator();
-
-			boolean firstrow = false;
 
 			while (e.hasNext()) {
 				Elements ee = e.next().select("td");
@@ -149,10 +172,20 @@ public class ArchPackageFinder extends PackageFinder {
 					break;
 				}
 			}
+		}
 
-			if (!infostr.equals(""))
-				result = infostr;
-			else
+		return infostr;
+	}
+
+	public String find(String arg) {
+
+		String result = "";
+
+		try {
+			result += this.getResultFromMainPkgDB(arg);
+			result += this.getResultFromAUR(arg);
+
+			if (result.equals(""))
 				result = "결과가 없습니다";
 
 		} catch (IOException e) {
