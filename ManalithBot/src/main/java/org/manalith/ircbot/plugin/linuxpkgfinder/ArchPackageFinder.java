@@ -140,11 +140,13 @@ public class ArchPackageFinder extends PackageFinder {
 			url = "http://aur.archlinux.org/packages.php?K=" + arg
 					+ "&PP=50&O=" + (i * 50);
 
-			pageinfo = Jsoup.connect(url).get()
-					.select("div#pkglist-results>div.pkglist-stats>p").get(0)
-					.text();
-
-			System.out.println(pageinfo);
+			try {
+				pageinfo = Jsoup.connect(url).get()
+						.select("div#pkglist-results>div.pkglist-stats>p")
+						.get(0).text();
+			} catch (IndexOutOfBoundsException e) {
+				return "";
+			}
 
 			if (i == 0 && pages == 100000000) {
 				if (StringUtils.countMatches(pageinfo, ".") == 1)
