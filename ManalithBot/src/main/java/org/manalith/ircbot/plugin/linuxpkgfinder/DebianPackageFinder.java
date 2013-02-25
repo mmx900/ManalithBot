@@ -98,7 +98,7 @@ public class DebianPackageFinder extends PackageFinder {
 			Document doc = conn.get();
 
 			if (doc.select("#psearchres").size() == 0) {
-				result = "결과가 없습니다";
+				result = "[Debian] 결과가 없습니다";
 				return result;
 			}
 
@@ -106,7 +106,7 @@ public class DebianPackageFinder extends PackageFinder {
 			int hsize = hits.size();
 
 			if (hsize == 0)
-				result = "결과가 없습니다";
+				result = "[Debian] 결과가 없습니다";
 			for (int i = 0; i < hsize; i++) {
 				if (hits.get(i).text().equals("Exact hits")) {
 					hasExacthits = true;
@@ -115,7 +115,7 @@ public class DebianPackageFinder extends PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "결과가 없습니다";
+				result = "[Debian] 결과가 없습니다";
 				return result;
 			}
 

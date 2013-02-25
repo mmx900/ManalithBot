@@ -186,7 +186,7 @@ public class ArchPackageFinder extends PackageFinder {
 			result += this.getResultFromAUR(arg);
 
 			if (result.equals(""))
-				result = "결과가 없습니다";
+				result = "[Arch] 결과가 없습니다";
 
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
