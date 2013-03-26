@@ -32,6 +32,7 @@ public class Configuration {
 	private String defaultChannels;
 	private boolean tryToReconnect;
 	private List<IBotPlugin> plugins;
+	private boolean autoAcceptInvite;
 
 	/**
 	 * @return the botLogin
@@ -166,5 +167,20 @@ public class Configuration {
 	 */
 	public void setPlugins(List<IBotPlugin> plugins) {
 		this.plugins = plugins;
+	}
+
+	/**
+	 * @return the autoAcceptInvite
+	 */
+	public boolean isAutoAcceptInvite() {
+		return autoAcceptInvite;
+	}
+
+	/**
+	 * @param autoAcceptInvite
+	 *            the autoAcceptInvite to set
+	 */
+	public void setAutoAcceptInvite(boolean autoAcceptInvite) {
+		this.autoAcceptInvite = autoAcceptInvite;
 	}
 }

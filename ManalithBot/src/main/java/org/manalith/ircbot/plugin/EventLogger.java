@@ -6,6 +6,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.DisconnectEvent;
+import org.pircbotx.hooks.events.InviteEvent;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -110,5 +111,11 @@ public class EventLogger extends ListenerAdapter<ManalithBot> {
 		logger.info(String.format("TOPIC : %s / %s / %s / %s / %s", event
 				.getChannel().getName(), event.getTopic(), event.getChannel()
 				.getTopicSetter(), event.getTimestamp(), event.isChanged()));
+	}
+
+	@Override
+	public void onInvite(InviteEvent<ManalithBot> event) throws Exception {
+		logger.info(String.format("INVITE : %s / %s", event.getChannel(),
+				event.getUser()));
 	}
 }

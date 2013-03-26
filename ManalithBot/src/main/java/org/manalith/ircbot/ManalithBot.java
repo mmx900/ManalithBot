@@ -114,4 +114,8 @@ public class ManalithBot extends PircBotXUtf8 {
 		if (needRelay && RelayPlugin.RELAY_BOT != null)
 			RelayPlugin.RELAY_BOT.sendMessage(target, message);
 	}
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
 }

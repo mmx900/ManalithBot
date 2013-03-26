@@ -24,6 +24,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="serverEncoding" value="UTF-8" />
 		<property name="defaultChannels" value="#CHANNEL,#CHANNEL2" />
 		<property name="tryToReconnect" value="true" />
+		<property name="autoAcceptInvite" value="false" />
 		<property name="plugins">
 			<list>
 				<!-- 사용할 플러그인 목록 -->
