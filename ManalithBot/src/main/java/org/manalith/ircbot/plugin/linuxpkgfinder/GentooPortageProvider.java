@@ -48,13 +48,13 @@ public class GentooPortageProvider implements GentooSearchEngineProvider {
 
 			int result_size = e.size();
 			if (result_size == 0) {
-				result = "There is no result";
+				result = "[Gentoo] 결과가 없습니다";
 				return result;
 			}
 
 			pkgname = e.select("div").text().split("\\s")[0];
 			if (!pkgname.split("\\/")[1].equals(arg)) {
-				result = "There is no result";
+				result = "[Gentoo] 결과가 없습니다";
 				return result;
 			}
 
@@ -67,7 +67,7 @@ public class GentooPortageProvider implements GentooSearchEngineProvider {
 			Elements ee = conn2.get().select("#ebuild_list>ul>li");
 
 			if (ee.size() == 0) {
-				result = "There is no result";
+				result = "[Gentoo] 결과가 없습니다";
 				return result;
 			}
 
