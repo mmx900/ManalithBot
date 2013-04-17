@@ -1,11 +1,14 @@
 package org.manalith.ircbot.plugin.symbol;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UnicodePlugin extends AbstractBotPlugin {
+	private static final String[] COMMANDS = { "!u", "!unicode", "!유니코드" };
 
 	@Override
 	public String getName() {
@@ -14,15 +17,18 @@ public class UnicodePlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getCommands() {
+		return StringUtils.join(COMMANDS, ",");
+	}
+
+	@Override
+	public String getHelp() {
 		return "!유니코드 [변환할 문자 혹은 코드]";
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
 		String[] segments = event.getMessageSegments();
-		if (segments.length == 2
-				&& (segments[0].equals("!유니코드") || segments[0]
-						.equals("!unicode"))) {
+		if (segments.length == 2 && ArrayUtils.contains(COMMANDS, segments[0])) {
 			String text = segments[1];
 			try {
 				if (text.startsWith("\\u") || text.startsWith("U+")) {
