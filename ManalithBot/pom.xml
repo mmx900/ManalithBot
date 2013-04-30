@@ -23,22 +23,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.beanshell</groupId>
-			<artifactId>bsh-classgen</artifactId>
-			<version>2.0b4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.beanshell</groupId>
-			<artifactId>bsh-core</artifactId>
-			<version>2.0b4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.beanshell</groupId>
-			<artifactId>bsh-reflect</artifactId>
-			<version>2.0b4</version>
+			<version>4.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -136,10 +121,23 @@
 			<version>3.2.1.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- scala support -->
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>2.10.0</version>
+		</dependency>
+		<!-- groovy support -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.gmaven.runtime</groupId>
+			<artifactId>gmaven-runtime</artifactId>
+			<version>1.5</version>
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>rome</groupId>
@@ -189,7 +187,7 @@
 			<plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>scala-maven-plugin</artifactId>
-				<version>3.1.3</version>
+				<version>3.1.4</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -200,6 +198,29 @@
 							<includes>
 								<include>**/*.scala</include>
 							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.gmaven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<fileset>
+									<directory>${pom.basedir}/src/main/java</directory>
+									<includes>
+										<include>**/*.groovy</include>
+									</includes>
+								</fileset>
+							</sources>
 						</configuration>
 					</execution>
 				</executions>
@@ -237,7 +258,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.1</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>

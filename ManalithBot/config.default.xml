@@ -2,11 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:task="http://www.springframework.org/schema/task" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:lang="http://www.springframework.org/schema/lang"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd">
 	<!-- 데이터베이스 설정 -->
 	<import resource="datasource.xml" />
 
@@ -64,6 +66,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 			</list>
 		</property>
 	</bean>
+
+	<!-- dropins 스크립트 플러그인들의 자동 재시작 시간  -->
+	<lang:defaults refresh-check-delay="5000" />
+	
+	<lang:groovy id="helloGroovyPlugin"
+		script-source="dropins/HelloGroovyPlugin.groovy" />
 
 	<!-- 릴레이 플러그인 설정 시작 -->
 	<bean id="relayConfiguration"
