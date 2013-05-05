@@ -1,18 +1,11 @@
 package org.manalith.ircbot.plugin.urlshortener;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.stereotype.Component;
-
-import com.google.gson.Gson;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class GooGlProvider implements UrlShortenerProvider {
@@ -21,30 +14,20 @@ public class GooGlProvider implements UrlShortenerProvider {
 
 	@Override
 	public String shorten(String url) {
-		ShortenApiRequest requestModel = new ShortenApiRequest();
-		requestModel.setLongUrl(url);
+		ShortenApiRequest req = new ShortenApiRequest();
+		req.longUrl = url;
 
-		HttpClient client = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(
-				String.format(
-						"https://www.googleapis.com/urlshortener/v1/url?key=%s",
-						apiKey));
+		RestTemplate rest = new RestTemplate();
+		rest.getMessageConverters().add(
+				new MappingJacksonHttpMessageConverter());
 
 		try {
-			StringEntity stringEntity = new StringEntity(
-					new Gson().toJson(requestModel));
-			stringEntity.setContentType("application/json");
-			httpPost.setEntity(stringEntity);
+			ShortenApiResponse data = rest.postForObject(
+					"https://www.googleapis.com/urlshortener/v1/url?key={key}",
+					req, ShortenApiResponse.class, apiKey);
 
-			HttpResponse response = client.execute(httpPost);
-
-			Reader reader = new InputStreamReader(response.getEntity()
-					.getContent(), "UTF-8");
-			ShortenApiResponse data = new Gson().fromJson(reader,
-					ShortenApiResponse.class);
-
-			return data.getId();
-		} catch (IOException e) {
+			return data.id;
+		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
 		}
 
@@ -66,16 +49,8 @@ public class GooGlProvider implements UrlShortenerProvider {
 	 * @author setzer
 	 * 
 	 */
-	public class ShortenApiRequest {
-		private String longUrl;
-
-		public String getLongUrl() {
-			return longUrl;
-		}
-
-		public void setLongUrl(String longUrl) {
-			this.longUrl = longUrl;
-		}
+	public static class ShortenApiRequest {
+		public String longUrl;
 	}
 
 	/**
@@ -85,34 +60,11 @@ public class GooGlProvider implements UrlShortenerProvider {
 	 * @author setzer
 	 * 
 	 */
-	public class ShortenApiResponse {
-		private String kind;
-		private String id;
-		private String longUrl;
-
-		public String getKind() {
-			return kind;
-		}
-
-		public void setKind(String kind) {
-			this.kind = kind;
-		}
-
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public String getLongUrl() {
-			return longUrl;
-		}
-
-		public void setLongUrl(String longUrl) {
-			this.longUrl = longUrl;
-		}
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	public static class ShortenApiResponse {
+		public String kind;
+		public String id;
+		public String longUrl;
 	}
 
 }

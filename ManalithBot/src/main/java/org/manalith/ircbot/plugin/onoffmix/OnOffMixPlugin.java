@@ -1,21 +1,18 @@
 package org.manalith.ircbot.plugin.onoffmix;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.stereotype.Component;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 /**
@@ -72,20 +69,22 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 	 * @return
 	 */
 	private String getEventInfo(int eventIdx) {
-		try (InputStream input = new URL(String.format(
-				"http://api.onoffmix.com/event/%d?apikey=%s&output=JSON",
-				eventIdx, apiKey)).openStream()) {
-			Reader reader = new InputStreamReader(input, "UTF-8");
-			OnOffMixEventInfoResponse res = new Gson().fromJson(reader,
-					OnOffMixEventInfoResponse.class);
+		RestTemplate rest = new RestTemplate();
+		rest.getMessageConverters().add(
+				new MappingJacksonHttpMessageConverter());
 
+		try {
+			OnOffMixEventInfoResponse res = rest
+					.getForObject(
+							"http://api.onoffmix.com/event/{eventIdx}?apikey={apiKey}&output=JSON",
+							OnOffMixEventInfoResponse.class, eventIdx, apiKey);
 			if (StringUtils.isNotEmpty(res.error.message)) {
 				throw new IllegalArgumentException(res.error.message);
 			} else {
 				return String.format("%s : %s", res.event.title,
 						res.event.abstractText);
 			}
-		} catch (IOException e) {
+		} catch (RestClientException e) {
 			logger.warn(e.getMessage(), e);
 		}
 
@@ -98,13 +97,15 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 	 * @return
 	 */
 	private String getEventUserInfo(int eventIdx) {
-		try (InputStream input = new URL(
-				String.format(
-						"http://api.onoffmix.com/rsvp/event?apikey=%s&eventIdx=%d&output=JSON",
-						apiKey, eventIdx)).openStream()) {
-			Reader reader = new InputStreamReader(input, "UTF-8");
-			OnOffMixUserInfoResponse res = new Gson().fromJson(reader,
-					OnOffMixUserInfoResponse.class);
+		RestTemplate rest = new RestTemplate();
+		rest.getMessageConverters().add(
+				new MappingJacksonHttpMessageConverter());
+
+		try {
+			OnOffMixUserInfoResponse res = rest
+					.getForObject(
+							"http://api.onoffmix.com/rsvp/event?apikey={apiKey}&eventIdx={eventIdx}&output=JSON",
+							OnOffMixUserInfoResponse.class, apiKey, eventIdx);
 
 			if (StringUtils.isNotEmpty(res.error.message)) {
 				throw new IllegalArgumentException(res.error.message);
@@ -113,36 +114,41 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 						res.groupList.get(0).authList.size(),
 						res.groupList.get(0).standbyList.size());
 			}
-		} catch (IOException e) {
+		} catch (RestClientException e) {
 			logger.warn(e.getMessage(), e);
 		}
 
 		return null;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixEventInfoResponse {
 		public OnOffMixError error;
 		public OnOffMixEvent event;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixEvent {
 		public int idx;
 		public String title;
 
-		@SerializedName("abstract")
+		@JsonProperty("abstract")
 		public String abstractText;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixUserInfoResponse {
 		public OnOffMixError error;
 		public List<OnOffMixGroup> groupList;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixError {
 		public int code;
 		public String message;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixGroup {
 		public int idx;
 		public String name;
@@ -150,6 +156,7 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 		public List<OnOffMixMember> standbyList;
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OnOffMixMember {
 		public String name;
 		public String email;

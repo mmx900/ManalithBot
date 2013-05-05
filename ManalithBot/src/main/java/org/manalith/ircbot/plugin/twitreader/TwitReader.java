@@ -18,7 +18,6 @@
  */
 package org.manalith.ircbot.plugin.twitreader;
 
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -31,9 +30,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.util.MessageUtils;
-
-import com.google.gson.reflect.TypeToken;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 public class TwitReader {
 	private Logger logger = Logger.getLogger(getClass());
@@ -71,10 +71,13 @@ public class TwitReader {
 		}
 
 		String result = null;
+		RestTemplate rest = new RestTemplate();
+		rest.getMessageConverters().add(
+				new MappingJacksonHttpMessageConverter());
 
 		switch (type) {
 		case TwitURL: {
-			Tweet tweet = MessageUtils.loadFromJson(uri, Tweet.class);
+			Tweet tweet = rest.getForObject(uri, Tweet.class);
 
 			String body = tweet.text.trim().replaceAll("\\n", "")
 					.replaceAll("(\\s){2,}", " ");
@@ -83,10 +86,9 @@ public class TwitReader {
 		}
 			break;
 		case UserURL:
-			Type listType = new TypeToken<List<Tweet>>() {
-			}.getType();
-
-			List<Tweet> tweets = MessageUtils.loadFromJson(uri, listType);
+			List<Tweet> tweets = rest.exchange(uri, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<Tweet>>() {
+					}).getBody();
 			Tweet tweet = tweets.get(0);
 
 			if (tweet.id == 0) {
