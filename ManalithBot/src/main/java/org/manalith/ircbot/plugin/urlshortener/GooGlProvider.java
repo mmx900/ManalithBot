@@ -1,11 +1,12 @@
 package org.manalith.ircbot.plugin.urlshortener;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class GooGlProvider implements UrlShortenerProvider {
@@ -19,7 +20,7 @@ public class GooGlProvider implements UrlShortenerProvider {
 
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(
-				new MappingJacksonHttpMessageConverter());
+				new MappingJackson2HttpMessageConverter());
 
 		try {
 			ShortenApiResponse data = rest.postForObject(

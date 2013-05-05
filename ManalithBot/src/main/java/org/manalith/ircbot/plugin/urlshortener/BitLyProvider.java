@@ -4,11 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class BitLyProvider implements UrlShortenerProvider {
@@ -19,7 +20,7 @@ public class BitLyProvider implements UrlShortenerProvider {
 	public String shorten(String url) {
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(
-				new MappingJacksonHttpMessageConverter());
+				new MappingJackson2HttpMessageConverter());
 
 		try {
 			ShortenApiResponse data = rest

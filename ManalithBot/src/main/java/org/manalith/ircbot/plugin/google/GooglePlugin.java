@@ -31,15 +31,16 @@ import java.util.Collections;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class GooglePlugin extends AbstractBotPlugin {
@@ -129,7 +130,7 @@ public class GooglePlugin extends AbstractBotPlugin {
 					+ "&key=" + apiKey //
 					+ "&userip=" + InetAddress.getLocalHost().getHostAddress();
 
-			MappingJacksonHttpMessageConverter conv = new MappingJacksonHttpMessageConverter();
+			MappingJackson2HttpMessageConverter conv = new MappingJackson2HttpMessageConverter();
 			conv.setSupportedMediaTypes(Collections
 					.singletonList(new MediaType("text", "javascript", Charset
 							.forName("UTF-8"))));

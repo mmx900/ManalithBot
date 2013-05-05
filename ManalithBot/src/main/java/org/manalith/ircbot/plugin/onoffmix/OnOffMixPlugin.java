@@ -5,14 +5,15 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component
 /**
@@ -71,7 +72,7 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 	private String getEventInfo(int eventIdx) {
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(
-				new MappingJacksonHttpMessageConverter());
+				new MappingJackson2HttpMessageConverter());
 
 		try {
 			OnOffMixEventInfoResponse res = rest
@@ -99,7 +100,7 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 	private String getEventUserInfo(int eventIdx) {
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(
-				new MappingJacksonHttpMessageConverter());
+				new MappingJackson2HttpMessageConverter());
 
 		try {
 			OnOffMixUserInfoResponse res = rest

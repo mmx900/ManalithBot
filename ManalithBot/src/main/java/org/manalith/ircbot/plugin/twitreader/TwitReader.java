@@ -32,7 +32,7 @@ import org.apache.http.client.utils.URIUtils;
 import org.apache.log4j.Logger;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 public class TwitReader {
@@ -73,7 +73,7 @@ public class TwitReader {
 		String result = null;
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(
-				new MappingJacksonHttpMessageConverter());
+				new MappingJackson2HttpMessageConverter());
 
 		switch (type) {
 		case TwitURL: {
