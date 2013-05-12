@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -63,8 +63,9 @@ public class TwitReader {
 		String[] PathnQuery = getJSONPathNQuery(twitterurl, type);
 		URI uri;
 		try {
-			uri = URIUtils.createURI("https", "api.twitter.com", -1,
-					PathnQuery[0], PathnQuery[1], null);
+			uri = new URIBuilder().setScheme("https")
+					.setHost("api.twitter.com").setPath(PathnQuery[0])
+					.setQuery(PathnQuery[1]).build();
 		} catch (URISyntaxException e) {
 			logger.error(e);
 			return null;
@@ -131,12 +132,12 @@ public class TwitReader {
 		switch (type) {
 		case TwitURL:
 			String twit_id = url[url.length - 1];
-			json_requrl[0] = "1/statuses/show.json";
+			json_requrl[0] = "/1/statuses/show.json";
 			json_requrl[1] = "id=" + twit_id + "&include_entities=false";
 			break;
 		case UserURL:
 			String scrname = url[url.length - 1];
-			json_requrl[0] = "1/statuses/user_timeline.json";
+			json_requrl[0] = "/1/statuses/user_timeline.json";
 			json_requrl[1] = "include_entities=false&include_rts=true&screen_name="
 					+ scrname + "&count=1";
 			break;
