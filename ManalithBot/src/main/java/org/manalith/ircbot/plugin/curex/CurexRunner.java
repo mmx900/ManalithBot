@@ -19,10 +19,11 @@
 package org.manalith.ircbot.plugin.curex;
 
 import java.io.File;
+import java.util.Iterator;
 
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.common.PropertyManager;
 
 public class CurexRunner {
 
@@ -64,11 +65,10 @@ public class CurexRunner {
 		if (ArrayUtils.isEmpty(arguments)) {
 			String[] default_currency = null;
 
-			PropertyManager prop = new PropertyManager(dataPath,
-					"customsetlist.prop");
-			prop.loadProperties();
+			PropertiesConfiguration prop = new PropertiesConfiguration(dataPath
+					+ "customsetlist.prop");
 
-			String[] userlist = prop.getKeyList();
+			Iterator<String> userlist = prop.getKeys();
 			if (userlist == null) {
 				default_currency = new String[4];
 				default_currency[0] = "USD";
@@ -76,10 +76,10 @@ public class CurexRunner {
 				default_currency[2] = "JPY";
 				default_currency[3] = "CNY";
 			} else {
-				int existidx = StringUtils.indexOfAny(userNick, userlist);
-				if (existidx != -1) {
-					default_currency = prop.getValue(userlist[existidx]).split(
-							"\\,");
+				String value = prop.getString(userNick);
+
+				if (!StringUtils.isEmpty(value)) {
+					default_currency = value.split("\\,");
 				} else {
 					default_currency = new String[4];
 					default_currency[0] = "USD";
@@ -102,7 +102,8 @@ public class CurexRunner {
 					result += info.commandInterpreter();
 			}
 		} else {
-			cmd = CurexMessageTokenAnalyzer.convertToCLICommandString(arguments);
+			cmd = CurexMessageTokenAnalyzer
+					.convertToCLICommandString(arguments);
 			info = new CurexInfoProvider(dataPath, cmd);
 
 			result = info.commandInterpreter();

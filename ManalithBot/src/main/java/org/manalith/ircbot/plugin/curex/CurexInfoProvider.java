@@ -29,8 +29,9 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.manalith.ircbot.common.PropertyManager;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.curex.exceptions.InvalidArgumentException;
 
@@ -482,7 +483,7 @@ public class CurexInfoProvider {
 	 * @throws ClassNotFoundException
 	 */
 	public String commandInterpreter() throws EmptyTokenStreamException,
-			InvalidArgumentException, IOException, SQLException,
+			InvalidArgumentException, ConfigurationException, SQLException,
 			ParseException, ClassNotFoundException {
 		String result = "";
 		TokenSubtype st;
@@ -612,17 +613,16 @@ public class CurexInfoProvider {
 		return result;
 	}
 
-	private String showLatestRound() throws IOException {
+	private String showLatestRound() throws ConfigurationException {
 		StringBuilder result = new StringBuilder();
 		String[] month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 				"Aug", "Sep", "Oct", "Nov", "Dec" };
 
-		PropertyManager pm = new PropertyManager(this.getPath(),
-				"LatestUpdatedDatetime.prop");
-		pm.loadProperties();
+		PropertiesConfiguration pm = new PropertiesConfiguration(this.getPath()
+				+ "LatestUpdatedDatetime.prop");
 
-		String dt = pm.getValue("date");
-		String roundstr = pm.getValue("round");
+		String dt = pm.getString("date");
+		String roundstr = pm.getString("round");
 
 		String[] datetime = dt.split("\\s");
 		String[] date = datetime[0].split("\\.");
