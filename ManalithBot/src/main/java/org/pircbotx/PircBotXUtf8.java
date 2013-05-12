@@ -3,6 +3,9 @@ package org.pircbotx;
 public class PircBotXUtf8 extends PircBotX {
 	public void sendRawLineSplit(String prefix, String message, String suffix) {
 		// Make sure suffix is valid
+		if (message == null)
+			return;
+
 		if (this.getEncoding().toString() != "UTF-8") {
 			super.sendRawLineSplit(prefix, message, suffix);
 			return;
