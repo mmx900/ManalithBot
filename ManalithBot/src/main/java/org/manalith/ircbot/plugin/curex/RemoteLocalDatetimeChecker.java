@@ -18,36 +18,44 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-
-import org.manalith.ircbot.common.PropertyManager;
+import org.jsoup.select.Elements;
 import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
 public class RemoteLocalDatetimeChecker {
 
 	private String LocalPath;
 	private String LocalFilename;
+	private SimpleDateFormat sdf;
 
 	public RemoteLocalDatetimeChecker() {
-		this.setLocalPath("");
-		this.setLocalFilename("");
+		this("", "");
 	}
 
 	public RemoteLocalDatetimeChecker(String newLocalFilename) {
-		this.setLocalPath("");
-		this.setLocalFilename(newLocalFilename);
+		this("", newLocalFilename);
 	}
 
 	public RemoteLocalDatetimeChecker(String newLocalPath,
 			String newLocalFilename) {
 		this.setLocalPath(newLocalPath);
 		this.setLocalFilename(newLocalFilename);
+		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREAN);
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 	}
 
 	public void setLocalPath(String newLocalPath) {
@@ -67,92 +75,62 @@ public class RemoteLocalDatetimeChecker {
 	}
 
 	public DateTimeRound checkLatestUpdatedLocalDateandTime()
-			throws IOException, FileDoesntSpecifiedException {
+			throws ConfigurationException, FileDoesntSpecifiedException,
+			ParseException {
 		DateTimeRound result = new DateTimeRound();
+		GregorianCalendar tCalendar = new GregorianCalendar();
+		tCalendar.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
 		if (this.getLocalFilename().equals(""))
 			throw new FileDoesntSpecifiedException();
 
-		PropertyManager prop = new PropertyManager(this.getLocalPath(),
-				this.getLocalFilename());
+		PropertiesConfiguration prop = new PropertiesConfiguration(
+				this.getLocalPath() + this.getLocalFilename());
 
-		prop.loadProperties();
-
-		if (prop.getValue("date") == null || prop.getValue("date").equals("")) {
-			GregorianCalendar tCalendar = new GregorianCalendar();
+		if (StringUtils.isEmpty(prop.getString("date"))) {
 			tCalendar.setTime(new Date(1L));
 			result.setCalendar(tCalendar);
 		} else {
-			String[] dateandtime = ((String) prop.getValue("date"))
-					.split("\\s");
+			System.out.println((String) prop.getString("date"));
+			Date localDate = sdf.parse((String) prop.getString("date"));
 
-			String[] YYMMDD = dateandtime[0].split("\\.");
-			String[] hhmm = dateandtime[1].split("\\:");
-
-			int year = Integer.parseInt(YYMMDD[0]);
-			int month = Integer.parseInt(YYMMDD[1]);
-			int date = Integer.parseInt(YYMMDD[2]);
-
-			int hour = Integer.parseInt(hhmm[0]);
-			int minute = Integer.parseInt(hhmm[1]);
-
-			GregorianCalendar tCalendar = new GregorianCalendar(year,
-					month - 1, date, hour, minute);
-			tCalendar.set(GregorianCalendar.ZONE_OFFSET, 32400000);
-			tCalendar.set(GregorianCalendar.ERA, 1);
-			tCalendar.set(GregorianCalendar.DST_OFFSET, 0);
-			tCalendar.set(GregorianCalendar.MILLISECOND, 1);
+			tCalendar.setTime(localDate);
 
 			result.setCalendar(tCalendar);
 		}
 
-		if (prop.getValue("round") == null) {
+		if (StringUtils.isEmpty(prop.getString("round"))) {
 			result.setRoundVal(0);
 		} else {
-			String temp = (String) prop.getValue("round");
-			result.setRoundVal(Integer.parseInt(temp));
+			result.setRoundVal(prop.getInt("round"));
 		}
 
 		return result;
 	}
 
 	public DateTimeRound checkLatestNoticeDateandTime()
-			throws FileNotFoundException, IOException // ,
-														// EmptyTokenStreamException
-	{
+			throws FileNotFoundException, IOException, ParseException {
+
 		DateTimeRound result = new DateTimeRound();
 
-		String url = "http://info.finance.naver.com/marketindex/exchangeMain.nhn";
-		Element exchange_info = Jsoup.connect(url).get()
-				.select("div.exchange_info").get(0);
+		String url = "http://info.finance.naver.com/marketindex/";
+		Connection conn = Jsoup
+				.connect(url)
+				.userAgent(
+						"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31");
+		Elements exchange_info = conn.get().select("div.graph_info");
 
-		String dateStr = exchange_info.select("span.date").get(0).text();
+		System.out.println(exchange_info.select("span.time").get(0).text());
+		Date remoteDate = sdf.parse(exchange_info.select("span.time").get(0)
+				.text(), new ParsePosition(0));
 
-		String[] datetime = dateStr.split("\\s");
-		String[] date = datetime[0].split("\\.");
-		String[] time = datetime[1].split("\\:");
-
-		int year = Integer.parseInt(date[0]);
-		int month = Integer.parseInt(date[1]);
-		int day = Integer.parseInt(date[2]);
-
-		int hour = Integer.parseInt(time[0]);
-		int minute = Integer.parseInt(time[1]);
-
-		GregorianCalendar tCalendar = new GregorianCalendar(year, month - 1,
-				day, hour, minute);
-		tCalendar.set(GregorianCalendar.ZONE_OFFSET, 32400000);
-		tCalendar.set(GregorianCalendar.ERA, 1);
-		tCalendar.set(GregorianCalendar.DST_OFFSET, 0);
-		tCalendar.set(GregorianCalendar.MILLISECOND, 1);
+		GregorianCalendar tCalendar = new GregorianCalendar();
+		tCalendar.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+		tCalendar.setTime(remoteDate);
 
 		result.setCalendar(tCalendar);
 
-		String roundStr = exchange_info.select("span.round").get(0)
-				.select("em").text();
-		result.setRoundVal(Integer.parseInt(roundStr));
-
-		return result;
+		result.setRoundVal(NumberUtils.toInt(exchange_info.select("span.num")
+				.get(0).text()));	return result;
 	}
-
 }
