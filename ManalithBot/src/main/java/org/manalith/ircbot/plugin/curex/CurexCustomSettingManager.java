@@ -19,11 +19,13 @@
 package org.manalith.ircbot.plugin.curex;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.manalith.ircbot.common.PropertyManager;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 
 public class CurexCustomSettingManager extends TokenAnalyzer {
@@ -105,28 +107,24 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 				return result;
 			}
 
-			PropertyManager customsetlist = new PropertyManager(
-					this.getLocalPath(), "customsetlist.prop");
+			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
+					this.getLocalPath() + "customsetlist.prop");
 
-			customsetlist.loadProperties();
-
-			String[] userlist = customsetlist.getKeyList();
-			if (userlist == null) {
-				;
-			} else if (this.indexOfContained(userlist, this.getUserNick()) != -1) {
+			if (!StringUtils
+					.isEmpty(customsetlist.getString(this.getUserNick()))) {
 				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
 			}
 
-			customsetlist.setKeyValue(this.getChannel().substring(1) + "."
+			customsetlist.setProperty(this.getChannel().substring(1) + "."
 					+ this.getUserNick(), this.getCurrencyArgString());
-			customsetlist.storeProperties();
+			customsetlist.save();
 
 			result += this.getChannel() + "의 " + this.getUserNick()
 					+ "님이 조회할 기본화폐 환율은 " + this.getCurrencyArgString() + "입니다.";
 
 		} catch (EmptyTokenStreamException e) {
 			result = "지정한 화폐 단위가 없습니댜";
-		} catch (IOException ioe) {
+		} catch (ConfigurationException ioe) {
 			result = ioe.getMessage();
 		}
 
@@ -137,26 +135,25 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 		String result = "";
 
 		try {
-			PropertyManager customsetlist = new PropertyManager(
-					this.getLocalPath(), "customsetlist.prop");
+			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
+					this.getLocalPath() + "customsetlist.prop");
 
-			customsetlist.loadProperties();
-
-			String[] userlist = customsetlist.getKeyList();
+			Iterator<String> userlist = customsetlist.getKeys();
 			if (userlist == null) {
 				result = "설정을 등록한 사용자가 없습니다";
 				return result;
-			} else if (this.indexOfContained(userlist, this.getUserNick()) != -1) {
-				customsetlist.removeKeyValue(this.getChannel().substring(1)
+			} else if (!StringUtils.isEmpty(customsetlist.getString(this
+					.getUserNick()))) {
+				customsetlist.clearProperty(this.getChannel().substring(1)
 						+ "." + this.getUserNick());
-				customsetlist.storeProperties();
+				customsetlist.save();
 				result = this.getChannel() + "의 " + this.getUserNick()
 						+ "님에 대한 설정을 지웠습니다.";
 			} else {
 				result = this.getChannel() + "의 " + this.getUserNick()
 						+ "님은 설정을 등록하지 않았습니다.";
 			}
-		} catch (IOException e) {
+		} catch (ConfigurationException e) {
 			result = e.getMessage();
 		}
 
@@ -223,20 +220,6 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 			if (t.getTokenType() == TokenType.Unknown
 					|| t.getTokenSubtype() == TokenSubtype.Unknown)
 				return i; // i th element has problem
-		}
-
-		return result;
-	}
-
-	private int indexOfContained(String[] strarray, String value) {
-		int result = -1;
-		int length = strarray.length;
-
-		for (int i = 0; i < length; i++) {
-			if (strarray[i].contains(value)) {
-				result = i;
-				break;
-			}
 		}
 
 		return result;

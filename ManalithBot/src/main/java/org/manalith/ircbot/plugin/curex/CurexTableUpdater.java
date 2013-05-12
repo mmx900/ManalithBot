@@ -20,9 +20,12 @@ package org.manalith.ircbot.plugin.curex;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.GregorianCalendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
-import org.manalith.ircbot.common.PropertyManager;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
 public class CurexTableUpdater {
@@ -34,12 +37,10 @@ public class CurexTableUpdater {
 	private DateTimeRound local;
 	private DateTimeRound remote;
 
+	private SimpleDateFormat sdf;
+
 	public CurexTableUpdater() {
-		this.setLocalPath("");
-		propFileName = "LatestUpdatedDatetime.prop";
-		sqlman = null;
-		local = null;
-		remote = null;
+		this("");
 	}
 
 	public CurexTableUpdater(String newLocalPath) {
@@ -48,6 +49,7 @@ public class CurexTableUpdater {
 		sqlman = null;
 		local = null;
 		remote = null;
+		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREAN);
 	}
 
 	private void setLocalPath(String newLocalPath) {
@@ -67,7 +69,8 @@ public class CurexTableUpdater {
 	}
 
 	public boolean checkLocalLastRoundExpired()
-			throws FileDoesntSpecifiedException, IOException {
+			throws FileDoesntSpecifiedException, ConfigurationException,
+			ParseException, IOException {
 		RemoteLocalDatetimeChecker check = new RemoteLocalDatetimeChecker(
 				this.getLocalPath(), propFileName);
 		local = check.checkLatestUpdatedLocalDateandTime();
@@ -76,35 +79,21 @@ public class CurexTableUpdater {
 		return (remote.compareTo(local) > 0);
 	}
 
-	public void updateLastRound() throws IOException {
+	public void updateLastRound() throws ConfigurationException {
 		// set properties using the value.
-		PropertyManager pm = new PropertyManager(this.getLocalPath(),
-				propFileName);
-		pm.loadProperties();
+		PropertiesConfiguration pm = new PropertiesConfiguration(
+				this.getLocalPath() + propFileName);
 
-		String date = Integer.toString(remote.getCalendar().get(
-				GregorianCalendar.YEAR));
-		date += ".";
-		date += Integer.toString(remote.getCalendar().get(
-				GregorianCalendar.MONTH) + 1);
-		date += ".";
-		date += Integer.toString(remote.getCalendar().get(
-				GregorianCalendar.DAY_OF_MONTH));
-		date += " ";
-		date += Integer.toString(remote.getCalendar().get(
-				GregorianCalendar.HOUR_OF_DAY));
-		date += ":";
-		date += Integer.toString(remote.getCalendar().get(
-				GregorianCalendar.MINUTE));
-		pm.setKeyValue("date", date);
+		String date = sdf.format(remote.getCalendar().getTime());
+		pm.setProperty("date", date);
 
 		String round = Integer.toString(remote.getRoundVal());
 		while (round.length() < 3)
 			round = "0" + round;
-		pm.setKeyValue("round", round);
+		pm.setProperty("round", round);
 
 		// commit into prop file.
-		pm.storeProperties();
+		pm.save();
 	}
 
 	public void updateDataTable() throws ClassNotFoundException, SQLException {
@@ -114,7 +103,8 @@ public class CurexTableUpdater {
 	}
 
 	public void update() throws IOException, SQLException,
-			ClassNotFoundException, FileDoesntSpecifiedException {
+			ClassNotFoundException, FileDoesntSpecifiedException,
+			ParseException, ConfigurationException {
 		boolean data = this.checkLocalLastRoundExpired();
 		if (data) {
 			this.updateLastRound();
