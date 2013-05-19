@@ -19,14 +19,12 @@
 package org.manalith.ircbot.plugin.tweetreader;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TweetReaderPlugin extends AbstractBotPlugin {
-	private Logger logger = Logger.getLogger(getClass());
 
 	private TweetReader reader;
 

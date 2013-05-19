@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -131,6 +132,7 @@ public class RemoteLocalDatetimeChecker {
 		result.setCalendar(tCalendar);
 
 		result.setRoundVal(NumberUtils.toInt(exchange_info.select("span.num")
-				.get(0).text()));	return result;
+				.get(0).text()));
+		return result;
 	}
 }
