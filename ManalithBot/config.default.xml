@@ -32,7 +32,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<!-- 사용할 플러그인 목록 -->
 				<!-- <ref bean="relayPlugin" /> -->
 				<!-- <ref bean="adminPlugin" /> -->
-				<ref bean="twitReaderPlugin" />
+				<ref bean="tweetReaderPlugin" />
 				<ref bean="archPackageFinder" />
 				<ref bean="debianPackageFinder" />
 				<ref bean="fedoraPackageFinder" />
