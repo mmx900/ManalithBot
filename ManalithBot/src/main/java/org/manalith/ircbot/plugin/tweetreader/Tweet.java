@@ -1,4 +1,4 @@
-package org.manalith.ircbot.plugin.twitreader;
+package org.manalith.ircbot.plugin.tweetreader;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -16,15 +16,24 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.manalith.ircbot.plugin.twitreader;
+package org.manalith.ircbot.plugin.tweetreader;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TwitReaderPlugin extends AbstractBotPlugin {
-	private TwitReader reader = new TwitReader();
+public class TweetReaderPlugin extends AbstractBotPlugin {
+	private Logger logger = Logger.getLogger(getClass());
+
+	private TweetReader reader;
+
+	private String consumerKey;
+	private String consumerSecret;
+	private String username;
+	private String password;
 
 	public String getName() {
 		return "트윗리더";
@@ -38,17 +47,43 @@ public class TwitReaderPlugin extends AbstractBotPlugin {
 		return "";
 	}
 
+	public void setConsumerKey(String ck_) {
+		this.consumerKey = ck_;
+	}
+
+	public void setConsumerSecret(String cs_) {
+		this.consumerSecret = cs_;
+	}
+
+	public void setUsername(String un_) {
+		this.username = un_;
+	}
+
+	public void setPassword(String pw_) {
+		this.password = pw_;
+	}
+
 	@Override
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
 
 		String[] command = msg.split("\\s");
 
+		try {
+			reader = new TweetReader(this.getResourcePath(), this.consumerKey,
+					this.consumerSecret);
+		} catch (ConfigurationException e) {
+			event.respond(e.getMessage());
+			return;
+		}
+
+		reader.setTwitterUsernameOrEmail(this.username);
+		reader.setTwitterPassword(this.password);
+
 		String result = reader.read(command);
 
 		if (result != null) {
 			event.respond(result);
 		}
-
 	}
 }
