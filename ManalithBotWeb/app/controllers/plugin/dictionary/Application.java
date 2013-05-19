@@ -3,22 +3,20 @@ package controllers.plugin.dictionary;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.Query;
-
 import models.plugin.dictionary.Word;
 import name.fraser.neil.plaintext.diff_match_patch;
 import name.fraser.neil.plaintext.diff_match_patch.Diff;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.plugin.dictionary.diff;
 import views.html.plugin.dictionary.history;
 import views.html.plugin.dictionary.list;
 import views.html.plugin.dictionary.show;
-import views.html.plugin.dictionary.diff;
 
 public class Application extends Controller {
 
@@ -30,24 +28,27 @@ public class Application extends Controller {
 			words = JPA
 					.em()
 					.createQuery(
-							"SELECT DISTINCT w.word FROM Word w ORDER BY w.word")
-					.getResultList();
+							"SELECT DISTINCT w.word FROM Word w ORDER BY w.word",
+							String.class).getResultList();
 		} else {
 			words = JPA
 					.em()
 					.createQuery(
-							"SELECT DISTINCT w.word FROM Word w WHERE w.author=:author ORDER BY w.word")
-					.setParameter("author", author).getResultList();
+							"SELECT DISTINCT w.word FROM Word w WHERE w.author=:author ORDER BY w.word",
+							String.class).setParameter("author", author)
+					.getResultList();
 		}
 		return ok(list.render(words));
 	}
 
 	@Transactional(readOnly = true)
 	public static Result show(String word) {
-		Query query = JPA.em().createQuery(
-				"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC");
-		query.setParameter("word", word);
-		Word w = (Word) query.setMaxResults(1).getSingleResult();
+		Word w = JPA
+				.em()
+				.createQuery(
+						"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC",
+						Word.class).setParameter("word", word).setMaxResults(1)
+				.getSingleResult();
 
 		return ok(show.render(w));
 	}
@@ -57,8 +58,8 @@ public class Application extends Controller {
 		List<Word> words = JPA
 				.em()
 				.createQuery(
-						"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC")
-				.setParameter("word", word).getResultList();
+						"SELECT w FROM Word w WHERE w.word=:word ORDER BY w.id DESC",
+						Word.class).setParameter("word", word).getResultList();
 		return ok(history.render(words));
 	}
 
@@ -67,8 +68,8 @@ public class Application extends Controller {
 		List<Word> words = JPA
 				.em()
 				.createQuery(
-						"SELECT w FROM Word w WHERE w.word=:word AND (w.id=:revision1 OR w.id=:revision2) ORDER BY w.id DESC")
-				.setParameter("word", word)
+						"SELECT w FROM Word w WHERE w.word=:word AND (w.id=:revision1 OR w.id=:revision2) ORDER BY w.id DESC",
+						Word.class).setParameter("word", word)
 				.setParameter("revision1", revision1)
 				.setParameter("revision2", revision2).getResultList();
 
