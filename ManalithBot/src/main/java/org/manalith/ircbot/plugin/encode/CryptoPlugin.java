@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CryptoPlugin extends AbstractBotPlugin {
-
 	@Override
 	public String getName() {
 		return "인코더";
@@ -24,32 +23,20 @@ public class CryptoPlugin extends AbstractBotPlugin {
 	}
 
 	@BotCommand(value = { "!sha1" }, minimumArguments = 1)
-	public String sha1(String... inputs) {
+	public String sha1(String... inputs) throws NoSuchAlgorithmException {
 		String input = StringUtils.join(inputs, ' ');
 
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-			return Hex.encodeHexString(messageDigest.digest(input
-					.getBytes(Charset.forName("UTF-8"))));
-		} catch (NoSuchAlgorithmException e) {
-			// impossible
-			e.printStackTrace();
-			return null;
-		}
+		MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+		return Hex.encodeHexString(messageDigest.digest(input.getBytes(Charset
+				.forName("UTF-8"))));
 	}
 
 	@BotCommand(value = { "!md5" }, minimumArguments = 1)
-	public String md5(String... inputs) {
+	public String md5(String... inputs) throws NoSuchAlgorithmException {
 		String input = StringUtils.join(inputs, ' ');
 
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			return Hex.encodeHexString(messageDigest.digest(input
-					.getBytes(Charset.forName("UTF-8"))));
-		} catch (NoSuchAlgorithmException e) {
-			// impossible
-			e.printStackTrace();
-			return null;
-		}
+		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+		return Hex.encodeHexString(messageDigest.digest(input.getBytes(Charset
+				.forName("UTF-8"))));
 	}
 }

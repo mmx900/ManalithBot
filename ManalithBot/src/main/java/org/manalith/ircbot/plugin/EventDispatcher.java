@@ -64,12 +64,9 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	public void dispatchMessageEvent(
 			org.manalith.ircbot.resources.MessageEvent event) {
-		ManalithBot bot = event.getBot();
-		String channel = event.getChannel().getName();
-		String message = event.getMessage();
 
 		// 공백으로 구성된 메시지는 처리하지 않는다.
-		if (StringUtils.isBlank(message)) {
+		if (StringUtils.isBlank(event.getMessage())) {
 			return;
 		}
 
@@ -77,7 +74,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 		for (Method method : pluginManager.getCommands().keySet()) {
 			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
 
-			String[] segments = StringUtils.split(message);
+			String[] segments = event.getMessageSegments();
 
 			if (!ArrayUtils.contains(commandMeta.listeners(),
 					BotEvent.ON_MESSAGE))
@@ -90,19 +87,17 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					method);
 
 			if (segments.length - 1 < commandMeta.minimumArguments()) {
-				bot.sendMessage(
-						channel,
-						String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
-								commandMeta.minimumArguments()));
-
-				event.setExecuted(true);
+				event.respond(String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
+						commandMeta.minimumArguments()));
 			} else {
 				try {
 					String result = null;
 
-					if (method.getParameterTypes().length == 0) {
+					switch (method.getParameterTypes().length) {
+					case 0:
 						result = (String) method.invoke(plugin);
-					} else if (method.getParameterTypes().length == 1) {
+						break;
+					case 1:
 						if (method.getParameterTypes()[0] == MessageEvent.class) {
 							result = (String) method.invoke(plugin, event);
 						} else {
@@ -110,25 +105,25 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 									(Object) ArrayUtils.subarray(segments, 1,
 											segments.length));
 						}
-					} else {
+						break;
+					default:
 						result = (String) method.invoke(plugin, event,
 								ArrayUtils.subarray(segments, 1,
 										segments.length));
 					}
 
 					if (StringUtils.isNotBlank(result)) {
-						bot.sendMessage(channel, result);
+						event.getBot().sendMessage(
+								event.getChannel().getName(), result);
 					}
 
 					event.setExecuted(commandMeta.stopEvent());
 				} catch (IllegalArgumentException | IllegalAccessException
 						| InvocationTargetException e) {
-					if (logger.isDebugEnabled())
-						logger.debug(e.getMessage(), e);
+					logger.warn(e.getMessage(), e);
 
-					bot.sendMessage(channel,
-							String.format("실행중 %s 오류가 발생했습니다.", e.getMessage()));
-					event.setExecuted(true);
+					event.respond(String.format("실행중 %s 오류가 발생했습니다.",
+							e.getMessage()));
 				}
 			}
 
@@ -164,7 +159,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onUserList(UserListEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onUserList(event);
 	}
 
@@ -211,7 +205,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onNotice(NoticeEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onNotice(event);
 	}
 
@@ -267,177 +260,154 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onMode(ModeEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onMode(event);
 	}
 
 	@Override
 	public void onUserMode(UserModeEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onUserMode(event);
 	}
 
 	@Override
 	public void onOp(OpEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onOp(event);
 	}
 
 	@Override
 	public void onVoice(VoiceEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onVoice(event);
 	}
 
 	@Override
 	public void onSetChannelKey(SetChannelKeyEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetChannelKey(event);
 	}
 
 	@Override
 	public void onRemoveChannelKey(RemoveChannelKeyEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveChannelKey(event);
 	}
 
 	@Override
 	public void onSetChannelLimit(SetChannelLimitEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetChannelLimit(event);
 	}
 
 	@Override
 	public void onRemoveChannelLimit(RemoveChannelLimitEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveChannelLimit(event);
 	}
 
 	@Override
 	public void onSetChannelBan(SetChannelBanEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetChannelBan(event);
 	}
 
 	@Override
 	public void onRemoveChannelBan(RemoveChannelBanEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveChannelBan(event);
 	}
 
 	@Override
 	public void onSetTopicProtection(SetTopicProtectionEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetTopicProtection(event);
 	}
 
 	@Override
 	public void onRemoveTopicProtection(
 			RemoveTopicProtectionEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveTopicProtection(event);
 	}
 
 	@Override
 	public void onSetNoExternalMessages(
 			SetNoExternalMessagesEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetNoExternalMessages(event);
 	}
 
 	@Override
 	public void onRemoveNoExternalMessages(
 			RemoveNoExternalMessagesEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveNoExternalMessages(event);
 	}
 
 	@Override
 	public void onSetInviteOnly(SetInviteOnlyEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetInviteOnly(event);
 	}
 
 	@Override
 	public void onRemoveInviteOnly(RemoveInviteOnlyEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveInviteOnly(event);
 	}
 
 	@Override
 	public void onSetModerated(SetModeratedEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetModerated(event);
 	}
 
 	@Override
 	public void onRemoveModerated(RemoveModeratedEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveModerated(event);
 	}
 
 	@Override
 	public void onSetPrivate(SetPrivateEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetPrivate(event);
 	}
 
 	@Override
 	public void onRemovePrivate(RemovePrivateEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemovePrivate(event);
 	}
 
 	@Override
 	public void onSetSecret(SetSecretEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onSetSecret(event);
 	}
 
 	@Override
 	public void onRemoveSecret(RemoveSecretEvent<ManalithBot> event)
 			throws Exception {
-		// TODO Auto-generated method stub
 		super.onRemoveSecret(event);
 	}
 
 	@Override
 	public void onInvite(InviteEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
-		super.onInvite(event);
+		ManalithBot bot = event.getBot();
+		if (bot.getConfiguration().isAutoAcceptInvite()) {
+			bot.joinChannel(event.getChannel());
+		}
 	}
 
 	@Override
 	public void onIncomingFileTransfer(
 			IncomingFileTransferEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onIncomingFileTransfer(event);
 	}
 
 	@Override
 	public void onFileTransferFinished(
 			FileTransferFinishedEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onFileTransferFinished(event);
 	}
 
 	@Override
 	public void onIncomingChatRequest(
 			IncomingChatRequestEvent<ManalithBot> event) throws Exception {
-		// TODO Auto-generated method stub
 		super.onIncomingChatRequest(event);
 	}
 }
