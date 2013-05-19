@@ -30,11 +30,11 @@ public class KVLTableBuilder {
 	private String url;
 
 	public KVLTableBuilder() {
-		setURL("");
+		this.setURL("");
 	}
 
 	public KVLTableBuilder(String newURL) {
-		setURL(newURL);
+		this.setURL(newURL);
 	}
 
 	private void setURL(String url) {
@@ -52,7 +52,7 @@ public class KVLTableBuilder {
 		String newVerElement = null;
 
 		Iterator<Element> e = Jsoup.connect(getURL()).get()
-				.select("table.kver>tbody>tr").iterator();
+				.select("table#releases>tbody>tr").iterator();
 
 		while (e.hasNext()) {
 			Elements tds = e.next().select("td");

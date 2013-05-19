@@ -20,8 +20,7 @@ public class KVLRunner {
 	}
 
 	private void initKVLRun() throws Exception {
-		KVLTableBuilder tBuilder = new KVLTableBuilder(
-				"http://kernel.org/index.shtml"/* array */);
+		KVLTableBuilder tBuilder = new KVLTableBuilder("http://www.kernel.org"/* array */);
 		kvlTable = tBuilder.generateKernelVersionTable();
 	}
 
@@ -40,7 +39,7 @@ public class KVLRunner {
 		} else if (arg.equals("all")) {
 			result = kvlTable.getAllVersionInfo();
 		} else if (arg.equals("help")) {
-			result = "!kernel (latest[default]|all|help)";
+			result = "!커널 (latest[default]|all|help)";
 		} else {
 			result = "인식할 수 없는 옵션.";
 		}
