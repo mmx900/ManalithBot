@@ -11,8 +11,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public class ServerStatusChecker {
 
 	public ServerStatusChecker() throws SocketException {
 		datagramSocket = new DatagramSocket();
-		datagramSocket.setSoTimeout(1000);
+		datagramSocket.setSoTimeout(3000);
 	}
 
 	public ServerStatus checkStatus(String adress, int port,
@@ -70,14 +70,14 @@ public class ServerStatusChecker {
 
 		String[] split = parameters.split("\\\\");
 		Set<ETCVars> etCvars = new HashSet<ETCVars>();
-		HashMap<String,String> etCVarsHash = new HashMap<String,String>();
+		HashMap<String, String> etCVarsHash = new HashMap<String, String>();
 		ETCVars[] values = ETCVars.values();
 		etCvars.addAll(Arrays.asList(values));
 		for (int i = 1; i < split.length; i += 2) {
 
 			String varKey = split[i];
 			String varValue = split[i + 1];
-			etCVarsHash.put(varKey,varValue);
+			etCVarsHash.put(varKey, varValue);
 			// System.out.println(split[i] + " : " + split[i+1]);
 
 			Iterator<ETCVars> iterator = etCvars.iterator();
@@ -96,15 +96,18 @@ public class ServerStatusChecker {
 		String teamFlagString = etCVarsHash.get("P");
 
 		String readLine = bufferedReader.readLine();
-	
+
 		int j = 0;
 
 		while (true) {
 			// skip available slot
-			if ( teamFlagString == null ) break;
+			if (teamFlagString == null)
+				break;
 			char teamChar = teamFlagString.charAt(j);
-			if ( teamChar != '-' ) break;
-			else j++;
+			if (teamChar != '-')
+				break;
+			else
+				j++;
 		}
 
 		while (readLine != null) {
@@ -142,39 +145,35 @@ public class ServerStatusChecker {
 			}
 			player.setName(sb.toString());
 
-
-			while (true) {	
-				if ( teamFlagString == null ) break;
+			while (true) {
+				if (teamFlagString == null)
+					break;
 				char teamChar = teamFlagString.charAt(j);
-				if ( teamChar == '-' )
-				{
+				if (teamChar == '-') {
 					j++;
 					continue;
-				}
-				else
-				{
-					switch ( teamChar )
-					{
-						case '0':
-							player.setTeam("Connecting");
-							break;
-						case '1':
-							player.setTeam("Axis");
-							break;
-						case '2':
-							player.setTeam("Allies");
-							break;
-						case '3':
-							player.setTeam("Spectator");
-							break;
-						default:
-							player.setTeam("UNKNOWN");
+				} else {
+					switch (teamChar) {
+					case '0':
+						player.setTeam("Connecting");
+						break;
+					case '1':
+						player.setTeam("Axis");
+						break;
+					case '2':
+						player.setTeam("Allies");
+						break;
+					case '3':
+						player.setTeam("Spectator");
+						break;
+					default:
+						player.setTeam("UNKNOWN");
 					}
 					j++;
 					break;
 				}
 			}
-			
+
 			serverStatus.getPlayers().add(player);
 			readLine = bufferedReader.readLine();
 
