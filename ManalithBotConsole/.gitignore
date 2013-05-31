@@ -3,3 +3,7 @@
 /target
 /log
 /config.xml
+/project/project
+/project/target
+.classpath
+.project
