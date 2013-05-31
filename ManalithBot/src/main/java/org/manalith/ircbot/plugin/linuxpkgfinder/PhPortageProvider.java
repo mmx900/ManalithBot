@@ -36,8 +36,8 @@ public class PhPortageProvider implements GentooSearchEngineProvider {
 
 	public String find(String arg) {
 		String result = "";
-		String url = "http://darkcircle.myhome.tv/phportage/phportage.xml?k="
-				+ arg + "&limit=1&similarity=exact"
+		String url = "http://darkcircle.kr/phportage/phportage.xml?k=" + arg
+				+ "&limit=1&similarity=exact"
 				+ "&showmasked=true&livebuild=false";
 
 		try {

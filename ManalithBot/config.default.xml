@@ -32,7 +32,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<!-- 사용할 플러그인 목록 -->
 				<!-- <ref bean="relayPlugin" /> -->
 				<!-- <ref bean="adminPlugin" /> -->
-				<ref bean="twitReaderPlugin" />
+				<ref bean="tweetReaderPlugin" />
 				<ref bean="archPackageFinder" />
 				<ref bean="debianPackageFinder" />
 				<ref bean="fedoraPackageFinder" />
@@ -155,6 +155,17 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<bean id="onOffMixPlugin" class="org.manalith.ircbot.plugin.onoffmix.OnOffMixPlugin">
 		<property name="apiKey" value="YOUR_ONOFFMIX_API_KEY" />
 	</bean>
+
+	<!-- 트윗리더 플러그인 설정 -->
+	<bean id="tweetReaderPlugin" class="org.manalith.ircbot.plugin.tweetreader.TweetReaderPlugin">
+		<!-- do not edit below two lines-->
+		<property name="consumerKey" value="fQ9hRqzQjF5hmDM6yd0XNQ"/>
+		<property name="consumerSecret" value="nzJzR3pFoe5w2hW4VreHBlKWolbjaRapZ909aioqM"/>
+
+		<property name="username" value="MANALITH_BOT_OWNERS_USERNAME"/>
+		<property name="password" value="MANALITH_BOT_OWNERS_PASSWORD"/>
+	</bean>
+
 	
 	<!-- Repl 플러그인 설정 -->
 	<!--
