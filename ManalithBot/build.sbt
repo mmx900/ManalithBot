@@ -46,8 +46,6 @@ libraryDependencies ++= Seq(
 
 mainClass in (Compile, run) := Some("org.manalith.ircbot.BotMain")
 
-fork in (Test,run) := true
-
-javaOptions in (Test, run) += "-Dfile.encoding=UTF-8 -Dlog4j.configuration=file:./log4j.properties" 
+fork in (Test, run) := true
 
 EclipseKeys.withSource := true
