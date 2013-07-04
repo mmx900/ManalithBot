@@ -43,61 +43,10 @@ public class CurexInfoProvider {
 	private Options optionList;
 	private CommandLineParser argParser;
 
-	/**
-	 * 3 types of Constructors
-	 */
-	public CurexInfoProvider() {
-		this.setArgs(null);
-		this.setPath("");
-		this.initArgumentParser();
-	}
-
-	public CurexInfoProvider(String[] newArgs) {
-		this.setArgs(newArgs);
-		this.setPath("");
-		this.initArgumentParser();
-	}
-
-	public CurexInfoProvider(String newPath, String[] newArgs) {
-		this.setArgs(newArgs);
-		this.setPath(newPath);
-		this.initArgumentParser();
-	}
-
-	/**
-	 * set array into args
-	 * 
-	 * @param newArgs
-	 */
-	public void setArgs(String[] newArgs) {
-		this.args = newArgs;
-	}
-
-	/**
-	 * return argument as array of string
-	 * 
-	 * @return string[] args
-	 */
-	private String[] getArgs() {
-		return this.args;
-	}
-
-	/**
-	 * set this plugin's data path
-	 * 
-	 * @param newPath
-	 */
-	public void setPath(String newPath) {
-		this.path = newPath;
-	}
-
-	/**
-	 * return this plugin's data path as a string
-	 * 
-	 * @return String path.
-	 */
-	private String getPath() {
-		return this.path;
+	public CurexInfoProvider(String path, String[] args) {
+		this.args = args;
+		this.path = path;
+		initArgumentParser();
 	}
 
 	/**
@@ -267,199 +216,174 @@ public class CurexInfoProvider {
 	public String[] rearrangeArgs() throws InvalidArgumentException {
 		String[] result = null;
 
-		TokenSubtype ts = this.getTokenSubtype(this.getArgs()[0],
-				TokenType.Command);
+		TokenSubtype ts = getTokenSubtype(args[0], TokenType.Command);
 
 		if (ts == TokenSubtype.CommandHelp
 				|| ts == TokenSubtype.CommandLastRound
 				|| ts == TokenSubtype.CommandUnitList) {
 			result = new String[1];
-			result[0] = this.getArgs()[0];
+			result[0] = args[0];
 		} else if (ts == TokenSubtype.CommandBuyCash
 				|| ts == TokenSubtype.CommandCellCash
 				|| ts == TokenSubtype.CommandRecvRemit
 				|| ts == TokenSubtype.CommandSendRemit) {
 			result = new String[3];
-			result[0] = this.getArgs()[0];
+			result[0] = args[0];
 
-			switch (this.getArgs().length) {
+			switch (args.length) {
 			case 1:
 				result[1] = "1";
 				result[2] = "USD";
 				break;
 			case 2:
-				if (this.getTokenSubtype(this.getArgs()[1],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result[1] = "1";
-					result[2] = this.getArgs()[1];
-				} else if (this.getTokenType(this.getArgs()[1]) == TokenType.Amount) {
-					result[1] = this.getArgs()[1];
+					result[2] = args[1];
+				} else if (getTokenType(args[1]) == TokenType.Amount) {
+					result[1] = args[1];
 					result[2] = "USD";
 				} else
-					throw new InvalidArgumentException(this.getArgs()[1]);
+					throw new InvalidArgumentException(args[1]);
 				break;
 			case 3:
 				// first arg.
-				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown)
-					result[1] = this.getArgs()[1];
+				if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown)
+					result[1] = args[1];
 				else
-					throw new InvalidArgumentException(this.getArgs()[1]);
+					throw new InvalidArgumentException(args[1]);
 
 				// second arg
-				if (this.getTokenSubtype(this.getArgs()[2],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown)
-					result[2] = this.getArgs()[2];
+				if (getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
+					result[2] = args[2];
 				else
-					throw new InvalidArgumentException(this.getArgs()[2]);
+					throw new InvalidArgumentException(args[2]);
 
 				break;
 			default:
 				throw new InvalidArgumentException("불 필요한 인자");
 			}
 		} else if (ts == TokenSubtype.CommandShow) {
-			switch (this.getArgs().length) {
+			switch (args.length) {
 			case 1:
 				result = new String[3];
-				result[0] = this.getArgs()[0];
+				result[0] = args[0];
 				result[1] = "USD";
 				result[2] = "cr";
 				break;
 			case 2:
-				if (this.getTokenSubtype(this.getArgs()[1],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[3];
-					System.arraycopy(this.getArgs(), 0, result, 0,
-							this.getArgs().length);
+					System.arraycopy(args, 0, result, 0, args.length);
 					result[2] = "cr";
 				} else {
-					throw new InvalidArgumentException(this.getArgs()[1]);
+					throw new InvalidArgumentException(args[1]);
 				}
 				break;
 			case 3:
-				if (this.getTokenSubtype(this.getArgs()[1],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[2],
-								TokenType.FieldAbbr) != TokenSubtype.Unknown) {
-					result = new String[this.getArgs().length];
-					System.arraycopy(this.getArgs(), 0, result, 0,
-							this.getArgs().length);
+				if (getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[2], TokenType.FieldAbbr) != TokenSubtype.Unknown) {
+					result = new String[args.length];
+					System.arraycopy(args, 0, result, 0, args.length);
 				} else
-					throw new InvalidArgumentException(this.getArgs()[1]
-							+ " and " + this.getArgs()[2]);
+					throw new InvalidArgumentException(args[1] + " and "
+							+ args[2]);
 				break;
 			default:
 				throw new InvalidArgumentException("불 필요한 인자");
 			}
 
 		} else if (ts == TokenSubtype.CommandConvert) {
-			switch (this.getArgs().length) {
+			switch (args.length) {
 			case 1:
 				throw new InvalidArgumentException("필요한 옵션 빠짐");
 			case 2:
-				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown) {
 					result = new String[4];
-					System.arraycopy(this.getArgs(), 0, result, 0, 2);
+					System.arraycopy(args, 0, result, 0, 2);
 					result[2] = "USD";
 					result[3] = "KRW";
 				} else
-					throw new InvalidArgumentException(this.getArgs()[1]);
+					throw new InvalidArgumentException(args[1]);
 
 				break;
 			case 3:
-				if (this.getTokenSubtype(this.getArgs()[1],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[2],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
-					result[0] = this.getArgs()[0];
+					result[0] = args[0];
 					result[1] = "1";
-					System.arraycopy(this.getArgs(), 1, result, 2, 2);
-				} else if (this.getTokenSubtype(this.getArgs()[1],
-						TokenType.Amount) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[2],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					System.arraycopy(args, 1, result, 2, 2);
+				} else if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
-					System.arraycopy(this.getArgs(), 0, result, 0,
-							this.getArgs().length);
+					System.arraycopy(args, 0, result, 0, args.length);
 					result[3] = "KRW";
 				} else
-					throw new InvalidArgumentException(this.getArgs()[1]
-							+ " and " + this.getArgs()[2]);
+					throw new InvalidArgumentException(args[1] + " and "
+							+ args[2]);
 				break;
 			case 4:
-				if (this.getTokenSubtype(this.getArgs()[1], TokenType.Amount) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[2],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[3],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[3], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
-					System.arraycopy(this.getArgs(), 0, result, 0,
-							this.getArgs().length);
+					System.arraycopy(args, 0, result, 0, args.length);
 				} else
-					throw new InvalidArgumentException(this.getArgs()[1] + ", "
-							+ this.getArgs()[2] + " and " + this.getArgs()[3]);
+					throw new InvalidArgumentException(args[1] + ", " + args[2]
+							+ " and " + args[3]);
 				break;
 			default:
 				throw new InvalidArgumentException("불 필요한 인자");
 			}
 		} else {
-			switch (this.getArgs().length) {
+			switch (args.length) {
 			case 1:
-				if (this.getTokenSubtype(this.getArgs()[0],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[3];
 					result[0] = "-show";
-					result[1] = this.getArgs()[0];
+					result[1] = args[0];
 					result[2] = "cr";
-				} else if (this.getTokenSubtype(this.getArgs()[0],
-						TokenType.Amount) != TokenSubtype.Unknown) {
+				} else if (getTokenSubtype(args[0], TokenType.Amount) != TokenSubtype.Unknown) {
 					result = new String[4];
 					result[0] = "-conv";
-					result[1] = this.getArgs()[0];
+					result[1] = args[0];
 					result[2] = "USD";
 					result[3] = "KRW";
 				} else {
-					throw new InvalidArgumentException(this.getArgs()[0]);
+					throw new InvalidArgumentException(args[0]);
 				}
 				break;
 			case 2:
-				if (this.getTokenSubtype(this.getArgs()[0],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[1],
-								TokenType.FieldAbbr) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[1], TokenType.FieldAbbr) != TokenSubtype.Unknown) {
 					result = new String[3];
 					result[0] = "-show";
-					System.arraycopy(this.getArgs(), 0, result, 1, 2);
-				} else if (this.getTokenSubtype(this.getArgs()[0],
-						TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[1],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					System.arraycopy(args, 0, result, 1, 2);
+				} else if (this
+						.getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
 					result[0] = "-conv";
 					result[1] = "1";
-					System.arraycopy(this.getArgs(), 0, result, 2, 2);
-				} else if (this.getTokenSubtype(this.getArgs()[0],
-						TokenType.Amount) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[1],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+					System.arraycopy(args, 0, result, 2, 2);
+				} else if (getTokenSubtype(args[0], TokenType.Amount) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
 					result[0] = "-conv";
-					System.arraycopy(this.getArgs(), 0, result, 1, 2);
+					System.arraycopy(args, 0, result, 1, 2);
 					result[3] = "KRW";
 				} else {
-					throw new InvalidArgumentException(this.getArgs()[0]
-							+ " and " + this.getArgs()[1]);
+					throw new InvalidArgumentException(args[0] + " and "
+							+ args[1]);
 				}
 				break;
 			case 3:
-				if (this.getTokenSubtype(this.getArgs()[0], TokenType.Amount) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[1],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown
-						&& this.getTokenSubtype(this.getArgs()[2],
-								TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
+				if (getTokenSubtype(args[0], TokenType.Amount) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+						&& getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
 					result[0] = "-conv";
-					System.arraycopy(this.getArgs(), 0, result, 1, 3);
+					System.arraycopy(args, 0, result, 1, 3);
 				}
 				break;
 			default:
@@ -489,21 +413,21 @@ public class CurexInfoProvider {
 		TokenSubtype st;
 
 		// Argument preprocessor
-		String[] aargs = this.rearrangeArgs();
+		String[] aargs = rearrangeArgs();
 		// Parse!
 		CommandLine cl = argParser.parse(optionList, aargs);
 
 		if (cl.hasOption("help"))
 			result = "Help!";
 		else if (cl.hasOption("lastround"))
-			result = this.showLatestRound();
+			result = showLatestRound();
 		else if (cl.hasOption("unitlist"))
 			result = "unitlist";
 		else if (cl.hasOption("show")) {
 			String[] args = cl.getOptionValues(aargs[0].substring(1));
 
 			String currencyUnit;
-			if (this.getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
+			if (getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
 				currencyUnit = args[0];
 			else
 				throw new InvalidArgumentException("통화 단위 아님");
@@ -511,32 +435,32 @@ public class CurexInfoProvider {
 			StringBuilder fieldName = new StringBuilder();
 			fieldName.append("country_name,");
 
-			if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAAll) {
+			if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAAll) {
 				fieldName.delete(0, fieldName.length());
 				fieldName.append("*");
-			} else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACentralRate)
+			} else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACentralRate)
 				fieldName.append("currency_unit,central_rate");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FABuyCash)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FABuyCash)
 				fieldName.append("currency_unit,cash_buy");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACellCash)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FACellCash)
 				fieldName.append("currency_unit,cash_cell");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FARecvRemit)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FARecvRemit)
 				fieldName.append("currency_unit,remittance_recv");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FASendRemit)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FASendRemit)
 				fieldName.append("currency_unit,remittance_send");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAECRate)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FAECRate)
 				fieldName.append("currency_unit,exchan_comm_rate");
-			else if (this.getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FADollarExcRate)
+			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FADollarExcRate)
 				fieldName.append("currency_unit,dollar_exc_rate");
 			else
 				throw new InvalidArgumentException("알 수 없는 필드 [ " + args[1]
 						+ " ] ");
 
-			result = this.showCurrencyRate(currencyUnit, fieldName.toString());
+			result = showCurrencyRate(currencyUnit, fieldName.toString());
 		} else if (cl.hasOption("conv")) {
 			String[] args = cl.getOptionValues(aargs[0].substring(1));
 			String value;
-			st = this.getTokenSubtype(args[0], TokenType.Amount);
+			st = getTokenSubtype(args[0], TokenType.Amount);
 
 			// argument validation
 			if (st != TokenSubtype.Unknown) {
@@ -546,21 +470,21 @@ public class CurexInfoProvider {
 					value = args[0];
 			} else
 				throw new InvalidArgumentException("금액 아님");
-			st = this.getTokenSubtype(args[1], TokenType.CurrencyUnit);
+			st = getTokenSubtype(args[1], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
 				throw new InvalidArgumentException("화폐 단위 아님");
-			st = this.getTokenSubtype(args[2], TokenType.CurrencyUnit);
+			st = getTokenSubtype(args[2], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
 				throw new InvalidArgumentException("화폐 단위 아님");
 
-			result = this.convert(value, args[1], args[2]);
+			result = convert(value, args[1], args[2]);
 		} else if (cl.hasOption("buycash") || cl.hasOption("cellcash")
 				|| cl.hasOption("recvremit") || cl.hasOption("sendremit")) {
 			String[] args = cl.getOptionValues(aargs[0].substring(1));
 			String currencyUnit;
 			String value;
 
-			st = this.getTokenSubtype(args[0], TokenType.Amount);
+			st = getTokenSubtype(args[0], TokenType.Amount);
 			if (st != TokenSubtype.Unknown) {
 				if (st == TokenSubtype.AmountNatural)
 					value = args[0] + ".0";
@@ -568,20 +492,20 @@ public class CurexInfoProvider {
 					value = args[0];
 			} else
 				throw new InvalidArgumentException("금액 아님");
-			st = this.getTokenSubtype(args[1], TokenType.CurrencyUnit);
+			st = getTokenSubtype(args[1], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
 				throw new InvalidArgumentException("화폐 단위 아님");
 
 			currencyUnit = args[1];
 
 			if (cl.hasOption("buycash"))
-				result = this.buyCash(currencyUnit, value);
+				result = buyCash(currencyUnit, value);
 			else if (cl.hasOption("cellcash"))
-				result = this.cellCash(currencyUnit, value);
+				result = cellCash(currencyUnit, value);
 			else if (cl.hasOption("recvremit"))
-				result = this.recvRemittance(currencyUnit, value);
+				result = recvRemittance(currencyUnit, value);
 			else if (cl.hasOption("sendremit"))
-				result = this.sendRemittance(currencyUnit, value);
+				result = sendRemittance(currencyUnit, value);
 		}
 
 		return result;
@@ -618,7 +542,7 @@ public class CurexInfoProvider {
 		String[] month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 				"Aug", "Sep", "Oct", "Nov", "Dec" };
 
-		PropertiesConfiguration pm = new PropertiesConfiguration(this.getPath()
+		PropertiesConfiguration pm = new PropertiesConfiguration(path
 				+ "LatestUpdatedDatetime.prop");
 
 		String dt = pm.getString("date");
@@ -660,7 +584,7 @@ public class CurexInfoProvider {
 			throws SQLException, ClassNotFoundException {
 		StringBuilder result = new StringBuilder();
 
-		HSQLDBTableManager sqlManager = new HSQLDBTableManager(this.getPath(),
+		HSQLDBTableManager sqlManager = new HSQLDBTableManager(path,
 				"currency.db");
 		String[] data = sqlManager.selectDataFromTable(FieldId.toString(),
 				CurrencyUnit.toString());
@@ -730,8 +654,7 @@ public class CurexInfoProvider {
 			return result;
 		}
 
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(),
-				"currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(path, "currency.db");
 		String field = "country_name,currency_unit,central_rate";
 		String resval = "";
 
@@ -788,8 +711,7 @@ public class CurexInfoProvider {
 	private String buyCash(String CurrencyUnit, String value)
 			throws SQLException, ClassNotFoundException {
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(),
-				"currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(path, "currency.db");
 		String field = "country_name,currency_unit,cash_buy";
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -808,8 +730,7 @@ public class CurexInfoProvider {
 	private String cellCash(String CurrencyUnit, String value)
 			throws SQLException, ClassNotFoundException {
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(),
-				"currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(path, "currency.db");
 		String field = "country_name,currency_unit,cash_cell";
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -828,8 +749,7 @@ public class CurexInfoProvider {
 	private String recvRemittance(String CurrencyUnit, String value)
 			throws SQLException, ClassNotFoundException {
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(),
-				"currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(path, "currency.db");
 		String field = "country_name,currency_unit,remittance_recv";
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();
@@ -849,8 +769,7 @@ public class CurexInfoProvider {
 	private String sendRemittance(String CurrencyUnit, String value)
 			throws SQLException, ClassNotFoundException {
 		String result = "";
-		HSQLDBTableManager sqlman = new HSQLDBTableManager(this.getPath(),
-				"currency.db");
+		HSQLDBTableManager sqlman = new HSQLDBTableManager(path, "currency.db");
 		String field = "country_name,currency_unit,remittance_send";
 		String[] data = sqlman.selectDataFromTable(field, CurrencyUnit);
 		sqlman.close();

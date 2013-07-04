@@ -23,12 +23,6 @@ import org.manalith.ircbot.plugin.calc.exceptions.ParenthesesMismatchException;
 
 public class CalcParseTreeGenerator {
 
-	// private TokenArray sourceArray;
-
-	public CalcParseTreeGenerator() {
-		;
-	}
-
 	public static ParseTreeUnit generateParseTree(TokenArray sArray)
 			throws ParenthesesMismatchException, InvalidSequenceTokenException {
 		int size = sArray.getSize();

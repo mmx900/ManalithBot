@@ -26,20 +26,8 @@ public class ParseTreeUnit {
 	protected ParseTreeUnit left;
 	protected ParseTreeUnit right;
 
-	public ParseTreeUnit() {
-		node = null;
-		left = null;
-		right = null;
-	}
-
-	public ParseTreeUnit(TokenUnit newNode) {
-		setNode(newNode);
-		left = null;
-		right = null;
-	}
-
-	public void setNode(TokenUnit newNode) {
-		this.node = newNode;
+	public void setNode(TokenUnit node) {
+		this.node = node;
 	}
 
 	public TokenUnit getNode() {

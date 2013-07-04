@@ -18,8 +18,8 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.manalith.ircbot.plugin.calc.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.calc.exceptions.TokenAnalysisException;
@@ -28,20 +28,8 @@ public class CalcTokenAnalyzer {
 
 	private String tokenStream;
 
-	public CalcTokenAnalyzer() {
-		setTokenStream("");
-	}
-
-	public CalcTokenAnalyzer(String MathExpr) {
-		setTokenStream(MathExpr);
-	}
-
-	public void setTokenStream(String MathExpr) {
-		this.tokenStream = MathExpr;
-	}
-
-	public String getTokenStream() {
-		return this.tokenStream;
+	public CalcTokenAnalyzer(String mathExpr) {
+		this.tokenStream = mathExpr;
 	}
 
 	public TokenType getTokenType(String tokenString) {
@@ -234,7 +222,7 @@ public class CalcTokenAnalyzer {
 
 			// 0.001 "e" or 0xnnnne
 			if ((tokenStream.charAt(i) == 'e' || tokenStream.charAt(i) == 'E')) {
-				if (this.getTokenSubtype(temp, currentType) == TokenSubtype.Decimal) {
+				if (getTokenSubtype(temp, currentType) == TokenSubtype.Decimal) {
 					currentType = TokenType.FlPoint;
 
 					temp = temp.concat(tokenStream.substring(i, i + 1));
@@ -256,7 +244,7 @@ public class CalcTokenAnalyzer {
 			if (tokenStream.charAt(i) == '-') {
 				if (temp.length() == 0 && i == 0) {
 					temp = temp.concat(tokenStream.substring(i, i + 1));
-					currentType = this.getTokenType(temp);
+					currentType = getTokenType(temp);
 					checkedType = currentType;
 
 					continue;
@@ -265,9 +253,8 @@ public class CalcTokenAnalyzer {
 						&& result.getToken(result.getSize() - 1).getTokenType() != TokenType.Operatr) {
 					// operator
 					temp = temp.concat(tokenStream.substring(i, i + 1));
-					currentType = this.getTokenType(temp);
-					TokenSubtype tsType = this.getTokenSubtype(temp,
-							currentType);
+					currentType = getTokenType(temp);
+					TokenSubtype tsType = getTokenSubtype(temp, currentType);
 					TokenUnit newUnit = new TokenUnit(currentType, tsType, temp);
 					result.addToken(newUnit);
 
@@ -286,8 +273,8 @@ public class CalcTokenAnalyzer {
 
 			if (tokenStream.charAt(i) == ' ') {
 				// add token if current point meets separator(white space)
-				currentType = this.getTokenType(temp);
-				TokenSubtype tsType = this.getTokenSubtype(temp, currentType);
+				currentType = getTokenType(temp);
+				TokenSubtype tsType = getTokenSubtype(temp, currentType);
 				TokenUnit newUnit = new TokenUnit(currentType, tsType, temp);
 				result.addToken(newUnit);
 
@@ -308,11 +295,11 @@ public class CalcTokenAnalyzer {
 					continue;
 				}
 
-				currentType = this.getTokenType(temp);
+				currentType = getTokenType(temp);
 				checkedType = currentType;
 			} else if (i == 1) {
 
-				checkedType = this.getTokenType(temp);
+				checkedType = getTokenType(temp);
 
 				if (currentType != checkedType) {
 					if (checkedType == TokenType.Unknown) {
@@ -322,8 +309,7 @@ public class CalcTokenAnalyzer {
 						if (temp.equals(""))
 							throw new TokenAnalysisException();
 
-						TokenSubtype tsType = this.getTokenSubtype(temp,
-								currentType);
+						TokenSubtype tsType = getTokenSubtype(temp, currentType);
 
 						// if selected string is unknown type of token.
 						if (currentType == TokenType.Unknown
@@ -343,7 +329,7 @@ public class CalcTokenAnalyzer {
 					}
 				}
 			} else {
-				checkedType = this.getTokenType(temp);
+				checkedType = getTokenType(temp);
 
 				if (currentType != checkedType) {
 					if (checkedType == TokenType.Unknown) {
@@ -353,8 +339,7 @@ public class CalcTokenAnalyzer {
 						if (temp.equals(""))
 							throw new TokenAnalysisException();
 
-						TokenSubtype tsType = this.getTokenSubtype(temp,
-								currentType);
+						TokenSubtype tsType = getTokenSubtype(temp, currentType);
 
 						// if selected string is unknown type of token.
 						if (currentType == TokenType.Unknown
@@ -375,7 +360,7 @@ public class CalcTokenAnalyzer {
 			}
 		}
 
-		TokenSubtype tsType = this.getTokenSubtype(temp, currentType);
+		TokenSubtype tsType = getTokenSubtype(temp, currentType);
 
 		// if selected string is unknown type of token.
 		if (currentType == TokenType.Unknown && tsType == TokenSubtype.Unknown)

@@ -26,72 +26,28 @@ import java.util.regex.Pattern;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 
 public class CurexCustomSettingManager extends TokenAnalyzer {
+	private final Logger logger = Logger.getLogger(getClass());
 
-	private String LocalPath;
-	private String channel;
-	private String userNick;
-	private String CurrencyArgString;
+	private final String localPath;
+	private final String channel;
+	private final String userNick;
+	private final String currencyArgs;
 
-	public CurexCustomSettingManager(String newLocalPath) {
-		this.setLocalPath(newLocalPath);
-		this.setChannel("");
-		this.setUserNick("");
-		this.setCurrencyArgString("");
-	}
+	public CurexCustomSettingManager(String localPath, String channel,
+			String userNick, String currencyArgs) {
+		this.localPath = localPath;
 
-	public CurexCustomSettingManager(String newLocalPath, String newChannel,
-			String newUserNick) {
-		this.setLocalPath(newLocalPath);
-		this.setChannel(newChannel);
-		this.setUserNick(newUserNick);
-		this.setCurrencyArgString("");
-	}
-
-	public CurexCustomSettingManager(String newLocalPath, String newChannel,
-			String newUserNick, String newArgs) {
-		this.setLocalPath(newLocalPath);
-		this.setChannel(newChannel);
-		this.setUserNick(newUserNick);
-		this.setCurrencyArgString(newArgs);
-	}
-
-	public void setChannel(String newChannel) {
-		this.channel = newChannel;
-	}
-
-	public String getChannel() {
-		return this.channel;
-	}
-
-	public void setUserNick(String newUserNick) {
-		this.userNick = newUserNick;
-	}
-
-	public String getUserNick() {
-		return this.userNick;
-	}
-
-	public void setCurrencyArgString(String newArgs) {
-		this.CurrencyArgString = newArgs;
-	}
-
-	public String getCurrencyArgString() {
-		return this.CurrencyArgString;
-	}
-
-	public void setLocalPath(String newLocalPath) {
-		this.LocalPath = newLocalPath;
-
-		File f = new File(newLocalPath);
+		File f = new File(localPath);
 		if (!f.exists())
 			f.mkdirs();
-	}
 
-	public String getLocalPath() {
-		return this.LocalPath;
+		this.channel = channel;
+		this.userNick = userNick;
+		this.currencyArgs = currencyArgs;
 	}
 
 	public String addUserSetting() {
@@ -99,33 +55,35 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 		int chkCode;
 
 		try {
-			chkCode = this.validateToken(this.analysisTokenStream());
+			chkCode = validateToken(analysisTokenStream());
 			if (chkCode != -1) {
-				result = "알 수 없는 화폐 단위 : "
-						+ this.getCurrencyArgString().split("\\,")[chkCode];
+				result = "알 수 없는 화폐 단위 : " + currencyArgs.split("\\,")[chkCode];
 				result += ", ex) !cer USD, JPY, HKD (각 화폐 단위는 콤마로 구분합니다)";
 				return result;
 			}
 
 			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
-					this.getLocalPath() + "customsetlist.prop");
+					localPath + "customsetlist.prop");
 
-			if (!StringUtils
-					.isEmpty(customsetlist.getString(this.getUserNick()))) {
+			if (!StringUtils.isEmpty(customsetlist.getString(userNick))) {
 				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
 			}
 
-			customsetlist.setProperty(this.getChannel().substring(1) + "."
-					+ this.getUserNick(), this.getCurrencyArgString());
+			customsetlist.setProperty(channel.substring(1) + "." + userNick,
+					currencyArgs);
 			customsetlist.save();
 
-			result += this.getChannel() + "의 " + this.getUserNick()
-					+ "님이 조회할 기본화폐 환율은 " + this.getCurrencyArgString() + "입니다.";
+			result += channel + "의 " + userNick + "님이 조회할 기본화폐 환율은 "
+					+ currencyArgs + "입니다.";
 
 		} catch (EmptyTokenStreamException e) {
 			result = "지정한 화폐 단위가 없습니댜";
-		} catch (ConfigurationException ioe) {
-			result = ioe.getMessage();
+		} catch (ConfigurationException e) {
+			logger.error(e.getMessage(), e);
+			result = e.getMessage();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			result = e.getMessage();
 		}
 
 		return result;
@@ -136,22 +94,19 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 
 		try {
 			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
-					this.getLocalPath() + "customsetlist.prop");
+					localPath + "customsetlist.prop");
 
 			Iterator<String> userlist = customsetlist.getKeys();
 			if (userlist == null) {
 				result = "설정을 등록한 사용자가 없습니다";
 				return result;
-			} else if (!StringUtils.isEmpty(customsetlist.getString(this
-					.getUserNick()))) {
-				customsetlist.clearProperty(this.getChannel().substring(1)
-						+ "." + this.getUserNick());
+			} else if (!StringUtils.isEmpty(customsetlist.getString(userNick))) {
+				customsetlist.clearProperty(channel.substring(1) + "."
+						+ userNick);
 				customsetlist.save();
-				result = this.getChannel() + "의 " + this.getUserNick()
-						+ "님에 대한 설정을 지웠습니다.";
+				result = channel + "의 " + userNick + "님에 대한 설정을 지웠습니다.";
 			} else {
-				result = this.getChannel() + "의 " + this.getUserNick()
-						+ "님은 설정을 등록하지 않았습니다.";
+				result = channel + "의 " + userNick + "님은 설정을 등록하지 않았습니다.";
 			}
 		} catch (ConfigurationException e) {
 			result = e.getMessage();
@@ -196,13 +151,13 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 		TokenType oTokenType = null;
 		TokenSubtype oTokenSubtype = null;
 
-		if (this.getCurrencyArgString().length() == 0)
+		if (currencyArgs.length() == 0)
 			throw new EmptyTokenStreamException();
-		String[] options = this.getCurrencyArgString().split("\\,");
+		String[] options = currencyArgs.split("\\,");
 
 		for (int i = 0; i < options.length; i++) {
-			oTokenType = this.getTokenType(options[i]);
-			oTokenSubtype = this.getTokenSubtype(options[i], oTokenType);
+			oTokenType = getTokenType(options[i]);
+			oTokenSubtype = getTokenSubtype(options[i], oTokenType);
 
 			TokenUnit u = new TokenUnit(options[i], oTokenType, oTokenSubtype);
 			result.addElement(u);

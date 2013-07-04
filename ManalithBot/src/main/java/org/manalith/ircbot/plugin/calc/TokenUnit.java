@@ -19,20 +19,14 @@
 package org.manalith.ircbot.plugin.calc;
 
 public class TokenUnit {
-	private TokenType Type;
-	private TokenSubtype Subtype;
-	private String TokenStr;
+	private TokenType type;
+	private TokenSubtype subtype;
+	private String token;
 
 	public TokenUnit() {
 		setTokenType(TokenType.Unknown);
 		setTokenSubtype(TokenSubtype.Unknown);
 		setTokenString("");
-	}
-
-	public TokenUnit(String newTokenStr) {
-		setTokenType(TokenType.Unknown);
-		setTokenSubtype(TokenSubtype.Unknown);
-		setTokenString(newTokenStr);
 	}
 
 	public TokenUnit(TokenType newTokenType, TokenSubtype newTokenSubtype,
@@ -42,32 +36,31 @@ public class TokenUnit {
 		setTokenString(newTokenStr);
 	}
 
-	public void setTokenType(TokenType newTokenType) {
-		this.Type = newTokenType;
+	public void setTokenType(TokenType tokenType) {
+		this.type = tokenType;
 	}
 
-	public void setTokenSubtype(TokenSubtype newTokenSubtype) {
-		this.Subtype = newTokenSubtype;
+	public void setTokenSubtype(TokenSubtype tokenSubtype) {
+		this.subtype = tokenSubtype;
 	}
 
-	public void setTokenString(String newTokenStr) {
-		this.TokenStr = newTokenStr;
+	public void setTokenString(String token) {
+		this.token = token;
 	}
 
 	public TokenType getTokenType() {
-		return this.Type;
+		return type;
 	}
 
 	public TokenSubtype getTokenSubtype() {
-		return this.Subtype;
+		return subtype;
 	}
 
 	public String getTokenString() {
-		return this.TokenStr;
+		return token;
 	}
 
 	public String toString() {
-		return this.TokenStr + " : " + this.Type.toString() + "("
-				+ this.Subtype.toString() + ")";
+		return token + " : " + type.toString() + "(" + subtype.toString() + ")";
 	}
 }

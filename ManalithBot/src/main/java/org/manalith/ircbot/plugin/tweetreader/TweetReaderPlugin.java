@@ -45,38 +45,36 @@ public class TweetReaderPlugin extends AbstractBotPlugin {
 		return "";
 	}
 
-	public void setConsumerKey(String ck_) {
-		this.consumerKey = ck_;
+	public void setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
 	}
 
-	public void setConsumerSecret(String cs_) {
-		this.consumerSecret = cs_;
+	public void setConsumerSecret(String consumerSecret) {
+		this.consumerSecret = consumerSecret;
 	}
 
-	public void setUsername(String un_) {
-		this.username = un_;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public void setPassword(String pw_) {
-		this.password = pw_;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		String msg = event.getMessage();
-
-		String[] command = msg.split("\\s");
+		String[] command = event.getMessageSegments();
 
 		try {
-			reader = new TweetReader(this.getResourcePath(), this.consumerKey,
-					this.consumerSecret);
+			reader = new TweetReader(getResourcePath(), consumerKey,
+					consumerSecret);
 		} catch (ConfigurationException e) {
 			event.respond(e.getMessage());
 			return;
 		}
 
-		reader.setTwitterUsernameOrEmail(this.username);
-		reader.setTwitterPassword(this.password);
+		reader.setTwitterUsernameOrEmail(username);
+		reader.setTwitterPassword(password);
 
 		String result = reader.read(command);
 

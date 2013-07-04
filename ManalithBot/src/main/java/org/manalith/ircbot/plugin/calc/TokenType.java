@@ -20,4 +20,4 @@ package org.manalith.ircbot.plugin.calc;
 
 public enum TokenType {
 	Unknown, Integer, FlPoint, Operatr, Parents, TriangleFunc, BaseConvFunc, MathematFunc
-};
+}

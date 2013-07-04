@@ -21,49 +21,49 @@ package org.manalith.ircbot.plugin.calc;
 import java.util.ArrayList;
 
 public class TokenArray {
-	private ArrayList<TokenUnit> TokenArray;
+	private ArrayList<TokenUnit> tokenArray;
 
 	public TokenArray() {
-		TokenArray = new ArrayList<TokenUnit>();
+		tokenArray = new ArrayList<TokenUnit>();
 	}
 
 	public TokenArray(TokenArray sourceObject) {
-		TokenArray = new ArrayList<TokenUnit>();
-		TokenArray.addAll(sourceObject.getArray());
+		tokenArray = new ArrayList<TokenUnit>();
+		tokenArray.addAll(sourceObject.getArray());
 	}
 
 	public TokenArray(ArrayList<TokenUnit> sourceArray) {
-		TokenArray = new ArrayList<TokenUnit>();
-		TokenArray.addAll(sourceArray);
+		tokenArray = new ArrayList<TokenUnit>();
+		tokenArray.addAll(sourceArray);
 	}
 
 	public void addToken(TokenType newTokenType, TokenSubtype newTokenSubtype,
 			String newTokenStr) {
 		TokenUnit newTokenUnit = new TokenUnit(newTokenType, newTokenSubtype,
 				newTokenStr);
-		TokenArray.add(newTokenUnit);
+		tokenArray.add(newTokenUnit);
 	}
 
 	public void addToken(TokenUnit newTokenUnit) {
-		TokenArray.add(newTokenUnit);
+		tokenArray.add(newTokenUnit);
 	}
 
 	public TokenUnit getToken(int index) {
-		return TokenArray.get(index);
+		return tokenArray.get(index);
 	}
 
 	public int getSize() {
-		return TokenArray.size();
+		return tokenArray.size();
 	}
 
 	public ArrayList<TokenUnit> getArray() {
-		return this.TokenArray;
+		return this.tokenArray;
 	}
 
 	public String toString() {
 		String result = "";
 
-		for (TokenUnit unit : TokenArray) {
+		for (TokenUnit unit : tokenArray) {
 			result += unit.toString() + "\n";
 		}
 

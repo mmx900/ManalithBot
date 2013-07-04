@@ -42,12 +42,21 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TweetReader {
-	// private Logger logger = Logger.getLogger(getClass());
-	private static final String TWITTER_USER_HOME_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}";
-	private static final String TWITTER_TWIT_URL_PATTERN = "http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+";
+	public static enum TwitterUrlType {
+		UserHome(
+				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}"), Tweet(
+				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+");
+
+		Pattern pattern;
+
+		TwitterUrlType(String textPattern) {
+			pattern = Pattern.compile(textPattern);
+		}
+	}
+
 	private static final String TARGET_DATE_PATTERN = "yyyy년 MM월 dd일 E요일 HH:mm:ss";
 
-	private long tweet_id;
+	private long tweetId;
 	private String screenName;
 
 	private String consumerKey;
@@ -55,54 +64,53 @@ public class TweetReader {
 	private String username;
 	private String password;
 
-	private PropertiesConfiguration twitterConfiguration;
+	private PropertiesConfiguration config;
 
 	private WebDriver driver;
 	private JavascriptExecutor jse;
 
 	private Twitter tweet;
-	private RequestToken reqToken;
-	private AccessToken aToken;
+	private RequestToken requestToken;
+	private AccessToken accessToken;
 
-	public TweetReader(String resourcePath, String ck_, String cs_)
-			throws ConfigurationException {
+	public TweetReader(String resourcePath, String consumerKey,
+			String consumerSecret) throws ConfigurationException {
 
 		try {
-			this.twitterConfiguration = new PropertiesConfiguration(
-					resourcePath + "keybox.property");
+			config = new PropertiesConfiguration(resourcePath
+					+ "keybox.property");
 		} catch (ConfigurationException e) {
-			this.twitterConfiguration = new PropertiesConfiguration();
-			this.twitterConfiguration.setFile(new File(resourcePath
-					+ "keybox.property"));
-			this.twitterConfiguration.save();
+			config = new PropertiesConfiguration();
+			config.setFile(new File(resourcePath + "keybox.property"));
+			config.save();
 		}
 
-		this.setConsumerKey(ck_);
-		this.setConsumerSecret(cs_);
+		setConsumerKey(consumerKey);
+		setConsumerSecret(consumerSecret);
 	}
 
-	public void setConsumerKey(String ck_) {
-		this.consumerKey = ck_;
+	public void setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
 	}
 
-	public void setConsumerSecret(String cs_) {
-		this.consumerSecret = cs_;
+	public void setConsumerSecret(String consumerSecret) {
+		this.consumerSecret = consumerSecret;
 	}
 
-	public void setTwitterUsernameOrEmail(String un_) {
-		this.username = un_;
+	public void setTwitterUsernameOrEmail(String username) {
+		this.username = username;
 	}
 
-	public void setTwitterPassword(String pw_) {
-		this.password = pw_;
+	public void setTwitterPassword(String password) {
+		this.password = password;
 	}
 
-	private void setAcecssToken(String aToken, String aSecret) {
-		this.setAccessToken(new AccessToken(aToken, aSecret));
+	private void setAcecssToken(String accessToken, String accessSecret) {
+		setAccessToken(new AccessToken(accessToken, accessSecret));
 	}
 
 	private void setAccessToken(AccessToken accessToken) {
-		this.tweet.setOAuthAccessToken(accessToken);
+		tweet.setOAuthAccessToken(accessToken);
 	}
 
 	private enum UrlType {
@@ -110,36 +118,36 @@ public class TweetReader {
 	}
 
 	private void initWebAutomateObject() {
-		this.driver = new HtmlUnitDriver();
-		((HtmlUnitDriver) this.driver).setJavascriptEnabled(true);
-		this.jse = (JavascriptExecutor) this.driver;
+		driver = new HtmlUnitDriver();
+		((HtmlUnitDriver) driver).setJavascriptEnabled(true);
+		jse = (JavascriptExecutor) driver;
 	}
 
-	private void initTwitter4JObject() throws TwitterException {
-		ConfigurationBuilder c = new ConfigurationBuilder();
-		Configuration cfg = c.setDebugEnabled(false).setJSONStoreEnabled(true)
-				.setOAuthConsumerKey(this.consumerKey)
-				.setOAuthConsumerSecret(this.consumerSecret).build();
+	private void initTwitter4j() throws TwitterException {
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		Configuration config = builder.setDebugEnabled(false)
+				.setJSONStoreEnabled(true).setOAuthConsumerKey(consumerKey)
+				.setOAuthConsumerSecret(consumerSecret).build();
 
-		this.tweet = new TwitterFactory(cfg).getInstance();
-		this.reqToken = this.tweet.getOAuthRequestToken();
+		tweet = new TwitterFactory(config).getInstance();
+		requestToken = tweet.getOAuthRequestToken();
 	}
 
 	private String getTwitterAuthorizationPINPageSource() {
-		String url = this.reqToken.getAuthenticationURL();
-		this.driver.get(url);
-		this.jse.executeScript("document.getElementById('username_or_email').setAttribute('value','"
-				+ this.username + "')"); // Twitter ID
-		this.jse.executeScript("document.getElementById('password').setAttribute('value','"
-				+ this.password + "')"); // Twitter Password
-		this.jse.executeScript("document.getElementById('allow').click()");
-		this.driver.getPageSource();
+		String url = requestToken.getAuthenticationURL();
+		driver.get(url);
+		jse.executeScript("document.getElementById('username_or_email').setAttribute('value','"
+				+ username + "')"); // Twitter ID
+		jse.executeScript("document.getElementById('password').setAttribute('value','"
+				+ password + "')"); // Twitter Password
+		jse.executeScript("document.getElementById('allow').click()");
+		driver.getPageSource();
 
-		return this.driver.getPageSource();
+		return driver.getPageSource();
 	}
 
 	private String getTwitterAuthPINString() throws TwitterException {
-		return Jsoup.parse(this.getTwitterAuthorizationPINPageSource())
+		return Jsoup.parse(getTwitterAuthorizationPINPageSource())
 				.getAllElements().select("div#oauth_pin>p>kbd>code").text();
 
 	}
@@ -147,41 +155,38 @@ public class TweetReader {
 	private void authorizeTwitter() throws TwitterException,
 			ConfigurationException {
 		// init selenium web automation object
-		this.initWebAutomateObject();
+		initWebAutomateObject();
 
 		// to success authorization for owners' twitter account
-		this.aToken = this.tweet.getOAuthAccessToken(this.reqToken,
-				this.getTwitterAuthPINString());
+		accessToken = tweet.getOAuthAccessToken(requestToken,
+				getTwitterAuthPINString());
 
-		this.setAccessToken(this.aToken);
-		this.tweet.verifyCredentials().getId(); // pass.
+		setAccessToken(accessToken);
+		tweet.verifyCredentials().getId(); // pass.
 
-		this.twitterConfiguration.setProperty("com.twitter.accessKey",
-				this.aToken.getToken());
-		this.twitterConfiguration.setProperty("com.twitter.accessSecret",
-				this.aToken.getTokenSecret());
-		this.twitterConfiguration.save();
+		config.setProperty("com.twitter.accessKey", accessToken.getToken());
+		config.setProperty("com.twitter.accessSecret",
+				accessToken.getTokenSecret());
+		config.save();
 
 	}
 
-	private Status getStatus(String twitterurl, UrlType type)
-			throws TwitterException {
+	private Status getStatus(String url, UrlType type) throws TwitterException {
 		Status stat = null;
-		String[] urlArray = twitterurl.split("\\/");
+		String[] urlArray = url.split("\\/");
 
 		switch (type) {
 		case TweetURL:
-			this.tweet_id = NumberUtils.toLong(urlArray[urlArray.length - 1]);
-			stat = this.tweet.showStatus(this.tweet_id);
+			tweetId = NumberUtils.toLong(urlArray[urlArray.length - 1]);
+			stat = tweet.showStatus(tweetId);
 
 			if (stat == null)
 				return null;
 
 			break;
 		case UserURL:
-			this.screenName = urlArray[urlArray.length - 1];
-			ResponseList<Status> resp = this.tweet
-					.getUserTimeline(this.screenName);
+			screenName = urlArray[urlArray.length - 1];
+			ResponseList<Status> resp = tweet.getUserTimeline(screenName);
 
 			if (resp.size() == 0)
 				return null;
@@ -199,18 +204,16 @@ public class TweetReader {
 
 		// init twitter4j
 		try {
-			this.initTwitter4JObject();
-		} catch (TwitterException e1) {
-			// TODO Auto-generated catch block
-			return e1.getMessage();
+			initTwitter4j();
+		} catch (TwitterException e) {
+			return e.getMessage();
 		}
 
-		if (StringUtils.isEmpty(this.twitterConfiguration
-				.getString("com.twitter.accessKey"))
-				|| StringUtils.isEmpty(this.twitterConfiguration
+		if (StringUtils.isEmpty(config.getString("com.twitter.accessKey"))
+				|| StringUtils.isEmpty(config
 						.getString("com.twitter.accessSecret"))) {
 			try {
-				this.authorizeTwitter();
+				authorizeTwitter();
 			} catch (TwitterException e) {
 				return "[twitter4j.TwitterException] " + e.getMessage();
 			} catch (ConfigurationException e) {
@@ -218,17 +221,15 @@ public class TweetReader {
 						+ e.getMessage();
 			}
 		} else {
-			String accessToken = this.twitterConfiguration
-					.getString("com.twitter.accessKey");
-			String accessSecret = this.twitterConfiguration
-					.getString("com.twitter.accessSecret");
+			String accessToken = config.getString("com.twitter.accessKey");
+			String accessSecret = config.getString("com.twitter.accessSecret");
 
-			this.setAcecssToken(accessToken, accessSecret);
+			setAcecssToken(accessToken, accessSecret);
 		}
 
 		Status stat = null;
 		try {
-			stat = this.getStatus(twitterurl, type);
+			stat = getStatus(twitterurl, type);
 		} catch (TwitterException e) {
 			return "[twitter4j.TwitterException] " + e.getMessage();
 		}
@@ -243,7 +244,6 @@ public class TweetReader {
 
 		return String.format("작성자: %s, 작성일시: %s, 본문: %s", author, createdAt,
 				message);
-
 	}
 
 	private UrlType validateUrl(String url) {
@@ -251,11 +251,11 @@ public class TweetReader {
 
 		if (StringUtils.isEmpty(url))
 			return null;
-		else if (Pattern.compile(TWITTER_TWIT_URL_PATTERN).matcher(url)
-				.matches())
+
+		if (TwitterUrlType.Tweet.pattern.matcher(url).matches())
 			return UrlType.TweetURL;
-		else if (Pattern.compile(TWITTER_USER_HOME_PATTERN).matcher(url)
-				.matches())
+
+		if (TwitterUrlType.UserHome.pattern.matcher(url).matches())
 			return UrlType.UserURL;
 
 		return result;
