@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+	debug="false">
+
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %l - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="logfile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="File" value="log/manalith_ircbot.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{HH:mm:ss}][%-5p](%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="mail" class="org.apache.log4j.net.SMTPAppender">
+		<param name="BufferSize" value="512" />
+		<param name="SMTPHost" value="" />
+		<param name="SMTPUsername" value="" />
+		<param name="SMTPPassword" value="" />
+		<param name="TimeFrame" value="30" />
+		<param name="MaxEMails" value="10" />
+		<param name="From" value="" />
+		<param name="To" value="" />
+		<param name="Subject" value="" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %5p [%t](%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="console" />
+		<appender-ref ref="logfile" />
+	</root>
+
+</log4j:configuration>
