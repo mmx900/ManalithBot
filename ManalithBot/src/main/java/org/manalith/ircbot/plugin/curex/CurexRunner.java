@@ -21,6 +21,7 @@ package org.manalith.ircbot.plugin.curex;
 import java.io.File;
 import java.util.Iterator;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,17 +31,6 @@ public class CurexRunner {
 	private String[] arguments;
 	private String dataPath;
 	private String userNick;
-
-	public CurexRunner() {
-		arguments = null;
-		dataPath = "";
-	}
-
-	public CurexRunner(String userNick, String[] arguments) {
-		this.userNick = userNick;
-		this.arguments = arguments;
-		dataPath = "";
-	}
 
 	public CurexRunner(String userNick, String dataPath, String[] arguments) {
 		this.userNick = userNick;
@@ -65,10 +55,19 @@ public class CurexRunner {
 		if (ArrayUtils.isEmpty(arguments)) {
 			String[] default_currency = null;
 
-			PropertiesConfiguration prop = new PropertiesConfiguration(dataPath
-					+ "customsetlist.prop");
+			PropertiesConfiguration config;
 
-			Iterator<String> userlist = prop.getKeys();
+			try {
+				config = new PropertiesConfiguration(dataPath
+						+ CurexCustomSettingManager.PROP_FILE);
+			} catch (ConfigurationException e) {
+				config = new PropertiesConfiguration();
+				config.setFile(new File(dataPath
+						+ CurexCustomSettingManager.PROP_FILE));
+				config.save();
+			}
+
+			Iterator<String> userlist = config.getKeys();
 			if (userlist == null) {
 				default_currency = new String[4];
 				default_currency[0] = "USD";
@@ -76,7 +75,7 @@ public class CurexRunner {
 				default_currency[2] = "JPY";
 				default_currency[3] = "CNY";
 			} else {
-				String value = prop.getString(userNick);
+				String value = config.getString(userNick);
 
 				if (!StringUtils.isEmpty(value)) {
 					default_currency = value.split("\\,");

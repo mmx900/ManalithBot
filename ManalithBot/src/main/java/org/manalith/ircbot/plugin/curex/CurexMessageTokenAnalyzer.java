@@ -18,10 +18,8 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
-import org.manalith.ircbot.plugin.curex.exceptions.InvalidArgumentException;
+import java.util.regex.Pattern;
 
 public class CurexMessageTokenAnalyzer {
 
@@ -118,7 +116,7 @@ public class CurexMessageTokenAnalyzer {
 	}
 
 	public static String[] convertToCLICommandString(String[] args)
-			throws InvalidArgumentException {
+			throws IllegalArgumentException {
 		String[] result = null;
 
 		for (int i = 0; i < args.length; i++) {
@@ -147,7 +145,7 @@ public class CurexMessageTokenAnalyzer {
 							args[i], TokenType.Amount) != TokenSubtype.Unknown)) {
 				;
 			} else {
-				throw new InvalidArgumentException(args[i] + " => "
+				throw new IllegalArgumentException(args[i] + " => "
 						+ TokenType.Unknown.toString());
 			}
 		}

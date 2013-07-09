@@ -18,6 +18,7 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -26,12 +27,11 @@ import java.util.Locale;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
 public class CurexTableUpdater {
 
-	private String LocalPath;
-	private String propFileName;
+	public static final String PROP_FILE_NAME = "LatestUpdatedDatetime.prop";
+	private final String dataPath;
 	private HSQLDBTableManager sqlman;
 
 	private DateTimeRound local;
@@ -39,40 +39,37 @@ public class CurexTableUpdater {
 
 	private SimpleDateFormat sdf;
 
-	public CurexTableUpdater() {
-		this("");
-	}
+	public CurexTableUpdater(String dataPath) throws ConfigurationException {
+		this.dataPath = dataPath;
 
-	public CurexTableUpdater(String newLocalPath) {
-		this.setLocalPath(newLocalPath);
-		propFileName = "LatestUpdatedDatetime.prop";
+		PropertiesConfiguration config;
+
+		try {
+			config = new PropertiesConfiguration(dataPath + PROP_FILE_NAME);
+		} catch (ConfigurationException e) {
+			config = new PropertiesConfiguration();
+			config.setFile(new File(dataPath + PROP_FILE_NAME));
+			config.save();
+		}
+
 		sqlman = null;
 		local = null;
 		remote = null;
 		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREAN);
 	}
 
-	private void setLocalPath(String newLocalPath) {
-		this.LocalPath = newLocalPath;
-	}
-
-	private String getLocalPath() {
-		return this.LocalPath;
-	}
-
 	private void initSQLiteTable() throws SQLException, ClassNotFoundException {
-		if (this.getLocalPath().equals("")) {
+		if ("".equals(dataPath)) {
 			sqlman = new HSQLDBTableManager("currency.db");
 		} else {
-			sqlman = new HSQLDBTableManager(this.getLocalPath(), "currency.db");
+			sqlman = new HSQLDBTableManager(dataPath, "currency.db");
 		}
 	}
 
-	public boolean checkLocalLastRoundExpired()
-			throws FileDoesntSpecifiedException, ConfigurationException,
+	public boolean checkLocalLastRoundExpired() throws ConfigurationException,
 			ParseException, IOException {
 		RemoteLocalDatetimeChecker check = new RemoteLocalDatetimeChecker(
-				this.getLocalPath(), propFileName);
+				dataPath + PROP_FILE_NAME);
 		local = check.checkLatestUpdatedLocalDateandTime();
 		remote = check.checkLatestNoticeDateandTime();
 
@@ -81,19 +78,19 @@ public class CurexTableUpdater {
 
 	public void updateLastRound() throws ConfigurationException {
 		// set properties using the value.
-		PropertiesConfiguration pm = new PropertiesConfiguration(
-				this.getLocalPath() + propFileName);
+		PropertiesConfiguration config = new PropertiesConfiguration(dataPath
+				+ PROP_FILE_NAME);
 
 		String date = sdf.format(remote.getCalendar().getTime());
-		pm.setProperty("date", date);
+		config.setProperty("date", date);
 
 		String round = Integer.toString(remote.getRoundVal());
 		while (round.length() < 3)
 			round = "0" + round;
-		pm.setProperty("round", round);
+		config.setProperty("round", round);
 
 		// commit into prop file.
-		pm.save();
+		config.save();
 	}
 
 	public void updateDataTable() throws ClassNotFoundException, SQLException {
@@ -103,12 +100,11 @@ public class CurexTableUpdater {
 	}
 
 	public void update() throws IOException, SQLException,
-			ClassNotFoundException, FileDoesntSpecifiedException,
-			ParseException, ConfigurationException {
-		boolean data = this.checkLocalLastRoundExpired();
+			ClassNotFoundException, ParseException, ConfigurationException {
+		boolean data = checkLocalLastRoundExpired();
 		if (data) {
-			this.updateLastRound();
-			this.updateDataTable();
+			updateLastRound();
+			updateDataTable();
 		}
 	}
 }

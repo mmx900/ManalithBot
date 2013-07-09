@@ -35,65 +35,36 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.manalith.ircbot.plugin.curex.exceptions.FileDoesntSpecifiedException;
 
 public class RemoteLocalDatetimeChecker {
 
-	private String LocalPath;
-	private String LocalFilename;
+	private String propFilePath;
 	private SimpleDateFormat sdf;
 
-	public RemoteLocalDatetimeChecker() {
-		this("", "");
-	}
+	public RemoteLocalDatetimeChecker(String propFilePath) {
+		this.propFilePath = propFilePath;
 
-	public RemoteLocalDatetimeChecker(String newLocalFilename) {
-		this("", newLocalFilename);
-	}
+		if ("".equals(propFilePath))
+			throw new IllegalArgumentException();
 
-	public RemoteLocalDatetimeChecker(String newLocalPath,
-			String newLocalFilename) {
-		this.setLocalPath(newLocalPath);
-		this.setLocalFilename(newLocalFilename);
 		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREAN);
 		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 	}
 
-	public void setLocalPath(String newLocalPath) {
-		this.LocalPath = newLocalPath;
-	}
-
-	public String getLocalPath() {
-		return this.LocalPath;
-	}
-
-	public void setLocalFilename(String newLocalFilename) {
-		this.LocalFilename = newLocalFilename;
-	}
-
-	public String getLocalFilename() {
-		return this.LocalFilename;
-	}
-
 	public DateTimeRound checkLatestUpdatedLocalDateandTime()
-			throws ConfigurationException, FileDoesntSpecifiedException,
-			ParseException {
+			throws ConfigurationException, ParseException {
 		DateTimeRound result = new DateTimeRound();
 		GregorianCalendar tCalendar = new GregorianCalendar();
 		tCalendar.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
-		if (this.getLocalFilename().equals(""))
-			throw new FileDoesntSpecifiedException();
-
-		PropertiesConfiguration prop = new PropertiesConfiguration(
-				this.getLocalPath() + this.getLocalFilename());
+		PropertiesConfiguration prop = new PropertiesConfiguration(propFilePath);
 
 		if (StringUtils.isEmpty(prop.getString("date"))) {
 			tCalendar.setTime(new Date(1L));
 			result.setCalendar(tCalendar);
 		} else {
-			System.out.println((String) prop.getString("date"));
-			Date localDate = sdf.parse((String) prop.getString("date"));
+			System.out.println(prop.getString("date"));
+			Date localDate = sdf.parse(prop.getString("date"));
 
 			tCalendar.setTime(localDate);
 

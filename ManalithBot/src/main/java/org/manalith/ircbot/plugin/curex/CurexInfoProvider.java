@@ -33,7 +33,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
-import org.manalith.ircbot.plugin.curex.exceptions.InvalidArgumentException;
 
 public class CurexInfoProvider {
 
@@ -211,9 +210,9 @@ public class CurexInfoProvider {
 	 * Argument re-arranger
 	 * 
 	 * @return arranged argument array
-	 * @throws InvalidArgumentException
+	 * @throws IllegalArgumentException
 	 */
-	public String[] rearrangeArgs() throws InvalidArgumentException {
+	public String[] rearrangeArgs() throws IllegalArgumentException {
 		String[] result = null;
 
 		TokenSubtype ts = getTokenSubtype(args[0], TokenType.Command);
@@ -243,24 +242,24 @@ public class CurexInfoProvider {
 					result[1] = args[1];
 					result[2] = "USD";
 				} else
-					throw new InvalidArgumentException(args[1]);
+					throw new IllegalArgumentException(args[1]);
 				break;
 			case 3:
 				// first arg.
 				if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown)
 					result[1] = args[1];
 				else
-					throw new InvalidArgumentException(args[1]);
+					throw new IllegalArgumentException(args[1]);
 
 				// second arg
 				if (getTokenSubtype(args[2], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
 					result[2] = args[2];
 				else
-					throw new InvalidArgumentException(args[2]);
+					throw new IllegalArgumentException(args[2]);
 
 				break;
 			default:
-				throw new InvalidArgumentException("불 필요한 인자");
+				throw new IllegalArgumentException("불 필요한 인자");
 			}
 		} else if (ts == TokenSubtype.CommandShow) {
 			switch (args.length) {
@@ -276,7 +275,7 @@ public class CurexInfoProvider {
 					System.arraycopy(args, 0, result, 0, args.length);
 					result[2] = "cr";
 				} else {
-					throw new InvalidArgumentException(args[1]);
+					throw new IllegalArgumentException(args[1]);
 				}
 				break;
 			case 3:
@@ -285,17 +284,17 @@ public class CurexInfoProvider {
 					result = new String[args.length];
 					System.arraycopy(args, 0, result, 0, args.length);
 				} else
-					throw new InvalidArgumentException(args[1] + " and "
+					throw new IllegalArgumentException(args[1] + " and "
 							+ args[2]);
 				break;
 			default:
-				throw new InvalidArgumentException("불 필요한 인자");
+				throw new IllegalArgumentException("불 필요한 인자");
 			}
 
 		} else if (ts == TokenSubtype.CommandConvert) {
 			switch (args.length) {
 			case 1:
-				throw new InvalidArgumentException("필요한 옵션 빠짐");
+				throw new IllegalArgumentException("필요한 옵션 빠짐");
 			case 2:
 				if (getTokenSubtype(args[1], TokenType.Amount) != TokenSubtype.Unknown) {
 					result = new String[4];
@@ -303,7 +302,7 @@ public class CurexInfoProvider {
 					result[2] = "USD";
 					result[3] = "KRW";
 				} else
-					throw new InvalidArgumentException(args[1]);
+					throw new IllegalArgumentException(args[1]);
 
 				break;
 			case 3:
@@ -319,7 +318,7 @@ public class CurexInfoProvider {
 					System.arraycopy(args, 0, result, 0, args.length);
 					result[3] = "KRW";
 				} else
-					throw new InvalidArgumentException(args[1] + " and "
+					throw new IllegalArgumentException(args[1] + " and "
 							+ args[2]);
 				break;
 			case 4:
@@ -329,11 +328,11 @@ public class CurexInfoProvider {
 					result = new String[4];
 					System.arraycopy(args, 0, result, 0, args.length);
 				} else
-					throw new InvalidArgumentException(args[1] + ", " + args[2]
+					throw new IllegalArgumentException(args[1] + ", " + args[2]
 							+ " and " + args[3]);
 				break;
 			default:
-				throw new InvalidArgumentException("불 필요한 인자");
+				throw new IllegalArgumentException("불 필요한 인자");
 			}
 		} else {
 			switch (args.length) {
@@ -350,7 +349,7 @@ public class CurexInfoProvider {
 					result[2] = "USD";
 					result[3] = "KRW";
 				} else {
-					throw new InvalidArgumentException(args[0]);
+					throw new IllegalArgumentException(args[0]);
 				}
 				break;
 			case 2:
@@ -373,7 +372,7 @@ public class CurexInfoProvider {
 					System.arraycopy(args, 0, result, 1, 2);
 					result[3] = "KRW";
 				} else {
-					throw new InvalidArgumentException(args[0] + " and "
+					throw new IllegalArgumentException(args[0] + " and "
 							+ args[1]);
 				}
 				break;
@@ -387,7 +386,7 @@ public class CurexInfoProvider {
 				}
 				break;
 			default:
-				throw new InvalidArgumentException("불 필요한 인자");
+				throw new IllegalArgumentException("불 필요한 인자");
 
 			}
 
@@ -401,13 +400,13 @@ public class CurexInfoProvider {
 	 * 
 	 * @return result message as string
 	 * @throws EmptyTokenStreamException
-	 * @throws InvalidArgumentException
+	 * @throws IllegalArgumentException
 	 * @throws IOException
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
 	public String commandInterpreter() throws EmptyTokenStreamException,
-			InvalidArgumentException, ConfigurationException, SQLException,
+			IllegalArgumentException, ConfigurationException, SQLException,
 			ParseException, ClassNotFoundException {
 		String result = "";
 		TokenSubtype st;
@@ -430,7 +429,7 @@ public class CurexInfoProvider {
 			if (getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown)
 				currencyUnit = args[0];
 			else
-				throw new InvalidArgumentException("통화 단위 아님");
+				throw new IllegalArgumentException("통화 단위 아님");
 
 			StringBuilder fieldName = new StringBuilder();
 			fieldName.append("country_name,");
@@ -453,7 +452,7 @@ public class CurexInfoProvider {
 			else if (getTokenSubtype(args[1], TokenType.FieldAbbr) == TokenSubtype.FADollarExcRate)
 				fieldName.append("currency_unit,dollar_exc_rate");
 			else
-				throw new InvalidArgumentException("알 수 없는 필드 [ " + args[1]
+				throw new IllegalArgumentException("알 수 없는 필드 [ " + args[1]
 						+ " ] ");
 
 			result = showCurrencyRate(currencyUnit, fieldName.toString());
@@ -469,13 +468,13 @@ public class CurexInfoProvider {
 				else
 					value = args[0];
 			} else
-				throw new InvalidArgumentException("금액 아님");
+				throw new IllegalArgumentException("금액 아님");
 			st = getTokenSubtype(args[1], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
-				throw new InvalidArgumentException("화폐 단위 아님");
+				throw new IllegalArgumentException("화폐 단위 아님");
 			st = getTokenSubtype(args[2], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
-				throw new InvalidArgumentException("화폐 단위 아님");
+				throw new IllegalArgumentException("화폐 단위 아님");
 
 			result = convert(value, args[1], args[2]);
 		} else if (cl.hasOption("buycash") || cl.hasOption("cellcash")
@@ -491,10 +490,10 @@ public class CurexInfoProvider {
 				else
 					value = args[0];
 			} else
-				throw new InvalidArgumentException("금액 아님");
+				throw new IllegalArgumentException("금액 아님");
 			st = getTokenSubtype(args[1], TokenType.CurrencyUnit);
 			if (st == TokenSubtype.Unknown)
-				throw new InvalidArgumentException("화폐 단위 아님");
+				throw new IllegalArgumentException("화폐 단위 아님");
 
 			currencyUnit = args[1];
 
@@ -543,7 +542,7 @@ public class CurexInfoProvider {
 				"Aug", "Sep", "Oct", "Nov", "Dec" };
 
 		PropertiesConfiguration pm = new PropertiesConfiguration(path
-				+ "LatestUpdatedDatetime.prop");
+				+ CurexTableUpdater.PROP_FILE_NAME);
 
 		String dt = pm.getString("date");
 		String roundstr = pm.getString("round");

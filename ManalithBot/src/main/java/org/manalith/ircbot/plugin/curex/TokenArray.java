@@ -22,11 +22,7 @@ import java.util.ArrayList;
 
 public class TokenArray {
 
-	private ArrayList<TokenUnit> array;
-
-	public TokenArray() {
-		array = new ArrayList<TokenUnit>();
-	}
+	private ArrayList<TokenUnit> array = new ArrayList<TokenUnit>();
 
 	public int getSize() {
 		return array.size();

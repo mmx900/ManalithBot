@@ -19,12 +19,14 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
+import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.AbstractBotPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component("cerPlugin")
 public class CurexPlugin extends AbstractBotPlugin {
+	private Logger logger = Logger.getLogger(getClass());
 
 	/*
 	 * (non-Javadoc)
@@ -96,6 +98,7 @@ public class CurexPlugin extends AbstractBotPlugin {
 					event.respond(result);
 				}
 			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
 				event.respond(e.getMessage());
 			}
 		} else if (subcmd.length > 2) {
@@ -111,16 +114,20 @@ public class CurexPlugin extends AbstractBotPlugin {
 				arg += command[i];
 			}
 
-			CurexCustomSettingManager csMan = new CurexCustomSettingManager(
-					this.getResourcePath(), target, userNick, arg);
+			try {
+				CurexCustomSettingManager csMan = new CurexCustomSettingManager(
+						getResourcePath(), target, userNick, arg);
 
-			if (subcmd[1].equals("sub"))
-				event.respond(csMan.addUserSetting());
-			else if (subcmd[1].equals("unsub")) {
-				event.respond(csMan.removeUserSetting());
-			} else
-				event.respond("그런 옵션은 없습니다.");
-
+				if (subcmd[1].equals("sub"))
+					event.respond(csMan.addUserSetting());
+				else if (subcmd[1].equals("unsub")) {
+					event.respond(csMan.removeUserSetting());
+				} else
+					event.respond("그런 옵션은 없습니다.");
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+				event.respond(e.getMessage());
+			}
 		}
 	}
 }

@@ -32,18 +32,25 @@ import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 public class CurexCustomSettingManager extends TokenAnalyzer {
 	private final Logger logger = Logger.getLogger(getClass());
 
-	private final String localPath;
+	private final String dataPath;
 	private final String channel;
 	private final String userNick;
 	private final String currencyArgs;
+	public static final String PROP_FILE = "customsetlist.prop";
 
 	public CurexCustomSettingManager(String localPath, String channel,
-			String userNick, String currencyArgs) {
-		this.localPath = localPath;
+			String userNick, String currencyArgs) throws ConfigurationException {
+		this.dataPath = localPath;
 
-		File f = new File(localPath);
-		if (!f.exists())
-			f.mkdirs();
+		PropertiesConfiguration config;
+
+		try {
+			config = new PropertiesConfiguration(localPath + PROP_FILE);
+		} catch (ConfigurationException e) {
+			config = new PropertiesConfiguration();
+			config.setFile(new File(localPath + PROP_FILE));
+			config.save();
+		}
 
 		this.channel = channel;
 		this.userNick = userNick;
@@ -63,7 +70,7 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 			}
 
 			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
-					localPath + "customsetlist.prop");
+					dataPath + PROP_FILE);
 
 			if (!StringUtils.isEmpty(customsetlist.getString(userNick))) {
 				result += "이미 설정이 등록되어 새로운 설정으로 대체합니다. ";
@@ -94,7 +101,7 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 
 		try {
 			PropertiesConfiguration customsetlist = new PropertiesConfiguration(
-					localPath + "customsetlist.prop");
+					dataPath + PROP_FILE);
 
 			Iterator<String> userlist = customsetlist.getKeys();
 			if (userlist == null) {
@@ -138,7 +145,7 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 			try {
 				result = TokenSubtype.valueOf("Currency" + TokenString);
 			} catch (IllegalArgumentException e) {
-				;
+				// ignore
 			}
 		}
 
