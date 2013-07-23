@@ -4,6 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageUtils {
+	private static final Pattern PATTERN_URI = Pattern
+			.compile(".*(https?://\\S+).*");
 
 	/**
 	 * 메시지 본문에서 http 혹은 https로 시작하는 URI를 추출해 반환한다. URI가 없을 경우 null을 반환한다.
@@ -16,9 +18,7 @@ public class MessageUtils {
 		if (!msg.contains("http"))
 			return null;
 
-		String URI_REGEX = ".*(https?://\\S+).*";
-		Pattern pattern = Pattern.compile(URI_REGEX);
-		Matcher matcher = pattern.matcher(msg);
+		Matcher matcher = PATTERN_URI.matcher(msg);
 
 		if (!matcher.matches())
 			return null;
