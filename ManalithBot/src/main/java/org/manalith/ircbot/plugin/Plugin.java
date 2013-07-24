@@ -22,12 +22,28 @@ package org.manalith.ircbot.plugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.osgi.framework.BundleActivator;
 
-public interface IBotPlugin extends BundleActivator {
+public interface Plugin extends BundleActivator {
+
+	/**
+	 * 이름을 반환. 이름에 '플러그인'을 포함하지 않기를 권장함.
+	 */
 	public String getName();
 
+	/**
+	 * 사용되는 모든 명령어를 반환. 현재는 자동으로 출력되는 것을 사용하도록 권장.
+	 */
+	@Deprecated
 	public String getCommands();
 
+	/**
+	 * 도움말을 반환. 현재는 getDescription()과 getUsage()로 나눠서 사용하기를 권장.
+	 */
+	@Deprecated
 	public String getHelp();
+
+	public String getUsage();
+
+	public String getDescription();
 
 	public void onJoin(String channel, String sender, String login,
 			String hostname);

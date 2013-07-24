@@ -18,13 +18,13 @@
  */
 package org.manalith.ircbot.plugin.linuxpkgfinder;
 
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GentooPackageFinder extends PackageFinder {
-
 	protected String keyword;
 	protected GentooSearchEngineProvider provider;
 
@@ -34,40 +34,20 @@ public class GentooPackageFinder extends PackageFinder {
 	}
 
 	@Override
-	public String getCommands() {
-		return "!gen";
-	}
-
-	public String getHelp() {
-		return "설  명: 지정한 이름을 가진 젠투의 패키지를 검색합니다, 사용법: !gen [키워드]";
-	}
-
-	public GentooPackageFinder() {
-		this.setKeyword("");
-	}
-
-	public GentooPackageFinder(String newKeyword) {
-		this.setKeyword(newKeyword);
+	public String getDescription() {
+		return "지정한 이름을 가진 젠투의 패키지를 검색합니다.";
 	}
 
 	public void setProvider(GentooSearchEngineProvider provider) {
 		this.provider = provider;
 	}
 
-	public void setKeyword(String newKeyword) {
-		this.keyword = newKeyword;
-	}
-
 	public String getKeyword() {
 		return this.keyword;
 	}
 
-	@BotCommand(value = { "!gen" }, minimumArguments = 1)
-	public String find(MessageEvent event, String... args) {
-		return this.find(args[0]);
-	}
-
-	public String find(String arg) {
-		return this.provider.find(arg);
+	@BotCommand("gen")
+	public String find(@Description("키워드") @NotNull String keyword) {
+		return provider.find(keyword);
 	}
 }

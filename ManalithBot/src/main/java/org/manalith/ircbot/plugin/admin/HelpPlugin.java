@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.plugin.IBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
+import org.manalith.ircbot.plugin.Plugin;
 import org.manalith.ircbot.plugin.PluginManager;
 import org.manalith.ircbot.resources.MessageEvent;
 
-public class HelpPlugin extends AbstractBotPlugin {
+public class HelpPlugin extends SimplePlugin {
 	private static final String[] HELP_COMMANDS = new String[] { "!명령어", "!명령",
 			"!도움", "!도움말", "!help", "!plugins" };
 	private PluginManager pluginManager;
@@ -65,7 +65,7 @@ public class HelpPlugin extends AbstractBotPlugin {
 	private String getPluginInfo() {
 		ArrayList<String> plugins = new ArrayList<String>();
 
-		for (IBotPlugin p : pluginManager.getPlugins()) {
+		for (Plugin p : pluginManager.getPlugins()) {
 			String name = p.getName();
 			String commands = p.getCommands();
 
@@ -80,7 +80,7 @@ public class HelpPlugin extends AbstractBotPlugin {
 	}
 
 	private String getPluginInfo(String command) {
-		for (IBotPlugin p : pluginManager.getPlugins())
+		for (Plugin p : pluginManager.getPlugins())
 			if (StringUtils.contains(p.getCommands(), command))
 				return p.getHelp();
 

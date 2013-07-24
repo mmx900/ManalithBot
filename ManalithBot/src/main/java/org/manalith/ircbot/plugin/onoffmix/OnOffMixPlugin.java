@@ -5,8 +5,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -21,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see http://developer.onoffmix.com/doku.php
  *
  */
-public class OnOffMixPlugin extends AbstractBotPlugin {
+public class OnOffMixPlugin extends SimplePlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private String apiKey;
 
@@ -35,7 +37,7 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 
 	@Override
 	public String getName() {
-		return "온오프믹스 플러그인";
+		return "온오프믹스";
 	}
 
 	@Override
@@ -48,9 +50,10 @@ public class OnOffMixPlugin extends AbstractBotPlugin {
 		return "설  명: 온오프믹스 행사를 조회합니다., 사용법: !onoffmix [조회할 이벤트ID]";
 	}
 
-	@BotCommand(value = { "!onoffmix" }, minimumArguments = 1)
-	public String getEventInfo(String... args) {
-		int eventIdx = NumberUtils.toInt(StringUtils.join(args));
+	@BotCommand("!onoffmix")
+	public String getEventInfo(
+			@Description("조회할 이벤트 ID") @NotNull String eventId) {
+		int eventIdx = NumberUtils.toInt(eventId);
 
 		if (eventIdx == 0)
 			return getHelp();

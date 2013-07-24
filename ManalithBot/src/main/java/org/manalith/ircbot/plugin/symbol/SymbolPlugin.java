@@ -1,57 +1,46 @@
 package org.manalith.ircbot.plugin.symbol;
 
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SymbolPlugin extends AbstractBotPlugin {
+public class SymbolPlugin extends SimplePlugin {
 
 	@Override
 	public String getName() {
-		return "심볼 찾기 플러그인";
+		return "심볼 찾기";
 	}
 
 	@Override
-	public String getCommands() {
-		return "!심볼";
+	public String getDescription() {
+		return "심볼을 텍스트로 보여줍니다.";
 	}
 
-	public String getHelp() {
-		return "설  명: 심볼을 텍스트로 보여줍니다, 사용법: !심볼 [심볼(그림문자)]";
-	}
-
-	@Override
-	public void onMessage(MessageEvent event) {
-		String[] segments = event.getMessageSegments();
-		if (segments.length == 2 && segments[0].equals("!심볼")) {
-			switch (segments[1]) {
-			case "->":
-				event.respond("→");
-				break;
-			case "<-":
-				event.respond("←");
-				break;
-			case "v":
-				event.respond("✌");
-				break;
-			case "*":
-				event.respond("•");
-				break;
-			case ":-)":
-				event.respond("☺");
-				break;
-			case ":-(":
-				event.respond("☹");
-				break;
-			case "x":
-				event.respond("✖");
-				break;
-			case "...":
-				event.respond("…");
-				break;
-			}
+	@BotCommand("심볼")
+	public String symbol(@Description("심볼(그림문자)") @NotNull String str) {
+		switch (str) {
+		case "->":
+			return "→";
+		case "<-":
+			return "←";
+		case "v":
+			return "✌";
+		case "*":
+			return "•";
+		case ":-)":
+			return "☺";
+		case ":-(":
+			return "☹";
+		case "x":
+			return "✖";
+		case "...":
+			return "…";
 		}
+
+		return "해당하는 문자가 없습니다.";
 	}
 
 }

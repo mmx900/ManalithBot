@@ -21,13 +21,13 @@ package org.manalith.ircbot.plugin.missedmessage;
 import java.util.Set;
 
 import org.manalith.ircbot.ManalithBot;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MissedMessagePlugin extends AbstractBotPlugin {
+public class MissedMessagePlugin extends SimplePlugin {
 
 	public String getName() {
 		return "부재중메시지";

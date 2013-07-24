@@ -1,57 +1,39 @@
 package org.manalith.ircbot.plugin.symbol;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UnicodePlugin extends AbstractBotPlugin {
-	private static final String[] COMMANDS = { "!u", "!unicode", "!유니코드" };
-
+public class UnicodePlugin extends SimplePlugin {
 	@Override
 	public String getName() {
-		return "유니코드 변환 플러그인";
+		return "유니코드 변환";
 	}
 
-	@Override
-	public String getCommands() {
-		return StringUtils.join(COMMANDS, ",");
-	}
-
-	@Override
-	public String getHelp() {
-		return "!유니코드 [변환할 문자 혹은 코드]";
-	}
-
-	@Override
-	public void onMessage(MessageEvent event) {
-		String[] segments = event.getMessageSegments();
-		if (segments.length == 2 && ArrayUtils.contains(COMMANDS, segments[0])) {
-			String text = segments[1];
-			try {
-				if (text.startsWith("\\u") || text.startsWith("U+")) {
-					char ch = (char) Integer.parseInt(text.substring(2), 16);
-					event.respond(ch + " - " + Character.getName(ch));
-				} else {
-					char[] chars = text.toCharArray();
-					StringBuilder sb = new StringBuilder();
-					for (char ch : chars) {
-						sb.append("U+"
-								+ Integer.toHexString(ch | 0x10000)
-										.substring(1));
-					}
-					if (chars.length == 1) {
-						sb.append(" - ");
-						sb.append(Character.getName(chars[0]));
-					}
-					event.respond(sb.toString());
+	@BotCommand({ "u", "유니코드" })
+	public String unicode(@Description("변환할 문자 혹은 코드") @NotNull String text) {
+		try {
+			if (text.startsWith("\\u") || text.startsWith("U+")) {
+				char ch = (char) Integer.parseInt(text.substring(2), 16);
+				return ch + " - " + Character.getName(ch);
+			} else {
+				char[] chars = text.toCharArray();
+				StringBuilder sb = new StringBuilder();
+				for (char ch : chars) {
+					sb.append("U+"
+							+ Integer.toHexString(ch | 0x10000).substring(1));
 				}
-			} catch (NumberFormatException e) {
-				event.respond("잘못된 유니코드 문자열입니다.");
+				if (chars.length == 1) {
+					sb.append(" - ");
+					sb.append(Character.getName(chars[0]));
+				}
+				return sb.toString();
 			}
+		} catch (NumberFormatException e) {
+			return "잘못된 유니코드 문자열입니다.";
 		}
 	}
-
 }

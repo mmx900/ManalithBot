@@ -1,14 +1,12 @@
 package org.manalith.ircbot.plugin;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.command.CommandParser;
-import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
@@ -57,10 +55,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EventDispatcher extends ListenerAdapter<ManalithBot> {
+	public static final String COMMAND_PREFIX = "!";
 	private final Logger logger = Logger.getLogger(getClass());
 
 	@Autowired
-	private PluginManager pluginManager;
+	private PluginManager plugins;
 
 	public void dispatchMessageEvent(
 			org.manalith.ircbot.resources.MessageEvent event) {
@@ -70,54 +69,18 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 			return;
 		}
 
+		String[] segments = event.getMessageSegments();
+		String cmd = segments[0];
+		String[] params = ArrayUtils.subarray(segments, 1, segments.length);
+
 		// 어노테이션(@BotCommand) 기반 플러그인 실행
-		for (Method method : pluginManager.getCommands().keySet()) {
-			BotCommand commandMeta = method.getAnnotation(BotCommand.class);
+		if (cmd.startsWith(COMMAND_PREFIX)) {
+			for (Command command : plugins.getCommands().keySet()) {
+				if (!command.matches(cmd, BotEvent.ON_MESSAGE))
+					continue;
 
-			String[] segments = event.getMessageSegments();
-
-			if (!ArrayUtils.contains(commandMeta.listeners(),
-					BotEvent.ON_MESSAGE))
-				continue;
-
-			if (!ArrayUtils.contains(commandMeta.value(), segments[0]))
-				continue;
-
-			IBotPlugin plugin = (IBotPlugin) pluginManager.getCommands().get(
-					method);
-
-			if (segments.length - 1 < commandMeta.minimumArguments()) {
-				event.respond(String.format("실행에 필요한 인자의 수는 최소 %d 개입니다.",
-						commandMeta.minimumArguments()));
-			} else {
 				try {
-					String result = null;
-
-					switch (method.getParameterTypes().length) {
-					case 0:
-						result = (String) method.invoke(plugin);
-						break;
-					case 1:
-						if (method.getParameterTypes()[0] == MessageEvent.class) {
-							result = (String) method.invoke(plugin, event);
-						} else {
-							result = (String) method.invoke(plugin,
-									(Object) ArrayUtils.subarray(segments, 1,
-											segments.length));
-						}
-						break;
-					default:
-						result = (String) method.invoke(plugin, event,
-								ArrayUtils.subarray(segments, 1,
-										segments.length));
-					}
-
-					if (StringUtils.isNotBlank(result)) {
-						event.getBot().sendMessage(
-								event.getChannel().getName(), result);
-					}
-
-					event.setExecuted(commandMeta.stopEvent());
+					event.respond(command.execute(event, params));
 				} catch (IllegalArgumentException | IllegalAccessException
 						| InvocationTargetException e) {
 					logger.warn(e.getMessage(), e);
@@ -125,14 +88,14 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 					event.respond(String.format("실행중 %s 오류가 발생했습니다.",
 							e.getMessage()));
 				}
-			}
 
-			if (event.isExecuted())
-				return;
+				if (event.isExecuted())
+					return;
+			}
 		}
 
 		// 비 어노테이션 기반 플러그인 실행
-		for (IBotPlugin plugin : pluginManager.getPlugins()) {
+		for (Plugin plugin : plugins.getPlugins()) {
 			plugin.onMessage(event);
 
 			if (event.isExecuted())
@@ -190,7 +153,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 		org.manalith.ircbot.resources.MessageEvent msg = new org.manalith.ircbot.resources.MessageEvent(
 				event);
-		for (IBotPlugin plugin : pluginManager.getPlugins()) {
+		for (Plugin plugin : plugins.getPlugins()) {
 			plugin.onPrivateMessage(msg);
 			if (msg.isExecuted())
 				break;
@@ -210,7 +173,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onJoin(JoinEvent<ManalithBot> event) throws Exception {
-		for (IBotPlugin plugin : pluginManager.getPlugins())
+		for (Plugin plugin : plugins.getPlugins())
 			plugin.onJoin(event.getChannel().getName(), event.getUser()
 					.getNick(), event.getUser().getLogin(), event.getUser()
 					.getHostmask());
@@ -218,7 +181,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onPart(PartEvent<ManalithBot> event) throws Exception {
-		for (IBotPlugin plugin : pluginManager.getPlugins())
+		for (Plugin plugin : plugins.getPlugins())
 			plugin.onPart(event.getChannel().getName(), event.getUser()
 					.getNick(), event.getUser().getLogin(), event.getUser()
 					.getHostmask());
@@ -238,7 +201,7 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 
 	@Override
 	public void onQuit(QuitEvent<ManalithBot> event) throws Exception {
-		for (IBotPlugin plugin : pluginManager.getPlugins())
+		for (Plugin plugin : plugins.getPlugins())
 			plugin.onQuit(event.getUser().getNick(),
 					event.getUser().getLogin(), event.getUser().getHostmask(),
 					event.getReason());

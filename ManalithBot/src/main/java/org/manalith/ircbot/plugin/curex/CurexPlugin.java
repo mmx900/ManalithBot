@@ -20,12 +20,12 @@
 package org.manalith.ircbot.plugin.curex;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component("cerPlugin")
-public class CurexPlugin extends AbstractBotPlugin {
+public class CurexPlugin extends SimplePlugin {
 	private Logger logger = Logger.getLogger(getClass());
 
 	/*

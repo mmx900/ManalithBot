@@ -28,8 +28,9 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,20 +43,13 @@ public class ArchPackageFinder extends PackageFinder {
 	}
 
 	@Override
-	public String getCommands() {
-		return "!ar";
+	public String getDescription() {
+		return "지정한 이름을 가진 아치의 패키지를 검색합니다.";
 	}
 
-	public String getHelp() {
-		return "설  명: 지정한 이름을 가진 아치의 패키지를 검색합니다, 사용법: !ar [키워드]";
-	}
-
-	@BotCommand(value = { "!ar" }, minimumArguments = 1)
-	public String find(MessageEvent event, String... args) {
-		return this.find(args[0]);
-	}
-
-	private String getResultFromMainPkgDB(String arg) throws IOException {
+	@BotCommand("ar")
+	public String getResultFromMainPkgDB(@Description("키워드") @NotNull String arg)
+			throws IOException {
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
 		int len = arch_keywords.length;

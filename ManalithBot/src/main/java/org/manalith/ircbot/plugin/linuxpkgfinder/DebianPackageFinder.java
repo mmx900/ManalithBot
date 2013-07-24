@@ -25,8 +25,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -39,12 +40,8 @@ public class DebianPackageFinder extends PackageFinder {
 	}
 
 	@Override
-	public String getCommands() {
-		return "!deb";
-	}
-
-	public String getHelp() {
-		return "설  명: 지정한 이름을 가진 데비안의 패키지를 검색합니다, 사용법: !deb [키워드]";
+	public String getDescription() {
+		return "지정한 이름을 가진 데비안의 패키지를 검색합니다.";
 	}
 
 	public String parseVersionInfo(Document doc) {
@@ -79,14 +76,10 @@ public class DebianPackageFinder extends PackageFinder {
 		return result;
 	}
 
-	@BotCommand(value = { "!deb" }, minimumArguments = 1)
-	public String find(MessageEvent event, String... args) {
-		return this.find(args[0]);
-	}
-
-	public String find(String arg) {
+	@BotCommand("deb")
+	public String find(@Description("키워드") @NotNull String keyword) {
 		String result = "";
-		String url = "http://packages.debian.org/search?keywords=" + arg
+		String url = "http://packages.debian.org/search?keywords=" + keyword
 				+ "&searchon=names&suite=all&section=all";
 
 		boolean hasExacthits = false;

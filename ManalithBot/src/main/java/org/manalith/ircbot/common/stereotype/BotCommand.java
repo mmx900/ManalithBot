@@ -12,9 +12,7 @@ public @interface BotCommand {
 		ON_MESSAGE, ON_PRIVATE_MESSAGE
 	}
 
-	String[] value();
-
-	int minimumArguments() default 0;
+	String[] value() default {};
 
 	BotEvent[] listeners() default { BotEvent.ON_MESSAGE };
 

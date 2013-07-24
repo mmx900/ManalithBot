@@ -19,12 +19,12 @@
  */
 package org.manalith.ircbot.plugin.sample;
 
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PlainOldBotPlugin extends AbstractBotPlugin {
+public class PlainOldBotPlugin extends SimplePlugin {
 
 	@Override
 	public String getName() {

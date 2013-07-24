@@ -33,7 +33,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -43,7 +43,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
-public class GooglePlugin extends AbstractBotPlugin {
+public class GooglePlugin extends SimplePlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "!구글";
 	private static final String HIGH_INTENSITY = "\u0002";

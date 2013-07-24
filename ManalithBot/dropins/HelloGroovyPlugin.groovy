@@ -1,8 +1,8 @@
-import org.manalith.ircbot.plugin.AbstractBotPlugin
+import org.manalith.ircbot.plugin.SimplePlugin
 import org.manalith.ircbot.resources.MessageEvent
 
 
-class HelloGroovyPlugin extends AbstractBotPlugin {
+class HelloGroovyPlugin extends SimplePlugin {
 	private final String COMMAND = "!helloGroovy";
 
 	@Override

@@ -6,18 +6,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.command.CommandParser;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DictionaryPlugin extends AbstractBotPlugin {
+public class DictionaryPlugin extends SimplePlugin {
 	@Autowired
 	private WordDao wordDao;
 
 	public String getName() {
-		return "FAQ 플러그인";
+		return "FAQ";
 	}
 
 	public String getCommands() {

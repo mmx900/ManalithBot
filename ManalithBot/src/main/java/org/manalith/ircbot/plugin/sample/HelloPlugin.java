@@ -21,31 +21,29 @@ package org.manalith.ircbot.plugin.sample;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.Channel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HelloPlugin extends AbstractBotPlugin {
+public class HelloPlugin extends SimplePlugin {
 
 	@Override
 	public String getName() {
-		return "Hello Plugin (Sample)";
+		return "Hello (Sample)";
 	}
 
 	@Override
-	public String getCommands() {
-		return "!hello|!bye";
+	public String getDescription() {
+		return "예제 플러그인 입니다.";
 	}
 
-	public String getHelp() {
-		return "설 명: 예제 플러그인 입니다, 사용법: !hello|!bye|!count|!채널인사 [인사말]";
-	}
-
-	@BotCommand({ "!hello", "!인사" })
-	public String sayHello(String... args) {
+	@BotCommand("인사")
+	public String hello(String... args) {
 		if (ArrayUtils.isEmpty(args)) {
 			return "Hello world!";
 		} else {
@@ -53,12 +51,12 @@ public class HelloPlugin extends AbstractBotPlugin {
 		}
 	}
 
-	@BotCommand({ "!bye", "!작별인사" })
-	public String sayBye() {
+	@BotCommand("작별인사")
+	public String bye() {
 		return "Bye!";
 	}
 
-	@BotCommand({ "!count" })
+	@BotCommand
 	public String count(MessageEvent event) {
 		Channel channel = event.getChannel();
 
@@ -66,9 +64,10 @@ public class HelloPlugin extends AbstractBotPlugin {
 				.getUsers().size());
 	}
 
-	@BotCommand(value = { "!채널인사" }, minimumArguments = 1)
-	public String sayHelloWithCount(MessageEvent event, String... args) {
-		return String.format("%s 방 여러분 %s", event.getChannel().getName(),
-				args[0]);
+	@BotCommand("채널인사")
+	public String sayHelloWithCount(MessageEvent event,
+			@Description("인사말") @NotNull String hello) {
+		return String
+				.format("%s 방 여러분 %s", event.getChannel().getName(), hello);
 	}
 }

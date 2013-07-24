@@ -24,7 +24,7 @@ import java.io.File;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.osgi.framework.BundleContext;
 
-public abstract class AbstractBotPlugin implements IBotPlugin {
+public abstract class SimplePlugin implements Plugin {
 	public String getResourcePath() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(System.getProperty("user.dir"));
@@ -37,7 +37,24 @@ public abstract class AbstractBotPlugin implements IBotPlugin {
 	}
 
 	@Override
+	@Deprecated
+	public String getCommands() {
+		return null;
+	}
+
+	@Override
+	@Deprecated
 	public String getHelp() {
+		return null;
+	}
+
+	@Override
+	public String getUsage() {
+		return null;
+	}
+
+	@Override
+	public String getDescription() {
 		return null;
 	}
 

@@ -1,6 +1,6 @@
 package org.manalith.ircbot.plugin.encode;
 
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class ReplacementCharacterDetectPlugin extends AbstractBotPlugin {
+public class ReplacementCharacterDetectPlugin extends SimplePlugin {
 
 	@Override
 	public String getName() {
-		return "유니코드 대체 문자 감지 플러그인";
+		return "유니코드 대체 문자 감지";
 	}
 
 	@Override

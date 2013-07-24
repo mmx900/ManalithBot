@@ -3,7 +3,7 @@ package org.manalith.ircbot.plugin.relay;
 import java.util.StringTokenizer;
 
 import org.manalith.ircbot.ManalithBot;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class RelayPlugin extends AbstractBotPlugin {
+public class RelayPlugin extends SimplePlugin {
 	public static RelayBot RELAY_BOT;
 	private String outputFormat;
 

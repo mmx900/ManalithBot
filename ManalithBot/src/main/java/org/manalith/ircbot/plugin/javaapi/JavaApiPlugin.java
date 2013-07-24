@@ -3,12 +3,12 @@ package org.manalith.ircbot.plugin.javaapi;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JavaApiPlugin extends AbstractBotPlugin {
+public class JavaApiPlugin extends SimplePlugin {
 	private static final String NAMESPACE = "!japi";
 
 	public String getName() {

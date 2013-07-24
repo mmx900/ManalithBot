@@ -19,26 +19,24 @@
 package org.manalith.ircbot.plugin.nvidiadrivernews;
 
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NvidiaDriverNewsPlugin extends AbstractBotPlugin {
+public class NvidiaDriverNewsPlugin extends SimplePlugin {
 	private NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
 
+	@Override
 	public String getName() {
 		return "Nvidia최신";
 	}
 
-	public String getCommands() {
-		return "!nvidia";
+	@Override
+	public String getDescription() {
+		return "Nvidia 그래픽 디스플레이 드라이버의 최신 버전을 보여줍니다.";
 	}
 
-	public String getHelp() {
-		return "설  명: Nvidia 그래픽 디스플레이 드라이버의 최신 버전을 보여줍니다, 사용법: !nvidia";
-	}
-
-	@BotCommand({ "!nvidia" })
+	@BotCommand("nvidia")
 	public String getNews() {
 		return reader.read();
 	}

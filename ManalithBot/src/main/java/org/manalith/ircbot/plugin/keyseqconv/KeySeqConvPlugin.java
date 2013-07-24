@@ -21,12 +21,12 @@ package org.manalith.ircbot.plugin.keyseqconv;
 import java.text.ParseException;
 
 import org.apache.log4j.Logger;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component("keySeqConvPlugin")
-public class KeySeqConvPlugin extends AbstractBotPlugin {
+public class KeySeqConvPlugin extends SimplePlugin {
 
 	private Logger logger = Logger.getLogger(getClass());
 	private DubeolAutomataEngine dengine;

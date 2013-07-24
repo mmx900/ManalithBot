@@ -20,7 +20,7 @@ package org.manalith.ircbot;
 
 import java.util.List;
 
-import org.manalith.ircbot.plugin.IBotPlugin;
+import org.manalith.ircbot.plugin.Plugin;
 
 public class Configuration {
 	private String botLogin;
@@ -31,7 +31,7 @@ public class Configuration {
 	private String serverEncoding;
 	private String defaultChannels;
 	private boolean tryToReconnect;
-	private List<IBotPlugin> plugins;
+	private List<Plugin> plugins;
 	private boolean autoAcceptInvite;
 
 	/**
@@ -157,7 +157,7 @@ public class Configuration {
 	/**
 	 * @return the plugins
 	 */
-	public List<IBotPlugin> getPlugins() {
+	public List<Plugin> getPlugins() {
 		return plugins;
 	}
 
@@ -165,7 +165,7 @@ public class Configuration {
 	 * @param plugins
 	 *            the plugins to set
 	 */
-	public void setPlugins(List<IBotPlugin> plugins) {
+	public void setPlugins(List<Plugin> plugins) {
 		this.plugins = plugins;
 	}
 

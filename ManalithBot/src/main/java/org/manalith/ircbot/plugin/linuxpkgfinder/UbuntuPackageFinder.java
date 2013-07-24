@@ -24,8 +24,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,22 +39,15 @@ public class UbuntuPackageFinder extends PackageFinder {
 	}
 
 	@Override
-	public String getCommands() {
-		return "!ubu";
+	public String getDescription() {
+		return "지정한 이름을 가진 우분투의 패키지를 검색합니다.";
 	}
 
-	public String getHelp() {
-		return "설  명: 지정한 이름을 가진 우분투의 패키지를 검색합니다, 사용법: !ubu [키워드]";
-	}
-
-	@BotCommand(value = { "!ubu" }, minimumArguments = 1)
-	public String find(MessageEvent event, String... args) {
-		return this.find(args[0]);
-	}
-
-	public String find(String arg) {
+	@BotCommand("ubu")
+	public String find(@Description("키워드") @NotNull String arg) {
 		String result = "";
 		String latestPkgName = "";
+
 		try {
 			latestPkgName = this.getLatestPkgName();
 		} catch (Exception e) {
@@ -61,6 +55,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 			result = "오류: " + e.getMessage();
 			return result;
 		}
+
 		String url = "http://packages.ubuntu.com/search?keywords=" + arg
 				+ "&searchon=names&suite=" + latestPkgName + "&section=all";
 

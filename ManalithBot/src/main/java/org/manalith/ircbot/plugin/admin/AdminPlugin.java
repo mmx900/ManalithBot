@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AdminPlugin extends AbstractBotPlugin {
+public class AdminPlugin extends SimplePlugin {
 	private List<Admin> admins = new ArrayList<Admin>();
 	private String password;
 
@@ -32,11 +32,6 @@ public class AdminPlugin extends AbstractBotPlugin {
 	@Override
 	public String getName() {
 		return "AUTH";
-	}
-
-	@Override
-	public String getCommands() {
-		return null;
 	}
 
 	@Override

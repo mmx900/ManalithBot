@@ -25,8 +25,9 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
-import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -39,23 +40,15 @@ public class FedoraPackageFinder extends PackageFinder {
 	}
 
 	@Override
-	public String getCommands() {
-		return "!fed";
+	public String getDescription() {
+		return "지정한 이름을 가진 페도라의 패키지를 검색합니다.";
 	}
 
-	public String getHelp() {
-		return "설  명: 지정한 이름을 가진 페도라의 패키지를 검색합니다, 사용법: !fed [키워드]";
-	}
-
-	@BotCommand(value = { "!fed" }, minimumArguments = 1)
-	public String find(MessageEvent event, String... args) {
-		return this.find(args[0]);
-	}
-
-	public String find(String arg) {
+	@BotCommand("fed")
+	public String find(@Description("키워드") @NotNull String keyword) {
 		String result = "";
 
-		if (arg.equals("")) {
+		if (keyword.equals("")) {
 			result = "키워드를 지정하지 않았습니다";
 			return result;
 		}
@@ -63,7 +56,7 @@ public class FedoraPackageFinder extends PackageFinder {
 		try {
 
 			String url = "http://rpmfind.net/linux/rpm2html/search.php?query="
-					+ arg + "&submit=Search";
+					+ keyword + "&submit=Search";
 
 			Connection conn = Jsoup.connect(url);
 			conn.timeout(5000);

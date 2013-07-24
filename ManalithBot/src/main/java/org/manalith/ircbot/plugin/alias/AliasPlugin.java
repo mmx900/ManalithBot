@@ -4,18 +4,18 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AliasPlugin extends AbstractBotPlugin {
+public class AliasPlugin extends SimplePlugin {
 	@Autowired
 	private AliasDao aliasDao;
 
 	public String getName() {
-		return "Alias 플러그인";
+		return "별칭";
 	}
 
 	public String getCommands() {

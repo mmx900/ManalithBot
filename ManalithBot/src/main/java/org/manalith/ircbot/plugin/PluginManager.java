@@ -39,8 +39,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PluginManager {
 	private Logger logger = Logger.getLogger(getClass());
-	private List<IBotPlugin> list = new ArrayList<IBotPlugin>();
-	private Map<Method, Object> commands = new HashMap<Method, Object>();
+	private List<Plugin> list = new ArrayList<Plugin>();
+	private Map<Command, Object> commands = new HashMap<Command, Object>();
 	private Map<Method, Object> filters = new HashMap<Method, Object>();
 	private Map<Method, Object> timers = new HashMap<Method, Object>();
 
@@ -56,13 +56,13 @@ public class PluginManager {
 	@Autowired
 	private Configuration configuration;
 
-	public void load(List<IBotPlugin> plugins) {
-		for (IBotPlugin plugin : plugins) {
+	public void load(List<Plugin> plugins) {
+		for (Plugin plugin : plugins) {
 			load(plugin);
 		}
 	}
 
-	public void load(IBotPlugin plugin) {
+	public void load(Plugin plugin) {
 		extractEventDelegates(plugin);
 
 		list.add(plugin);
@@ -77,7 +77,7 @@ public class PluginManager {
 		}
 	}
 
-	public void unload(IBotPlugin plugin) {
+	public void unload(Plugin plugin) {
 		try {
 			plugin.stop(null);
 		} catch (Exception e) {
@@ -87,12 +87,12 @@ public class PluginManager {
 		list.remove(plugin);
 	}
 
-	private void extractEventDelegates(IBotPlugin plugin) {
+	private void extractEventDelegates(Plugin plugin) {
 		Method[] methods = plugin.getClass().getDeclaredMethods();
 		for (Method method : methods) {
 			BotCommand command = method.getAnnotation(BotCommand.class);
 			if (command != null) {
-				commands.put(method, plugin);
+				commands.put(new Command(method, plugin), plugin);
 				continue;
 			}
 
@@ -110,11 +110,11 @@ public class PluginManager {
 		}
 	}
 
-	public List<IBotPlugin> getPlugins() {
+	public List<Plugin> getPlugins() {
 		return list;
 	}
 
-	public Map<Method, Object> getCommands() {
+	public Map<Command, Object> getCommands() {
 		return commands;
 	}
 

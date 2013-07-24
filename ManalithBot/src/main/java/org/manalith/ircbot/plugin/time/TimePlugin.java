@@ -6,12 +6,12 @@ import java.util.Date;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TimePlugin extends AbstractBotPlugin {
+public class TimePlugin extends SimplePlugin {
 	private final String[] commands = { "!시간", "!time", "!월요일", "!금요일", "!토요일",
 			"!일요일", "!주말" };
 	private final SimpleDateFormat format = new SimpleDateFormat(

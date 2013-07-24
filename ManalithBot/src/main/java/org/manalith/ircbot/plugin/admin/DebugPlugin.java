@@ -4,12 +4,12 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DebugPlugin extends AbstractBotPlugin {
+public class DebugPlugin extends SimplePlugin {
 	private static final String[] COMMANDS = { "!len" };
 
 	@Override

@@ -27,13 +27,13 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.MessageUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UriInfoPlugin extends AbstractBotPlugin {
+public class UriInfoPlugin extends SimplePlugin {
 
 	private Logger logger = Logger.getLogger(getClass());
 	private boolean enablePrintContentType;

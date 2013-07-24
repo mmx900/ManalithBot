@@ -24,41 +24,27 @@ import java.net.URLEncoder;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
-import org.manalith.ircbot.resources.MessageEvent;
+import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.NotNull;
+import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WeatherPlugin extends AbstractBotPlugin {
+public class WeatherPlugin extends SimplePlugin {
 	private Logger logger = Logger.getLogger(getClass());
-	private static final String COMMAND = "!날씨";
 
 	public String getName() {
 		return "구글 날씨";
 	}
 
-	public String getCommands() {
-		return COMMAND;
-	}
-
 	public String getHelp() {
-		return "설  명: 지정한 지역의 날씨를 보여줍니다, 사용법: !날씨 [한글/영문 지명]";
+		return "지정한 지역의 날씨를 보여줍니다.";
 	}
 
-	public void onMessage(MessageEvent event) {
-		String message = event.getMessage();
-
-		if (message.equals(COMMAND + ":help")) {
-			event.respond(getHelp());
-		} else if (message.equals(COMMAND)) {
-			event.respond(this.getHelp());
-		} else if (message.startsWith(COMMAND)
-				&& message.length() >= COMMAND.length() + 2) {
-			event.respond(getYahooWeather(message.substring(COMMAND.length() + 1)));
-		}
-	}
-
-	public String getYahooWeather(String keyword) {
+	@BotCommand("날씨")
+	public String getYahooWeather(
+			@Description("한글/영문 지명") @NotNull String keyword) {
 		try {
 			// TODO WOEID 로컬 캐싱
 			final String url_woeid = "http://query.yahooapis.com/v1/public/yql"

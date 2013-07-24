@@ -18,12 +18,12 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalcPlugin extends AbstractBotPlugin {
+public class CalcPlugin extends SimplePlugin {
 
 	public String getName() {
 		return "뒷북계산기";
