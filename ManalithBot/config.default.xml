@@ -45,6 +45,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="cerPlugin" />
 				<ref bean="uriInfoPlugin" />
 				<ref bean="dictionaryPlugin" />
+				<ref bean="spellCheckerPlugin" />
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
 				<ref bean="helloPlugin" />
@@ -165,7 +166,12 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 		<property name="username" value="MANALITH_BOT_OWNERS_USERNAME"/>
 		<property name="password" value="MANALITH_BOT_OWNERS_PASSWORD"/>
 	</bean>
-
+	
+	<!-- 맞춤법 검사 플러그인 설정 -->
+	<bean id="spellCheckerPlugin" class="org.manalith.ircbot.plugin.dictionary.SpellCheckerPlugin">
+		<property name="koreanDictionaryPath" value="/usr/share/hunspell/ko_KR" />
+		<property name="englishDictionaryPath" value="/usr/share/hunspell/en_US" />
+	</bean>
 	
 	<!-- Repl 플러그인 설정 -->
 	<!--

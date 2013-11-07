@@ -16,6 +16,7 @@ mainClassName = "org.manalith.ircbot.BotMain"
 repositories { mavenCentral() }
 
 dependencies {
+	compile fileTree(dir: 'lib', include: '*.jar')
 	compile group: 'org.pircbotx', name: 'pircbotx', version: '1.9'
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.2.5'
