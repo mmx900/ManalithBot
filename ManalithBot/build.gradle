@@ -3,8 +3,9 @@ apply plugin: 'eclipse'
 apply plugin: 'scala'
 apply plugin: 'application'
 
-
 sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 version = '1.0'
 jar {
 	manifest {
