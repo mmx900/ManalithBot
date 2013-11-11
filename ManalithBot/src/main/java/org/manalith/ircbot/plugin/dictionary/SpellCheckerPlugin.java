@@ -4,7 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.annotation.Description;
 import org.manalith.ircbot.annotation.NotNull;
@@ -45,28 +46,43 @@ public class SpellCheckerPlugin extends SimplePlugin {
 	}
 
 	@BotCommand({ "맞춤법" })
-	public String checkKorean(@Description("키워드") @NotNull String keyword) {
-		return checkSpell(keyword, koreanDictionaryPath);
+	public String checkKorean(@Description("키워드") @NotNull String sentence) {
+		return checkSpell(sentence, koreanDictionaryPath);
 	}
 
 	@BotCommand({ "spell" })
-	public String checkEnglish(@Description("키워드") @NotNull String keyword) {
-		return checkSpell(keyword, englishDictionaryPath);
+	public String checkEnglish(@Description("키워드") @NotNull String sentence) {
+		return checkSpell(sentence, englishDictionaryPath);
 	}
 
-	private String checkSpell(String keyword, String dictPath) {
+	private String checkSpell(String sentence, String dictPath) {
+		String[] words = StringUtils.split(sentence);
+		StringBuilder sb = new StringBuilder();
+
 		try {
 			Hunspell.Dictionary dict = Hunspell.getInstance().getDictionary(
 					dictPath);
 
-			if (dict.misspelled(keyword)) {
-				List<String> suggestions = dict.suggest(keyword);
-				String result = StringUtils.join(suggestions, ' ');
-				return StringUtils.isNotBlank(result) ? "추천 단어 : " + result
-						: "오류를 찾았으나 추천 단어가 없습니다.";
+			boolean hasSuggestion = false;
+			for (String word : words) {
+				if (dict.misspelled(word)) {
+					hasSuggestion = true;
+					sb.append("[");
+					sb.append(word);
+					sb.append("] ");
+
+					List<String> suggestions = dict.suggest(word);
+					if (CollectionUtils.isNotEmpty(suggestions)) {
+						sb.append(StringUtils.join(suggestions, ' '));
+					} else {
+						sb.append("추천 단어 없음");
+					}
+
+					sb.append(" ");
+				}
 			}
 
-			return "오류가 없습니다.";
+			return hasSuggestion ? sb.toString() : "오류가 없습니다.";
 		} catch (FileNotFoundException | UnsupportedEncodingException
 				| UnsatisfiedLinkError | UnsupportedOperationException e) {
 			logger.error(e.getMessage(), e);

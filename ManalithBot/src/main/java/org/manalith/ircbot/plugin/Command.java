@@ -127,7 +127,7 @@ public class Command {
 				result = (String) method.invoke(plugin, (Object) params);
 			else
 				result = (String) method.invoke(plugin,
-						StringUtils.join(params));
+						StringUtils.join(params, " "));
 
 			break;
 		}
