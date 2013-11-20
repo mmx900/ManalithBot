@@ -8,12 +8,12 @@ import org.apache.log4j.Logger;
 import org.jsoup.Connection.Method;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
-import org.manalith.ircbot.plugin.AbstractBotPlugin;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReplPlugin extends AbstractBotPlugin {
+public class ReplPlugin extends SimplePlugin {
 	private Logger logger = Logger.getLogger(getClass());
 	private final String[] commands = { "!scala", "!java", "!js",
 			"!javascript", "!ruby", "!py", "!python", "!groovy" };
@@ -98,5 +98,4 @@ public class ReplPlugin extends AbstractBotPlugin {
 			}
 		}
 	}
-
 }
