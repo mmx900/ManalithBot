@@ -27,6 +27,8 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.MessageUtils;
@@ -61,6 +63,23 @@ public class UriInfoPlugin extends SimplePlugin {
 		return enablePrintContentType;
 	}
 
+	private String getSiteSpecificTitle(String uri, Document document) {
+		if (uri.startsWith("http://mlbpark.donga.com/bbs/view.php?") ||
+		    uri.startsWith("http://mlbpark.donga.com/mbs/articleV.php?")) {
+			// MLB Park article
+			Element element = document.getElementsByClass("D14").first();
+			if (element != null) {
+				try {
+					return element.child(0).text();
+				} catch (IndexOutOfBoundsException e) {
+					return null;
+				}
+			}
+		}
+
+		return null;
+        }
+
 	private String getInfo(String uri) {
 		String result = null;
 		Response response;
@@ -86,7 +105,13 @@ public class UriInfoPlugin extends SimplePlugin {
 				throw new IOException();
 
 			title = title.trim().replaceAll("(\\s){1,}", " ");
-			result = "[링크 제목] " + title;
+
+			// 몇몇 사이트에 대한 처리
+			String stitle = getSiteSpecificTitle(uri, document);
+			if (stitle == null)
+				result = "[링크 제목] " + title;
+			else
+				result = "[링크 제목] " + stitle + " | " + title;
 		} catch (IOException e) {
 			// parse 오류 또는 빈 title -- HTML의
 			// 경우는 빈 제목이라도 표시하고 아니면
