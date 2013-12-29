@@ -75,6 +75,11 @@ public class UriInfoPlugin extends SimplePlugin {
 					return null;
 				}
 			}
+		} else if (uri.startsWith("http://www.slrclub.com/bbs/vx2.php?")) {
+			Element element = document.getElementsByClass("sbj").first();
+			if (element != null) {
+				return element.text();
+			}
 		}
 
 		return null;
