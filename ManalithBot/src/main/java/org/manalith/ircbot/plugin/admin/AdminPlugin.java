@@ -42,16 +42,19 @@ public class AdminPlugin extends SimplePlugin {
 	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
+		User sender = event.getUser();
 
 		if (message.equals("!나가")) {
-			if (event.getChannel().isOp(event.getUser())) {
+			if (event.getChannel().isOp(sender)) {
 				event.getBot().partChannel(event.getChannel());
 				event.setExecuted(true);
 			} else {
 				event.respond("옵을 가진 사용자만 실행할 수 있습니다.");
 			}
 		} else if (message.equals("!@")) {
-			if (event.getChannel().isOp(event.getUser())) {
+			if (event.getChannel().isOp(sender)
+					|| event.getChannel().isSuperOp(sender)
+					|| event.getChannel().isOwner(sender)) {
 				if (!event.getChannel().isOp(event.getBot().getUserBot())) {
 					event.respond("봇에게 옵이 필요합니다.");
 				}
@@ -79,7 +82,7 @@ public class AdminPlugin extends SimplePlugin {
 			}
 		}
 
-		if (isAdmin(event.getUser())) {
+		if (isAdmin(sender)) {
 			if (message.equals("!uptime")) {
 				RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
 				long upTime = bean.getUptime();
