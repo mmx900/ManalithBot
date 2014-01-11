@@ -18,14 +18,14 @@ public class CryptoPlugin extends SimplePlugin {
 		return "인코더";
 	}
 
-	@BotCommand("sha1")
+	@BotCommand
 	public String sha1(@NotNull String input) throws NoSuchAlgorithmException {
 		MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
 		return Hex.encodeHexString(messageDigest.digest(input.getBytes(Charset
 				.forName("UTF-8"))));
 	}
 
-	@BotCommand("md5")
+	@BotCommand
 	public String md5(@NotNull String input) throws NoSuchAlgorithmException {
 		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 		return Hex.encodeHexString(messageDigest.digest(input.getBytes(Charset

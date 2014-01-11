@@ -1,5 +1,6 @@
 package org.manalith.ircbot.plugin.admin;
 
+import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -9,16 +10,11 @@ public class BasicPlugin extends SimplePlugin {
 
 	@Override
 	public String getName() {
-		return "echo";
-	}
-
-	@Override
-	public String getHelp() {
-		return "설  명: 인자를 그대로 반환합니다. 사용법: !echo [명령]";
+		return "기본 명령어";
 	}
 
 	@BotCommand
-	public String echo(String message) {
+	public String echo(@NotNull String message) {
 		return message;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import org.manalith.ircbot.ManalithBot;
 
 public class ETAlertTimerTask extends TimerTask {
+
 	public final ETPlugin plugin;
 
 	public ETAlertTimerTask(ETPlugin plugin) {

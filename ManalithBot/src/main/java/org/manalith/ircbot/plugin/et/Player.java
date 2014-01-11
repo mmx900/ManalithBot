@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Player")
 public class Player {
+
 	private long id;
 
 	private String IRCName;

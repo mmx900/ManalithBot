@@ -43,14 +43,12 @@ public class ETPlugin extends SimplePlugin {
 		ETAlertTimerTask alertTask = new ETAlertTimerTask(this);
 		Timer timer = new Timer(true);
 
-		Date firstTime = null;
-
 		// 한 시간 뒤 00분에 첫 실행
 		Calendar now = Calendar.getInstance();
 		now.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY) + 1); // 1~24
 		now.set(Calendar.MINUTE, 0);
 		now.set(Calendar.MILLISECOND, 0);
-		firstTime = now.getTime();
+		Date firstTime = now.getTime();
 
 		logger.info("ET 플러그인 실행 시간 : " + Calendar.getInstance().toString());
 		logger.info("최초 실행 예정 시간 : " + now.toString());

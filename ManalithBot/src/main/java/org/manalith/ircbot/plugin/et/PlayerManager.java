@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerManager {
+
 	private static PlayerManager _instance;
 	private static final String MEMBER_LIST_DB = "et_members.xml";
 
