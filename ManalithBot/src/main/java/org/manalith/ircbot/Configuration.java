@@ -18,21 +18,48 @@
  */
 package org.manalith.ircbot;
 
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.StringTokenizer;
 
+import org.manalith.ircbot.plugin.EventDispatcher;
+import org.manalith.ircbot.plugin.EventLogger;
 import org.manalith.ircbot.plugin.Plugin;
+import org.pircbotx.Configuration.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Configuration {
+
+	@Autowired
+	private EventLogger eventLogger;
+
+	@Autowired
+	private EventDispatcher eventDispatcher;
+
 	private String botLogin;
 	private String botName;
 	private boolean verbose;
 	private String server;
 	private int serverPort;
-	private String serverEncoding;
+	private Charset serverEncoding;
 	private String defaultChannels;
 	private boolean tryToReconnect;
 	private List<Plugin> plugins;
 	private boolean autoAcceptInvite;
+
+	public org.pircbotx.Configuration<ManalithBot> buildPircBotConfiguration()
+			throws Exception {
+		Builder<ManalithBot> builder = new Builder<ManalithBot>()
+				.setServer(server, serverPort).setLogin(botLogin)
+				.setName(botName).setEncoding(serverEncoding)
+				.addListener(eventLogger).addListener(eventDispatcher);
+
+		StringTokenizer st = new StringTokenizer(defaultChannels, ",");
+		while (st.hasMoreTokens())
+			builder.addAutoJoinChannel(st.nextToken());
+
+		return builder.buildConfiguration();
+	}
 
 	/**
 	 * @return the botLogin
@@ -112,7 +139,7 @@ public class Configuration {
 	/**
 	 * @return the serverEncoding
 	 */
-	public String getServerEncoding() {
+	public Charset getServerEncoding() {
 		return serverEncoding;
 	}
 
@@ -120,7 +147,7 @@ public class Configuration {
 	 * @param serverEncoding
 	 *            the serverEncoding to set
 	 */
-	public void setServerEncoding(String serverEncoding) {
+	public void setServerEncoding(Charset serverEncoding) {
 		this.serverEncoding = serverEncoding;
 	}
 

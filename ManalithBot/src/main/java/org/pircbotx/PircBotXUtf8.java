@@ -1,13 +1,17 @@
 package org.pircbotx;
 
 public class PircBotXUtf8 extends PircBotX {
+	public PircBotXUtf8(Configuration<? extends PircBotX> configuration) {
+		super(configuration);
+	}
+
 	public void sendRawLineSplit(String prefix, String message, String suffix) {
 		// Make sure suffix is valid
 		if (message == null)
 			return;
 
-		if (this.getEncoding().toString() != "UTF-8") {
-			super.sendRawLineSplit(prefix, message, suffix);
+		if (configuration.getEncoding().toString() != "UTF-8") {
+			super.sendRaw().rawLineSplit(prefix, message, suffix);
 			return;
 		}
 
@@ -15,7 +19,7 @@ public class PircBotXUtf8 extends PircBotX {
 			suffix = "";
 
 		// Make a server side prefix string
-		User b = this.getUserBot();
+		User b = getUserBot();
 		String serverSidePrefix = ":" + b.getNick() + "!" + b.getLogin() + "@"
 				+ b.getHostmask() + " ";
 
@@ -28,14 +32,14 @@ public class PircBotXUtf8 extends PircBotX {
 		// Find if final line is going to be shorter than the max line length
 		String finalMessage = prefix + message + suffix;
 
-		int realMaxLineLength = getMaxLineLength() - 2; // except CR+LF
-
-		if (!autoSplitMessage
+		int realMaxLineLength = configuration.getMaxLineLength() - 2; // except
+																		// CR+LF
+		if (!configuration.autoSplitMessage
 				|| serverSidePrefixByteArray.length + prefixByteArray.length
 						+ messageByteArray.length + suffixByteArray.length < realMaxLineLength) {
 			// Length is good (or auto split message is false),
 			// just go ahead and send it
-			sendRawLine(finalMessage);
+			sendRaw().rawLine(finalMessage);
 			return;
 		}
 
@@ -79,7 +83,8 @@ public class PircBotXUtf8 extends PircBotX {
 					messageByteArrayCopy, 0, endPoint - startPoint + 1);
 
 			// convert from byte array to string and concatenate!
-			sendRawLine(prefix + new String(messageByteArrayCopy) + suffix);
+			sendRaw().rawLine(
+					prefix + new String(messageByteArrayCopy) + suffix);
 
 			startPoint = endPoint + 1;
 

@@ -28,22 +28,19 @@ public class RelayPlugin extends SimplePlugin {
 	}
 
 	private void init(RelayConfiguration config) throws Exception {
-		final RelayBot bot = new RelayBot(config.getBotLogin(),
-				config.getBotName());
+		final RelayBot bot = new RelayBot(config.buildPircBotConfiguration());
 		RELAY_BOT = bot;
 		// XXX Refer RelayBotListener.java:7
 		bot.setIgnorePattern(config.getIgnorePattern());
 		bot.setOutputFormat(config.getOutputFormat());
-		bot.setVerbose(config.getVerbose());
-		bot.setEncoding(config.getServerEncoding());
-		bot.connect(config.getServer(), config.getServerPort());
+		bot.startBot();
 
 		this.outputFormat = config.getOutputFormat();
 
 		final StringTokenizer st = new StringTokenizer(
 				config.getDefaultChannels(), ",");
 		while (st.hasMoreTokens())
-			bot.joinChannel(st.nextToken());
+			bot.sendIRC().joinChannel(st.nextToken());
 	}
 
 	public String getName() {
@@ -72,7 +69,7 @@ public class RelayPlugin extends SimplePlugin {
 			event.respond("릴레이를 강제로 종료합니다.");
 			// 타겟 채널 이름은 소스 채널 이름과 동일한 것으로 간주.
 			// 명령에 대한 안내에 대해 입력 명령은 전송하지 않음.
-			RELAY_BOT.sendMessage(event.getChannel().getName(),
+			RELAY_BOT.sendIRC().message(event.getChannel().getName(),
 					"릴레이를 강제로 종료합니다.");
 			return;
 		} else if (message.equals("relay:start")) {
@@ -80,7 +77,7 @@ public class RelayPlugin extends SimplePlugin {
 			event.respond("릴레이를 강제로 시작합니다.");
 			// 타겟 채널 이름은 소스 채널 이름과 동일한 것으로 간주.
 			// 명령에 대한 안내에 대해 입력 명령은 전송하지 않음.
-			RELAY_BOT.sendMessage(event.getChannel().getName(),
+			RELAY_BOT.sendIRC().message(event.getChannel().getName(),
 					"릴레이를 강제로 시작합니다.");
 			return;
 		}
@@ -98,7 +95,7 @@ public class RelayPlugin extends SimplePlugin {
 			 */
 
 			// 타겟 서버의 타겟 채널 이름은 소스 서버의 소스 채널 이름과 동일한 것으로 간주.
-			RELAY_BOT.sendMessage(channel,
+			RELAY_BOT.sendIRC().message(channel,
 					String.format(this.outputFormat, sender, message));
 		}
 	}

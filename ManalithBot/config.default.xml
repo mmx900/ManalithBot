@@ -16,6 +16,15 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 
 	<task:annotation-driven />
 
+	<bean id="pircbotConfiguration" factory-bean="configuration"
+		factory-method="buildPircBotConfiguration" />
+
+	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
+		<constructor-arg>
+			<ref bean="pircbotConfiguration" />
+		</constructor-arg>
+	</bean>
+
 	<!-- 봇 연결 설정 -->
 	<bean id="configuration" class="org.manalith.ircbot.Configuration">
 		<property name="botLogin" value="LOGIN" />

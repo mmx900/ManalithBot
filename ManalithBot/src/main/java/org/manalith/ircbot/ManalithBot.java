@@ -20,22 +20,22 @@
 
 package org.manalith.ircbot;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.StringTokenizer;
+import java.nio.charset.Charset;
 
-import javax.annotation.PostConstruct;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.EventDispatcher;
-import org.manalith.ircbot.plugin.EventLogger;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.AppContextUtils;
+import org.manalith.ircbot.util.UrlUtils;
 import org.pircbotx.PircBotXUtf8;
-import org.pircbotx.exception.IrcException;
-import org.pircbotx.exception.NickAlreadyInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,15 +46,10 @@ public class ManalithBot extends PircBotXUtf8 {
 	private Configuration configuration;
 
 	@Autowired
-	private EventLogger eventLogger;
-
-	@Autowired
 	private EventDispatcher eventDispatcher;
 
-	@PostConstruct
-	public void onPostConstruct() {
-		getListenerManager().addListener(eventLogger);
-		getListenerManager().addListener(eventDispatcher);
+	public ManalithBot(org.pircbotx.Configuration<ManalithBot> configuration) {
+		super(configuration);
 	}
 
 	public static ManalithBot getInstance() {
@@ -62,60 +57,55 @@ public class ManalithBot extends PircBotXUtf8 {
 				ManalithBot.class);
 	}
 
-	/**
-	 * Configuration으로부터 설정을 읽어들여 봇을 시작한다.
-	 * 
-	 * @throws Exception
-	 *             봇을 설정하고 구동할 때 발생하는 예외
-	 */
-	public void start() throws IOException, IrcException {
-		setLogin(configuration.getBotLogin());
-		setName(configuration.getBotName());
-		setVerbose(configuration.isVerbose());
-
-		try {
-			setEncoding(configuration.getServerEncoding());
-		} catch (UnsupportedEncodingException e) {
-			logger.error("지원되지 않는 인코딩입니다.");
-			return;
-		}
-
-		try {
-			connect(configuration.getServer(), configuration.getServerPort());
-		} catch (NickAlreadyInUseException e) {
-			logger.error("닉네임이 이미 사용중입니다.");
-			return;
-		} catch (IOException | IrcException e) {
-			throw e;
-		}
-
-		StringTokenizer st = new StringTokenizer(
-				configuration.getDefaultChannels(), ",");
-		while (st.hasMoreTokens())
-			joinChannel(st.nextToken());
-	}
-
 	public void invokeMessageEvent(MessageEvent event) {
 		eventDispatcher.dispatchMessageEvent(event);
 	}
 
-	@Override
 	public void sendMessage(String target, String message) {
 		sendMessage(target, message, true);
 	}
 
 	public void sendMessage(String target, String message, boolean needRelay) {
-		super.sendMessage(target, message);
+		sendIRC().message(target, message);
 
 		if (logger.isInfoEnabled())
 			logger.info(String.format("MESSAGE(LOCAL) : %s / %s", target,
 					message));
 
 		if (needRelay && RelayPlugin.RELAY_BOT != null)
-			RelayPlugin.RELAY_BOT.sendMessage(target, message);
+			RelayPlugin.RELAY_BOT.sendIRC().message(target, message);
 	}
 
-	public Configuration getConfiguration() {
+	public Configuration getManalithBotConfiguration() {
 		return configuration;
+	}
+
+	public static void main(String[] args) throws Exception {
+		// 인코딩 검사
+		if (!Charset.defaultCharset().toString().equals("UTF-8")) {
+			System.out.println("-Dfile.encoding=UTF-8 옵션으로 실행시켜 주세요.");
+			return;
+		}
+
+		// 옵션 반영
+		Options options = new Options();
+		options.addOption("c", true, "config file");
+
+		CommandLineParser parser = new PosixParser();
+		CommandLine cmd = parser.parse(options, args);
+
+		String configFile = cmd.getOptionValue("c", "config.xml");
+
+		// SSL/HTTPS 설정
+		UrlUtils.setTrustAllHosts();
+
+		// 설정 초기화
+		ApplicationContext context = new FileSystemXmlApplicationContext(
+				configFile);
+		AppContextUtils.setApplicationContext(context);
+
+		// 봇 구동
+		ManalithBot bot = context.getBean(ManalithBot.class);
+		bot.startBot();
 	}
 }

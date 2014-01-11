@@ -43,31 +43,29 @@ public class AdminPlugin extends SimplePlugin {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		User sender = event.getUser();
+		Channel channel = event.getChannel();
 
 		if (message.equals("!나가")) {
-			if (event.getChannel().isOp(sender)) {
-				event.getBot().partChannel(event.getChannel());
+			if (channel.isOp(sender)) {
+				channel.send().part();
 				event.setExecuted(true);
 			} else {
 				event.respond("옵을 가진 사용자만 실행할 수 있습니다.");
 			}
 		} else if (message.equals("!@")) {
-			if (event.getChannel().isOp(sender)
-					|| event.getChannel().isSuperOp(sender)
-					|| event.getChannel().isOwner(sender)) {
-				if (!event.getChannel().isOp(event.getBot().getUserBot())) {
+			if (channel.isOp(sender) || channel.isSuperOp(sender)
+					|| channel.isOwner(sender)) {
+				if (!channel.isOp(event.getBot().getUserBot())) {
 					event.respond("봇에게 옵이 필요합니다.");
 				}
 
 				int i = 0;
 
 				// 모든 사용자에게 옵을 준다
-				Channel channel = event.getChannel();
 				for (User user : channel.getUsers()) {
-					if (!channel.getOps().contains(user)
-							&& !channel.getSuperOps().contains(user)
-							&& !channel.getOwners().contains(user)) {
-						channel.op(user);
+					if (!channel.isOp(user) && !channel.isSuperOp(user)
+							&& !channel.isOwner(user)) {
+						channel.send().op(user);
 						i++;
 					}
 				}
@@ -80,18 +78,18 @@ public class AdminPlugin extends SimplePlugin {
 			} else {
 				event.respond("옵을 가진 사용자만 실행할 수 있습니다.");
 			}
+		} else if (message.equals("!uptime")) {
+			RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+			long upTime = bean.getUptime();
+			event.respond(String.format("Up Time = %d (ms)", upTime));
 		}
 
 		if (isAdmin(sender)) {
-			if (message.equals("!uptime")) {
-				RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
-				long upTime = bean.getUptime();
-				event.respond(String.format("Up Time = %d (ms)", upTime));
-			} else if (message.equals("!quit")) {
+			if (message.equals("!quit")) {
 				// TODO 보다 안전한 종료가 필요
 				// TODO 멀티봇 대응 필요
 				// TODO 재시작 기능이 필요
-				event.getBot().quitServer();
+				event.getBot().sendIRC().quitServer();
 				System.exit(-1);
 			}
 		}

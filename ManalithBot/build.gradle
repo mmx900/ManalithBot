@@ -12,14 +12,14 @@ jar {
 		attributes 'Implementation-Title': 'ManalithBot', 'Implementation-Version': 2.0
 	}
 }
-mainClassName = "org.manalith.ircbot.BotMain"
+mainClassName = "org.manalith.ircbot.ManalithBot"
 
 repositories { mavenCentral() }
 
 dependencies {
 	compile fileTree(dir: 'lib', include: '*.jar')
-	compile group: 'org.pircbotx', name: 'pircbotx', version: '1.9'
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
+	compile group: 'org.pircbotx', name: 'pircbotx', version: '2.0.1'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2'
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
 	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
 	compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.1'

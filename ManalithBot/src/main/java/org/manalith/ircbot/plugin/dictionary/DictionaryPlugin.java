@@ -33,7 +33,7 @@ public class DictionaryPlugin extends SimplePlugin {
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		String cmd = CommandParser.checkMessageAndRemoveNick(bot.getName(),
+		String cmd = CommandParser.checkMessageAndRemoveNick(bot.getNick(),
 				message);
 
 		if (cmd != null) {

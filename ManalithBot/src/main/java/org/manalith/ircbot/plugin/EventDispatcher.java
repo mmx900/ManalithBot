@@ -13,7 +13,6 @@ import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ChannelInfoEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.DisconnectEvent;
-import org.pircbotx.hooks.events.FileTransferFinishedEvent;
 import org.pircbotx.hooks.events.IncomingChatRequestEvent;
 import org.pircbotx.hooks.events.IncomingFileTransferEvent;
 import org.pircbotx.hooks.events.InviteEvent;
@@ -21,6 +20,7 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.ModeEvent;
+import org.pircbotx.hooks.events.NickAlreadyInUseEvent;
 import org.pircbotx.hooks.events.NickChangeEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
 import org.pircbotx.hooks.events.OpEvent;
@@ -112,6 +112,12 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	public void onDisconnect(DisconnectEvent<ManalithBot> event)
 			throws Exception {
 		// pluginManager.onDisconnect();
+	}
+
+	@Override
+	public void onNickAlreadyInUse(NickAlreadyInUseEvent<ManalithBot> event)
+			throws Exception {
+		logger.error("닉네임이 이미 사용중입니다.");
 	}
 
 	@Override
@@ -351,8 +357,8 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onInvite(InviteEvent<ManalithBot> event) throws Exception {
 		ManalithBot bot = event.getBot();
-		if (bot.getConfiguration().isAutoAcceptInvite()) {
-			bot.joinChannel(event.getChannel());
+		if (bot.getManalithBotConfiguration().isAutoAcceptInvite()) {
+			bot.sendIRC().joinChannel(event.getChannel());
 		}
 	}
 
@@ -360,12 +366,6 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	public void onIncomingFileTransfer(
 			IncomingFileTransferEvent<ManalithBot> event) throws Exception {
 		super.onIncomingFileTransfer(event);
-	}
-
-	@Override
-	public void onFileTransferFinished(
-			FileTransferFinishedEvent<ManalithBot> event) throws Exception {
-		super.onFileTransferFinished(event);
 	}
 
 	@Override

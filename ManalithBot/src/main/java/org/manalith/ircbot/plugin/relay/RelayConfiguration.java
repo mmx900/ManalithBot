@@ -1,15 +1,33 @@
 package org.manalith.ircbot.plugin.relay;
 
+import java.nio.charset.Charset;
+import java.util.StringTokenizer;
+
+import org.pircbotx.Configuration;
+import org.pircbotx.Configuration.Builder;
+
 public class RelayConfiguration {
 	private String botLogin;
 	private String botName;
 	private boolean verbose;
 	private String server;
 	private int serverPort;
-	private String serverEncoding;
+	private Charset serverEncoding;
 	private String defaultChannels;
 	private String outputFormat;
 	private String ignorePattern;
+
+	public Configuration<RelayBot> buildPircBotConfiguration() throws Exception {
+		Builder<RelayBot> builder = new Configuration.Builder<RelayBot>()
+				.setServer(server, serverPort).setLogin(botLogin)
+				.setName(botName).setEncoding(serverEncoding);
+
+		StringTokenizer st = new StringTokenizer(defaultChannels, ",");
+		while (st.hasMoreTokens())
+			builder.addAutoJoinChannel(st.nextToken());
+
+		return builder.buildConfiguration();
+	}
 
 	public String getBotLogin() {
 		return botLogin;
@@ -51,11 +69,11 @@ public class RelayConfiguration {
 		this.serverPort = serverPort;
 	}
 
-	public String getServerEncoding() {
+	public Charset getServerEncoding() {
 		return serverEncoding;
 	}
 
-	public void setServerEncoding(String serverEncoding) {
+	public void setServerEncoding(Charset serverEncoding) {
 		this.serverEncoding = serverEncoding;
 	}
 

@@ -37,7 +37,7 @@ public class EventLogger extends ListenerAdapter<ManalithBot> {
 	public void onServerResponse(ServerResponseEvent<ManalithBot> event)
 			throws Exception {
 		logger.info(String.format("SERVER_RESPONSE: %s / %s", event.getCode(),
-				event.getResponse()));
+				event.getParsedResponse()));
 	}
 
 	@Override
@@ -93,8 +93,8 @@ public class EventLogger extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onKick(KickEvent<ManalithBot> event) throws Exception {
 		logger.info(String.format("KICK : %s / %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getSource().getNick(), event
-				.getSource().getLogin(), event.getSource().getHostmask(), event
+				.getChannel().getName(), event.getUser().getNick(), event
+				.getUser().getLogin(), event.getUser().getHostmask(), event
 				.getRecipient().getNick(), event.getReason()));
 	}
 
