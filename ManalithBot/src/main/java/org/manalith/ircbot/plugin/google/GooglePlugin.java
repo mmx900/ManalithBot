@@ -151,6 +151,7 @@ public class GooglePlugin extends SimplePlugin {
 						.replace("</b>", LOW_INTENSITY).replace("&quot;", "\"")
 						.replace("&#39;", "'").replace("&gt;", ">")
 						.replace("&lt;", "<").replace("&amp;", "&")
+						.replace("\n", "")
 						+ " : " + result.unescapedUrl;
 			}
 		} catch (IOException e) {
