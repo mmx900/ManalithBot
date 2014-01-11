@@ -30,6 +30,10 @@ public class ETPlugin extends SimplePlugin {
 	// private final static long ONCE_PER_MINUTE = 1000*60;
 	private final static long ONCE_PER_HOUR = 1000 * 60 * 60;
 
+	private String serverAddress;
+
+	private int serverPort;
+
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
@@ -117,13 +121,11 @@ public class ETPlugin extends SimplePlugin {
 		 */
 		else if (message.equals("!et")
 				|| message.equals(NAMESPACE + ":connected")) {
-			final String serverAddress = "neogeo.co.kr";
-			final int port = 27960;
 
 			try {
 				ServerStatusChecker checker = new ServerStatusChecker();
-				ServerStatus status = checker.checkStatus(serverAddress, port,
-						true);
+				ServerStatus status = checker.checkStatus(serverAddress,
+						serverPort, true);
 				List<ServerStatus.Player> players = status.getPlayers();
 				if (players.isEmpty()) {
 					event.respond(String.format(
@@ -197,5 +199,35 @@ public class ETPlugin extends SimplePlugin {
 		} else if (message.equals(NAMESPACE + ":help")) {
 			event.respond(getHelp());
 		}
+	}
+
+	/**
+	 * @return the serverAddress
+	 */
+	public String getServerAddress() {
+		return serverAddress;
+	}
+
+	/**
+	 * @param serverAddress
+	 *            the serverAddress to set
+	 */
+	public void setServerAddress(String serverAddress) {
+		this.serverAddress = serverAddress;
+	}
+
+	/**
+	 * @return the serverPort
+	 */
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	/**
+	 * @param serverPort
+	 *            the serverPort to set
+	 */
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
 	}
 }

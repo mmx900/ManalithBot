@@ -184,6 +184,14 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 		<property name="englishDictionaryPath" value="/usr/share/hunspell/en_US" />
 	</bean>
 	
+	<!-- Enemy Territory 플러그인 설정 -->
+	<!--
+	<bean id="etPlugin" class="org.manalith.ircbot.plugin.et.ETPlugin">
+		<property name="serverAddress" value="SERVER_ADDRESS" />
+		<property name="serverPort" value="27960" />
+	</bean>
+	 -->
+	
 	<!-- Repl 플러그인 설정 -->
 	<!--
 	<bean id="replPlugin" class="org.manalith.ircbot.plugin.repl.ReplPlugin">
