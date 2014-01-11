@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RelayPlugin extends SimplePlugin {
+
 	public static RelayBot RELAY_BOT;
 	private String outputFormat;
 
@@ -43,14 +44,17 @@ public class RelayPlugin extends SimplePlugin {
 			bot.sendIRC().joinChannel(st.nextToken());
 	}
 
+	@Override
 	public String getName() {
 		return "릴레이 플러그인";
 	}
 
+	@Override
 	public String getCommands() {
 		return null;
 	}
 
+	@Override
 	public String getHelp() {
 		return null;
 	}
@@ -59,6 +63,7 @@ public class RelayPlugin extends SimplePlugin {
 		RELAY_BOT.setTargetbot(bot);
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();

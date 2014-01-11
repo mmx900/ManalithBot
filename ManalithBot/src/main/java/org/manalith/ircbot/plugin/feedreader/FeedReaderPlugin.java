@@ -22,6 +22,7 @@ import com.sun.syndication.io.XmlReader;
 
 @Component
 public class FeedReaderPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	@Autowired

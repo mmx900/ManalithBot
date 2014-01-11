@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdminPlugin extends SimplePlugin {
+
 	private List<Admin> admins = new ArrayList<Admin>();
 	private String password;
 

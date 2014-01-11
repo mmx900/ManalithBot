@@ -9,20 +9,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JavaApiPlugin extends SimplePlugin {
+
 	private static final String NAMESPACE = "!japi";
 
+	@Override
 	public String getName() {
 		return "Java API Viewer";
 	}
 
+	@Override
 	public String getCommands() {
 		return NAMESPACE;
 	}
 
+	@Override
 	public String getHelp() {
 		return "설  명: 지정한 클래스 이름에 대한 자바문서 연결을 보여줍니다, 사용법: !japi [클래스명]";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 

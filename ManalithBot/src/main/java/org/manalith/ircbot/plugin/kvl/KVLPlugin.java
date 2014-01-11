@@ -25,12 +25,15 @@ import org.springframework.stereotype.Component;
 
 @Component("kvlPlugin")
 public class KVLPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 
+	@Override
 	public String getName() {
 		return "커널버전";
 	}
 
+	@Override
 	public String getCommands() {
 		return "!커널";
 	}

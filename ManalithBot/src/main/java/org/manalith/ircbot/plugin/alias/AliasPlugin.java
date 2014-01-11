@@ -11,21 +11,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AliasPlugin extends SimplePlugin {
+
 	@Autowired
 	private AliasDao aliasDao;
 
+	@Override
 	public String getName() {
 		return "별칭";
 	}
 
+	@Override
 	public String getCommands() {
 		return "!alias";
 	}
 
+	@Override
 	public String getHelp() {
 		return "가르치기 : !alias [명령] [스크립트], 보기 : !alias [명령], 사용하기 : ![명령]";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		// 악의 혹은 실수에 의한 재귀 호출 alias 명령을 차단한다.
 		if (event.isRecursive()) {

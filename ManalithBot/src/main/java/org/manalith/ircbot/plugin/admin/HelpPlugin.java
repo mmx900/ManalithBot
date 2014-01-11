@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.plugin.Plugin;
 import org.manalith.ircbot.plugin.PluginManager;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 
 public class HelpPlugin extends SimplePlugin {
+
 	private static final String[] HELP_COMMANDS = new String[] { "!명령어", "!명령",
 			"!도움", "!도움말", "!help", "!plugins" };
 	private PluginManager pluginManager;
@@ -30,7 +31,7 @@ public class HelpPlugin extends SimplePlugin {
 
 	@Override
 	public String getHelp() {
-		return "설  명: 플러그인들의 목록 및 각 플러그인에 대한 도움말을 출력합니다, 사용법: !명령어|!명령|!도움|!help|!plugins [명령] (명령이름 생략 가능)";
+		return "설  명: 플러그인들의 목록 및 각 플러그인에 대한 도움말을 출력합니다. 사용법: !명령어|!명령|!도움|!help|!plugins [명령] (명령이름 생략 가능)";
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NvidiaDriverNewsPlugin extends SimplePlugin {
+
 	private NvidiaDriverNewsReader reader = new NvidiaDriverNewsReader();
 
 	@Override

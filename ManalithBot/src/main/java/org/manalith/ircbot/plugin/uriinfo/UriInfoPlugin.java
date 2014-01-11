@@ -28,7 +28,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.MessageUtils;
@@ -43,14 +42,17 @@ public class UriInfoPlugin extends SimplePlugin {
 	private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) "
 			+ "Gecko/20100101 Firefox/12.0";
 
+	@Override
 	public String getCommands() {
 		return null;
 	}
 
+	@Override
 	public String getName() {
 		return "URI 정보";
 	}
 
+	@Override
 	public String getHelp() {
 		return "대화 중 등장하는 URI의 정보를 표시합니다";
 	}
@@ -64,8 +66,8 @@ public class UriInfoPlugin extends SimplePlugin {
 	}
 
 	private String getSiteSpecificTitle(String uri, Document document) {
-		if (uri.startsWith("http://mlbpark.donga.com/bbs/view.php?") ||
-		    uri.startsWith("http://mlbpark.donga.com/mbs/articleV.php?")) {
+		if (uri.startsWith("http://mlbpark.donga.com/bbs/view.php?")
+				|| uri.startsWith("http://mlbpark.donga.com/mbs/articleV.php?")) {
 			// MLB Park article
 			Element element = document.getElementsByClass("D14").first();
 			if (element != null) {
@@ -83,7 +85,7 @@ public class UriInfoPlugin extends SimplePlugin {
 		}
 
 		return null;
-        }
+	}
 
 	private String getInfo(String uri) {
 		String result = null;
@@ -132,6 +134,7 @@ public class UriInfoPlugin extends SimplePlugin {
 		return result;
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 

@@ -19,6 +19,7 @@ import com.etcfg.etlaunch.ServerStatusChecker;
 
 @Component("etPlugin")
 public class ETPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	private PlayerManager playerManager;
@@ -53,14 +54,17 @@ public class ETPlugin extends SimplePlugin {
 		timer.scheduleAtFixedRate(alertTask, firstTime, ONCE_PER_HOUR);
 	}
 
+	@Override
 	public String getName() {
 		return "Enemy Territory";
 	}
 
+	@Override
 	public String getCommands() {
 		return NAMESPACE;
 	}
 
+	@Override
 	public String getHelp() {
 		// return
 		// "et:help, et:register, et:unregister, et:ready, et:list, et:players, et:alert, et:connected";
@@ -71,6 +75,7 @@ public class ETPlugin extends SimplePlugin {
 		return playerManager;
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();

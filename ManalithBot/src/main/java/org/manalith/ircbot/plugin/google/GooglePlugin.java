@@ -44,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class GooglePlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 	private static final String NAMESPACE = "!구글";
 	private static final String HIGH_INTENSITY = "\u0002";
@@ -53,18 +54,22 @@ public class GooglePlugin extends SimplePlugin {
 	private String apiKey;
 	private String apiReferer;
 
+	@Override
 	public String getName() {
 		return "Google";
 	}
 
+	@Override
 	public String getCommands() {
 		return NAMESPACE;
 	}
 
+	@Override
 	public String getHelp() {
 		return "설 명: 구글 검색 결과를 보여줍니다, 사용법: !구글 [키워드], !gg [키워드], !구글:match [키워드1] [키워드2], !gg:match [키워드1] [키워드2]";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 

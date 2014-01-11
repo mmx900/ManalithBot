@@ -33,14 +33,17 @@ public class TweetReaderPlugin extends SimplePlugin {
 	private String username;
 	private String password;
 
+	@Override
 	public String getName() {
 		return "트윗리더";
 	}
 
+	@Override
 	public String getCommands() {
 		return null;
 	}
 
+	@Override
 	public String getHelp() {
 		return "";
 	}

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TimePlugin extends SimplePlugin {
+
 	private final String[] commands = { "!시간", "!time", "!월요일", "!금요일", "!토요일",
 			"!일요일", "!주말" };
 	private final SimpleDateFormat format = new SimpleDateFormat(

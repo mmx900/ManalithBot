@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PingPlugin extends SimplePlugin {
+
+	@Override
 	public String getName() {
 		return "핑";
 	}

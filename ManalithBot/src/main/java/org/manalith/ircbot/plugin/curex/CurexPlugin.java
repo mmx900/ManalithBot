@@ -26,48 +26,30 @@ import org.springframework.stereotype.Component;
 
 @Component("cerPlugin")
 public class CurexPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
-	 */
+	@Override
 	public String getName() {
 		return "환율계산";
-		// return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getNamespace()
-	 */
-
+	@Override
 	public String getCommands() {
 		return "!환율";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
-	 */
+	@Override
 	public String getHelp() {
 		return "설  명: 환율 정보를 보여주고 환율 계산을 도와줍니다, 사용법: !환율 (자세한 사용법은 !curex help를 실행하세요)";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
-	 * .MessageEvent)
-	 */
+	@Override
 	public void onMessage(MessageEvent event) {
 		parseMessage(event, event.getChannel().getName());
 	}
 
+	@Override
 	public void onPrivateMessage(MessageEvent event) {
 		parseMessage(event, event.getUser().getNick());
 	}

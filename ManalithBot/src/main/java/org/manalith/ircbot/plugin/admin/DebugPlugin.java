@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DebugPlugin extends SimplePlugin {
+
 	private static final String[] COMMANDS = { "!len" };
 
 	@Override

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CryptoPlugin extends SimplePlugin {
+
 	@Override
 	public String getName() {
 		return "인코더";

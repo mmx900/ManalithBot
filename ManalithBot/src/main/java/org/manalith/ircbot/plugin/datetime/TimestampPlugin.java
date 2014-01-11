@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TimestampPlugin extends SimplePlugin {
+
 	@Override
 	public String getName() {
 		return "유닉스 타임스탬프 변환";

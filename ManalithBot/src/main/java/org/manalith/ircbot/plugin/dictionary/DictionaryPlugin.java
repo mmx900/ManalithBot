@@ -13,21 +13,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DictionaryPlugin extends SimplePlugin {
+
 	@Autowired
 	private WordDao wordDao;
 
+	@Override
 	public String getName() {
 		return "FAQ";
 	}
 
+	@Override
 	public String getCommands() {
 		return "배워";
 	}
 
+	@Override
 	public String getHelp() {
 		return "사용법 : 배워 [단어] [해석]";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		ManalithBot bot = event.getBot();
 		String message = event.getMessage();

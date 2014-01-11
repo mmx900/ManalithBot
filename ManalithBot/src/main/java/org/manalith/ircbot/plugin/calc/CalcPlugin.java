@@ -25,14 +25,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class CalcPlugin extends SimplePlugin {
 
+	@Override
 	public String getName() {
 		return "뒷북계산기";
 	}
 
+	@Override
 	public String getCommands() {
 		return "!계산";
 	}
 
+	@Override
 	public String getHelp() {
 		return "설  명: 계산식을 입력하면 답을 구해줍니다, 사용법: !계산 (계산식), sin(), cos(), tan(), arcsin(), arccos(), arctan(), tobin(정수계산식), tooct(정수계산식), todec(정수계산식), tohex(정수계산식)";
 	}

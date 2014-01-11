@@ -43,52 +43,33 @@ public class KeySeqConvPlugin extends SimplePlugin {
 	}
 
 	public void setEnableParsingExceptionSyntax(boolean enable) {
-		this.enableParsingExceptionSyntax = enable;
+		enableParsingExceptionSyntax = enable;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getName()
-	 */
+	@Override
 	public String getName() {
 		return "입력 변환기(2벌,3벌[최종,390,순아래])";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getNamespace()
-	 */
-
+	@Override
 	public String getCommands() {
 		return "!c2|!c3|!c33|!c3n|!c2r";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.manalith.ircbot.plugin.IBotPlugin#getHelp()
-	 */
+	@Override
 	public String getHelp() {
 		return "!c2|!c3|!c33|!c3n 영문문자열, \\변환하지 않을 영문문자열\\ (백슬래시 표시: \\\\) | !c2r 한글문자열";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.manalith.ircbot.plugin.IBotPlugin#onMessage(org.manalith.ircbot.resources
-	 * .MessageEvent)
-	 */
+	@Override
 	public void onMessage(MessageEvent event) {
 		String msg = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		dengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
-		sfengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
-		stengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
-		snengine.setEnableParsingExceptionSyntax(this.enableParsingExceptionSyntax);
+		dengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
+		sfengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
+		stengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
+		snengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
 
 		String cmd = msg.split("\\s")[0];
 

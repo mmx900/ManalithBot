@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UnicodePlugin extends SimplePlugin {
+
 	@Override
 	public String getName() {
 		return "유니코드 변환";

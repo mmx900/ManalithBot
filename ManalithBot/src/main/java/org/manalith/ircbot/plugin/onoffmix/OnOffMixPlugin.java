@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 public class OnOffMixPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 	private String apiKey;
 

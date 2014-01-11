@@ -29,18 +29,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MissedMessagePlugin extends SimplePlugin {
 
+	@Override
 	public String getName() {
 		return "부재중메시지";
 	}
 
+	@Override
 	public String getCommands() {
 		return "msg";
 	}
 
+	@Override
 	public String getHelp() {
 		return "설  명: 부재중인 분께 메시지를 남겨드립니다, 사용법: !msg [닉] [150자 메시지] // 3개 까지 남길 수 있습니다";
 	}
 
+	@Override
 	public void onMessage(MessageEvent event) {
 		String channel = event.getChannel().getName();
 		String sender = event.getUser().getNick();
@@ -96,6 +100,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 		return;
 	}
 
+	@Override
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
 		MissedMessageRunner runner = new MissedMessageRunner(
@@ -113,6 +118,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 		}
 	}
 
+	@Override
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
 		MissedMessageRunner runner = new MissedMessageRunner(

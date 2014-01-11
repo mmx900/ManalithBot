@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReplPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 	private final String[] commands = { "!scala", "!java", "!js",
 			"!javascript", "!ruby", "!py", "!python", "!groovy" };

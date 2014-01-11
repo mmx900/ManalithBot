@@ -32,12 +32,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WeatherPlugin extends SimplePlugin {
+
 	private Logger logger = Logger.getLogger(getClass());
 
+	@Override
 	public String getName() {
 		return "구글 날씨";
 	}
 
+	@Override
 	public String getHelp() {
 		return "지정한 지역의 날씨를 보여줍니다.";
 	}
