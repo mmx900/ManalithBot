@@ -57,6 +57,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="spellCheckerPlugin" />
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
+				<!-- <ref bean="etPlugin" /> -->
 				<ref bean="helloPlugin" />
 				<ref bean="feedReaderPlugin" />
 				<ref bean="urlShortenerPlugin" />
