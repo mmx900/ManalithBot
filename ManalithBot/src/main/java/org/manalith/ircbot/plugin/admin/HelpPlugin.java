@@ -64,7 +64,7 @@ public class HelpPlugin extends SimplePlugin {
 	}
 
 	private String getPluginInfo() {
-		ArrayList<String> plugins = new ArrayList<String>();
+		ArrayList<String> plugins = new ArrayList<>();
 
 		for (Plugin p : pluginManager.getPlugins()) {
 			String name = p.getName();

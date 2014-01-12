@@ -18,13 +18,12 @@
  */
 package org.manalith.ircbot.plugin.curex;
 
-import java.sql.DriverManager;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -42,40 +41,40 @@ public class HSQLDBTableManager {
 
 	public HSQLDBTableManager(String newFilename) throws SQLException,
 			ClassNotFoundException {
-		this.setPath("");
-		this.setFilename(newFilename);
-		this.initJDBCDriverHSQLDB();
+		setPath("");
+		setFilename(newFilename);
+		initJDBCDriverHSQLDB();
 	}
 
 	public HSQLDBTableManager(String newPath, String newFilename)
 			throws SQLException, ClassNotFoundException {
-		this.setPath(newPath);
-		this.setFilename(newFilename);
-		this.initJDBCDriverHSQLDB();
+		setPath(newPath);
+		setFilename(newFilename);
+		initJDBCDriverHSQLDB();
 	}
 
 	private void setPath(String newPath) {
-		this.path = newPath;
+		path = newPath;
 	}
 
 	private String getPath() {
-		return this.path;
+		return path;
 	}
 
 	private void setFilename(String newFilename) {
-		this.filename = newFilename;
+		filename = newFilename;
 	}
 
 	private String getFilename() {
-		return this.filename;
+		return filename;
 	}
 
 	private void initJDBCDriverHSQLDB() throws SQLException,
 			ClassNotFoundException {
 		Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
-		conn = DriverManager.getConnection("jdbc:hsqldb:" + this.getPath()
-				+ this.getFilename(), "sa", "");
+		conn = DriverManager.getConnection("jdbc:hsqldb:" + getPath()
+				+ getFilename(), "sa", "");
 		stat = conn.createStatement();
 	}
 
@@ -99,7 +98,7 @@ public class HSQLDBTableManager {
 	}
 
 	public void insertDataToTable() throws SQLException {
-		this.initCurrencyRateTable();
+		initCurrencyRateTable();
 
 		PreparedStatement stmt = conn
 				.prepareStatement("insert into CurrencyRate values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

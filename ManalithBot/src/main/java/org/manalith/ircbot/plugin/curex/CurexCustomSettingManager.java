@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
 
 public class CurexCustomSettingManager extends TokenAnalyzer {
+
 	private final Logger logger = Logger.getLogger(getClass());
 
 	private final String dataPath;
@@ -40,7 +41,7 @@ public class CurexCustomSettingManager extends TokenAnalyzer {
 
 	public CurexCustomSettingManager(String localPath, String channel,
 			String userNick, String currencyArgs) throws ConfigurationException {
-		this.dataPath = localPath;
+		dataPath = localPath;
 
 		PropertiesConfiguration config;
 

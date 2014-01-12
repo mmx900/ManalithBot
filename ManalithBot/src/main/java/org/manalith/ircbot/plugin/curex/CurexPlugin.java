@@ -67,7 +67,7 @@ public class CurexPlugin extends SimplePlugin {
 
 			try {
 				CurexRunner runner = new CurexRunner(event.getUser().getNick(),
-						this.getResourcePath(), mergedcmd);
+						getResourcePath(), mergedcmd);
 
 				String result = runner.run();
 				if (result.equals("Help!")) {

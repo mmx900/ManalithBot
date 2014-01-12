@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Timer;
 
 import org.apache.log4j.Logger;
@@ -26,9 +29,9 @@ public class ETPlugin extends SimplePlugin {
 
 	private static final String NAMESPACE = "et";
 
-	// private final static long ONCE_PER_DAY = 1000*60*60*24;
-	// private final static long ONCE_PER_MINUTE = 1000*60;
-	private final static long ONCE_PER_HOUR = 1000 * 60 * 60;
+	private final static long ONCE_PER_MINUTE = 1000 * 60;
+	private final static long ONCE_PER_HOUR = ONCE_PER_MINUTE * 60;
+	private final static long ONCE_PER_DAY = ONCE_PER_HOUR * 24;
 
 	private String serverAddress;
 
@@ -130,62 +133,46 @@ public class ETPlugin extends SimplePlugin {
 							"%s(현재 맵 : %s) 에 접속중인 플레이어가 없습니다.", serverAddress,
 							status.getMapName()));
 				} else {
-					StringBuilder sb = new StringBuilder();
-					List<ServerStatus.Player> axis = new ArrayList<ServerStatus.Player>();
-					List<ServerStatus.Player> allies = new ArrayList<ServerStatus.Player>();
-					List<ServerStatus.Player> spectator = new ArrayList<ServerStatus.Player>();
-					List<ServerStatus.Player> connecting = new ArrayList<ServerStatus.Player>();
+					Map<String, List<ServerStatus.Player>> playerMap = new LinkedHashMap<>();
+					playerMap.put("Axis", new ArrayList<ServerStatus.Player>());
+					playerMap.put("Allies",
+							new ArrayList<ServerStatus.Player>());
+					playerMap.put("Spectator",
+							new ArrayList<ServerStatus.Player>());
+					playerMap.put("Connecting",
+							new ArrayList<ServerStatus.Player>());
 
 					for (ServerStatus.Player player : players) {
-						if (player.getTeam().equals("Axis"))
-							axis.add(player);
-						else if (player.getTeam().equals("Allies"))
-							allies.add(player);
-						else if (player.getTeam().equals("Spectator"))
-							spectator.add(player);
-						else
-							connecting.add(player);
-					}
-
-					if (axis.size() > 0) {
-						sb.append(" [AXIS] ");
-						for (ServerStatus.Player player : axis) {
-							sb.append(ColorConvertor
-									.convertToPlainString(player.getName())
-									+ "(" + player.getXp() + ") ");
+						if (playerMap.containsKey(player.getTeam())) {
+							playerMap.get(player.getTeam()).add(player);
+						} else {
+							playerMap.get("Connecting").add(player);
 						}
 					}
 
-					if (allies.size() > 0) {
-						sb.append(" [ALLIES] ");
-						for (ServerStatus.Player player : allies) {
+					StringBuilder sb = new StringBuilder();
+					for (Entry<String, List<ServerStatus.Player>> entry : playerMap
+							.entrySet()) {
+						if (entry.getValue().isEmpty()) {
+							continue;
+						}
+
+						sb.append(" ");
+						sb.append(entry.getKey());
+						sb.append(" ");
+
+						for (ServerStatus.Player player : entry.getValue()) {
 							sb.append(ColorConvertor
-									.convertToPlainString(player.getName())
-									+ "(" + player.getXp() + ") ");
+									.convertToPlainString(player.getName()));
+							sb.append("(");
+							sb.append(player.getXp());
+							sb.append(")");
 						}
 					}
 
-					if (spectator.size() > 0) {
-						sb.append(" [SPECTATOR] ");
-						for (ServerStatus.Player player : spectator) {
-							sb.append(ColorConvertor
-									.convertToPlainString(player.getName())
-									+ "(" + player.getXp() + ") ");
-						}
-					}
-
-					if (connecting.size() > 0) {
-						sb.append(" [CONNECTING] ");
-						for (ServerStatus.Player player : connecting) {
-							sb.append(ColorConvertor
-									.convertToPlainString(player.getName())
-									+ "(" + player.getXp() + ") ");
-						}
-					}
-
-					event.respond(serverAddress + "(현재 맵 : "
-							+ status.getMapName() + ") 에 접속중인 플레이어 :"
-							+ sb.toString());
+					event.respond(String.format(
+							"%s(현재 맵 : %s)에 접속중인 플레이어 : %s", serverAddress,
+							status.getMapName(), sb.toString()));
 				}
 			} catch (IOException e) {
 				logger.warn(e);

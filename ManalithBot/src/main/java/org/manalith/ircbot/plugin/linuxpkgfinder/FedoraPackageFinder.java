@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FedoraPackageFinder extends PackageFinder {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	@Override
@@ -44,6 +45,7 @@ public class FedoraPackageFinder extends PackageFinder {
 		return "지정한 이름을 가진 페도라의 패키지를 검색합니다.";
 	}
 
+	@Override
 	@BotCommand("fed")
 	public String find(@Description("키워드") @NotNull String keyword) {
 		String result = "";

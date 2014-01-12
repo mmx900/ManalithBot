@@ -42,7 +42,7 @@ public class JavaDocSearch implements SearchInterface {
 	private List<JavaDocObject> parseDocObjects(Document doc) {
 		Elements items = doc.select("a");
 
-		List<JavaDocObject> objs = new ArrayList<JavaDocObject>();
+		List<JavaDocObject> objs = new ArrayList<>();
 
 		for (int i = 0; i < items.size(); i++) {
 			Element element = items.get(i);
@@ -74,6 +74,7 @@ public class JavaDocSearch implements SearchInterface {
 	 *            검색할 클래스의 이름
 	 * @return 클래스 이름 + 클래스 api 링크
 	 */
+	@Override
 	public String search(String className) {
 		if (docObjects == null)
 			docObjects = parseDocObjects(getDocument());
@@ -105,9 +106,10 @@ public class JavaDocSearch implements SearchInterface {
 	 *            검색 결과를 추가할 리스트, null일 경우 새로이 생성하여 리턴한다.
 	 * @return 리스트(클래스 이름 + 클래스 api 링크)
 	 */
+	@Override
 	public List<String> searchAll(String regex, List<String> classes) {
 		if (classes == null)
-			classes = new ArrayList<String>();
+			classes = new ArrayList<>();
 
 		if (docObjects == null)
 			docObjects = parseDocObjects(getDocument());

@@ -28,12 +28,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PhPortageProvider implements GentooSearchEngineProvider {
+
 	private Logger logger = Logger.getLogger(getClass());
 
+	@Override
 	public String find(MessageEvent event, String... args) {
 		return this.find(args[0]);
 	}
 
+	@Override
 	public String find(String arg) {
 		String result = "";
 		String url = "http://darkcircle.kr/phportage/phportage.xml?k=" + arg

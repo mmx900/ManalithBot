@@ -42,6 +42,7 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TweetReader {
+
 	public static enum TwitterUrlType {
 		UserHome(
 				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}"), Tweet(

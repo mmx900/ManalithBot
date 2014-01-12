@@ -24,16 +24,16 @@ public class TokenArray {
 	private ArrayList<TokenUnit> tokenArray;
 
 	public TokenArray() {
-		tokenArray = new ArrayList<TokenUnit>();
+		tokenArray = new ArrayList<>();
 	}
 
 	public TokenArray(TokenArray sourceObject) {
-		tokenArray = new ArrayList<TokenUnit>();
+		tokenArray = new ArrayList<>();
 		tokenArray.addAll(sourceObject.getArray());
 	}
 
 	public TokenArray(ArrayList<TokenUnit> sourceArray) {
-		tokenArray = new ArrayList<TokenUnit>();
+		tokenArray = new ArrayList<>();
 		tokenArray.addAll(sourceArray);
 	}
 
@@ -60,6 +60,7 @@ public class TokenArray {
 		return this.tokenArray;
 	}
 
+	@Override
 	public String toString() {
 		String result = "";
 

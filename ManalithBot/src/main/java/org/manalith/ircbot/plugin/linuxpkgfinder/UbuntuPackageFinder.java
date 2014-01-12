@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UbuntuPackageFinder extends PackageFinder {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	@Override
@@ -43,13 +44,14 @@ public class UbuntuPackageFinder extends PackageFinder {
 		return "지정한 이름을 가진 우분투의 패키지를 검색합니다.";
 	}
 
+	@Override
 	@BotCommand("ubu")
 	public String find(@Description("키워드") @NotNull String arg) {
 		String result = "";
 		String latestPkgName = "";
 
 		try {
-			latestPkgName = this.getLatestPkgName();
+			latestPkgName = getLatestPkgName();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			result = "오류: " + e.getMessage();

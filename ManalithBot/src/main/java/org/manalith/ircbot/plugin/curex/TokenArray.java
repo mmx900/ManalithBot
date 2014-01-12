@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class TokenArray {
 
-	private ArrayList<TokenUnit> array = new ArrayList<TokenUnit>();
+	private ArrayList<TokenUnit> array = new ArrayList<>();
 
 	public int getSize() {
 		return array.size();
@@ -47,13 +47,14 @@ public class TokenArray {
 		return array.get(index);
 	}
 
+	@Override
 	public String toString() {
 		String result = "";
 
-		int size = this.array.size();
+		int size = array.size();
 
 		for (int i = 0; i < size; i++) {
-			result += (this.getElement(i).toString() + "\n");
+			result += (getElement(i).toString() + "\n");
 		}
 
 		return result;

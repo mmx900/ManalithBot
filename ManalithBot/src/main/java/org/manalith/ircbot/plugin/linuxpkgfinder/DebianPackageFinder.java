@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DebianPackageFinder extends PackageFinder {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	@Override
@@ -76,6 +77,7 @@ public class DebianPackageFinder extends PackageFinder {
 		return result;
 	}
 
+	@Override
 	@BotCommand("deb")
 	public String find(@Description("키워드") @NotNull String keyword) {
 		String result = "";

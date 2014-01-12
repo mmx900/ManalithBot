@@ -30,11 +30,11 @@ public class MissedMessageRunner {
 	private static String filename = "msglist.prop";
 
 	public MissedMessageRunner() {
-		this.setResourcePath("");
+		setResourcePath("");
 	}
 
 	public MissedMessageRunner(String newResourcePath) {
-		this.setResourcePath(newResourcePath);
+		setResourcePath(newResourcePath);
 	}
 
 	private void setResourcePath(String newResourcePath) {
@@ -42,11 +42,11 @@ public class MissedMessageRunner {
 		if (!f.exists())
 			f.mkdirs();
 
-		this.ResourcePath = newResourcePath;
+		ResourcePath = newResourcePath;
 	}
 
 	private String getResourcePath() {
-		return this.ResourcePath;
+		return ResourcePath;
 	}
 
 	public String addMsg(String sender, String receiver, String msg) {
@@ -57,7 +57,7 @@ public class MissedMessageRunner {
 
 		try {
 			PropertiesConfiguration prop = new PropertiesConfiguration(
-					this.getResourcePath() + MissedMessageRunner.filename);
+					getResourcePath() + MissedMessageRunner.filename);
 
 			Iterator<String> userlist = prop.getKeys();
 			if (userlist != null) {
@@ -121,9 +121,9 @@ public class MissedMessageRunner {
 		try {
 			// init!
 			PropertiesConfiguration prop = new PropertiesConfiguration(
-					this.getResourcePath() + MissedMessageRunner.filename);
+					getResourcePath() + MissedMessageRunner.filename);
 
-			if (this.isMatchedNickinList(newRecv)) {
+			if (isMatchedNickinList(newRecv)) {
 				if (prop.getString(newRecv).length() != 0) {
 					msgs = prop.getString(newRecv).split("\\:\\:");
 
@@ -146,7 +146,7 @@ public class MissedMessageRunner {
 
 		try {
 			PropertiesConfiguration prop = new PropertiesConfiguration(
-					this.getResourcePath() + MissedMessageRunner.filename);
+					getResourcePath() + MissedMessageRunner.filename);
 
 			// if user not found, init msgslot
 			prop.setProperty(newRecv, "");
@@ -162,7 +162,7 @@ public class MissedMessageRunner {
 
 		try {
 			PropertiesConfiguration prop = new PropertiesConfiguration(
-					this.getResourcePath() + MissedMessageRunner.filename);
+					getResourcePath() + MissedMessageRunner.filename);
 
 			Iterator<String> userlist = prop.getKeys();
 			if (userlist != null) {

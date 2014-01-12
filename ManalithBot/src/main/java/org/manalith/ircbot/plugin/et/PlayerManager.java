@@ -58,7 +58,7 @@ public class PlayerManager {
 				decoder.close();
 			} catch (IOException ex) {
 				// ignore
-				list = new ArrayList<Player>();
+				list = new ArrayList<>();
 			}
 		}
 	}

@@ -13,6 +13,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	public String changeKeyValToInternalSymbol(final String str) {
 		String result = "";
 		String strbuf = "";
@@ -64,6 +65,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		return result;
 	}
 
+	@Override
 	public boolean isISingleConsonant(String tICon) {
 		try {
 			@SuppressWarnings("unused")
@@ -75,6 +77,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	public boolean isIDoubleConsonant(String tICon) {
 		try {
 			@SuppressWarnings("unused")
@@ -86,6 +89,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	public boolean isVowel(String tVow) {
 		try {
 			@SuppressWarnings("unused")
@@ -97,6 +101,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	public boolean isFConsonant(String tFCon) {
 		try {
 			@SuppressWarnings("unused")
@@ -108,6 +113,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	public boolean isSpecialChar(String tChar) {
 		try {
 			@SuppressWarnings("unused")
@@ -119,6 +125,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 		}
 	}
 
+	@Override
 	protected String inputIConsonant(boolean isLastPosition, String token) {
 		String result = "";
 
@@ -128,7 +135,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 		// 초성이 없으면 초성을 넣는다
 		if (!beingIConsonant)
-			syl.setIConsonant(this.changeKeyValToInternalSymbol(token));
+			syl.setIConsonant(changeKeyValToInternalSymbol(token));
 
 		// 마지막 입력도 아니고 초성이 있는 상태도 아닌 상태의 나머지 경우에 실행
 		if (!(!isLastPosition && !beingIConsonant)) {
@@ -145,14 +152,11 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 				// 받침이 있으면
 				if (syl.isAssignedFConstantFirst())
-					result += this.getSingleChar(this.getSingleCharVal(fin
-							.toString()))
-							+ this.getSingleChar(this.getSingleCharVal(init
-									.toString()));
+					result += getSingleChar(getSingleCharVal(fin.toString()))
+							+ getSingleChar(getSingleCharVal(init.toString()));
 				// 초성만 있다.
 				else
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 			}
 		}
 
@@ -161,19 +165,19 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 			// 마지막 입력이면
 			if (isLastPosition)
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(this
-						.changeKeyValToInternalSymbol(token)));
+				result += getSingleChar(getSingleCharVal(changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else {
 				// 초기화 하고 슬롯에 넣는다.
 				syl.initLetter();
-				syl.setIConsonant(this.changeKeyValToInternalSymbol(token));
+				syl.setIConsonant(changeKeyValToInternalSymbol(token));
 			}
 		}
 
 		return result;
 	}
 
+	@Override
 	protected String inputVowel(boolean isLastPosition, String token) {
 		String result = "";
 
@@ -183,7 +187,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 		// 중성이 없으면 중성을 넣는다
 		if (!beingVowel)
-			syl.setVowel(this.changeKeyValToInternalSymbol(token));
+			syl.setVowel(changeKeyValToInternalSymbol(token));
 
 		// 마지막 입력도 아니고 중성이 있는 상태도 아닌 상태의 나머지 경우에 실행
 		if (!(!isLastPosition && !beingVowel)) {
@@ -199,15 +203,12 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 				// 받침이 있으면
 				if (syl.isAssignedFConstantFirst())
-					result += this.getSingleChar(this.getSingleCharVal(fin
-							.toString()))
-							+ this.getSingleChar(this.getSingleCharVal(vow
-									.toString()));
+					result += getSingleChar(getSingleCharVal(fin.toString()))
+							+ getSingleChar(getSingleCharVal(vow.toString()));
 
 				// 받침이 없으면
 				else
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 
 			}
 		}
@@ -217,19 +218,19 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 			// 마지막 입력이면
 			if (isLastPosition)
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(this
-						.changeKeyValToInternalSymbol(token)));
+				result += getSingleChar(getSingleCharVal(changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else {
 				// 초기화 하고 슬롯에 넣는다
 				syl.initLetter();
-				syl.setVowel(this.changeKeyValToInternalSymbol(token));
+				syl.setVowel(changeKeyValToInternalSymbol(token));
 			}
 		}
 
 		return result;
 	}
 
+	@Override
 	protected String inputFConsonant(boolean isLastPosition, String token) {
 		String result = "";
 
@@ -238,7 +239,7 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 		// 종성이 슬롯에 없으면 종성을 일단 넣는다.
 		if (!beingFConsonant)
-			syl.setFConsonant(this.changeKeyValToInternalSymbol(token));
+			syl.setFConsonant(changeKeyValToInternalSymbol(token));
 
 		if (!(!isLastPosition && !beingFConsonant)) {
 			// 완성 글자 초+중+종
@@ -256,15 +257,12 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 				// 초성이 있으면 (초성 -> 종성)
 				if (init != Sebeol390Symbol.SebeolIConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 				// 중성이 있으면 (중성 -> 종성)
 				if (vow != Sebeol390Symbol.SebeolVowel.nul)
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 
-				result += this.getSingleChar(this.getSingleCharVal(fin
-						.toString()));
+				result += getSingleChar(getSingleCharVal(fin.toString()));
 			}
 		}
 
@@ -273,22 +271,22 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 			// 마지막 잉여 종성 입력이면
 			if (isLastPosition)
 				// 출력
-				result += this.getSingleChar(this.getSingleCharVal(this
-						.changeKeyValToInternalSymbol(token)));
+				result += getSingleChar(getSingleCharVal(changeKeyValToInternalSymbol(token)));
 			// 아니면
 			else {
 				// 종성이 이미 있으므로 슬롯을 초기화 하고 넣는다.
 				syl.initLetter();
-				syl.setFConsonant(this.changeKeyValToInternalSymbol(token));
+				syl.setFConsonant(changeKeyValToInternalSymbol(token));
 			}
 		}
 
 		return result;
 	}
 
+	@Override
 	protected String inputSpecialChar(String token) {
 		String result = "";
-		String internalSymbol = this.changeKeyValToInternalSymbol(token);
+		String internalSymbol = changeKeyValToInternalSymbol(token);
 		Sebeol390Symbol.SebeolSpecialChar spec = Sebeol390Symbol.SebeolSpecialChar
 				.valueOf(internalSymbol);
 
@@ -306,37 +304,32 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 			// 받침이 있으면
 			if (syl.isAssignedFConstantFirst()) {
-				result += this.getSingleChar(this.getSingleCharVal(fin
-						.toString()));
+				result += getSingleChar(getSingleCharVal(fin.toString()));
 				// 초성이 있으면
 				if (init != Sebeol390Symbol.SebeolIConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 				if (vow != Sebeol390Symbol.SebeolVowel.nul)
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 			}
 			// 초성만 있거나 중성만 있거나 아무것도 없다?
 			else {
 				if (init != Sebeol390Symbol.SebeolIConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 				if (vow != Sebeol390Symbol.SebeolVowel.nul)
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 				if (fin != Sebeol390Symbol.SebeolFConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(fin
-							.toString()));
+					result += getSingleChar(getSingleCharVal(fin.toString()));
 
 			}
 
 		}
 
-		result += this.getSpecialChar(spec.value());
+		result += getSpecialChar(spec.value());
 		syl.initLetter();
 		return result;
 	}
 
+	@Override
 	protected String inputOtherChar(String token) {
 		String result = "";
 
@@ -352,27 +345,21 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
 			// 받침이 있으면
 			if (syl.isAssignedFConstantFirst()) {
-				result += this.getSingleChar(this.getSingleCharVal(fin
-						.toString()));
+				result += getSingleChar(getSingleCharVal(fin.toString()));
 				// 초성이 있으면
 				if (init != Sebeol390Symbol.SebeolIConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 				if (vow != Sebeol390Symbol.SebeolVowel.nul)
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 			}
 			// 초성만 있거나 아무것도 없다?
 			else {
 				if (init != Sebeol390Symbol.SebeolIConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(init
-							.toString()));
+					result += getSingleChar(getSingleCharVal(init.toString()));
 				if (vow != Sebeol390Symbol.SebeolVowel.nul)
-					result += this.getSingleChar(this.getSingleCharVal(vow
-							.toString()));
+					result += getSingleChar(getSingleCharVal(vow.toString()));
 				if (fin != Sebeol390Symbol.SebeolFConsonant.nul)
-					result += this.getSingleChar(this.getSingleCharVal(fin
-							.toString()));
+					result += getSingleChar(getSingleCharVal(fin.toString()));
 			}
 		}
 

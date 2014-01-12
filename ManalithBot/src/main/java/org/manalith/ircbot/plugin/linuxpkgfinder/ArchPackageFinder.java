@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ArchPackageFinder extends PackageFinder {
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	@Override
@@ -173,13 +174,14 @@ public class ArchPackageFinder extends PackageFinder {
 		return infostr;
 	}
 
+	@Override
 	public String find(String arg) {
 
 		String result = "";
 
 		try {
-			result += this.getResultFromMainPkgDB(arg);
-			result += this.getResultFromAUR(arg);
+			result += getResultFromMainPkgDB(arg);
+			result += getResultFromAUR(arg);
 
 			if (result.equals(""))
 				result = "[Arch] 결과가 없습니다";

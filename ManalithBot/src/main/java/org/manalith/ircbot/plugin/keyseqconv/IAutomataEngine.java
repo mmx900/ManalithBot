@@ -21,6 +21,7 @@ package org.manalith.ircbot.plugin.keyseqconv;
 import java.text.ParseException;
 
 public interface IAutomataEngine {
+
 	public void setEnableParsingExceptionSyntax(boolean enable);
 
 	public boolean isEnableParsingExceptionSyntax();

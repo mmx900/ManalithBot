@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GentooPackageFinder extends PackageFinder {
+
 	protected String keyword;
 	protected GentooSearchEngineProvider provider;
 
@@ -43,9 +44,10 @@ public class GentooPackageFinder extends PackageFinder {
 	}
 
 	public String getKeyword() {
-		return this.keyword;
+		return keyword;
 	}
 
+	@Override
 	@BotCommand("gen")
 	public String find(@Description("키워드") @NotNull String keyword) {
 		return provider.find(keyword);

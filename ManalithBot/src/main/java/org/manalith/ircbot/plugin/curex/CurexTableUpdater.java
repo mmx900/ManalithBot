@@ -94,7 +94,7 @@ public class CurexTableUpdater {
 	}
 
 	public void updateDataTable() throws ClassNotFoundException, SQLException {
-		this.initSQLiteTable();
+		initSQLiteTable();
 		sqlman.insertDataToTable();
 		sqlman.close();
 	}

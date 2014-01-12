@@ -15,12 +15,16 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 	public abstract String changeKeyValToInternalSymbol(final String str);
 
+	@Override
 	public abstract boolean isISingleConsonant(String tICon);
 
+	@Override
 	public abstract boolean isIDoubleConsonant(String tICon);
 
+	@Override
 	public abstract boolean isVowel(String tVow);
 
+	@Override
 	public abstract boolean isFConsonant(String tFCon);
 
 	public abstract boolean isSpecialChar(String tChar);
@@ -39,21 +43,26 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 	// Example in body :
 	// return SebeolSymbol.SebeolSingleLetter.valueOf(keySymbol).value();
+	@Override
 	public abstract int getSingleCharVal(String keySymbol);
 
+	@Override
 	public final void setEnableParsingExceptionSyntax(boolean enable) {
-		this.enableParseExceptionSyntax = enable;
+		enableParseExceptionSyntax = enable;
 	}
 
+	@Override
 	public final boolean isEnableParsingExceptionSyntax() {
-		return this.enableParseExceptionSyntax;
+		return enableParseExceptionSyntax;
 	}
 
+	@Override
 	public final String parseKoreanStringToEngSpell(String korean) {
 		String result = "";
 		return result;
 	}
 
+	@Override
 	public final String parseKeySequenceToKorean(String keySequence)
 			throws ParseException, IllegalArgumentException {
 		String result = "";
@@ -65,7 +74,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 		// 기본값은 마지막 위치가 아닌걸로 태깅
 		boolean isLastPosition = false;
 
-		if (this.isEnableParsingExceptionSyntax()
+		if (isEnableParsingExceptionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
 			throw new ParseException("Back slashes do not match",
 					keySequence.lastIndexOf("\\", 0));
@@ -73,10 +82,9 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 		for (int i = 0; i < keySequence.length(); i++) {
 			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
 				if (keySequence.charAt(i) == '\\'
-						&& this.isEnableParsingExceptionSyntax()) {
-					if ( i < keySequence.length() - 1 )
-						if (keySequence.charAt(i+1) == '\\')
-						{
+						&& isEnableParsingExceptionSyntax()) {
+					if (i < keySequence.length() - 1)
+						if (keySequence.charAt(i + 1) == '\\') {
 							result += "\\";
 							continue;
 						}
@@ -116,9 +124,8 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 				isLastPosition = (i + 1 == keySequence.length() - 1);
 
 				// 쌍자음
-				if (this.isIDoubleConsonant(this
-						.changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
-					result += this.inputIConsonant(isLastPosition,
+				if (isIDoubleConsonant(changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
+					result += inputIConsonant(isLastPosition,
 							tTokenLookaheadCombination);
 					if (isLastPosition) {
 						syl.initLetter();
@@ -129,10 +136,8 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 					}
 				}
 				// 겹모음!
-				else if (this
-						.isVowel(this
-								.changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
-					result += this.inputVowel(isLastPosition,
+				else if (isVowel(changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
+					result += inputVowel(isLastPosition,
 							tTokenLookaheadCombination);
 					if (isLastPosition) {
 						syl.initLetter();
@@ -143,10 +148,8 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 					}
 				}
 				// 겹받침
-				else if (this
-						.isFConsonant(this
-								.changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
-					result += this.inputFConsonant(isLastPosition,
+				else if (isFConsonant(changeKeyValToInternalSymbol(tTokenLookaheadCombination))) {
+					result += inputFConsonant(isLastPosition,
 							tTokenLookaheadCombination);
 					if (isLastPosition) {
 						syl.initLetter();
@@ -163,24 +166,21 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 			isLastPosition = (i == keySequence.length() - 1);
 
 			// 단자음
-			if (this.isISingleConsonant(this
-					.changeKeyValToInternalSymbol(tToken)))
-				result += this.inputIConsonant(isLastPosition, tToken);
+			if (isISingleConsonant(changeKeyValToInternalSymbol(tToken)))
+				result += inputIConsonant(isLastPosition, tToken);
 
 			// 단모음
-			else if (this.isVowel(this.changeKeyValToInternalSymbol(tToken)))
-				result += this.inputVowel(isLastPosition, tToken);
+			else if (isVowel(changeKeyValToInternalSymbol(tToken)))
+				result += inputVowel(isLastPosition, tToken);
 
 			// 받침은 키 하나로만 입력
-			else if (this.isFConsonant(this
-					.changeKeyValToInternalSymbol(tToken)))
-				result += this.inputFConsonant(isLastPosition, tToken);
+			else if (isFConsonant(changeKeyValToInternalSymbol(tToken)))
+				result += inputFConsonant(isLastPosition, tToken);
 
-			else if (this.isSpecialChar(this
-					.changeKeyValToInternalSymbol(tToken)))
-				result += this.inputSpecialChar(tToken);
+			else if (isSpecialChar(changeKeyValToInternalSymbol(tToken)))
+				result += inputSpecialChar(tToken);
 			else
-				result += this.inputOtherChar(tToken);
+				result += inputOtherChar(tToken);
 
 			// 마지막이면 루프를 깨고 아니면 계속
 			if (isLastPosition) {
@@ -196,6 +196,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 		return result;
 	}
 
+	@Override
 	public final String getSingleChar(int charVal) {
 		char[] ch = new char[1];
 		// single char value starts from 0x1100

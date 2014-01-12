@@ -67,6 +67,7 @@ public class Command {
 
 			if (isRequired)
 				name = "*" + name;
+
 			name = "[" + name + "]";
 
 			params.add(name);
@@ -102,7 +103,7 @@ public class Command {
 		sb.append("사용법 : ");
 		sb.append(StringUtils.join(aliases, '|'));
 		sb.append(" ");
-		sb.append(StringUtils.join(params));
+		sb.append(StringUtils.join(params, ' '));
 
 		return sb.toString();
 	}

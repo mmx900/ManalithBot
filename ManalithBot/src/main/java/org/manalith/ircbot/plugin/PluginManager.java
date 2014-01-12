@@ -38,11 +38,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PluginManager {
+
 	private Logger logger = Logger.getLogger(getClass());
-	private List<Plugin> list = new ArrayList<Plugin>();
-	private Map<Command, Object> commands = new HashMap<Command, Object>();
-	private Map<Method, Object> filters = new HashMap<Method, Object>();
-	private Map<Method, Object> timers = new HashMap<Method, Object>();
+	private List<Plugin> list = new ArrayList<>();
+	private Map<Command, Object> commands = new HashMap<>();
+	private Map<Method, Object> filters = new HashMap<>();
+	private Map<Method, Object> timers = new HashMap<>();
 
 	public PluginManager() {
 		load(new HelpPlugin(this));
@@ -125,5 +126,4 @@ public class PluginManager {
 	public Map<Method, Object> getTimers() {
 		return timers;
 	}
-
 }

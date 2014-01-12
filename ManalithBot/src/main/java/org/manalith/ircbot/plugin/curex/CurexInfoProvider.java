@@ -358,8 +358,7 @@ public class CurexInfoProvider {
 					result = new String[3];
 					result[0] = "-show";
 					System.arraycopy(args, 0, result, 1, 2);
-				} else if (this
-						.getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown
+				} else if (getTokenSubtype(args[0], TokenType.CurrencyUnit) != TokenSubtype.Unknown
 						&& getTokenSubtype(args[1], TokenType.CurrencyUnit) != TokenSubtype.Unknown) {
 					result = new String[4];
 					result[0] = "-conv";

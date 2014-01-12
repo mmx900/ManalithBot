@@ -30,31 +30,31 @@ public class DateTimeRound {
 	}
 
 	public DateTimeRound(GregorianCalendar newCalendar, int newRoundVal) {
-		this.setCalendar(newCalendar);
-		this.setRoundVal(newRoundVal);
+		setCalendar(newCalendar);
+		setRoundVal(newRoundVal);
 	}
 
 	public void setCalendar(GregorianCalendar newCalendar) {
-		this.calendar = newCalendar;
+		calendar = newCalendar;
 	}
 
 	public GregorianCalendar getCalendar() {
-		return this.calendar;
+		return calendar;
 	}
 
 	public void setRoundVal(int newRoundVal) {
-		this.round = newRoundVal;
+		round = newRoundVal;
 	}
 
 	public int getRoundVal() {
-		return this.round;
+		return round;
 	}
 
 	public int compareTo(DateTimeRound o) {
-		int result = this.getCalendar().compareTo(o.getCalendar());
+		int result = getCalendar().compareTo(o.getCalendar());
 
 		if (result == 0)
-			result = this.getRoundVal() - o.getRoundVal();
+			result = getRoundVal() - o.getRoundVal();
 
 		return result;
 	}

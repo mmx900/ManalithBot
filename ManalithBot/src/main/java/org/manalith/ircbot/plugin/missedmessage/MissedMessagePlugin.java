@@ -55,7 +55,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 
 		if (cmdnmsg[0].equals("!msg")) {
 			if (cmdnmsg.length == 1) {
-				event.respond(this.getHelp());
+				event.respond(getHelp());
 			} else if (cmdnmsg.length == 2) {
 				String recv = cmdnmsg[1];
 
@@ -90,7 +90,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 				}
 
 				MissedMessageRunner runner = new MissedMessageRunner(
-						this.getResourcePath());
+						getResourcePath());
 				event.respond(runner.addMsg(sender, channel.substring(1) + "."
 						+ recv, msg.toString()));
 				// exclude # in the channel name.
@@ -103,8 +103,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 	@Override
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
-		MissedMessageRunner runner = new MissedMessageRunner(
-				this.getResourcePath());
+		MissedMessageRunner runner = new MissedMessageRunner(getResourcePath());
 
 		if (!runner.isMatchedNickinList(channel.substring(1) + "." + sender))
 			runner.addMsgSlot(channel.substring(1) + "." + sender);
@@ -121,8 +120,7 @@ public class MissedMessagePlugin extends SimplePlugin {
 	@Override
 	public void onPart(String channel, String sender, String login,
 			String hostname) {
-		MissedMessageRunner runner = new MissedMessageRunner(
-				this.getResourcePath());
+		MissedMessageRunner runner = new MissedMessageRunner(getResourcePath());
 
 		if (!runner.isMatchedNickinList(channel.substring(1) + "." + sender))
 			runner.addMsgSlot(channel.substring(1) + "." + sender);

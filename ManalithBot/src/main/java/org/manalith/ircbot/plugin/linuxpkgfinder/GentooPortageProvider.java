@@ -27,12 +27,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GentooPortageProvider implements GentooSearchEngineProvider {
+
 	private Logger logger = Logger.getLogger(getClass());
 
+	@Override
 	public String find(MessageEvent event, String... args) {
 		return this.find(args[0]);
 	}
 
+	@Override
 	public String find(String arg) {
 		String result = "";
 		String url = "http://gentoo-portage.com/Search?search=" + arg;

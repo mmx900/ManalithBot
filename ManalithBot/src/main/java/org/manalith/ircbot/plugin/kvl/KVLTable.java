@@ -27,7 +27,7 @@ public class KVLTable {
 
 		public KVLRecord(String newTag) {
 			setTag(newTag);
-			versionlist = new ArrayList<String>();
+			versionlist = new ArrayList<>();
 		}
 
 		public void setTag(String tag) {
@@ -46,6 +46,7 @@ public class KVLTable {
 			return versionlist.get(0);
 		}
 
+		@Override
 		public String toString() {
 			String result = "";
 			result += getTag() + " : ";
@@ -64,7 +65,7 @@ public class KVLTable {
 	ArrayList<KVLRecord> records;
 
 	public KVLTable() {
-		records = new ArrayList<KVLRecord>();
+		records = new ArrayList<>();
 	}
 
 	public void addVersionInfo(String tag, String versionElement) {
@@ -114,6 +115,7 @@ public class KVLTable {
 		return result;
 	}
 
+	@Override
 	public String toString() {
 		return this.getLatestVersions();
 	}
