@@ -1,5 +1,7 @@
 package org.manalith.ircbot.util;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,10 @@ public class MessageUtils {
 		if (!matcher.matches())
 			return null;
 
-		return matcher.group(1);
+		try {
+			return new URI(matcher.group(1)).toASCIIString();
+		} catch (URISyntaxException e) {
+			return null;
+		}
 	}
 }
