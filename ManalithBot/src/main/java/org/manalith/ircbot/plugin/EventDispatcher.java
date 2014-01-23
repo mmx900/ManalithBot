@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.manalith.ircbot.command.CommandParser;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
@@ -50,13 +49,16 @@ import org.pircbotx.hooks.events.TopicEvent;
 import org.pircbotx.hooks.events.UserListEvent;
 import org.pircbotx.hooks.events.UserModeEvent;
 import org.pircbotx.hooks.events.VoiceEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	public static final String COMMAND_PREFIX = "!";
-	private final Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PluginManager plugins;
@@ -221,8 +223,8 @@ public class EventDispatcher extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onChannelInfo(ChannelInfoEvent<ManalithBot> event)
 			throws Exception {
-		// logger.trace(String.format("CHANNEL_INFO : %s / %s / %s", channel,
-		// userCount, topic));
+		// logger.trace("CHANNEL_INFO : {} / {} / {}", channel,userCount,
+		// topic);
 
 		// pluginManager.onTopic(channel, userCount, topic);
 	}

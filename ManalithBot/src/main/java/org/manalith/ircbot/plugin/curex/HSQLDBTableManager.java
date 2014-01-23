@@ -26,12 +26,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HSQLDBTableManager {
-	private Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Connection conn;
 	private Statement stat;
@@ -180,7 +182,7 @@ public class HSQLDBTableManager {
 			conn.setAutoCommit(true);
 			stmt.clearParameters();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 	}
 

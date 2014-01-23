@@ -27,19 +27,21 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.Configuration;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotFilter;
 import org.manalith.ircbot.common.stereotype.BotTimer;
 import org.manalith.ircbot.plugin.admin.HelpPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PluginManager {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	private List<Plugin> list = new ArrayList<>();
 	private Map<Command, Object> commands = new HashMap<>();
 	private Map<Method, Object> filters = new HashMap<>();
@@ -70,9 +72,9 @@ public class PluginManager {
 
 		try {
 			plugin.start(null);
-			logger.info(String.format("%s 플러그인이 시작되었습니다.", plugin.getName()));
+			logger.info("{} 플러그인이 시작되었습니다.", plugin.getName());
 		} catch (Exception e) {
-			logger.error(String.format("%s 플러그인을 시작하지 못했습니다.", plugin.getName()));
+			logger.error("{} 플러그인을 시작하지 못했습니다.", plugin.getName());
 			logger.error(e.getMessage(), e);
 			unload(plugin);
 		}
@@ -82,7 +84,7 @@ public class PluginManager {
 		try {
 			plugin.stop(null);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 
 		list.remove(plugin);

@@ -18,17 +18,18 @@
  */
 package org.manalith.ircbot.plugin.linuxpkgfinder;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GentooPortageProvider implements GentooSearchEngineProvider {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public String find(MessageEvent event, String... args) {

@@ -6,11 +6,12 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.annotation.Description;
 import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import dk.dren.hunspell.Hunspell;
@@ -18,7 +19,7 @@ import dk.dren.hunspell.Hunspell;
 @Component
 public class SpellCheckerPlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String englishDictionaryPath;
 
@@ -29,7 +30,7 @@ public class SpellCheckerPlugin extends SimplePlugin {
 	}
 
 	public void setEnglishDictionaryPath(String path) {
-		this.englishDictionaryPath = path;
+		englishDictionaryPath = path;
 	}
 
 	public String getKoreanDictionaryPath() {
@@ -37,7 +38,7 @@ public class SpellCheckerPlugin extends SimplePlugin {
 	}
 
 	public void setKoreanDictionaryPath(String path) {
-		this.koreanDictionaryPath = path;
+		koreanDictionaryPath = path;
 	}
 
 	@Override

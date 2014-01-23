@@ -3,7 +3,8 @@ package org.manalith.ircbot.plugin.urlshortener;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -13,10 +14,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class BitLyProvider implements UrlShortenerProvider {
-	private Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private String apiLogin;
 	private String apiKey;
 
+	@Override
 	public String shorten(String url) {
 		RestTemplate rest = new RestTemplate();
 		rest.getMessageConverters().add(

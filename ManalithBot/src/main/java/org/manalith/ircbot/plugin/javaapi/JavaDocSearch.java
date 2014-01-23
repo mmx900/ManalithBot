@@ -8,14 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JavaDocSearch implements SearchInterface {
-	private Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	private final String baseUrl;
 	private static final String JAVADOC_ALLCLASS_FRAME_URL = "allclasses-frame.html";
 	private List<JavaDocObject> docObjects = null;

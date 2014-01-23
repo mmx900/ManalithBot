@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin;
 
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.ManalithBot;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
@@ -16,11 +15,14 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.events.QuitEvent;
 import org.pircbotx.hooks.events.ServerResponseEvent;
 import org.pircbotx.hooks.events.TopicEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventLogger extends ListenerAdapter<ManalithBot> {
-	private final Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void onConnect(ConnectEvent<ManalithBot> event) throws Exception {
@@ -36,8 +38,8 @@ public class EventLogger extends ListenerAdapter<ManalithBot> {
 	@Override
 	public void onServerResponse(ServerResponseEvent<ManalithBot> event)
 			throws Exception {
-		logger.info(String.format("SERVER_RESPONSE: %s / %s", event.getCode(),
-				event.getParsedResponse()));
+		logger.info("SERVER_RESPONSE: {} / {}", event.getCode(),
+				event.getParsedResponse());
 	}
 
 	@Override
@@ -48,74 +50,72 @@ public class EventLogger extends ListenerAdapter<ManalithBot> {
 		String hostname = event.getUser().getHostmask();
 		String message = event.getMessage();
 
-		logger.info(String.format("MESSAGE : %s / %s / %s / %s / %s", channel,
-				sender, login, hostname, message));
+		logger.info("MESSAGE : {} / {} / {} / {} / {}", channel, sender, login,
+				hostname, message);
 	}
 
 	@Override
 	public void onPrivateMessage(PrivateMessageEvent<ManalithBot> event)
 			throws Exception {
-		logger.info(String.format("PRIVMSG : %s / %s / %s / %s", event
-				.getUser().getNick(), event.getUser().getLogin(), event
-				.getUser().getHostmask(), event.getMessage()));
+		logger.info("PRIVMSG : {} / {} / {} / {}", event.getUser().getNick(),
+				event.getUser().getLogin(), event.getUser().getHostmask(),
+				event.getMessage());
 	}
 
 	@Override
 	public void onAction(ActionEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("ACTION : %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask(), event
-				.getAction()));
+		logger.info("ACTION : {} / {} / {} / {} / {}", event.getChannel()
+				.getName(), event.getUser().getNick(), event.getUser()
+				.getLogin(), event.getUser().getHostmask(), event.getAction());
 	}
 
 	@Override
 	public void onJoin(JoinEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("JOIN : %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask()));
+		logger.info("JOIN : {} / {} / {} / {}", event.getChannel().getName(),
+				event.getUser().getNick(), event.getUser().getLogin(), event
+						.getUser().getHostmask());
 	}
 
 	@Override
 	public void onPart(PartEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("PART : %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask()));
+		logger.info("PART : {} / {} / {} / {}", event.getChannel().getName(),
+				event.getUser().getNick(), event.getUser().getLogin(), event
+						.getUser().getHostmask());
 	}
 
 	@Override
 	public void onNickChange(NickChangeEvent<ManalithBot> event)
 			throws Exception {
-		logger.info(String.format("NICK_CHANGE : %s / %s / %s / %s", event
-				.getOldNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask(), event.getNewNick()));
+		logger.info("NICK_CHANGE : {} / {} / {} / {}", event.getOldNick(),
+				event.getUser().getLogin(), event.getUser().getHostmask(),
+				event.getNewNick());
 	}
 
 	@Override
 	public void onKick(KickEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("KICK : %s / %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getUser().getNick(), event
-				.getUser().getLogin(), event.getUser().getHostmask(), event
-				.getRecipient().getNick(), event.getReason()));
+		logger.info("KICK : {} / {} / {} / {} / {} / {}", event.getChannel()
+				.getName(), event.getUser().getNick(), event.getUser()
+				.getLogin(), event.getUser().getHostmask(), event
+				.getRecipient().getNick(), event.getReason());
 	}
 
 	@Override
 	public void onQuit(QuitEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("QUIT : %s / %s / %s / %s", event.getUser()
-				.getNick(), event.getUser().getLogin(), event.getUser()
-				.getHostmask(), event.getReason()));
+		logger.info("QUIT : {} / {} / {} / {}", event.getUser().getNick(),
+				event.getUser().getLogin(), event.getUser().getHostmask(),
+				event.getReason());
 
 	}
 
 	@Override
 	public void onTopic(TopicEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("TOPIC : %s / %s / %s / %s / %s", event
-				.getChannel().getName(), event.getTopic(), event.getChannel()
-				.getTopicSetter(), event.getTimestamp(), event.isChanged()));
+		logger.info("TOPIC : {} / {} / {} / {} / {}", event.getChannel()
+				.getName(), event.getTopic(), event.getChannel()
+				.getTopicSetter(), event.getTimestamp(), event.isChanged());
 	}
 
 	@Override
 	public void onInvite(InviteEvent<ManalithBot> event) throws Exception {
-		logger.info(String.format("INVITE : %s / %s", event.getChannel(),
-				event.getUser()));
+		logger.info("INVITE : {} / {}", event.getChannel(), event.getUser());
 	}
 }

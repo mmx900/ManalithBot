@@ -18,15 +18,16 @@
  */
 package org.manalith.ircbot.plugin.kvl;
 
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("kvlPlugin")
 public class KVLPlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public String getName() {

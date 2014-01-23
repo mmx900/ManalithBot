@@ -18,7 +18,6 @@
  */
 package org.manalith.ircbot.plugin.linuxpkgfinder;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,12 +26,14 @@ import org.jsoup.select.Elements;
 import org.manalith.ircbot.annotation.Description;
 import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UbuntuPackageFinder extends PackageFinder {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public String getName() {

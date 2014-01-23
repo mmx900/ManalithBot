@@ -10,10 +10,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.etcfg.etlaunch.ColorConvertor;
@@ -23,7 +24,7 @@ import com.etcfg.etlaunch.ServerStatusChecker;
 @Component("etPlugin")
 public class ETPlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PlayerManager playerManager;
 
@@ -175,7 +176,7 @@ public class ETPlugin extends SimplePlugin {
 							status.getMapName(), sb.toString()));
 				}
 			} catch (IOException e) {
-				logger.warn(e);
+				logger.warn(e.getMessage(), e);
 				event.respond("서버 연결에 오류가 발생했습니다.");
 			}
 

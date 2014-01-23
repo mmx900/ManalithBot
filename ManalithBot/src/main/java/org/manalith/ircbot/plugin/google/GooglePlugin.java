@@ -30,11 +30,12 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Component
 public class GooglePlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	private static final String NAMESPACE = "!구글";
 	private static final String HIGH_INTENSITY = "\u0002";
 	private static final String LOW_INTENSITY = "\u000f";
@@ -112,11 +114,11 @@ public class GooglePlugin extends SimplePlugin {
 					.getString("estimatedResultCount"));
 
 		} catch (MalformedURLException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		} catch (JSONException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 
 		return -1;
@@ -160,7 +162,7 @@ public class GooglePlugin extends SimplePlugin {
 						+ " : " + result.unescapedUrl;
 			}
 		} catch (IOException e) {
-			logger.warn(e);
+			logger.warn(e.getMessage(), e);
 		}
 
 		return null;

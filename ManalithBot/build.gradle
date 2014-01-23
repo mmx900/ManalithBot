@@ -23,7 +23,7 @@ dependencies {
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.3'
 	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
 	compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.1'
-	compile group: 'log4j', name: 'log4j', version: '1.2.14'
+	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
 	compile group: 'org.hibernate', name: 'hibernate-core', version: '4.2.1.Final'
 	compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.2.1.Final'
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'

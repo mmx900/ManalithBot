@@ -26,12 +26,13 @@ import java.util.regex.Pattern;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.curex.exceptions.EmptyTokenStreamException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CurexCustomSettingManager extends TokenAnalyzer {
 
-	private final Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final String dataPath;
 	private final String channel;

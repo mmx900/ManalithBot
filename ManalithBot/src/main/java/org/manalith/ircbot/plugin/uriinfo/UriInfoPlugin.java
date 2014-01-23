@@ -22,7 +22,6 @@ package org.manalith.ircbot.plugin.uriinfo;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
@@ -31,12 +30,14 @@ import org.jsoup.nodes.Element;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.MessageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UriInfoPlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private boolean enablePrintContentType;
 
 	private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:12.0) "

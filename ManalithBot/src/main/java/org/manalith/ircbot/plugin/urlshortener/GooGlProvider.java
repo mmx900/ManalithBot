@@ -1,6 +1,7 @@
 package org.manalith.ircbot.plugin.urlshortener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 public class GooGlProvider implements UrlShortenerProvider {
-	private Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private String apiKey;
 
 	@Override

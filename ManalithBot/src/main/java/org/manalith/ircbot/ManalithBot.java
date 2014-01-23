@@ -26,13 +26,14 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
 import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.relay.RelayPlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.manalith.ircbot.util.AppContextUtils;
 import org.manalith.ircbot.util.UrlUtils;
 import org.pircbotx.PircBotXUtf8;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -40,7 +41,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ManalithBot extends PircBotXUtf8 {
-	private Logger logger = Logger.getLogger(getClass());
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private Configuration configuration;
@@ -68,9 +70,7 @@ public class ManalithBot extends PircBotXUtf8 {
 	public void sendMessage(String target, String message, boolean needRelay) {
 		sendIRC().message(target, message);
 
-		if (logger.isInfoEnabled())
-			logger.info(String.format("MESSAGE(LOCAL) : %s / %s", target,
-					message));
+		logger.info("MESSAGE(LOCAL) : {} / {}", target, message);
 
 		if (needRelay && RelayPlugin.RELAY_BOT != null)
 			RelayPlugin.RELAY_BOT.sendIRC().message(target, message);

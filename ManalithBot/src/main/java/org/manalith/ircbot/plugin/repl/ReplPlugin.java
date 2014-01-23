@@ -4,18 +4,19 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jsoup.Connection.Method;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReplPlugin extends SimplePlugin {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private final String[] commands = { "!scala", "!java", "!js",
 			"!javascript", "!ruby", "!py", "!python", "!groovy" };
 	private String serverAddress;

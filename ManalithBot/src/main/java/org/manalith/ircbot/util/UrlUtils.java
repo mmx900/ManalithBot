@@ -12,17 +12,18 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UrlUtils {
-	private static Logger logger = Logger.getLogger(UrlUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(UrlUtils.class);
 
 	public static String encode(String url) {
 		try {
 			return URLEncoder.encode(url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// impossible
-			logger.error(e);
+			logger.error("encode error", e);
 			return null;
 		}
 	}
@@ -32,7 +33,7 @@ public class UrlUtils {
 			return URLDecoder.decode(url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// impossible
-			logger.error(e);
+			logger.error("decode error", e);
 			return null;
 		}
 	}
@@ -46,14 +47,17 @@ public class UrlUtils {
 	public static void setTrustAllHosts() throws Exception {
 		// 인증서를 검증하지 않는다.
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			@Override
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
 
+			@Override
 			public void checkClientTrusted(X509Certificate[] certs,
 					String authType) {
 			}
 
+			@Override
 			public void checkServerTrusted(X509Certificate[] certs,
 					String authType) {
 			}
@@ -66,6 +70,7 @@ public class UrlUtils {
 
 		// 호스트명을 검증하지 않는다.
 		HostnameVerifier allHostsValid = new HostnameVerifier() {
+			@Override
 			public boolean verify(String hostname, SSLSession session) {
 				return true;
 			}
