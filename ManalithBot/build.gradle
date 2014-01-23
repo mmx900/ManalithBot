@@ -19,8 +19,8 @@ repositories { mavenCentral() }
 dependencies {
 	compile fileTree(dir: 'lib', include: '*.jar')
 	compile group: 'org.pircbotx', name: 'pircbotx', version: '2.0.1'
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2'
-	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2.1'
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.3'
 	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
 	compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.1'
 	compile group: 'log4j', name: 'log4j', version: '1.2.14'
@@ -50,7 +50,7 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.2'
 	compile group: 'commons-configuration', name: 'commons-configuration', version: '1.10'
 	compile group: 'org.twitter4j', name: 'twitter4j-core', version: '3.0.5'
-	compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.37.0'
+	compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.38.0'
 }
 
 test { systemProperties 'property': 'value' }
