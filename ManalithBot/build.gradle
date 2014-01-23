@@ -53,7 +53,11 @@ dependencies {
 	compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.38.0'
 }
 
-test { systemProperties 'property': 'value' }
+test {
+	ignoreFailures true
+	testLogging.showStandardStreams = true
+	onlyIf { Boolean.getBoolean('run.tests') }
+}
 
 uploadArchives {
 	repositories { flatDir { dirs 'repos' } }
