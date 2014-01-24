@@ -26,15 +26,8 @@ import org.manalith.ircbot.plugin.EventDispatcher;
 import org.manalith.ircbot.plugin.EventLogger;
 import org.manalith.ircbot.plugin.Plugin;
 import org.pircbotx.Configuration.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class Configuration {
-
-	@Autowired
-	private EventLogger eventLogger;
-
-	@Autowired
-	private EventDispatcher eventDispatcher;
 
 	private String botLogin;
 	private String botName;
@@ -47,8 +40,10 @@ public class Configuration {
 	private List<Plugin> plugins;
 	private boolean autoAcceptInvite;
 
-	public org.pircbotx.Configuration<ManalithBot> buildPircBotConfiguration()
+	public org.pircbotx.Configuration<ManalithBot> buildPircBotConfiguration(
+			EventLogger eventLogger, EventDispatcher eventDispatcher)
 			throws Exception {
+
 		Builder<ManalithBot> builder = new Builder<ManalithBot>()
 				.setServer(server, serverPort).setLogin(botLogin)
 				.setName(botName).setEncoding(serverEncoding)

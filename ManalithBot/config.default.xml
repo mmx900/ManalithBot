@@ -17,12 +17,13 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<task:annotation-driven />
 
 	<bean id="pircbotConfiguration" factory-bean="configuration"
-		factory-method="buildPircBotConfiguration" />
+		factory-method="buildPircBotConfiguration">
+		<constructor-arg ref="eventLogger" />
+		<constructor-arg ref="eventDispatcher" />
+	</bean>
 
 	<bean id="manalithBot" class="org.manalith.ircbot.ManalithBot">
-		<constructor-arg>
-			<ref bean="pircbotConfiguration" />
-		</constructor-arg>
+		<constructor-arg ref="pircbotConfiguration" />
 	</bean>
 
 	<!-- 봇 연결 설정 -->
