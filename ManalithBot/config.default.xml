@@ -73,6 +73,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="cryptoPlugin" />
 				<ref bean="onOffMixPlugin" />
 				<ref bean="timePlugin" />
+				<ref bean="translatorPlugin" />
 				<!-- <ref bean="replPlugin" /> -->
 				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
 				<ref bean="aliasPlugin" />
@@ -190,6 +191,13 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<bean id="etPlugin" class="org.manalith.ircbot.plugin.et.ETPlugin">
 		<property name="serverAddress" value="SERVER_ADDRESS" />
 		<property name="serverPort" value="27960" />
+	</bean>
+	 -->
+	
+	<!-- 번역 플러그인 설정 -->
+	<!-- 
+	<bean id="translatorPlugin" class="org.manalith.ircbot.plugin.translator.TranslatorPlugin">
+		<property name="clientSecret" value="YOUR_AZURE_TRANSLATOR_ID" />
 	</bean>
 	 -->
 	
