@@ -53,7 +53,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="nvidiaDriverNewsPlugin" />
 				<ref bean="calcPlugin" />
 				<ref bean="kvlPlugin" />
-				<ref bean="cerPlugin" />
+				<ref bean="curexPlugin" />
 				<ref bean="uriInfoPlugin" />
 				<ref bean="dictionaryPlugin" />
 				<ref bean="spellCheckerPlugin" />
@@ -175,6 +175,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 		<property name="consumerKey" value="fQ9hRqzQjF5hmDM6yd0XNQ"/>
 		<property name="consumerSecret" value="nzJzR3pFoe5w2hW4VreHBlKWolbjaRapZ909aioqM"/>
 
+		<!-- https://dev.twitter.com/ 참조 -->
 		<property name="username" value="MANALITH_BOT_OWNERS_USERNAME"/>
 		<property name="password" value="MANALITH_BOT_OWNERS_PASSWORD"/>
 	</bean>
@@ -183,6 +184,12 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<bean id="spellCheckerPlugin" class="org.manalith.ircbot.plugin.dictionary.SpellCheckerPlugin">
 		<property name="koreanDictionaryPath" value="/usr/share/hunspell/ko_KR" />
 		<property name="englishDictionaryPath" value="/usr/share/hunspell/en_US" />
+	</bean>
+
+	<!-- 환율 정보(Curex) 플러그인 설정 -->
+	<bean id="curexPlugin" class="org.manalith.ircbot.plugin.curex.CurexPlugin">
+		<!-- https://www.openexchangerates.org/ 참조 -->
+		<propery name="appid" value="MANALITH_BOT_OWNERS_APPID"/>
 	</bean>
 	
 	<!-- Enemy Territory 플러그인 설정 -->
