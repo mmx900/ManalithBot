@@ -18,6 +18,8 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
+import java.math.BigInteger;
+
 import org.manalith.ircbot.plugin.calc.exceptions.InvalidOperatorUseException;
 import org.manalith.ircbot.plugin.calc.exceptions.NotImplementedException;
 
@@ -31,8 +33,8 @@ public class ParseTreeUnit {
 	}
 
 	public TokenUnit getNode() {
-		if (this.node != null)
-			return this.node;
+		if (node != null)
+			return node;
 		else
 			return null;
 	}
@@ -80,26 +82,26 @@ public class ParseTreeUnit {
 	}
 
 	public void removeLeftSubtree() {
-		this.left = null;
+		left = null;
 	}
 
 	public void removeRightSubtree() {
-		this.right = null;
+		right = null;
 	}
 
 	public void preorder() {
-		System.out.println(this.getNode());
+		System.out.println(getNode());
 		if (left != null)
 			left.preorder();
 		if (right != null)
 			right.preorder();
 	}
 
-	public int Factorial(int n) {
-		if (n == 1)
+	public BigInteger Factorial(BigInteger n) {
+		if (n.compareTo(new BigInteger("1")) == 0)
 			return n;
 		else
-			return n * Factorial(n - 1);
+			return n.multiply(Factorial(n.subtract(new BigInteger("1"))));
 	}
 
 	public String getResultType() {
@@ -129,10 +131,10 @@ public class ParseTreeUnit {
 		}
 	}
 
-	public String getIntResult() throws NotImplementedException {
+	public String getIntFpResult() throws NotImplementedException {
 		String result = "";
-		int leftVal = 0;
-		int rightVal = 0;
+		BigInteger leftVal = new BigInteger("0");
+		BigInteger rightVal = new BigInteger("0");
 
 		if (node.getTokenSubtype() == TokenSubtype.Decimal) {
 			result = node.getTokenString();
@@ -144,7 +146,7 @@ public class ParseTreeUnit {
 			// ignore last 'b'
 			for (int i = 0; i < len - 1; i++) {
 				val *= 2;
-				val += (int) (data.charAt(i) - '0');
+				val += data.charAt(i) - '0';
 			}
 
 			result = Integer.toString(val);
@@ -157,7 +159,7 @@ public class ParseTreeUnit {
 			// ignore first '0'
 			for (int i = 1; i < len; i++) {
 				val *= 8;
-				val += (int) (data.charAt(i) - '0');
+				val += data.charAt(i) - '0';
 			}
 
 			result = Integer.toString(val);
@@ -170,13 +172,13 @@ public class ParseTreeUnit {
 				val *= 16;
 
 				if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-					val += (int) (data.charAt(i) - '0');
+					val += data.charAt(i) - '0';
 
 				if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
-					val += ((int) (data.charAt(i) - 'a') + 10);
+					val += (data.charAt(i) - 'a' + 10);
 
 				if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
-					val += ((int) (data.charAt(i) - 'A') + 10);
+					val += (data.charAt(i) - 'A' + 10);
 			}
 
 			result = Integer.toString(val);
@@ -184,83 +186,89 @@ public class ParseTreeUnit {
 
 		if (node.getTokenType() == TokenType.Operatr) {
 			if (left != null)
-				leftVal = Integer.parseInt(left.getIntResult());
+				leftVal = new BigInteger(left.getIntFpResult());
 			if (right != null)
-				rightVal = Integer.parseInt(right.getIntResult());
+				rightVal = new BigInteger(right.getIntFpResult());
 
 			int opval = node.getTokenSubtype().hashCode();
 
 			if (opval == TokenSubtype.Plus.hashCode())
-				result = Integer.toString(leftVal + rightVal);
+				result = leftVal.add(rightVal).toString();
 			else if (opval == TokenSubtype.Minus.hashCode())
-				result = Integer.toString(leftVal - rightVal);
+				result = leftVal.subtract(rightVal).toString();
 			else if (opval == TokenSubtype.Times.hashCode())
-				result = Integer.toString(leftVal * rightVal);
+				result = leftVal.multiply(rightVal).toString();
 			else if (opval == TokenSubtype.Divide.hashCode()) {
-				if (rightVal == 0)
+				if (rightVal.equals(new BigInteger("0")))
 					throw new ArithmeticException("/ by zero");
-				result = Integer.toString(leftVal / rightVal);
+				if (leftVal.mod(rightVal).equals(new BigInteger("0")))
+					result = leftVal.divide(rightVal).toString();
+				else {
+					double t0 = leftVal.doubleValue();
+					double t1 = rightVal.doubleValue();
+					result = Double.toString(t0 / t1);
+				}
 			} else if (opval == TokenSubtype.Modulus.hashCode()) {
-				if (rightVal == 0)
+				if (rightVal.equals(new BigInteger("0")))
 					throw new ArithmeticException("/ by zero");
-				result = Integer.toString(leftVal % rightVal);
+				result = leftVal.mod(rightVal).toString();
 			} else if (opval == TokenSubtype.Power.hashCode())
-				result = Integer.toString((int) Math.pow((double) leftVal,
-						(double) rightVal));
+				result = leftVal.pow(rightVal.intValue()).toString();
 			else if (opval == TokenSubtype.Factorial.hashCode())
-				result = Integer.toString(this.Factorial(leftVal));
+				result = Factorial(leftVal).toString();
 		}
 
 		if (node.getTokenType() == TokenType.BaseConvFunc) {
 			if (right != null)
-				rightVal = Integer.parseInt(right.getIntResult());
+				rightVal = new BigInteger(right.getIntFpResult());
 
 			int opval = node.getTokenSubtype().hashCode();
 
 			if (opval == TokenSubtype.ToBin.hashCode()) {
 				String val = "";
-				while (rightVal >= 2) {
-					val = Integer.toString(rightVal % 2) + val;
-					rightVal /= 2;
+				while (rightVal.compareTo(new BigInteger("2")) >= 0) {
+					val = rightVal.mod(new BigInteger("2")).toString() + val;
+					rightVal = rightVal.divide(new BigInteger("2"));
 				}
 
-				val = Integer.toString(rightVal) + val + "b";
+				val = rightVal.add(new BigInteger(val)).toString() + "b";
 
 				result = val;
 			} else if (opval == TokenSubtype.ToOct.hashCode()) {
 				String val = "";
 
-				while (rightVal >= 8) {
-					val = Integer.toString(rightVal % 8) + val;
-					rightVal /= 8;
+				while (rightVal.compareTo(new BigInteger("8")) >= 0) {
+					val = rightVal.mod(new BigInteger("8")).toString() + val;
+					rightVal = rightVal.divide(new BigInteger("8"));
 				}
 
-				val = "0" + Integer.toString(rightVal) + val;
+				val = "0" + rightVal.toString() + val;
 
 				result = val;
 			} else if (opval == TokenSubtype.ToDec.hashCode()) {
-				result = Integer.toString(rightVal);
+				result = rightVal.toString();
 			} else if (opval == TokenSubtype.ToHex.hashCode()) {
 				String val = "";
-				int temp = 0;
+				BigInteger temp = new BigInteger("0");
 
-				while (rightVal >= 16) {
-					temp = rightVal % 16;
-					if (temp < 10)
-						val = Integer.toString(temp) + val;
+				while (rightVal.compareTo(new BigInteger("16")) >= 0) {
+					temp = rightVal.mod(new BigInteger("16"));
+					if (temp.compareTo(new BigInteger("10")) < 0)
+						val = temp.toString() + val;
 					else
-						val = Character.toString((char) ((temp - 10) + 'A'))
+						val = Character.toString((char) (temp.subtract(
+								new BigInteger("10")).intValue() - 'A'))
 								+ val;
 
-					rightVal /= 16;
+					rightVal = rightVal.divide(new BigInteger("16"));
 				}
 
-				if (rightVal < 10)
-					val = "0x" + Integer.toString(rightVal) + val;
+				if (rightVal.compareTo(new BigInteger("10")) < 0)
+					val = "0x" + rightVal.toString() + val;
 				else
 					val = "0x"
-							+ Character
-									.toString((char) ((rightVal - 10) + 'A'))
+							+ Character.toString((char) (rightVal.subtract(
+									new BigInteger("10")).intValue() + 'A'))
 							+ val;
 
 				result = val;
@@ -278,7 +286,7 @@ public class ParseTreeUnit {
 
 		if (node.getTokenSubtype() == TokenSubtype.Decimal) {
 			String data = node.getTokenString();
-			result = Double.toString((double) Integer.parseInt(data));
+			result = Double.toString(Integer.parseInt(data));
 		} else if (node.getTokenSubtype() == TokenSubtype.Binary) {
 			String data = node.getTokenString();
 			int len = data.length();
@@ -287,10 +295,10 @@ public class ParseTreeUnit {
 			// ignore last 'b'
 			for (int i = 0; i < len - 1; i++) {
 				val *= 2;
-				val += (int) (data.charAt(i) - '0');
+				val += data.charAt(i) - '0';
 			}
 
-			result = Double.toString((double) val);
+			result = Double.toString(val);
 		} else if (node.getTokenSubtype() == TokenSubtype.Octal) {
 			String data = node.getTokenString();
 			int len = data.length();
@@ -299,10 +307,10 @@ public class ParseTreeUnit {
 			// ignore first '0'
 			for (int i = 1; i < len; i++) {
 				val *= 8;
-				val += (int) (data.charAt(i) - '0');
+				val += data.charAt(i) - '0';
 			}
 
-			result = Double.toString((double) val);
+			result = Double.toString(val);
 		} else if (node.getTokenSubtype() == TokenSubtype.Hexadec) {
 			String data = node.getTokenString();
 			int len = data.length();
@@ -312,19 +320,19 @@ public class ParseTreeUnit {
 				val *= 16;
 
 				if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-					val += (int) (data.charAt(i) - '0');
+					val += data.charAt(i) - '0';
 
 				if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
-					val += ((int) (data.charAt(i) - 'a') + 10);
+					val += (data.charAt(i) - 'a' + 10);
 
 				if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
-					val += ((int) (data.charAt(i) - 'A') + 10);
+					val += (data.charAt(i) - 'A' + 10);
 			}
 
-			result = Double.toString((double) val);
+			result = Double.toString(val);
 		} else if (node.getTokenSubtype() == TokenSubtype.SpFltPoint) {
 			String data = node.getTokenString();
-			result = Double.toString((double) Float.parseFloat(data));
+			result = Double.toString(Float.parseFloat(data));
 		} else if (node.getTokenSubtype() == TokenSubtype.DpFltPoint) {
 			String data = node.getTokenString();
 			result = Double.toString(Double.parseDouble(data));
@@ -352,13 +360,12 @@ public class ParseTreeUnit {
 			else if (opval == TokenSubtype.Modulus.hashCode())
 				throw new InvalidOperatorUseException();
 			else if (opval == TokenSubtype.Power.hashCode())
-				result = Double.toString(Math.pow((double) leftVal,
-						(double) rightVal));
+				result = Double.toString(Math.pow(leftVal, rightVal));
 			else if (opval == TokenSubtype.Factorial.hashCode()) {
 				if (left.getNode().getTokenType() == TokenType.Integer) {
-					result = Double.toString(Double.parseDouble(Integer
-							.toString(this.Factorial(Integer.parseInt(left
-									.getNode().getTokenString())))));
+					result = Factorial(
+							new BigInteger(left.getNode().getTokenString()
+									.split(".")[0])).toString();
 				} else {
 					throw new InvalidOperatorUseException();
 				}

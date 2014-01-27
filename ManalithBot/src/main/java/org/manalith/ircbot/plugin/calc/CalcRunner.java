@@ -56,7 +56,7 @@ public class CalcRunner {
 
 			// Computation phase
 			if (ptu.getResultType().equals("Integer"))
-				result = " => " + ptu.getIntResult();
+				result = " => " + ptu.getIntFpResult();
 			else
 				result = " => " + ptu.getFpResult();
 		} catch (Exception e) {
