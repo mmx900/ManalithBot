@@ -46,21 +46,15 @@ public class TokenObject {
 				result = TokenSubtype.CommandUnitList;
 			else if (ts.equals("calc"))
 				result = TokenSubtype.CommandCalc;
-			else if (ts.equals("add"))
-				result = TokenSubtype.CommandAdd;
-			else if (ts.equals("remove"))
-				result = TokenSubtype.CommandRemove;
-			else if (ts.equals("flush"))
-				result = TokenSubtype.CommandFlush;
 			break;
 		case 1:
+			result = TokenSubtype.CurrencyUnit;
+			break;
+		case 2:
 			if (Pattern.matches("[0-9]+", ts))
 				result = TokenSubtype.NumberNatural;
 			else if (Pattern.matches("0-9]+\\.[0-9]+", ts))
 				result = TokenSubtype.NumberFloatingPoint;
-			break;
-		case 2:
-			result = TokenSubtype.CurrencyUnit;
 			break;
 		default:
 			break;
@@ -106,9 +100,8 @@ public class TokenObject {
 
 	public enum TokenSubtype {
 
-		CommandShow(0), CommandHelp(1), CommandCalc(2), CommandUnitList(3), CommandAdd(
-				4), CommandRemove(5), CommandFlush(6), NumberNatural(7), NumberFloatingPoint(
-				8), CurrencyUnit(9), UnDefined(10);
+		CommandShow(0), CommandHelp(1), CommandCalc(2), CommandUnitList(3), NumberNatural(
+				4), NumberFloatingPoint(5), CurrencyUnit(6), UnDefined(7);
 
 		private final int value;
 

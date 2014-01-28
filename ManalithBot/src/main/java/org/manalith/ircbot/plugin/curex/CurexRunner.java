@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.manalith.ircbot.plugin.curex.TokenObject.TokenSubtype;
 import org.manalith.ircbot.plugin.curex.TokenObject.TokenType;
 import org.manalith.ircbot.plugin.curex.exceptions.AppIDMissingException;
 import org.manalith.ircbot.plugin.curex.exceptions.IllegalArgumentException;
@@ -83,9 +84,8 @@ public class CurexRunner {
 				if (!isValidCurrency(tarray.get(3).getTokenString()))
 					throw new UnknownCurrencyException(tarray.get(3)
 							.getTokenString());
-				result = getCalcResult(tarray.get(1).getTokenString(), tarray
-						.get(2).getTokenString(), tarray.get(3)
-						.getTokenString());
+				result = getCalcResult(tarray.get(1), tarray.get(2)
+						.getTokenString(), tarray.get(3).getTokenString());
 				break;
 			}
 		}
@@ -106,21 +106,19 @@ public class CurexRunner {
 		return "(준비 안됨. 빠른 시일 내에 준비하겠습니다.)";
 	}
 
-	public String getCalcResult(String val, String sourceUnit, String targetUnit) {
-		int v0;
-		double v1;
-		double result;
+	public String getCalcResult(TokenObject to, String sourceUnit,
+			String targetUnit) {
+		double result = 0.0;
 
-		v0 = NumberUtils.toInt(val);
-		if (v0 != 0)
-			result = oer.calc(v0, sourceUnit, targetUnit);
-		else {
-			v1 = NumberUtils.toDouble(val);
-			result = oer.calc(v1, sourceUnit, targetUnit);
-		}
+		if (to.getTokenSubtype().equals(TokenSubtype.NumberNatural))
+			result = oer.calc(NumberUtils.toInt(to.getTokenString()),
+					sourceUnit, targetUnit);
+		else if (to.getTokenSubtype().equals(TokenSubtype.NumberFloatingPoint))
+			result = oer.calc(NumberUtils.toDouble(to.getTokenString()),
+					sourceUnit, targetUnit);
 
-		return String.format(Locale.getDefault(), val + " " + sourceUnit
-				+ " => %.4f " + targetUnit, result);
+		return String.format(Locale.getDefault(), to.getTokenString() + " "
+				+ sourceUnit + " => %.4f " + targetUnit, result);
 	}
 
 	public String getUnitListResult() {
