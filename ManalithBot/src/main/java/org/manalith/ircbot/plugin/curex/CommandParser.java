@@ -36,15 +36,12 @@ public class CommandParser {
 				switch (intArr.get(0).getTokenSubtype().value()) {
 				case 0:
 				case 1:
-				case 3:
-				case 6: // show, help, unitlist, flush
+				case 3: // show, help, unitlist
 					result.add(intArr.get(0));
 					break;
-				case 2:
-				case 4:
-				case 5:// calc, add, remove
+				case 2: // calc
 					throw new MissingArgumentException(1);
-				case 10: // UnDefined
+				case 7: // UnDefined
 					throw new IllegalArgumentException(1);
 				}
 				break;
@@ -76,8 +73,7 @@ public class CommandParser {
 					break;
 				case 1:
 				case 3:
-				case 6:
-				case 10: // help, unitlist, flush, Undefined
+				case 7: // help, unitlist, Undefined
 					throw new IllegalArgumentException(2);
 				case 2: // calc
 					if (intArr.get(1).getTokenType().equals(TokenType.Unit)) {
@@ -93,15 +89,6 @@ public class CommandParser {
 						result.add(new TokenObject("KRW"));
 					} else
 						throw new IllegalArgumentException(2);
-				case 4:
-				case 5: // add, remove
-					if (!intArr.get(1).getTokenType().equals(TokenType.Unit))
-						throw new IllegalArgumentException(2);
-					else {
-						result.add(intArr.get(0));
-						result.add(intArr.get(1));
-					}
-					break;
 				}
 				break;
 			case 1: // Unit
@@ -135,9 +122,8 @@ public class CommandParser {
 				case 0:
 				case 1:
 				case 3:
-				case 6:
-				case 10:
-					// show, help, unitlist, flush, unknown
+				case 7:
+					// show, help, unitlist, unknown
 					throw new IllegalArgumentException(1);
 				case 2: // calc
 					if (!intArr.get(1).getTokenType().equals(TokenType.Number)
@@ -159,17 +145,6 @@ public class CommandParser {
 						result.add(intArr.get(1));
 						result.add(intArr.get(2));
 					}
-					break;
-				case 4:
-				case 5: // add, remove
-					if (!intArr.get(1).getTokenType().equals(TokenType.Unit))
-						throw new IllegalArgumentException(2);
-					if (!intArr.get(2).getTokenType().equals(TokenType.Unit))
-						throw new IllegalArgumentException(3);
-
-					result.add(intArr.get(0));
-					result.add(intArr.get(1));
-					result.add(intArr.get(2));
 					break;
 				}
 				break;
