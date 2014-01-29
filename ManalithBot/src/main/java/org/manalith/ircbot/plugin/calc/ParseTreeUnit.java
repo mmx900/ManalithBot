@@ -20,6 +20,8 @@ package org.manalith.ircbot.plugin.calc;
 
 import java.math.BigInteger;
 
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenSubtype;
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenType;
 import org.manalith.ircbot.plugin.calc.exceptions.InvalidOperatorUseException;
 import org.manalith.ircbot.plugin.calc.exceptions.NotImplementedException;
 
@@ -133,72 +135,85 @@ public class ParseTreeUnit {
 
 	public String getIntFpResult() throws NotImplementedException {
 		String result = "";
+		String data = "";
+		String valstr = "";
+		int len = 0;
+
 		BigInteger leftVal = new BigInteger("0");
 		BigInteger rightVal = new BigInteger("0");
 
-		if (node.getTokenSubtype() == TokenSubtype.Decimal) {
-			result = node.getTokenString();
-		} else if (node.getTokenSubtype() == TokenSubtype.Binary) {
-			String data = node.getTokenString();
-			int len = data.length();
+		BigInteger valint = new BigInteger("0");
 
-			int val = 0;
-			// ignore last 'b'
-			for (int i = 0; i < len - 1; i++) {
-				val *= 2;
-				val += data.charAt(i) - '0';
+		switch (node.getTokenType().value()) {
+		case 1:
+			switch (node.getTokenSubtype().value()) {
+			case 3: // decimal
+				result = node.getTokenString();
+				break;
+			case 1: // binary
+				data = node.getTokenString();
+				len = data.length();
+
+				// ignore last 'b'
+				for (int i = 0; i < len - 1; i++) {
+					valint.multiply(new BigInteger("2"));
+					valint.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = valint.toString();
+				break;
+			case 2: // octal
+				data = node.getTokenString();
+				len = data.length();
+
+				// ignore first '0'
+				for (int i = 1; i < len; i++) {
+					valint.multiply(new BigInteger("8"));
+					valint.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = valint.toString();
+				break;
+			case 4: // hex
+				data = node.getTokenString();
+				len = data.length();
+
+				for (int i = 2; i < len; i++) {
+					valint.multiply(new BigInteger("16"));
+
+					if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
+						valint.add(new BigInteger(Integer.toString(data
+								.charAt(i) - '0')));
+					else if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
+						valint.add(new BigInteger(Integer.toString(data
+								.charAt(i) - 'a' + 10)));
+					else if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
+						valint.add(new BigInteger(Integer.toString(data
+								.charAt(i) - 'A' + 10)));
+				}
+
+				result = valint.toString();
+				break;
 			}
-
-			result = Integer.toString(val);
-
-		} else if (node.getTokenSubtype() == TokenSubtype.Octal) {
-			String data = node.getTokenString();
-			int len = data.length();
-
-			int val = 0;
-			// ignore first '0'
-			for (int i = 1; i < len; i++) {
-				val *= 8;
-				val += data.charAt(i) - '0';
-			}
-
-			result = Integer.toString(val);
-		} else if (node.getTokenSubtype() == TokenSubtype.Hexadec) {
-			String data = node.getTokenString();
-			int len = data.length();
-
-			int val = 0;
-			for (int i = 2; i < len; i++) {
-				val *= 16;
-
-				if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-					val += data.charAt(i) - '0';
-
-				if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
-					val += (data.charAt(i) - 'a' + 10);
-
-				if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
-					val += (data.charAt(i) - 'A' + 10);
-			}
-
-			result = Integer.toString(val);
-		}
-
-		if (node.getTokenType() == TokenType.Operatr) {
+		case 3: // operator
 			if (left != null)
 				leftVal = new BigInteger(left.getIntFpResult());
 			if (right != null)
 				rightVal = new BigInteger(right.getIntFpResult());
 
-			int opval = node.getTokenSubtype().hashCode();
-
-			if (opval == TokenSubtype.Plus.hashCode())
+			switch (node.getTokenSubtype().value()) {
+			case 8: // plus
 				result = leftVal.add(rightVal).toString();
-			else if (opval == TokenSubtype.Minus.hashCode())
+				break;
+			case 9: // minus
 				result = leftVal.subtract(rightVal).toString();
-			else if (opval == TokenSubtype.Times.hashCode())
+				break;
+			case 10: // multiply
 				result = leftVal.multiply(rightVal).toString();
-			else if (opval == TokenSubtype.Divide.hashCode()) {
+				break;
+			case 11: // divide
 				if (rightVal.equals(new BigInteger("0")))
 					throw new ArithmeticException("/ by zero");
 				if (leftVal.mod(rightVal).equals(new BigInteger("0")))
@@ -208,70 +223,75 @@ public class ParseTreeUnit {
 					double t1 = rightVal.doubleValue();
 					result = Double.toString(t0 / t1);
 				}
-			} else if (opval == TokenSubtype.Modulus.hashCode()) {
+				break;
+			case 12: // modulus
 				if (rightVal.equals(new BigInteger("0")))
 					throw new ArithmeticException("/ by zero");
 				result = leftVal.mod(rightVal).toString();
-			} else if (opval == TokenSubtype.Power.hashCode())
+				break;
+			case 13: // power
 				result = leftVal.pow(rightVal.intValue()).toString();
-			else if (opval == TokenSubtype.Factorial.hashCode())
+				break;
+			case 14: // factorial
 				result = Factorial(leftVal).toString();
-		}
-
-		if (node.getTokenType() == TokenType.BaseConvFunc) {
+				break;
+			}
+			break;
+		case 6: // base conversion function
 			if (right != null)
 				rightVal = new BigInteger(right.getIntFpResult());
 
-			int opval = node.getTokenSubtype().hashCode();
-
-			if (opval == TokenSubtype.ToBin.hashCode()) {
-				String val = "";
+			switch (node.getTokenSubtype().value()) {
+			case 23: // bin
 				while (rightVal.compareTo(new BigInteger("2")) >= 0) {
-					val = rightVal.mod(new BigInteger("2")).toString() + val;
+					valstr = rightVal.mod(new BigInteger("2")).toString()
+							+ valstr;
 					rightVal = rightVal.divide(new BigInteger("2"));
 				}
 
-				val = rightVal.add(new BigInteger(val)).toString() + "b";
+				valstr = rightVal.add(new BigInteger(valstr)).toString() + "b";
 
-				result = val;
-			} else if (opval == TokenSubtype.ToOct.hashCode()) {
-				String val = "";
-
+				result = valstr;
+				break;
+			case 24: // octal
 				while (rightVal.compareTo(new BigInteger("8")) >= 0) {
-					val = rightVal.mod(new BigInteger("8")).toString() + val;
+					valstr = rightVal.mod(new BigInteger("8")).toString()
+							+ valstr;
 					rightVal = rightVal.divide(new BigInteger("8"));
 				}
 
-				val = "0" + rightVal.toString() + val;
+				valstr = "0" + rightVal.toString() + valstr;
 
-				result = val;
-			} else if (opval == TokenSubtype.ToDec.hashCode()) {
+				result = valstr;
+				break;
+			case 25: // decimal
 				result = rightVal.toString();
-			} else if (opval == TokenSubtype.ToHex.hashCode()) {
-				String val = "";
+				break;
+			case 26: // hex
 				BigInteger temp = new BigInteger("0");
 
 				while (rightVal.compareTo(new BigInteger("16")) >= 0) {
 					temp = rightVal.mod(new BigInteger("16"));
 					if (temp.compareTo(new BigInteger("10")) < 0)
-						val = temp.toString() + val;
+						valstr = temp.toString() + valstr;
 					else
-						val = Character.toString((char) (temp.subtract(
-								new BigInteger("10")).intValue() - 'A'))
-								+ val;
+						valstr = Character.toString((char) (temp.subtract(
+								new BigInteger("10")).intValue() + 'A'))
+								+ valstr;
 
 					rightVal = rightVal.divide(new BigInteger("16"));
 				}
 
 				if (rightVal.compareTo(new BigInteger("10")) < 0)
-					val = "0x" + rightVal.toString() + val;
+					valstr = "0x" + rightVal.toString() + valstr;
 				else
-					val = "0x"
+					valstr = "0x"
 							+ Character.toString((char) (rightVal.subtract(
 									new BigInteger("10")).intValue() + 'A'))
-							+ val;
+							+ valstr;
 
-				result = val;
+				result = valstr;
+				break;
 			}
 		}
 
@@ -280,130 +300,147 @@ public class ParseTreeUnit {
 
 	public String getFpResult() throws InvalidOperatorUseException {
 		String result = "";
+		String data = "";
+		int len = 0;
+		BigInteger val = new BigInteger("0");
 
 		double leftVal = 0.0;
 		double rightVal = 0.0;
 
-		if (node.getTokenSubtype() == TokenSubtype.Decimal) {
-			String data = node.getTokenString();
-			result = Double.toString(Integer.parseInt(data));
-		} else if (node.getTokenSubtype() == TokenSubtype.Binary) {
-			String data = node.getTokenString();
-			int len = data.length();
+		switch (node.getTokenType().value()) {
+		case 2: // floating-point
+			switch (node.getTokenSubtype().value()) {
+			case 3: // decimal
+				data = node.getTokenString();
+				result = Double.toString(Integer.parseInt(data));
+				break;
+			case 1: // binary
+				data = node.getTokenString();
+				len = data.length();
 
-			int val = 0;
-			// ignore last 'b'
-			for (int i = 0; i < len - 1; i++) {
-				val *= 2;
-				val += data.charAt(i) - '0';
+				// ignore last 'b'
+				for (int i = 0; i < len - 1; i++) {
+					val.multiply(new BigInteger("2"));
+					val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			case 2: // octal
+				data = node.getTokenString();
+				len = data.length();
+
+				// ignore first '0'
+				for (int i = 1; i < len; i++) {
+					val.multiply(new BigInteger("8"));
+					val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			case 4: // hex
+				data = node.getTokenString();
+				len = data.length();
+
+				for (int i = 2; i < len; i++) {
+					val.multiply(new BigInteger("16"));
+
+					if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
+						val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+
+					if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
+						val.add(new BigInteger(Integer.toString(data.charAt(i) - 'a' + 10)));
+
+					if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
+						val.add(new BigInteger(Integer.toString(data.charAt(i) - 'A' + 10)));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			case 5: // single-precision floating point
+				data = node.getTokenString();
+				result = Double.toString(Float.parseFloat(data));
+				break;
+			case 6: // double-precision floating point
+				data = node.getTokenString();
+				result = Double.toString(Double.parseDouble(data));
+				break;
+			case 7: // exponential floating point
+				data = node.getTokenString();
+				result = Double.toString(Double.parseDouble(data));
+				break;
 			}
-
-			result = Double.toString(val);
-		} else if (node.getTokenSubtype() == TokenSubtype.Octal) {
-			String data = node.getTokenString();
-			int len = data.length();
-
-			int val = 0;
-			// ignore first '0'
-			for (int i = 1; i < len; i++) {
-				val *= 8;
-				val += data.charAt(i) - '0';
-			}
-
-			result = Double.toString(val);
-		} else if (node.getTokenSubtype() == TokenSubtype.Hexadec) {
-			String data = node.getTokenString();
-			int len = data.length();
-
-			int val = 0;
-			for (int i = 2; i < len; i++) {
-				val *= 16;
-
-				if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-					val += data.charAt(i) - '0';
-
-				if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
-					val += (data.charAt(i) - 'a' + 10);
-
-				if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
-					val += (data.charAt(i) - 'A' + 10);
-			}
-
-			result = Double.toString(val);
-		} else if (node.getTokenSubtype() == TokenSubtype.SpFltPoint) {
-			String data = node.getTokenString();
-			result = Double.toString(Float.parseFloat(data));
-		} else if (node.getTokenSubtype() == TokenSubtype.DpFltPoint) {
-			String data = node.getTokenString();
-			result = Double.toString(Double.parseDouble(data));
-		} else if (node.getTokenSubtype() == TokenSubtype.ExpFltPoint) {
-			String data = node.getTokenString();
-			result = Double.toString(Double.parseDouble(data));
-		}
-
-		if (node.getTokenType() == TokenType.Operatr) {
+			break;
+		case 3: // operator
 			if (left != null)
 				leftVal = Double.parseDouble(left.getFpResult());
 			if (right != null)
 				rightVal = Double.parseDouble(right.getFpResult());
 
-			int opval = node.getTokenSubtype().hashCode();
-
-			if (opval == TokenSubtype.Plus.hashCode())
+			switch (node.getTokenSubtype().value()) {
+			case 8: // plus
 				result = Double.toString(leftVal + rightVal);
-			else if (opval == TokenSubtype.Minus.hashCode())
+				break;
+			case 9: // minus
 				result = Double.toString(leftVal - rightVal);
-			else if (opval == TokenSubtype.Times.hashCode())
+				break;
+			case 10: // multiply
 				result = Double.toString(leftVal * rightVal);
-			else if (opval == TokenSubtype.Divide.hashCode())
+				break;
+			case 11: // divide
 				result = Double.toString(leftVal / rightVal);
-			else if (opval == TokenSubtype.Modulus.hashCode())
+				break;
+			case 12: // modulus
 				throw new InvalidOperatorUseException();
-			else if (opval == TokenSubtype.Power.hashCode())
+			case 13: // power
 				result = Double.toString(Math.pow(leftVal, rightVal));
-			else if (opval == TokenSubtype.Factorial.hashCode()) {
-				if (left.getNode().getTokenType() == TokenType.Integer) {
+				break;
+			case 14: // factorial
+				if (left.getNode().getTokenType().equals(TokenType.Integer))
 					result = Factorial(
 							new BigInteger(left.getNode().getTokenString()
 									.split(".")[0])).toString();
-				} else {
+				else
 					throw new InvalidOperatorUseException();
-				}
 			}
-		} else if (node.getTokenType() == TokenType.TriangleFunc) {
-			if (right != null) {
+			break;
+		case 5: // triangular function
+			if (right != null)
 				rightVal = Double.parseDouble(right.getFpResult());
-			}
 
-			int funcval = node.getTokenSubtype().hashCode();
-
-			if (funcval == TokenSubtype.Sine.hashCode())
+			switch (node.getTokenSubtype().value()) {
+			case 17: // sine
 				result = Double.toString(Math.sin(rightVal / 180.0 * Math.PI));
-			else if (funcval == TokenSubtype.Cosine.hashCode())
+				break;
+			case 18: // cosine
 				result = Double.toString(Math.cos(rightVal / 180.0 * Math.PI));
-			else if (funcval == TokenSubtype.Tangent.hashCode())
+				break;
+			case 19: // tangent
 				result = Double.toString(Math.tan(rightVal / 180.0 * Math.PI));
-			else if (funcval == TokenSubtype.ArcSine.hashCode())
+				break;
+			case 20: // arcsine
 				result = Double.toString(Math.asin(rightVal / 180.0 * Math.PI));
-			else if (funcval == TokenSubtype.ArcCosine.hashCode())
+				break;
+			case 21: // arccosine
 				result = Double.toString(Math.acos(rightVal / 180.0 * Math.PI));
-			else if (funcval == TokenSubtype.ArcTangent.hashCode())
+				break;
+			case 22: // arctangent
 				result = Double.toString(Math.atan(rightVal / 180.0 * Math.PI));
-		} else if (node.getTokenType() == TokenType.MathematFunc) {
-			if (right != null) {
-				rightVal = Double.parseDouble(right.getFpResult());
+				break;
 			}
-
-			int funcval = node.getTokenSubtype().hashCode();
-
-			if (funcval == TokenSubtype.Sqrt.hashCode()) {
-				result = Double.toString(Math.sqrt(rightVal));
-			}
-		}
-
-		else if (node.getTokenType() == TokenType.BaseConvFunc)
+			break;
+		case 6: // base conversion function
 			throw new InvalidOperatorUseException();
+		case 7: // mathematical function
+			if (right != null)
+				rightVal = Double.parseDouble(right.getFpResult());
+
+			if (node.getTokenSubtype().equals(TokenSubtype.Sqrt))
+				result = Double.toString(Math.sqrt(rightVal));
+			break;
+		}
 
 		return result;
 	}
 }
+
