@@ -20,6 +20,9 @@ package org.manalith.ircbot.plugin.calc;
 
 import java.util.ArrayList;
 
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenSubtype;
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenType;
+
 public class TokenArray {
 	private ArrayList<TokenUnit> tokenArray;
 
@@ -57,7 +60,7 @@ public class TokenArray {
 	}
 
 	public ArrayList<TokenUnit> getArray() {
-		return this.tokenArray;
+		return tokenArray;
 	}
 
 	@Override
