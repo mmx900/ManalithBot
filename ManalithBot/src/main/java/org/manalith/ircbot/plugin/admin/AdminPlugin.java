@@ -60,7 +60,7 @@ public class AdminPlugin extends SimplePlugin {
 					event.respond("봇에게 옵이 필요합니다.");
 				}
 
-				ArrayList<String> uarr = new ArrayList<String>();
+				ArrayList<String> uarr = new ArrayList<>();
 				StringBuilder modeFlag = new StringBuilder("+");
 
 				// 모든 사용자에게 옵을 준다

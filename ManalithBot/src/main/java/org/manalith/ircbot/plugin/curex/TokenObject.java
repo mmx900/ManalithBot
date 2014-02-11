@@ -38,14 +38,21 @@ public class TokenObject {
 
 		switch (tt.value()) {
 		case 0:
-			if (ts.equals("help"))
-				result = TokenSubtype.CommandHelp;
-			else if (ts.equals("show"))
-				result = TokenSubtype.CommandShow;
-			else if (ts.equals("unitlist"))
-				result = TokenSubtype.CommandUnitList;
-			else if (ts.equals("calc"))
-				result = TokenSubtype.CommandCalc;
+			switch(ts)
+			{
+				case "help":
+					result = TokenSubtype.CommandHelp;
+					break;
+				case "show":
+					result = TokenSubtype.CommandShow;
+					break;
+				case "unitlist":
+					result = TokenSubtype.CommandUnitList;
+					break;
+				case "calc":
+					result = TokenSubtype.CommandCalc;
+					break;
+			}
 			break;
 		case 1:
 			result = TokenSubtype.CurrencyUnit;

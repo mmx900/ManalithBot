@@ -16,12 +16,12 @@ public class CommandParser {
 		for (int i = 0; i < options.length; i++)
 			opt[i] = options[i];
 
-		intArr = new ArrayList<TokenObject>();
+		intArr = new ArrayList<>();
 	}
 
 	public ArrayList<TokenObject> parse() throws Exception {
 
-		ArrayList<TokenObject> result = new ArrayList<TokenObject>();
+		ArrayList<TokenObject> result = new ArrayList<>();
 
 		for (String str : opt)
 			intArr.add(new TokenObject(str));

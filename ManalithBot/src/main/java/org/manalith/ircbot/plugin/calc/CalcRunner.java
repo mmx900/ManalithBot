@@ -32,9 +32,9 @@ public class CalcRunner {
 		try {
 			tArray = cta.getTokenArray();
 		} catch (EmptyTokenStreamException ets) {
-			System.out.println("input expression is empty string.");
+			return "입력 문자열이 비어있습니다."
 		} catch (TokenAnalysisException e) {
-			result = " === Parse Error! === " + e.getMessage();
+			result = " === 해석 오류! === " + e.getMessage();
 			return result;
 		}
 

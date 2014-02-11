@@ -91,50 +91,81 @@ public class CalcTokenAnalyzer {
 				result = TokenSubtype.ExpFltPoint;
 			break;
 		case 3: // Operator
-			if (tokenString.equals("+"))
-				result = TokenSubtype.Plus;
-			else if (tokenString.equals("-"))
-				result = TokenSubtype.Minus;
-			else if (tokenString.equals("*"))
-				result = TokenSubtype.Times;
-			else if (tokenString.equals("/"))
-				result = TokenSubtype.Divide;
-			else if (tokenString.equals("%"))
-				result = TokenSubtype.Modulus;
-			else if (tokenString.equals("^"))
-				result = TokenSubtype.Power;
-			else if (tokenString.equals("!"))
-				result = TokenSubtype.Factorial;
+			switch(tokenString) 
+			{
+				case "+":
+					result = TokenSubtype.Plus;
+					break;
+				case "-":
+					result = TokenSubtype.Minus;
+					break;
+				case "*":
+					result = TokenSubtype.Times;
+					break;
+				case "/":
+					result = TokenSubtype.Divide;
+					break;
+				case "%":
+					result = TokenSubtype.Modulus;
+					break;
+				case "^":
+					result = TokenSubtype.Power;
+					break;
+				case "!":
+					result = TokenSubtype.Factorial;
+					break;
+			}
 			break;
 		case 4: // Parenthesis
-			if (tokenString.equals("("))
-				result = TokenSubtype.Left_Parenthesis;
-			else if (tokenString.equals(")"))
-				result = TokenSubtype.Righ_Parenthesis;
+			switch(tokenString)
+			{
+				case "(":
+					result = TokenSubtype.Left_Parenthesis;
+					break;
+				case ")":
+					result = TokenSubtype.Righ_Parenthesis;
+					break;
+			}
 			break;
 		case 5: // Triangular function
-			if (tokenString.equals("sin"))
-				result = TokenSubtype.Sine;
-			else if (tokenString.equals("cos"))
-				result = TokenSubtype.Cosine;
-			else if (tokenString.equals("tan"))
-				result = TokenSubtype.Tangent;
-			else if (tokenString.equals("arcsin"))
-				result = TokenSubtype.ArcSine;
-			else if (tokenString.equals("arccos"))
-				result = TokenSubtype.ArcCosine;
-			else if (tokenString.equals("arctan"))
-				result = TokenSubtype.ArcTangent;
+			switch(tokenString)
+			{
+				case "sin":
+					result = TokenSubtype.Sine;
+					break;
+				case "cos":
+					result = TokenSubtype.Cosine;
+					break;
+				case "tan":
+					result = TokenSubtype.Tangent;
+					break;
+				case "arcsin":
+					result = TokenSubtype.ArcSine;
+					break;
+				case "arccos":
+					result = TokenSubtype.ArcCosine;
+					break;
+				case "arctan":
+					result = TokenSubtype.ArcTangent;
+					break;
+			}
 			break;
 		case 6: // Base conversion
-			if (tokenString.equals("tobin"))
-				result = TokenSubtype.ToBin;
-			else if (tokenString.equals("tooct"))
-				result = TokenSubtype.ToOct;
-			else if (tokenString.equals("todec"))
-				result = TokenSubtype.ToDec;
-			else if (tokenString.equals("tohex"))
-				result = TokenSubtype.ToHex;
+			switch(tokenString)
+			{
+				case "tobin":
+					result = TokenSubtype.ToBin;
+					break;
+				case "tooct":
+					result = TokenSubtype.ToOct;
+					break;
+				case "todec":
+					result = TokenSubtype.ToDec;
+					break;
+				case "tohex":
+					result = TokenSubtype.ToHex;
+					break;
+			}
 			break;
 		case 7: // Mathematical function
 			if (tokenString.equals("sqrt"))

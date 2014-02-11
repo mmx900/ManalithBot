@@ -94,7 +94,6 @@ public class OpenExchangeRate {
 						val = "EUROPEAN UNITED";
 					if (val.contains("\\u2019S"))
 						val = val.replaceAll("\\u2019S", "'S");
-
 					if (val.contains(", "))
 						val = val.replaceAll(", ", " ");
 					if (val.contains(","))
@@ -116,7 +115,7 @@ public class OpenExchangeRate {
 		}
 
 		public String[] getCurrencyList() {
-			ArrayList<String> strarr = new ArrayList<String>();
+			ArrayList<String> strarr = new ArrayList<>();
 			String[] result;
 			Iterator<String> list = config.getKeys();
 			while (list.hasNext())
@@ -186,7 +185,7 @@ public class OpenExchangeRate {
 	}
 
 	public ArrayList<String> getCurrencyList() {
-		return new ArrayList<String>(Arrays.asList(rates.keySet().toArray(
+		return new ArrayList<>(Arrays.asList(rates.keySet().toArray(
 				new String[rates.size()])));
 	}
 
