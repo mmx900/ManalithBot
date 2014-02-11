@@ -32,7 +32,7 @@ public class CalcRunner {
 		try {
 			tArray = cta.getTokenArray();
 		} catch (EmptyTokenStreamException ets) {
-			return "입력 문자열이 비어있습니다."
+			return "입력 문자열이 비어있습니다.";
 		} catch (TokenAnalysisException e) {
 			result = " === 해석 오류! === " + e.getMessage();
 			return result;
