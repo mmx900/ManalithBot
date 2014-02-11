@@ -18,6 +18,8 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenSubtype;
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenType;
 import org.manalith.ircbot.plugin.calc.exceptions.InvalidSequenceTokenException;
 import org.manalith.ircbot.plugin.calc.exceptions.ParenthesesMismatchException;
 
@@ -40,9 +42,11 @@ public class CalcParseTreeGenerator {
 
 		// Check whether Pairs of parentheses are match or not.
 		for (; i < size; i++) {
-			if (sArray.getToken(i).getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+			if (sArray.getToken(i).getTokenSubtype()
+					.equals(TokenSubtype.Left_Parenthesis))
 				lparen_cnt++;
-			if (sArray.getToken(i).getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+			if (sArray.getToken(i).getTokenSubtype()
+					.equals(TokenSubtype.Righ_Parenthesis))
 				rparen_cnt++;
 		}
 
@@ -55,7 +59,7 @@ public class CalcParseTreeGenerator {
 			if (i == 0) {
 				arg0 = sArray.getToken(i++);
 
-				if (arg0.getTokenSubtype() == TokenSubtype.Minus) {
+				if (arg0.getTokenSubtype().equals(TokenSubtype.Minus)) {
 					TokenUnit zero = new TokenUnit(TokenType.Integer,
 							TokenSubtype.Decimal, "0");
 
@@ -69,7 +73,8 @@ public class CalcParseTreeGenerator {
 					} while (i < size);
 
 					pstu_root.addRightSubtree(generateParseTree(subArray));
-				} else if (arg0.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+				} else if (arg0.getTokenSubtype().equals(
+						TokenSubtype.Left_Parenthesis)) {
 					TokenArray subArray1 = new TokenArray();
 
 					int skipPairofParentheses = 0;
@@ -78,9 +83,11 @@ public class CalcParseTreeGenerator {
 						TokenUnit temp = new TokenUnit();
 						temp = sArray.getToken(i);
 
-						if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+						if (temp.getTokenSubtype().equals(
+								TokenSubtype.Left_Parenthesis))
 							skipPairofParentheses++;
-						if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+						if (temp.getTokenSubtype().equals(
+								TokenSubtype.Righ_Parenthesis))
 							skipPairofParentheses--;
 
 						if (skipPairofParentheses == -1) {
@@ -101,7 +108,7 @@ public class CalcParseTreeGenerator {
 					} else {
 						op = sArray.getToken(i++);
 
-						if (op.getTokenType() != TokenType.Operatr)
+						if (!op.getTokenType().equals(TokenType.Operatr))
 							throw new InvalidSequenceTokenException(
 									"Missing Operator");
 
@@ -114,12 +121,14 @@ public class CalcParseTreeGenerator {
 						pstu_root.setNode(op);
 						pstu_root.addLeftSubtree(generateParseTree(subArray1));
 
-						if (arg1.getTokenType() == TokenType.Integer
-								|| arg1.getTokenType() == TokenType.FlPoint)
+						if (arg1.getTokenType().equals(TokenType.Integer)
+								|| arg1.getTokenType()
+										.equals(TokenType.FlPoint))
 							pstu_root.setRightLeapNode(arg1);
 
-						else if (arg1.getTokenType() == TokenType.Parents
-								&& arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+						else if (arg1.getTokenType().equals(TokenType.Parents)
+								&& arg1.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis)) {
 							TokenArray subArray2 = new TokenArray();
 							skipPairofParentheses = 0;
 
@@ -127,9 +136,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -150,24 +161,25 @@ public class CalcParseTreeGenerator {
 							}
 						}
 					}
-				} else if (arg0.getTokenType() == TokenType.Integer
-						|| arg0.getTokenType() == TokenType.FlPoint) {
+				} else if (arg0.getTokenType().equals(TokenType.Integer)
+						|| arg0.getTokenType().equals(TokenType.FlPoint)) {
 					if (size == 1) {
 						pstu_root.setNode(arg0);
 						break;
 					}
 
 					op = sArray.getToken(i++);
-					if (op.getTokenType() != TokenType.Operatr)
+					if (!op.getTokenType().equals(TokenType.Operatr))
 						throw new InvalidSequenceTokenException(
 								"Missing operator.");
 
 					if (i == size
-							&& op.getTokenSubtype() != TokenSubtype.Factorial)
+							&& !op.getTokenSubtype().equals(
+									TokenSubtype.Factorial))
 						throw new InvalidSequenceTokenException(
 								"Missing operand.");
 
-					if (op.getTokenSubtype() == TokenSubtype.Factorial) {
+					if (op.getTokenSubtype().equals(TokenSubtype.Factorial)) {
 						TokenUnit zero = new TokenUnit(TokenType.Integer,
 								TokenSubtype.Decimal, "0");
 						arg1 = zero;
@@ -178,11 +190,12 @@ public class CalcParseTreeGenerator {
 					pstu_root.setNode(op);
 					pstu_root.setLeftLeapNode(arg0);
 
-					if (arg1.getTokenType() == TokenType.Integer
-							|| arg1.getTokenType() == TokenType.FlPoint)
+					if (arg1.getTokenType().equals(TokenType.Integer)
+							|| arg1.getTokenType().equals(TokenType.FlPoint))
 						pstu_root.setRightLeapNode(arg1);
-					else if (arg1.getTokenType() == TokenType.Parents
-							&& arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+					else if (arg1.getTokenType().equals(TokenType.Parents)
+							&& arg1.getTokenSubtype().equals(
+									TokenSubtype.Left_Parenthesis)) {
 						TokenArray subArray2 = new TokenArray();
 						int skipPairofParentheses = 0;
 
@@ -190,9 +203,11 @@ public class CalcParseTreeGenerator {
 							TokenUnit temp = new TokenUnit();
 							temp = sArray.getToken(i);
 
-							if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Left_Parenthesis))
 								skipPairofParentheses++;
-							if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Righ_Parenthesis))
 								skipPairofParentheses--;
 
 							if (skipPairofParentheses == -1) {
@@ -211,9 +226,10 @@ public class CalcParseTreeGenerator {
 									.addRightSubtree(generateParseTree(subArray2));
 						}
 					}
-					// arg1.getTokenType() == TokenType.TriangleFunc
-					else if (arg1.getTokenType() == TokenType.TriangleFunc
-							|| arg1.getTokenType() == TokenType.MathematFunc) {
+					// arg1.getTokenType().equals(TokenType.TriangleFunc)
+					else if (arg1.getTokenType().equals(TokenType.TriangleFunc)
+							|| arg1.getTokenType().equals(
+									TokenType.MathematFunc)) {
 						TokenUnit zero = new TokenUnit(TokenType.Integer,
 								TokenSubtype.Decimal, "0");
 						ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -223,7 +239,7 @@ public class CalcParseTreeGenerator {
 
 						arg1 = sArray.getToken(i++);
 
-						if (arg1.getTokenType() != TokenType.Parents) {
+						if (!arg1.getTokenType().equals(TokenType.Parents)) {
 							throw new InvalidSequenceTokenException(
 									"Left parenthesis is expected.");
 						}
@@ -235,9 +251,11 @@ public class CalcParseTreeGenerator {
 							TokenUnit temp = new TokenUnit();
 							temp = sArray.getToken(i);
 
-							if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Left_Parenthesis))
 								skipPairofParentheses++;
-							if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Righ_Parenthesis))
 								skipPairofParentheses--;
 
 							if (skipPairofParentheses == -1) {
@@ -257,16 +275,17 @@ public class CalcParseTreeGenerator {
 						}
 
 						pstu_root.addRightSubtree(newSubtree2);
-					} else if (arg1.getTokenType() == TokenType.BaseConvFunc) {
+					} else if (arg1.getTokenType().equals(
+							TokenType.BaseConvFunc)) {
 						throw new InvalidSequenceTokenException(
 								"Base conversion function can be used for whole expression gets integer value.");
 					} else {
 						throw new InvalidSequenceTokenException(
 								"Missing operand.");
 					}
-				} else if ((arg0.getTokenType() == TokenType.TriangleFunc || arg0
-						.getTokenType() == TokenType.BaseConvFunc)
-						|| arg0.getTokenType() == TokenType.MathematFunc) {
+				} else if ((arg0.getTokenType().equals(TokenType.TriangleFunc) || arg0
+						.getTokenType().equals(TokenType.BaseConvFunc))
+						|| arg0.getTokenType().equals(TokenType.MathematFunc)) {
 					pstu_root.setNode(arg0);
 					TokenUnit zero = new TokenUnit(TokenType.Integer,
 							TokenSubtype.Decimal, "0");
@@ -280,9 +299,11 @@ public class CalcParseTreeGenerator {
 						TokenUnit temp = new TokenUnit();
 						temp = sArray.getToken(i);
 
-						if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+						if (temp.getTokenSubtype().equals(
+								TokenSubtype.Left_Parenthesis))
 							skipPairofParentheses++;
-						if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+						if (temp.getTokenSubtype().equals(
+								TokenSubtype.Righ_Parenthesis))
 							skipPairofParentheses--;
 
 						if (skipPairofParentheses == -1) {
@@ -308,13 +329,14 @@ public class CalcParseTreeGenerator {
 			else {
 
 				op = sArray.getToken(i++); // something operator
-				if (op.getTokenType() != TokenType.Operatr)
+				if (!op.getTokenType().equals(TokenType.Operatr))
 					throw new InvalidSequenceTokenException("Missing operator.");
 
-				if (i == size && op.getTokenSubtype() != TokenSubtype.Factorial)
+				if (i == size
+						&& !op.getTokenSubtype().equals(TokenSubtype.Factorial))
 					throw new InvalidSequenceTokenException("Missing operand.");
 
-				if (op.getTokenSubtype() != TokenSubtype.Factorial)
+				if (op.getTokenSubtype().equals(TokenSubtype.Factorial))
 					arg1 = sArray.getToken(i++); // can be integer, floating
 													// point, left parenthesis,
 													// or function
@@ -324,24 +346,27 @@ public class CalcParseTreeGenerator {
 					arg1 = zero;
 				}
 
-				if (pstu_root.getNode().getTokenType() == TokenType.BaseConvFunc) {
+				if (pstu_root.getNode().getTokenType()
+						.equals(TokenType.BaseConvFunc)) {
 					throw new InvalidSequenceTokenException(
 							"more tokens cannot be here.");
 				}
 
 				// The most priority
-				if (pstu_root.getNode().getTokenSubtype() == TokenSubtype.Factorial) {
+				if (pstu_root.getNode().getTokenSubtype()
+						.equals(TokenSubtype.Factorial)) {
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 
 					newSubtree.setNode(op);
 					newSubtree.addLeftSubtree(pstu_root);
 
-					if (arg1.getTokenType() == TokenType.Integer
-							|| arg1.getTokenType() == TokenType.FlPoint) {
+					if (arg1.getTokenType().equals(TokenType.Integer)
+							|| arg1.getTokenType().equals(TokenType.FlPoint)) {
 						newSubtree.setRightLeapNode(arg1);
 						pstu_root = newSubtree;
-					} else if (arg1.getTokenType() == TokenType.Parents
-							&& arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+					} else if (arg1.getTokenType().equals(TokenType.Parents)
+							&& arg1.getTokenSubtype().equals(
+									TokenSubtype.Left_Parenthesis)) {
 						TokenArray subArray2 = new TokenArray();
 						int skipPairofParentheses = 0;
 
@@ -349,9 +374,11 @@ public class CalcParseTreeGenerator {
 							TokenUnit temp = new TokenUnit();
 							temp = sArray.getToken(i);
 
-							if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Left_Parenthesis))
 								skipPairofParentheses++;
-							if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+							if (temp.getTokenSubtype().equals(
+									TokenSubtype.Righ_Parenthesis))
 								skipPairofParentheses--;
 
 							if (skipPairofParentheses == -1) {
@@ -376,8 +403,10 @@ public class CalcParseTreeGenerator {
 						.getNode().getTokenSubtype() == TokenSubtype.Modulus) || (pstu_root
 						.getNode().getTokenSubtype() == TokenSubtype.Times || pstu_root
 						.getNode().getTokenSubtype() == TokenSubtype.Divide))
-						|| (pstu_root.getNode().getTokenType() == TokenType.TriangleFunc || pstu_root
-								.getNode().getTokenType() == TokenType.MathematFunc)) {
+						|| (pstu_root.getNode().getTokenType()
+								.equals(TokenType.TriangleFunc) || pstu_root
+								.getNode().getTokenType()
+								.equals(TokenType.MathematFunc))) {
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 
 					if (op.getTokenSubtype() == TokenSubtype.Power
@@ -385,12 +414,15 @@ public class CalcParseTreeGenerator {
 						newSubtree.setNode(op);
 						newSubtree.addLeftSubtree(pstu_root.getRightSubtree());
 
-						if (arg1.getTokenType() == TokenType.Integer
-								|| arg1.getTokenType() == TokenType.FlPoint) {
+						if (arg1.getTokenType().equals(TokenType.Integer)
+								|| arg1.getTokenType()
+										.equals(TokenType.FlPoint)) {
 							newSubtree.setRightLeapNode(arg1);
 							pstu_root.addRightSubtree(newSubtree);
-						} else if (arg1.getTokenType() == TokenType.Parents
-								&& arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+						} else if (arg1.getTokenType()
+								.equals(TokenType.Parents)
+								&& arg1.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis)) {
 							TokenArray subArray2 = new TokenArray();
 							int skipPairofParentheses = 0;
 
@@ -398,9 +430,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -419,9 +453,11 @@ public class CalcParseTreeGenerator {
 								newSubtree
 										.addRightSubtree(generateParseTree(subArray2));
 							}
-						} else if ((arg1.getTokenType() == TokenType.TriangleFunc || arg1
-								.getTokenType() == TokenType.BaseConvFunc)
-								|| arg1.getTokenType() == TokenType.MathematFunc) {
+						} else if ((arg1.getTokenType().equals(
+								TokenType.TriangleFunc) || arg1.getTokenType()
+								.equals(TokenType.BaseConvFunc))
+								|| arg1.getTokenType().equals(
+										TokenType.MathematFunc)) {
 							TokenUnit zero = new TokenUnit(TokenType.Integer,
 									TokenSubtype.Decimal, "0");
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -431,7 +467,7 @@ public class CalcParseTreeGenerator {
 
 							arg1 = sArray.getToken(i++);
 
-							if (arg1.getTokenType() != TokenType.Parents) {
+							if (!arg1.getTokenType().equals(TokenType.Parents)) {
 								throw new InvalidSequenceTokenException(
 										"Left parenthesis is expected.");
 							}
@@ -443,9 +479,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -474,12 +512,15 @@ public class CalcParseTreeGenerator {
 						newSubtree.setNode(op);
 						newSubtree.addLeftSubtree(pstu_root);
 
-						if (arg1.getTokenType() == TokenType.Integer
-								|| arg1.getTokenType() == TokenType.FlPoint) {
+						if (arg1.getTokenType().equals(TokenType.Integer)
+								|| arg1.getTokenType()
+										.equals(TokenType.FlPoint)) {
 							newSubtree.setRightLeapNode(arg1);
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.Parents
-								|| arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+						} else if (arg1.getTokenType()
+								.equals(TokenType.Parents)
+								|| arg1.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis)) {
 							TokenArray subArray2 = new TokenArray();
 							int skipPairofParentheses = 0;
 
@@ -487,9 +528,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -510,8 +553,10 @@ public class CalcParseTreeGenerator {
 							}
 
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.TriangleFunc
-								|| arg1.getTokenType() == TokenType.MathematFunc) {
+						} else if (arg1.getTokenType().equals(
+								TokenType.TriangleFunc)
+								|| arg1.getTokenType().equals(
+										TokenType.MathematFunc)) {
 							TokenUnit zero = new TokenUnit(TokenType.Integer,
 									TokenSubtype.Decimal, "0");
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -521,7 +566,7 @@ public class CalcParseTreeGenerator {
 
 							arg1 = sArray.getToken(i++);
 
-							if (arg1.getTokenType() != TokenType.Parents) {
+							if (!arg1.getTokenType().equals(TokenType.Parents)) {
 								throw new InvalidSequenceTokenException(
 										"Left parenthesis is expected.");
 							}
@@ -533,9 +578,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -557,7 +604,8 @@ public class CalcParseTreeGenerator {
 
 							newSubtree.addRightSubtree(newSubtree2);
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.BaseConvFunc)
+						} else if (arg1.getTokenType().equals(
+								TokenType.BaseConvFunc))
 							throw new InvalidSequenceTokenException(
 									"Base conversion function can be used for whole expression gets integer value.");
 						else {
@@ -568,24 +616,31 @@ public class CalcParseTreeGenerator {
 				}
 
 				// The least priority
-				else if (pstu_root.getNode().getTokenSubtype() == TokenSubtype.Plus
-						|| pstu_root.getNode().getTokenSubtype() == TokenSubtype.Minus) {
+				else if (pstu_root.getNode().getTokenSubtype()
+						.equals(TokenSubtype.Plus)
+						|| pstu_root.getNode().getTokenSubtype()
+								.equals(TokenSubtype.Minus)) {
 					ParseTreeUnit newSubtree = new ParseTreeUnit();
 
-					if ((op.getTokenSubtype() == TokenSubtype.Power || op
-							.getTokenSubtype() == TokenSubtype.Modulus)
-							|| (op.getTokenSubtype() == TokenSubtype.Times || op
-									.getTokenSubtype() == TokenSubtype.Divide)
-							|| op.getTokenSubtype() == TokenSubtype.Factorial) {
+					if ((op.getTokenSubtype().equals(TokenSubtype.Power) || op
+							.getTokenSubtype().equals(TokenSubtype.Modulus))
+							|| (op.getTokenSubtype().equals(TokenSubtype.Times) || op
+									.getTokenSubtype().equals(
+											TokenSubtype.Divide))
+							|| op.getTokenSubtype().equals(
+									TokenSubtype.Factorial)) {
 						newSubtree.setNode(op);
 						newSubtree.addLeftSubtree(pstu_root.getRightSubtree());
 
-						if (arg1.getTokenType() == TokenType.Integer
-								|| arg1.getTokenType() == TokenType.FlPoint) {
+						if (arg1.getTokenType().equals(TokenType.Integer)
+								|| arg1.getTokenType()
+										.equals(TokenType.FlPoint)) {
 							newSubtree.setRightLeapNode(arg1);
 							pstu_root.addRightSubtree(newSubtree);
-						} else if (arg1.getTokenType() == TokenType.Parents
-								|| arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+						} else if (arg1.getTokenType()
+								.equals(TokenType.Parents)
+								|| arg1.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis)) {
 							TokenArray subArray2 = new TokenArray();
 							int skipPairofParentheses = 0;
 
@@ -593,9 +648,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -614,8 +671,10 @@ public class CalcParseTreeGenerator {
 								newSubtree
 										.addRightSubtree(generateParseTree(subArray2));
 							}
-						} else if (arg1.getTokenType() == TokenType.TriangleFunc
-								|| arg1.getTokenType() == TokenType.MathematFunc) {
+						} else if (arg1.getTokenType().equals(
+								TokenType.TriangleFunc)
+								|| arg1.getTokenType().equals(
+										TokenType.MathematFunc)) {
 							TokenUnit zero = new TokenUnit(TokenType.Integer,
 									TokenSubtype.Decimal, "0");
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -625,7 +684,7 @@ public class CalcParseTreeGenerator {
 
 							arg1 = sArray.getToken(i++);
 
-							if (arg1.getTokenType() != TokenType.Parents) {
+							if (!arg1.getTokenType().equals(TokenType.Parents)) {
 								throw new InvalidSequenceTokenException(
 										"Left parenthesis is expected.");
 							}
@@ -637,9 +696,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -660,7 +721,8 @@ public class CalcParseTreeGenerator {
 							}
 
 							newSubtree.addRightSubtree(newSubtree2);
-						} else if (arg1.getTokenType() == TokenType.BaseConvFunc) {
+						} else if (arg1.getTokenType().equals(
+								TokenType.BaseConvFunc)) {
 							throw new InvalidSequenceTokenException(
 									"Base conversion function can be used for whole expression gets integer value.");
 						} else {
@@ -671,12 +733,15 @@ public class CalcParseTreeGenerator {
 						newSubtree.setNode(op);
 						newSubtree.addLeftSubtree(pstu_root);
 
-						if (arg1.getTokenType() == TokenType.Integer
-								|| arg1.getTokenType() == TokenType.FlPoint) {
+						if (arg1.getTokenType().equals(TokenType.Integer)
+								|| arg1.getTokenType()
+										.equals(TokenType.FlPoint)) {
 							newSubtree.setRightLeapNode(arg1);
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.Parents
-								|| arg1.getTokenSubtype() == TokenSubtype.Left_Parenthesis) {
+						} else if (arg1.getTokenType()
+								.equals(TokenType.Parents)
+								|| arg1.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis)) {
 							TokenArray subArray2 = new TokenArray();
 							int skipPairofParentheses = 0;
 
@@ -684,9 +749,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -706,8 +773,10 @@ public class CalcParseTreeGenerator {
 										.addRightSubtree(generateParseTree(subArray2));
 							}
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.TriangleFunc
-								|| arg1.getTokenType() == TokenType.MathematFunc) {
+						} else if (arg1.getTokenType().equals(
+								TokenType.TriangleFunc)
+								|| arg1.getTokenType().equals(
+										TokenType.MathematFunc)) {
 							TokenUnit zero = new TokenUnit(TokenType.Integer,
 									TokenSubtype.Decimal, "0");
 							ParseTreeUnit newSubtree2 = new ParseTreeUnit();
@@ -717,7 +786,7 @@ public class CalcParseTreeGenerator {
 
 							arg1 = sArray.getToken(i++);
 
-							if (arg1.getTokenType() != TokenType.Parents) {
+							if (!arg1.getTokenType().equals(TokenType.Parents)) {
 								throw new InvalidSequenceTokenException(
 										"Left parenthesis is expected.");
 							}
@@ -729,9 +798,11 @@ public class CalcParseTreeGenerator {
 								TokenUnit temp = new TokenUnit();
 								temp = sArray.getToken(i);
 
-								if (temp.getTokenSubtype() == TokenSubtype.Left_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Left_Parenthesis))
 									skipPairofParentheses++;
-								if (temp.getTokenSubtype() == TokenSubtype.Righ_Parenthesis)
+								if (temp.getTokenSubtype().equals(
+										TokenSubtype.Righ_Parenthesis))
 									skipPairofParentheses--;
 
 								if (skipPairofParentheses == -1) {
@@ -753,7 +824,8 @@ public class CalcParseTreeGenerator {
 
 							newSubtree.addRightSubtree(newSubtree2);
 							pstu_root = newSubtree;
-						} else if (arg1.getTokenType() == TokenType.BaseConvFunc) {
+						} else if (arg1.getTokenType().equals(
+								TokenType.BaseConvFunc)) {
 							throw new InvalidSequenceTokenException(
 									"Base conversion function can be used for whole expression gets integer value.");
 						} else {

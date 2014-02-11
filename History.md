@@ -114,4 +114,3 @@ google is modified to search an information using google API ( -> mmx900 )
 missedmessage is added ( -> darkcircle )
  > It can says missed message by anyone to someone who was left and returned into the channel again.
 
-

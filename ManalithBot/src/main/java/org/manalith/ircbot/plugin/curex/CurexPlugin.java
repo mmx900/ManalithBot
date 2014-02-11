@@ -1,38 +1,22 @@
-/*
-	org.manalith.ircbot.plugin.curex/CurexPlugin.java
-	ManalithBot - An open source IRC bot based on the PircBot Framework.
-	Copyright (C) 2011, 2012 Seong-ho, Cho <darkcircle.0426@gmail.com>
-	Copyright (C) 2012  Changwoo Ryu <cwryu@debian.org>
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package org.manalith.ircbot.plugin.curex;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Component("cerPlugin")
+@Component("curexPlugin")
 public class CurexPlugin extends SimplePlugin {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private String appid;
+
+	public void setAppid(String app_id) {
+		appid = app_id;
+	}
 
 	@Override
 	public String getName() {
-		return "환율계산";
+		return "환율계산기";
 	}
 
 	@Override
@@ -42,75 +26,39 @@ public class CurexPlugin extends SimplePlugin {
 
 	@Override
 	public String getHelp() {
-		return "설  명: 환율 정보를 보여주고 환율 계산을 도와줍니다, 사용법: !환율 (자세한 사용법은 !curex help를 실행하세요)";
+		return "설  명: 기본적으로 달러, 유로, 옌, 위안, 비트코인의 환율을 살펴볼 수 있습니다."
+				+ " 필요한 경우 다른 화폐의 환율을 볼 수 있으며, 지정 금액에 대한 환율 계산도 가능합니다."
+				+ " (자세한 도움말: !환율 help)";
 	}
 
 	@Override
 	public void onMessage(MessageEvent event) {
-		parseMessage(event, event.getChannel().getName());
+		parseEvent(event);
 	}
 
 	@Override
 	public void onPrivateMessage(MessageEvent event) {
-		parseMessage(event, event.getUser().getNick());
+		parseEvent(event);
 	}
 
-	protected void parseMessage(MessageEvent event, String target) {
-		String[] command = event.getMessageSegments();
-		if (!command[0].equals("!환율") && !command[0].startsWith("!환율:"))
-			return;
+	protected void parseEvent(MessageEvent event) {
+		String[] irccmd = event.getMessageSegments();
+		String[] options = null;
+		String result = null;
+		String path = getResourcePath();
 
-		String[] subcmd = command[0].split("\\:");
-		if (subcmd.length == 1) {
-
-			String[] mergedcmd = new String[command.length - 1];
-			System.arraycopy(command, 1, mergedcmd, 0, command.length - 1);
-
+		// list
+		if (irccmd[0].equals("!환율")) {
+			options = ArrayUtils.subarray(irccmd, 1, irccmd.length);
 			try {
-				CurexRunner runner = new CurexRunner(event.getUser().getNick(),
-						getResourcePath(), mergedcmd);
-
-				String result = runner.run();
-				if (result.equals("Help!")) {
-					event.respond(CurexInfoProvider.getIRCHelpMessagePart1());
-					event.respond(CurexInfoProvider.getIRCHelpMessagePart2());
-				} else if (result.equals("unitlist")) {
-					event.respond(CurexInfoProvider.getUnitListPart1());
-					event.respond(CurexInfoProvider.getUnitListPart2());
-				} else {
-					event.respond(result);
-				}
+				CurexRunner runner = new CurexRunner(path, appid, options);
+				result = runner.run();
 			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-				event.respond(e.getMessage());
-			}
-		} else if (subcmd.length > 2) {
-			event.respond("옵션이 너무 많습니다");
-		} else {
-			// remerge strings separated by space.
-			String userNick = event.getUser().getNick();
-
-			String arg = "";
-			for (int i = 1; i < command.length; i++) {
-				if (command[i].equals(" "))
-					continue;
-				arg += command[i];
-			}
-
-			try {
-				CurexCustomSettingManager csMan = new CurexCustomSettingManager(
-						getResourcePath(), target, userNick, arg);
-
-				if (subcmd[1].equals("sub"))
-					event.respond(csMan.addUserSetting());
-				else if (subcmd[1].equals("unsub")) {
-					event.respond(csMan.removeUserSetting());
-				} else
-					event.respond("그런 옵션은 없습니다.");
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-				event.respond(e.getMessage());
+				result = e.getMessage();
+				return;
 			}
 		}
+
+		event.respond(result);
 	}
 }
