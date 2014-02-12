@@ -74,50 +74,40 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		snengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
 
 		String cmd = msg.split("\\s")[0];
+		String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
+		String dstmsg = "";
 
-		if (cmd.equals("!c2")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-			try {
-				String dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
-
-				event.respond(String.format("<%s> %s", sender, dstmsg));
-			} catch (Exception e) {
-				logger.warn(e.getMessage(), e);
+		try
+		{
+			switch(cmd)
+			{
+				case "!c2":
+					dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
+					event.respond(String.format("<%s> %s", sender, dstmsg));
+					break;
+				case "!c2r":
+					dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
+					event.respond(String.format("<%s> %s", sender, dstmsg));
+					break;
+				case "!c3":										
+					dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
+					event.respond(String.format("<%s> %s", sender, dstmsg));
+					break;
+				case "!c33":
+					dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
+					event.respond(String.format("<%s> %s", sender, dstmsg));
+					break;
+				case "!c3n":
+					dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
+					event.respond(String.format("<%s> %s", sender, dstmsg));
+					break;
 			}
-		} else if (cmd.equals("!c2r")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-			String dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
 
-			event.respond(String.format("<%s> %s", sender, dstmsg));
-		} else if (cmd.equals("!c3")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-			try {
-				String dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
-
-				event.respond(String.format("<%s> %s", sender, dstmsg));
-			} catch (IllegalArgumentException | ParseException e) {
-				logger.warn(e.getMessage(), e);
-			}
-		} else if (cmd.equals("!c33")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-
-			try {
-				String dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
-
-				event.respond(String.format("<%s> %s", sender, dstmsg));
-			} catch (IllegalArgumentException | ParseException e) {
-				logger.warn(e.getMessage(), e);
-			}
-		} else if (cmd.equals("!c3n")) {
-			String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
-
-			try {
-				String dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
-
-				event.respond(String.format("<%s> %s", sender, dstmsg));
-			} catch (IllegalArgumentException | ParseException e) {
-				logger.warn(e.getMessage(), e);
-			}
+		}
+		catch ( Exception e )
+		{
+			logger.warn(e.getMessage(), e);
 		}
 	}
 }
+

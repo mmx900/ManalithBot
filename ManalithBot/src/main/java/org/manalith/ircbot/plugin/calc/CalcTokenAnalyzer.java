@@ -18,9 +18,10 @@
  */
 package org.manalith.ircbot.plugin.calc;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenSubtype;
+import org.manalith.ircbot.plugin.calc.TokenUnit.TokenType;
 import org.manalith.ircbot.plugin.calc.exceptions.EmptyTokenStreamException;
 import org.manalith.ircbot.plugin.calc.exceptions.TokenAnalysisException;
 
@@ -29,171 +30,147 @@ public class CalcTokenAnalyzer {
 	private String tokenStream;
 
 	public CalcTokenAnalyzer(String mathExpr) {
-		this.tokenStream = mathExpr;
+		tokenStream = mathExpr;
 	}
 
 	public TokenType getTokenType(String tokenString) {
 		TokenType type = TokenType.Unknown;
 
 		// Regex patterns for recognizing integer
-		Pattern binary = Pattern.compile("(0|(0|1)+)(B|b)");
-		Pattern octal = Pattern.compile("0[1-7][0-7]*");
-		Pattern decimal = Pattern.compile("(0|-?[1-9][0-9]*)");
-		Pattern hexadec = Pattern.compile("0x([0-9a-fA-F]*)");
-
-		// Regex pattern for recognizing floating point
-		Pattern fpoint = Pattern
-				.compile("(-?[0-9]+)(\\.[0-9]+)?(([Ee](-?[1-9][0-9]*))|f)?");
-
-		// Regex pattern for recognizing operator
-		Pattern operat = Pattern.compile("\\+|\\-|\\*|\\/|\\%|\\^|\\!");
-
-		// Regex patterns for recognizing parenthesis to change priority of
-		// calculation
-		Pattern lparen = Pattern.compile("\\(");
-		Pattern rparen = Pattern.compile("\\)");
-
-		// Regex patterns for recognizing parentheses to preprocess for the
-		// function
-		Pattern triangleFunc = Pattern
-				.compile("sin|cos|tan|arcsin|arccos|arctan");
-		Pattern convertBase = Pattern.compile("to(bin|oct|dec|hex)");
-		Pattern mathematFunc = Pattern.compile("sqrt");
-
-		Matcher bin_match = binary.matcher(tokenString);
-		Matcher oct_match = octal.matcher(tokenString);
-		Matcher dec_match = decimal.matcher(tokenString);
-		Matcher hex_match = hexadec.matcher(tokenString);
-
-		Matcher op_match = operat.matcher(tokenString);
-
-		Matcher fp_match = fpoint.matcher(tokenString);
-
-		Matcher lparen_match = lparen.matcher(tokenString);
-		Matcher rparen_match = rparen.matcher(tokenString);
-
-		Matcher triFunc_match = triangleFunc.matcher(tokenString);
-		Matcher convBase_match = convertBase.matcher(tokenString);
-		Matcher mathemat_match = mathematFunc.matcher(tokenString);
-
-		if ((bin_match.matches() || oct_match.matches())
-				|| (dec_match.matches() || hex_match.matches()))
+		if (Pattern.matches("(0|(0|1)+)(B|b)", tokenString)
+				|| Pattern.matches("0[1-7][0-7]*", tokenString)
+				|| Pattern.matches("(0|-?[1-9][0-9]*)", tokenString)
+				|| Pattern.matches("0x([0-9a-fA-F]*)", tokenString))
 			type = TokenType.Integer;
-		else if (fp_match.matches())
+		// Regex pattern for recognizing floating point
+		else if (Pattern
+				.matches("(-?[0-9]+)(\\.[0-9]+)?(([Ee](-?[1-9][0-9]*))|f)?",
+						tokenString))
 			type = TokenType.FlPoint;
-		else if (op_match.matches())
+		// Regex pattern for recognizing operator
+		else if (Pattern.matches("\\+|\\-|\\*|\\/|\\%|\\^|\\!", tokenString))
 			type = TokenType.Operatr;
-		else if (lparen_match.matches() || rparen_match.matches())
+		// Regex patterns for recognizing parenthesis
+		// to change priority of calculation
+		else if (Pattern.matches("\\(", tokenString)
+				|| Pattern.matches("\\)", tokenString))
 			type = TokenType.Parents;
-		else if (triFunc_match.matches())
+		// Regex patterns for recognizing parentheses
+		// to preprocess for the function
+		else if (Pattern.matches("sin|cos|tan|arcsin|arccos|arctan",
+				tokenString))
 			type = TokenType.TriangleFunc;
-		else if (convBase_match.matches())
+		else if (Pattern.matches("to(bin|oct|dec|hex)", tokenString))
 			type = TokenType.BaseConvFunc;
-		else if (mathemat_match.matches())
+		else if (Pattern.matches("sqrt", tokenString))
 			type = TokenType.MathematFunc;
 		return type;
 	}
 
 	public TokenSubtype getTokenSubtype(String tokenString, TokenType type) {
 		TokenSubtype result = TokenSubtype.Unknown;
-		if (type.equals(TokenType.Integer)) {
-			// Regex pattern for recognizing integer
-			Pattern binary = Pattern.compile("(0|(0|1)+)(B|b)");
-			Pattern octal = Pattern.compile("0[1-7][0-7]*");
-			Pattern decimal = Pattern.compile("(0|-?[1-9][0-9]*)");
-			Pattern hexadec = Pattern.compile("0x([0-9a-fA-F]*)");
 
-			Matcher bin_match = binary.matcher(tokenString);
-			Matcher oct_match = octal.matcher(tokenString);
-			Matcher dec_match = decimal.matcher(tokenString);
-			Matcher hex_match = hexadec.matcher(tokenString);
-
-			if (oct_match.matches())
-				result = TokenSubtype.Octal;
-			else if (dec_match.matches())
-				result = TokenSubtype.Decimal;
-			else if (hex_match.matches())
-				result = TokenSubtype.Hexadec;
-			else if (bin_match.matches())
+		switch (type.value()) {
+		case 1: // Integer
+			if (Pattern.matches("(0|(0|1)+)(B|b)", tokenString))
 				result = TokenSubtype.Binary;
-			else
-				result = TokenSubtype.Unknown;
-		} else if (type.equals(TokenType.FlPoint)) {
-			// Regex pattern for recognizing floating point
-			Pattern spfpoint = Pattern.compile("(-?[0-9]+)(\\.[0-9]+)?f");
-			Pattern dpfpoint = Pattern.compile("(-?[0-9]+)(\\.[0-9]+)");
-			Pattern expfpoint = Pattern
-					.compile("(-?[0-9]+)(\\.[0-9]+)?([Ee](-?[1-9][0-9]*))");
-
-			Matcher spf_match = spfpoint.matcher(tokenString);
-			Matcher dpf_match = dpfpoint.matcher(tokenString);
-			Matcher expf_match = expfpoint.matcher(tokenString);
-
-			if (spf_match.matches())
+			else if (Pattern.matches("0[1-7][0-7]*", tokenString))
+				result = TokenSubtype.Octal;
+			else if (Pattern.matches("(0|-?[1-9][0-9]*)", tokenString))
+				result = TokenSubtype.Decimal;
+			else if (Pattern.matches("0x([0-9a-fA-F]*)", tokenString))
+				result = TokenSubtype.Hexadec;
+			break;
+		case 2: // FlPoint
+			if (Pattern.matches("(-?[0-9]+)(\\.[0-9]+)?f", tokenString))
 				result = TokenSubtype.SpFltPoint;
-			else if (dpf_match.matches())
+			else if (Pattern.matches("(-?[0-9]+)(\\.[0-9]+)", tokenString))
 				result = TokenSubtype.DpFltPoint;
-			else if (expf_match.matches())
+			else if (Pattern.matches(
+					"(-?[0-9]+)(\\.[0-9]+)?([Ee](-?[1-9][0-9]*))", tokenString))
 				result = TokenSubtype.ExpFltPoint;
-			else
-				result = TokenSubtype.Unknown;
-		} else if (type.equals(TokenType.Parents)) {
-			if (tokenString.equals("("))
-				result = TokenSubtype.Left_Parenthesis;
-			else if (tokenString.equals(")"))
-				result = TokenSubtype.Righ_Parenthesis;
-			else
-				result = TokenSubtype.Unknown;
-		} else if (type.equals(TokenType.Operatr)) {
-			if (tokenString.equals("+"))
-				result = TokenSubtype.Plus;
-			else if (tokenString.equals("-"))
-				result = TokenSubtype.Minus;
-			else if (tokenString.equals("*"))
-				result = TokenSubtype.Times;
-			else if (tokenString.equals("/"))
-				result = TokenSubtype.Divide;
-			else if (tokenString.equals("%"))
-				result = TokenSubtype.Modulus;
-			else if (tokenString.equals("^"))
-				result = TokenSubtype.Power;
-			else if (tokenString.equals("!"))
-				result = TokenSubtype.Factorial;
-			else
-				result = TokenSubtype.Unknown;
-		} else if (type.equals(TokenType.TriangleFunc)) {
-			// throw new NotImplementedException();
-			// *
-			if (tokenString.equals("sin")) {
-				result = TokenSubtype.Sine;
-			} else if (tokenString.equals("cos")) {
-				result = TokenSubtype.Cosine;
-			} else if (tokenString.equals("tan")) {
-				result = TokenSubtype.Tangent;
-			} else if (tokenString.equals("arcsin")) {
-				result = TokenSubtype.ArcSine;
-			} else if (tokenString.equals("arccos")) {
-				result = TokenSubtype.ArcCosine;
-			} else if (tokenString.equals("arctan")) {
-				result = TokenSubtype.ArcTangent;
+			break;
+		case 3: // Operator
+			switch(tokenString) 
+			{
+				case "+":
+					result = TokenSubtype.Plus;
+					break;
+				case "-":
+					result = TokenSubtype.Minus;
+					break;
+				case "*":
+					result = TokenSubtype.Times;
+					break;
+				case "/":
+					result = TokenSubtype.Divide;
+					break;
+				case "%":
+					result = TokenSubtype.Modulus;
+					break;
+				case "^":
+					result = TokenSubtype.Power;
+					break;
+				case "!":
+					result = TokenSubtype.Factorial;
+					break;
 			}
-		} else if (type.equals(TokenType.BaseConvFunc)) {
-			if (tokenString.equals("tobin")) {
-				result = TokenSubtype.ToBin;
-			} else if (tokenString.equals("tooct")) {
-				result = TokenSubtype.ToOct;
-			} else if (tokenString.equals("todec")) {
-				result = TokenSubtype.ToDec;
-			} else if (tokenString.equals("tohex")) {
-				result = TokenSubtype.ToHex;
+			break;
+		case 4: // Parenthesis
+			switch(tokenString)
+			{
+				case "(":
+					result = TokenSubtype.Left_Parenthesis;
+					break;
+				case ")":
+					result = TokenSubtype.Righ_Parenthesis;
+					break;
 			}
-		} else if (type.equals(TokenType.MathematFunc)) {
-			if (tokenString.equals("sqrt")) {
+			break;
+		case 5: // Triangular function
+			switch(tokenString)
+			{
+				case "sin":
+					result = TokenSubtype.Sine;
+					break;
+				case "cos":
+					result = TokenSubtype.Cosine;
+					break;
+				case "tan":
+					result = TokenSubtype.Tangent;
+					break;
+				case "arcsin":
+					result = TokenSubtype.ArcSine;
+					break;
+				case "arccos":
+					result = TokenSubtype.ArcCosine;
+					break;
+				case "arctan":
+					result = TokenSubtype.ArcTangent;
+					break;
+			}
+			break;
+		case 6: // Base conversion
+			switch(tokenString)
+			{
+				case "tobin":
+					result = TokenSubtype.ToBin;
+					break;
+				case "tooct":
+					result = TokenSubtype.ToOct;
+					break;
+				case "todec":
+					result = TokenSubtype.ToDec;
+					break;
+				case "tohex":
+					result = TokenSubtype.ToHex;
+					break;
+			}
+			break;
+		case 7: // Mathematical function
+			if (tokenString.equals("sqrt"))
 				result = TokenSubtype.Sqrt;
-			}
-		} else
-			result = TokenSubtype.Unknown;
-
+		}
 		return result;
 	}
 

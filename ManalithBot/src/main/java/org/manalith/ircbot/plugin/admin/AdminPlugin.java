@@ -60,20 +60,25 @@ public class AdminPlugin extends SimplePlugin {
 					event.respond("봇에게 옵이 필요합니다.");
 				}
 
-				int i = 0;
+				ArrayList<String> uarr = new ArrayList<>();
+				StringBuilder modeFlag = new StringBuilder("+");
 
 				// 모든 사용자에게 옵을 준다
+
 				for (User user : channel.getUsers()) {
 					if (!channel.isOp(user) && !channel.isSuperOp(user)
 							&& !channel.isOwner(user)) {
-						channel.send().op(user);
-						i++;
+						uarr.add(user.getNick());
+						modeFlag.append("o");
 					}
 				}
 
-				if (i == 0) {
+				if (uarr.isEmpty())
 					event.respond("모든 사용자가 옵을 가지고 있습니다.");
-				}
+				else
+					channel.send().setMode(
+							modeFlag + " "
+									+ StringUtils.join(uarr.toArray(), " "));
 
 				event.setExecuted(true);
 			} else {

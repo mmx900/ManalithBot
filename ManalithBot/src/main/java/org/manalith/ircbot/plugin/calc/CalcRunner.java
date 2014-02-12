@@ -31,32 +31,22 @@ public class CalcRunner {
 
 		try {
 			tArray = cta.getTokenArray();
-			/*
-			 * int asize = tArray.getSize(); for ( int i = 0 ; i < asize ; i++ )
-			 * System.out.println(tArray.getToken(i)); //
-			 */
 		} catch (EmptyTokenStreamException ets) {
-			System.out.println("input expression is empty string.");
+			return "입력 문자열이 비어있습니다.";
 		} catch (TokenAnalysisException e) {
-			result = " === Parse Error! === " + e.getMessage();
+			result = " === 해석 오류! === " + e.getMessage();
 			return result;
 		}
-		/*
-		 * catch ( NotImplementedException ie ) {
-		 * System.out.println("There is a keyword which is not implemented."); }
-		 */
 
 		ParseTreeUnit ptu = null;
 
 		try {
 			// Parse tree generation phase
 			ptu = CalcParseTreeGenerator.generateParseTree(tArray);
-			// ptu.preorder();
-			// System.out.println("Result type : " + ptu.getResultType());
 
 			// Computation phase
 			if (ptu.getResultType().equals("Integer"))
-				result = " => " + ptu.getIntResult();
+				result = " => " + ptu.getIntFpResult();
 			else
 				result = " => " + ptu.getFpResult();
 		} catch (Exception e) {
