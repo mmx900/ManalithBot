@@ -55,10 +55,9 @@ public class CurexPlugin extends SimplePlugin {
 				result = runner.run();
 			} catch (Exception e) {
 				result = e.getMessage();
-				return;
 			}
-		}
 
-		event.respond(result);
+			event.respond(result);
+		}
 	}
 }
