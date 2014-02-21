@@ -190,7 +190,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<!-- 환율 정보(Curex) 플러그인 설정 -->
 	<bean id="curexPlugin" class="org.manalith.ircbot.plugin.curex.CurexPlugin">
 		<!-- https://www.openexchangerates.org/ 참조 -->
-		<propery name="appid" value="MANALITH_BOT_OWNERS_APPID"/>
+		<property name="appid" value="MANALITH_BOT_OWNERS_APPID"/>
 	</bean>
 	
 	<!-- Enemy Territory 플러그인 설정 -->
