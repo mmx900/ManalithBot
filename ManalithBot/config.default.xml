@@ -59,6 +59,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="spellCheckerPlugin" />
 				<ref bean="pingPlugin" />
 				<ref bean="googlePlugin" />
+				<ref bean="calendarPlugin" />
 				<!-- <ref bean="etPlugin" /> -->
 				<ref bean="helloPlugin" />
 				<ref bean="feedReaderPlugin" />
@@ -115,6 +116,14 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<bean id="googlePlugin" class="org.manalith.ircbot.plugin.google.GooglePlugin">
 		<property name="apiKey" value="ABCDEFG" />
 		<property name="apiReferer" value="http://org" />
+	</bean>
+
+	<!-- 달력 플러그인 설정 -->
+	<bean id="calendarPlugin" class="org.manalith.ircbot.plugin.google.CalendarPlugin">
+		<property name="appName" value="APPLICATION_NAME" />
+		<property name="accountId" value="SERVICe_ACCOUNT_EMAIL" />
+		<property name="p12path" value="MYKEY.p12" />
+		<property name="calendarId" value="CALENDAR_ID" />
 	</bean>
 
 	<!-- 관리자 플러그인 설정 -->
