@@ -12,9 +12,9 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-		<property name="url" value="jdbc:hsqldb:file:common.db;shutdown=true" />
-		<!-- property name="url" value="jdbc:hsqldb:hsql://localhost/common" / -->
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:data/common" />
+		<!-- property name="url" value="jdbc:h2:tcp://localhost/common" / -->
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 	</bean>
@@ -29,7 +29,7 @@
 
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>

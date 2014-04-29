@@ -12,8 +12,8 @@ object ApplicationBuild extends Build {
 		javaCore,
 		javaJdbc,
 		javaJpa,
-		"org.hibernate" % "hibernate-entitymanager" % "3.6.10.Final",
-		"org.hsqldb" % "hsqldb" % "2.3.1",
+		"org.hibernate" % "hibernate-entitymanager" % "4.1.7.Final",
+		"com.h2database" % "h2" % "1.4.177",
 		"org.apache.commons" % "commons-lang3" % "3.2.1")
 
 	val main = play.Project(appName, appVersion, appDependencies).settings(
