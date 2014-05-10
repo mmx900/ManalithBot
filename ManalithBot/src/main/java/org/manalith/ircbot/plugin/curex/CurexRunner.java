@@ -98,7 +98,13 @@ public class CurexRunner {
 		String country_name = oer.getCountryName(sourceUnit);
 		double show_result = oer.calc(1, sourceUnit, "KRW");
 
-		return String.format(Locale.getDefault(), "%s(%s)에 대한 거래기준액: ￦%.4f",
+		if (sourceUnit.equals("JPY") || sourceUnit.equals("VND")
+				|| sourceUnit.equals("IDR") || sourceUnit.equals("KHR")) {
+			sourceUnit = "100 " + sourceUnit;
+			show_result *= 100.0;
+		}
+
+		return String.format(Locale.getDefault(), "%s(%s)에 대한 거래기준액: ￦%.2f",
 				country_name, sourceUnit, show_result);
 	}
 
@@ -117,8 +123,16 @@ public class CurexRunner {
 			result = oer.calc(NumberUtils.toDouble(to.getTokenString()),
 					sourceUnit, targetUnit);
 
+		if (targetUnit.equals("KRW")) {
+			if (sourceUnit.equals("JPY") || sourceUnit.equals("VND")
+					|| sourceUnit.equals("IDR") || sourceUnit.equals("KHR")) {
+				sourceUnit = "100 " + sourceUnit;
+				result *= 100.0;
+			}
+		}
+
 		return String.format(Locale.getDefault(), to.getTokenString() + " "
-				+ sourceUnit + " => %.4f " + targetUnit, result);
+				+ sourceUnit + " => %.2f " + targetUnit, result);
 	}
 
 	public String getUnitListResult() {
