@@ -59,7 +59,8 @@ public class PhPortageProvider implements GentooSearchEngineProvider {
 					String ver = e.select("version").get(0).text();
 					String description = e.select("description").get(0).text();
 
-					result = pkgname + "  " + ver + " : " + description;
+					result = "[Gentoo] \u0002" + pkgname + "\u0002 - "
+							+ description + ", " + ver;
 				}
 			}
 

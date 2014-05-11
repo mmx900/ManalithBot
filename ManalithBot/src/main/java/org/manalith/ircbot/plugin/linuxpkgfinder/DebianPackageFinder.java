@@ -72,7 +72,9 @@ public class DebianPackageFinder extends PackageFinder {
 				}
 			}
 
-			result += version + " (" + dist + ") ";
+			if (result.length() != 0)
+				result += ", ";
+			result += "\u0002(" + dist + ")\u0002 " + version;
 		}
 
 		return result;
@@ -125,9 +127,10 @@ public class DebianPackageFinder extends PackageFinder {
 			String description = latestElement.toString().split("\\<br\\s\\/>")[0]
 					.split("\\:")[1].trim();
 
-			result = pkgname + " - " + description + ", ";
-			result += parseVersionInfo(doc);
-			System.out.println(result);
+			result = "[Debian] \u0002" + pkgname + "\u0002 - " + description
+					+ ", ";
+			result += parseVersionInfo(doc) + ".";
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			result = "오류: " + e.getMessage();
