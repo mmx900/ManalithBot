@@ -76,9 +76,12 @@ public class FedoraPackageFinder extends PackageFinder {
 			boolean firstrow = false;
 
 			String pkgname = "";
+			int pkgver = 0;
+			String name = "";
+			String ver = "";
 			String description = "";
 			String dist = "";
-			String NamenVer = "";
+			String NamenDescription = "";
 
 			while (row.hasNext()) {
 				if (!firstrow) {
@@ -94,14 +97,11 @@ public class FedoraPackageFinder extends PackageFinder {
 				dist = e.get(2).text();
 
 				if (dist.split("\\s")[0].equals("Fedora")) {
-					int pkg_ver;
 					try {
-						pkg_ver = Integer.parseInt(dist.split("\\s")[1]);
+						pkgver = Integer.parseInt(dist.split("\\s")[1]);
 					} catch (Exception ee) {
 						continue;
 					}
-
-					description += " in the Fedora " + pkg_ver;
 
 					String[] spl = pkgname.split("\\.");
 					int i = 0;
@@ -109,14 +109,14 @@ public class FedoraPackageFinder extends PackageFinder {
 					// exclude .fcxx.html string
 					for (; !spl[i].contains("fc"); i++) {
 						if (i != 0)
-							NamenVer += ".";
-						NamenVer += spl[i];
+							NamenDescription += ".";
+						NamenDescription += spl[i];
 					}
 
 					// split pkgname and version
-					spl = NamenVer.split("\\-");
-					String name = spl[0];
-					String ver = "";
+					spl = NamenDescription.split("\\-");
+					name = spl[0];
+					ver = "";
 					i = 1;
 
 					while (!(spl[i].charAt(0) >= '0' && spl[i].charAt(0) <= '9')) {
@@ -130,7 +130,9 @@ public class FedoraPackageFinder extends PackageFinder {
 						ver += spl[i++];
 					}
 
-					NamenVer = name + "  " + ver;
+					ver.replace(" : ", "");
+					NamenDescription = "\u0002" + name + "\u0002 - "
+							+ description;
 
 					break;
 
@@ -141,7 +143,8 @@ public class FedoraPackageFinder extends PackageFinder {
 			if (!dist.contains("Fedora")) {
 				result = "[Fedora] 결과가 없습니다";
 			} else {
-				result = NamenVer + " : " + description;
+				result = "[Fedora] " + NamenDescription + ", \u0002(Fedora "
+						+ pkgver + ")\u0002 " + ver;
 			}
 
 		} catch (Exception e) {
