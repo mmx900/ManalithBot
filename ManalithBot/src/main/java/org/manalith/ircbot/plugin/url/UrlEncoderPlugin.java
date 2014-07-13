@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.url;
 
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.util.UrlUtils;
@@ -20,12 +19,12 @@ public class UrlEncoderPlugin extends SimplePlugin {
 	}
 
 	@BotCommand
-	public String urlEncode(@NotNull String txt) {
+	public String urlEncode(String txt) {
 		return UrlUtils.encode(txt);
 	}
 
 	@BotCommand
-	public String urlDecode(@NotNull String txt) {
+	public String urlDecode(String txt) {
 		return UrlUtils.decode(txt);
 	}
 }

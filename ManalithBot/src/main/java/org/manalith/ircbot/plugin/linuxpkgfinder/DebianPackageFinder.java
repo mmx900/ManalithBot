@@ -25,7 +25,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +79,7 @@ public class DebianPackageFinder extends PackageFinder {
 
 	@Override
 	@BotCommand("deb")
-	public String find(@Description("키워드") @NotNull String keyword) {
+	public String find(@Description("키워드") String keyword) {
 		String result = "";
 		String url = "http://packages.debian.org/search?keywords=" + keyword
 				+ "&searchon=names&suite=all&section=all";

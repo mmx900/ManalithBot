@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.admin;
 
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ public class BasicPlugin extends SimplePlugin {
 	}
 
 	@BotCommand
-	public String echo(@NotNull String message) {
+	public String echo(String message) {
 		return message;
 	}
 }

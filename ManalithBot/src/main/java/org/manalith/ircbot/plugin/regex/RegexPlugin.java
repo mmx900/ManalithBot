@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,8 @@ public class RegexPlugin extends SimplePlugin {
 	}
 
 	@BotCommand
-	public String regex(@Description("정규표현식") @NotNull String regex,
-			@Description("테스트 문자열") @NotNull String fixture) {
+	public String regex(@Description("정규표현식") String regex,
+			@Description("테스트 문자열") String fixture) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(fixture);
 

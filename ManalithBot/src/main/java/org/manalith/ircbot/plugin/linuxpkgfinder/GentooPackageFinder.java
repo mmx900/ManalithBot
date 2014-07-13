@@ -19,7 +19,6 @@
 package org.manalith.ircbot.plugin.linuxpkgfinder;
 
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +48,7 @@ public class GentooPackageFinder extends PackageFinder {
 
 	@Override
 	@BotCommand("gen")
-	public String find(@Description("키워드") @NotNull String keyword) {
+	public String find(@Description("키워드") String keyword) {
 		return provider.find(keyword);
 	}
 }

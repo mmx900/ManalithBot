@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.slf4j.Logger;
@@ -47,12 +46,12 @@ public class SpellCheckerPlugin extends SimplePlugin {
 	}
 
 	@BotCommand({ "맞춤법" })
-	public String checkKorean(@Description("키워드") @NotNull String sentence) {
+	public String checkKorean(@Description("키워드") String sentence) {
 		return checkSpell(sentence, koreanDictionaryPath);
 	}
 
 	@BotCommand({ "spell" })
-	public String checkEnglish(@Description("키워드") @NotNull String sentence) {
+	public String checkEnglish(@Description("키워드") String sentence) {
 		return checkSpell(sentence, englishDictionaryPath);
 	}
 

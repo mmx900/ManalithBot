@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -52,12 +52,12 @@ public class Command {
 			String name = null;
 			boolean isRequired = false;
 
-			for (Annotation a : ann) {
-				if (a instanceof NotNull) {
-					minimumArguments++;
-					isRequired = true;
-				}
+			if (type != Optional.class) {
+				minimumArguments++;
+				isRequired = true;
+			}
 
+			for (Annotation a : ann) {
 				if (a instanceof Description)
 					name = ((Description) a).value();
 			}

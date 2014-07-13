@@ -1,6 +1,5 @@
 package org.manalith.ircbot.plugin.urlshortener;
 
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,7 @@ public class UrlShortenerPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("짧게")
-	public String shorten(@NotNull String url) {
+	public String shorten(String url) {
 		return "[URL Shortener] " + provider.shorten(url);
 	}
 }

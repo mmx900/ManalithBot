@@ -24,7 +24,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +46,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 
 	@Override
 	@BotCommand("ubu")
-	public String find(@Description("키워드") @NotNull String arg) {
+	public String find(@Description("키워드") String arg) {
 		String result = "";
 		String latestPkgName = "";
 

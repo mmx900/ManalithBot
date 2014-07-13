@@ -1,7 +1,6 @@
 package org.manalith.ircbot.plugin.symbol;
 
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class SymbolPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("심볼")
-	public String symbol(@Description("심볼(그림문자)") @NotNull String str) {
+	public String symbol(@Description("심볼(그림문자)") String str) {
 		switch (str) {
 		case "->":
 			return "→";

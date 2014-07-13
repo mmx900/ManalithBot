@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -23,8 +22,7 @@ public class TimestampPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("timestamp")
-	public String convertTimeStamp(
-			@Description("timestamp") @NotNull String timestamp) {
+	public String convertTimeStamp(@Description("timestamp") String timestamp) {
 		return convertTimeStamp(Long.parseLong(timestamp));
 	}
 

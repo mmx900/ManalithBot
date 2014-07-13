@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.slf4j.Logger;
@@ -53,8 +52,7 @@ public class OnOffMixPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("!onoffmix")
-	public String getEventInfo(
-			@Description("조회할 이벤트 ID") @NotNull String eventId) {
+	public String getEventInfo(@Description("조회할 이벤트 ID") String eventId) {
 		int eventIdx = NumberUtils.toInt(eventId);
 
 		if (eventIdx == 0)

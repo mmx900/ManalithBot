@@ -7,8 +7,8 @@ apply plugin: 'eclipse'
 //apply plugin: 'scala'
 apply plugin: 'application'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 version = '1.0'
 jar {

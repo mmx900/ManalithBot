@@ -22,7 +22,6 @@ package org.manalith.ircbot.plugin.sample;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.manalith.ircbot.annotation.Description;
-import org.manalith.ircbot.annotation.NotNull;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -66,7 +65,7 @@ public class HelloPlugin extends SimplePlugin {
 
 	@BotCommand("채널인사")
 	public String sayHelloWithCount(MessageEvent event,
-			@Description("인사말") @NotNull String hello) {
+			@Description("인사말") String hello) {
 		return String
 				.format("%s 방 여러분 %s", event.getChannel().getName(), hello);
 	}
