@@ -46,7 +46,6 @@ dependencies {
 	compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.2.2'
 	compile group: 'rome', name: 'rome', version: '1.0'
 	compile group: 'javax.annotation', name: 'jsr250-api', version: '1.0'
-	compile group: 'org.apache.felix', name: 'org.apache.felix.main', version: '4.2.1'
 	compile group: 'junit', name: 'junit', version: '4.11'
 	compile group: 'cglib', name: 'cglib', version: '2.2.2'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.3.2'

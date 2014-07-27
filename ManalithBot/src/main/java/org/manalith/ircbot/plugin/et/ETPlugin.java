@@ -12,7 +12,6 @@ import java.util.Timer;
 
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,8 +38,8 @@ public class ETPlugin extends SimplePlugin {
 	private int serverPort;
 
 	@Override
-	public void start(BundleContext bundleContext) throws Exception {
-		super.start(bundleContext);
+	public void start() throws Exception {
+		super.start();
 
 		playerManager = PlayerManager.instance();
 

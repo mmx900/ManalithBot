@@ -20,9 +20,12 @@
 package org.manalith.ircbot.plugin;
 
 import org.manalith.ircbot.resources.MessageEvent;
-import org.osgi.framework.BundleActivator;
 
-public interface Plugin extends BundleActivator {
+public interface Plugin {
+
+	public void start() throws Exception;
+
+	public void stop() throws Exception;
 
 	/**
 	 * 이름을 반환. 이름에 '플러그인'을 포함하지 않기를 권장함.

@@ -22,7 +22,6 @@ package org.manalith.ircbot.plugin;
 import java.io.File;
 
 import org.manalith.ircbot.resources.MessageEvent;
-import org.osgi.framework.BundleContext;
 
 public abstract class SimplePlugin implements Plugin {
 	public String getResourcePath() {
@@ -87,12 +86,12 @@ public abstract class SimplePlugin implements Plugin {
 	}
 
 	@Override
-	public void start(BundleContext arg0) throws Exception {
+	public void start() throws Exception {
 
 	}
 
 	@Override
-	public void stop(BundleContext arg0) throws Exception {
+	public void stop() throws Exception {
 
 	}
 

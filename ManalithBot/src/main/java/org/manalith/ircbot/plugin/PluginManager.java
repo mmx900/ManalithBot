@@ -71,7 +71,7 @@ public class PluginManager {
 		list.add(plugin);
 
 		try {
-			plugin.start(null);
+			plugin.start();
 			logger.info("{} 플러그인이 시작되었습니다.", plugin.getName());
 		} catch (Exception e) {
 			logger.error("{} 플러그인을 시작하지 못했습니다.", plugin.getName());
@@ -82,7 +82,7 @@ public class PluginManager {
 
 	public void unload(Plugin plugin) {
 		try {
-			plugin.stop(null);
+			plugin.stop();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
