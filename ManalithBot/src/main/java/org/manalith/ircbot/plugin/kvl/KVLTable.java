@@ -69,12 +69,11 @@ public class KVLTable {
 	}
 
 	public void addVersionInfo(String tag, String versionElement) {
-		int arraysize = records.size();
 		boolean isSaved = false;
-		for (int i = 0; i < arraysize; i++) {
-			if (records.get(i).getTag().equals(tag)) {
+		for (KVLRecord r : records) {
+			if (r.getTag().equals(tag)) {
 				isSaved = true;
-				records.get(i).addVersionElement(versionElement);
+				r.addVersionElement(versionElement);
 			}
 		}
 

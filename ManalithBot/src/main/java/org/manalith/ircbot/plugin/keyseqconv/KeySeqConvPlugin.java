@@ -18,8 +18,6 @@
  */
 package org.manalith.ircbot.plugin.keyseqconv;
 
-import java.text.ParseException;
-
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.manalith.ircbot.resources.MessageEvent;
 import org.slf4j.Logger;
@@ -77,37 +75,31 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
 		String dstmsg = "";
 
-		try
-		{
-			switch(cmd)
-			{
-				case "!c2":
-					dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
-					event.respond(String.format("<%s> %s", sender, dstmsg));
-					break;
-				case "!c2r":
-					dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
-					event.respond(String.format("<%s> %s", sender, dstmsg));
-					break;
-				case "!c3":										
-					dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
-					event.respond(String.format("<%s> %s", sender, dstmsg));
-					break;
-				case "!c33":
-					dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
-					event.respond(String.format("<%s> %s", sender, dstmsg));
-					break;
-				case "!c3n":
-					dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
-					event.respond(String.format("<%s> %s", sender, dstmsg));
-					break;
+		try {
+			switch (cmd) {
+			case "!c2":
+				dstmsg = dengine.parseKeySequenceToKorean(srcmsg);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
+				break;
+			case "!c2r":
+				dstmsg = dengine.parseKoreanStringToEngSpell(srcmsg);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
+				break;
+			case "!c3":
+				dstmsg = sfengine.parseKeySequenceToKorean(srcmsg);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
+				break;
+			case "!c33":
+				dstmsg = stengine.parseKeySequenceToKorean(srcmsg);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
+				break;
+			case "!c3n":
+				dstmsg = snengine.parseKeySequenceToKorean(srcmsg);
+				event.respond(String.format("<%s> %s", sender, dstmsg));
+				break;
 			}
-
-		}
-		catch ( Exception e )
-		{
+		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 		}
 	}
 }
-

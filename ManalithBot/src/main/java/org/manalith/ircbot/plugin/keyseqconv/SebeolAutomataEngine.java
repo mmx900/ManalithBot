@@ -58,8 +58,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
 	@Override
 	public final String parseKoreanStringToEngSpell(String korean) {
-		String result = "";
-		return result;
+		return "";
 	}
 
 	@Override
@@ -186,10 +185,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 			if (isLastPosition) {
 				syl.initLetter();
 				break;
-			} else
-				continue;
-
-			// 끗.
+			}
 		}
 
 		syl.initLetter();

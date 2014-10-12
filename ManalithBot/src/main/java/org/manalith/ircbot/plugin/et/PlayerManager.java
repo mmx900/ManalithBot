@@ -30,7 +30,7 @@ public class PlayerManager {
 		StringBuilder sb = new StringBuilder();
 
 		for (Player p : list) {
-			sb.append(p.getIRCName() + " ");
+			sb.append(p.getIRCName()).append(" ");
 		}
 
 		return sb.toString();
@@ -41,7 +41,7 @@ public class PlayerManager {
 
 		for (Player p : list) {
 			if (p.isReady())
-				sb.append(p.getIRCName() + " ");
+				sb.append(p.getIRCName()).append(" ");
 		}
 
 		return sb.toString();

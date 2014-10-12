@@ -69,8 +69,8 @@ public class ServerStatusChecker {
 		String parameters = bufferedReader.readLine();
 
 		String[] split = parameters.split("\\\\");
-		Set<ETCVars> etCvars = new HashSet<ETCVars>();
-		HashMap<String, String> etCVarsHash = new HashMap<String, String>();
+		Set<ETCVars> etCvars = new HashSet<>();
+		HashMap<String, String> etCVarsHash = new HashMap<>();
 		ETCVars[] values = ETCVars.values();
 		etCvars.addAll(Arrays.asList(values));
 		for (int i = 1; i < split.length; i += 2) {

@@ -16,7 +16,7 @@ public class ETServer implements Comparable<ETServer> {
 	private String ip;
 	private int port;
 	private String password;
-	private Map<String, String> additionalParametes = new HashMap<String, String>();
+	private Map<String, String> additionalParametes = new HashMap<>();
 
 	private transient ServerStatus serverStatus;
 	private transient ServerStatus lastServertatus;

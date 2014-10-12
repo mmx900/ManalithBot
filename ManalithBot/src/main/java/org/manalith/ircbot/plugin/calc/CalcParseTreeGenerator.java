@@ -80,8 +80,7 @@ public class CalcParseTreeGenerator {
 					int skipPairofParentheses = 0;
 
 					while (true) {
-						TokenUnit temp = new TokenUnit();
-						temp = sArray.getToken(i);
+						TokenUnit temp = sArray.getToken(i);
 
 						if (temp.getTokenSubtype().equals(
 								TokenSubtype.Left_Parenthesis))
@@ -133,8 +132,7 @@ public class CalcParseTreeGenerator {
 							skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -180,9 +178,8 @@ public class CalcParseTreeGenerator {
 								"Missing operand.");
 
 					if (op.getTokenSubtype().equals(TokenSubtype.Factorial)) {
-						TokenUnit zero = new TokenUnit(TokenType.Integer,
+						arg1 = new TokenUnit(TokenType.Integer,
 								TokenSubtype.Decimal, "0");
-						arg1 = zero;
 					} else {
 						arg1 = sArray.getToken(i++);
 					}
@@ -200,8 +197,7 @@ public class CalcParseTreeGenerator {
 						int skipPairofParentheses = 0;
 
 						while (true) {
-							TokenUnit temp = new TokenUnit();
-							temp = sArray.getToken(i);
+							TokenUnit temp = sArray.getToken(i);
 
 							if (temp.getTokenSubtype().equals(
 									TokenSubtype.Left_Parenthesis))
@@ -248,8 +244,7 @@ public class CalcParseTreeGenerator {
 						int skipPairofParentheses = 0;
 
 						while (true) {
-							TokenUnit temp = new TokenUnit();
-							temp = sArray.getToken(i);
+							TokenUnit temp = sArray.getToken(i);
 
 							if (temp.getTokenSubtype().equals(
 									TokenSubtype.Left_Parenthesis))
@@ -296,8 +291,7 @@ public class CalcParseTreeGenerator {
 					int skipPairofParentheses = 0;
 
 					while (true) {
-						TokenUnit temp = new TokenUnit();
-						temp = sArray.getToken(i);
+						TokenUnit temp = sArray.getToken(i);
 
 						if (temp.getTokenSubtype().equals(
 								TokenSubtype.Left_Parenthesis))
@@ -341,9 +335,8 @@ public class CalcParseTreeGenerator {
 													// point, left parenthesis,
 													// or function
 				else {
-					TokenUnit zero = new TokenUnit(TokenType.Integer,
+					arg1 = new TokenUnit(TokenType.Integer,
 							TokenSubtype.Decimal, "0");
-					arg1 = zero;
 				}
 
 				if (pstu_root.getNode().getTokenType()
@@ -371,8 +364,7 @@ public class CalcParseTreeGenerator {
 						int skipPairofParentheses = 0;
 
 						while (true) {
-							TokenUnit temp = new TokenUnit();
-							temp = sArray.getToken(i);
+							TokenUnit temp = sArray.getToken(i);
 
 							if (temp.getTokenSubtype().equals(
 									TokenSubtype.Left_Parenthesis))
@@ -427,8 +419,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -476,8 +467,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -525,8 +515,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -575,8 +564,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -645,8 +633,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -693,8 +680,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -746,8 +732,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))
@@ -795,8 +780,7 @@ public class CalcParseTreeGenerator {
 							int skipPairofParentheses = 0;
 
 							while (true) {
-								TokenUnit temp = new TokenUnit();
-								temp = sArray.getToken(i);
+								TokenUnit temp = sArray.getToken(i);
 
 								if (temp.getTokenSubtype().equals(
 										TokenSubtype.Left_Parenthesis))

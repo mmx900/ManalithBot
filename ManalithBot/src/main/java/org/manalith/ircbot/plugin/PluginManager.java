@@ -60,9 +60,7 @@ public class PluginManager {
 	private Configuration configuration;
 
 	public void load(List<Plugin> plugins) {
-		for (Plugin plugin : plugins) {
-			load(plugin);
-		}
+		plugins.forEach(this::load);
 	}
 
 	public void load(Plugin plugin) {

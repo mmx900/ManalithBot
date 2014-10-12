@@ -40,7 +40,7 @@ public class JavaApiPlugin extends SimplePlugin {
 	}
 
 	private String getApiDocument(String query) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(query, " ");
 		st.nextToken();
 		if (st.countTokens() == 0 || st.countTokens() > 2) {

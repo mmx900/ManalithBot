@@ -19,7 +19,6 @@
 package org.manalith.ircbot.plugin.kvl;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -29,35 +28,20 @@ public class KVLTableBuilder {
 
 	private String url;
 
-	public KVLTableBuilder() {
-		this.setURL("");
-	}
-
-	public KVLTableBuilder(String newURL) {
-		this.setURL(newURL);
-	}
-
-	private void setURL(String url) {
+	public KVLTableBuilder(String url) {
 		this.url = url;
-	}
-
-	private String getURL() {
-		return url;
 	}
 
 	public KVLTable generateKernelVersionTable() throws IOException {
 		KVLTable result = new KVLTable();
 
-		String newTag = null;
-		String newVerElement = null;
+		Elements elements = Jsoup.connect(url).get()
+				.select("table#releases>tbody>tr");
 
-		Iterator<Element> e = Jsoup.connect(getURL()).get()
-				.select("table#releases>tbody>tr").iterator();
-
-		while (e.hasNext()) {
-			Elements tds = e.next().select("td");
-			newTag = tds.get(0).text().replaceAll("\\:", "");
-			newVerElement = tds.get(1).text();
+		for (Element e : elements) {
+			Elements tds = e.select("td");
+			String newTag = tds.get(0).text().replaceAll("\\:", "");
+			String newVerElement = tds.get(1).text();
 
 			result.addVersionInfo(newTag, newVerElement);
 		}

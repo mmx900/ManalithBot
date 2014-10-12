@@ -57,9 +57,6 @@ public class TweetReader {
 
 	private static final String TARGET_DATE_PATTERN = "yyyy년 MM월 dd일 E요일 HH:mm:ss";
 
-	private long tweetId;
-	private String screenName;
-
 	private String consumerKey;
 	private String consumerSecret;
 	private String username;
@@ -72,7 +69,6 @@ public class TweetReader {
 
 	private Twitter tweet;
 	private RequestToken requestToken;
-	private AccessToken accessToken;
 
 	public TweetReader(String resourcePath, String consumerKey,
 			String consumerSecret) throws ConfigurationException {
@@ -159,7 +155,7 @@ public class TweetReader {
 		initWebAutomateObject();
 
 		// to success authorization for owners' twitter account
-		accessToken = tweet.getOAuthAccessToken(requestToken,
+		AccessToken accessToken = tweet.getOAuthAccessToken(requestToken,
 				getTwitterAuthPINString());
 
 		setAccessToken(accessToken);
@@ -178,7 +174,7 @@ public class TweetReader {
 
 		switch (type) {
 		case TweetURL:
-			tweetId = NumberUtils.toLong(urlArray[urlArray.length - 1]);
+			long tweetId = NumberUtils.toLong(urlArray[urlArray.length - 1]);
 			stat = tweet.showStatus(tweetId);
 
 			if (stat == null)
@@ -186,7 +182,7 @@ public class TweetReader {
 
 			break;
 		case UserURL:
-			screenName = urlArray[urlArray.length - 1];
+			String screenName = urlArray[urlArray.length - 1];
 			ResponseList<Status> resp = tweet.getUserTimeline(screenName);
 
 			if (resp.size() == 0)
@@ -248,8 +244,6 @@ public class TweetReader {
 	}
 
 	private UrlType validateUrl(String url) {
-		UrlType result = null;
-
 		if (StringUtils.isEmpty(url))
 			return null;
 
@@ -259,11 +253,10 @@ public class TweetReader {
 		if (TwitterUrlType.UserHome.pattern.matcher(url).matches())
 			return UrlType.UserURL;
 
-		return result;
+		return null;
 	}
 
 	public String read(String[] strs) {
-
 		for (String str : strs) {
 			String result = getText(str, validateUrl(str));
 			if (result != null)

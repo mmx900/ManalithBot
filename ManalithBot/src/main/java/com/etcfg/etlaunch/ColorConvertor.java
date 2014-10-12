@@ -28,7 +28,7 @@ public class ColorConvertor {
 
 	public static List<JLabel> quakeColorNotationToJLabels(String coloredName) {
 		boolean colorChar = false;
-		List<JLabel> returnValue = new ArrayList<JLabel>();
+		List<JLabel> returnValue = new ArrayList<>();
 		JLabel currentLabel = new JLabel();
 		returnValue.add(currentLabel);
 		for (int i = 0; i < coloredName.length(); i++) {

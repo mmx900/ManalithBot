@@ -89,23 +89,12 @@ public class Command {
 	}
 
 	public boolean matches(String alias, BotEvent event) {
-		if (!ArrayUtils.contains(getListeners(), event))
-			return false;
+		return ArrayUtils.contains(getListeners(), event) && ArrayUtils.contains(aliases, alias);
 
-		if (!ArrayUtils.contains(aliases, alias))
-			return false;
-
-		return true;
 	}
 
 	public String getUsage() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("사용법 : ");
-		sb.append(StringUtils.join(aliases, '|'));
-		sb.append(" ");
-		sb.append(StringUtils.join(params, ' '));
-
-		return sb.toString();
+		return "사용법 : " + StringUtils.join(aliases, '|') + " " + StringUtils.join(params, ' ');
 	}
 
 	public String execute(MessageEvent event, String[] params)

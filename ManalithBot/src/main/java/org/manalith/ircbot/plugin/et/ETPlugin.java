@@ -85,7 +85,8 @@ public class ETPlugin extends SimplePlugin {
 		String message = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		if (message.equals(NAMESPACE + ":register")) {
+		switch (message) {
+		case NAMESPACE + ":register": {
 			Player p = new Player();
 			p.setETName(sender);
 			p.setIRCName(sender);
@@ -96,7 +97,9 @@ public class ETPlugin extends SimplePlugin {
 			} catch (AlreadyRegisteredException ex) {
 				event.respond(sender + ", 이미 등록된 닉네임입니다.");
 			}
-		} else if (message.equals(NAMESPACE + ":unregister")) {
+			break;
+		}
+		case NAMESPACE + ":unregister": {
 			Player p = new Player();
 			p.setETName(sender);
 			p.setIRCName(sender);
@@ -107,22 +110,25 @@ public class ETPlugin extends SimplePlugin {
 			} catch (NotRegisteredException e) {
 				event.respond(sender + ", 등록되지 않은 닉네임입니다.");
 			}
-		}/*
-		 * if (message.equals(NAMESPACE + ":ready")) { Player p = new Player();
+			break;
+		}
+		/*
+		 * case NAMESPACE + ":ready": Player p = new Player();
 		 * p.setETName(sender); p.setIRCName(sender); try{
 		 * playerManager.setReady(p); playerManager.save(); event.respond(sender
 		 * + ", 대기자 명단에 포함되었습니다."); }catch(NotRegisteredException ex){
-		 * event.respond(sender + ", et:register 명령으로 먼저 등록해주세요."); } }
+		 * event.respond(sender + ", et:register 명령으로 먼저 등록해주세요."); } break;
 		 */
-		if (message.equals(NAMESPACE + ":list")) {
+		case NAMESPACE + ":list": {
 			event.respond("등록된 플레이어 : " + playerManager.getPlayerNicks());
-		}/*
-		 * else if (message.equals(NAMESPACE + ":players")) {
-		 * event.respond("금일 참가 예정 플레이어 : " + playerManager.getPlayerNicks()); }
+			break;
+		}
+		/*
+		 * case NAMESPACE + ":players" : event.respond("금일 참가 예정 플레이어 : " +
+		 * playerManager.getPlayerNicks()); break;
 		 */
-		else if (message.equals("!et")
-				|| message.equals(NAMESPACE + ":connected")) {
-
+		case "!et":
+		case NAMESPACE + ":connected": {
 			try {
 				ServerStatusChecker checker = new ServerStatusChecker();
 				ServerStatus status = checker.checkStatus(serverAddress,
@@ -134,13 +140,10 @@ public class ETPlugin extends SimplePlugin {
 							status.getMapName()));
 				} else {
 					Map<String, List<ServerStatus.Player>> playerMap = new LinkedHashMap<>();
-					playerMap.put("Axis", new ArrayList<ServerStatus.Player>());
-					playerMap.put("Allies",
-							new ArrayList<ServerStatus.Player>());
-					playerMap.put("Spectator",
-							new ArrayList<ServerStatus.Player>());
-					playerMap.put("Connecting",
-							new ArrayList<ServerStatus.Player>());
+					playerMap.put("Axis", new ArrayList<>());
+					playerMap.put("Allies", new ArrayList<>());
+					playerMap.put("Spectator", new ArrayList<>());
+					playerMap.put("Connecting", new ArrayList<>());
 
 					for (ServerStatus.Player player : players) {
 						if (playerMap.containsKey(player.getTeam())) {
@@ -178,11 +181,14 @@ public class ETPlugin extends SimplePlugin {
 				logger.warn(e.getMessage(), e);
 				event.respond("서버 연결에 오류가 발생했습니다.");
 			}
-
-		} else if (message.equals(NAMESPACE + ":alert")) {
+			break;
+		}
+		case NAMESPACE + ":alert":
 			event.respond(playerManager.getPlayerNicks() + " ET하자옹!");
-		} else if (message.equals(NAMESPACE + ":help")) {
+			break;
+		case NAMESPACE + ":help":
 			event.respond(getHelp());
+			break;
 		}
 	}
 

@@ -1,6 +1,3 @@
-/*
- * Created on 2005. 8. 13
- */
 package org.manalith.ircbot.plugin.javaapi;
 
 import java.util.HashMap;

@@ -1,6 +1,3 @@
-/*
- * Created on 2005. 8. 8
- */
 package org.manalith.ircbot.plugin.javaapi;
 
 import java.util.List;

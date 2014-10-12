@@ -1,11 +1,7 @@
-/*
- * Created on 2005. 8. 8
- */
 package org.manalith.ircbot.plugin.javaapi;
 
 /**
  * JavaDoc 안의 Class, Interface, Annotation 등을 하나의 항목을 나타내는 클래스.
- * @author setzer
  */
 public class JavaDocObject {
 	protected JavaDocObject(){

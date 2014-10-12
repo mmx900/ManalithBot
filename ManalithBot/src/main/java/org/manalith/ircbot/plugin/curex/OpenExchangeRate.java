@@ -32,13 +32,7 @@ public class OpenExchangeRate {
 		private String key;
 		private String val;
 
-		public CurrencyNameTable() throws Exception {
-			// do not use :-P
-			;
-		}
-
 		public CurrencyNameTable(String path) {
-
 			filename = "currencylist.prop";
 			f = new File(path + "/" + filename);
 
@@ -77,10 +71,7 @@ public class OpenExchangeRate {
 						.get();
 				Elements ccytbl = doc.select("ISO_4217>CcyTbl>Ccyntry");
 
-				int sz = ccytbl.size();
-				for (int i = 0; i < sz; i++) {
-					Element ccyntry = ccytbl.get(i);
-
+				for (Element ccyntry : ccytbl) {
 					val = ccyntry.select("CtryNm").text();
 					key = ccyntry.select("Ccy").text();
 
@@ -147,7 +138,7 @@ public class OpenExchangeRate {
 		app_id = new_app_id;
 
 		table = new CurrencyNameTable(path);
-		rates = new HashMap<String, Double>();
+		rates = new HashMap<>();
 		initCurrencyTable();
 
 	}
@@ -163,19 +154,17 @@ public class OpenExchangeRate {
 		String k = "";
 		while (keys.hasNext()) {
 			k = keys.next();
-			rates.put(k, Double.valueOf(node.path(k).asDouble()));
+			rates.put(k, node.path(k).asDouble());
 		}
 	}
 
 	public double calc(int val, String sourceUnit, String targetUnit) {
-		double r = rates.get(targetUnit).doubleValue()
-				/ rates.get(sourceUnit).doubleValue();
+		double r = rates.get(targetUnit) / rates.get(sourceUnit);
 		return r * val;
 	}
 
 	public double calc(double val, String sourceUnit, String targetUnit) {
-		double r = rates.get(targetUnit).doubleValue()
-				/ rates.get(sourceUnit).doubleValue();
+		double r = rates.get(targetUnit) / rates.get(sourceUnit);
 		return r * val;
 	}
 

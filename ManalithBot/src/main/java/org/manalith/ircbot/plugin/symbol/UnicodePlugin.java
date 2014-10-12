@@ -23,12 +23,10 @@ public class UnicodePlugin extends SimplePlugin {
 				char[] chars = text.toCharArray();
 				StringBuilder sb = new StringBuilder();
 				for (char ch : chars) {
-					sb.append("U+"
-							+ Integer.toHexString(ch | 0x10000).substring(1));
+					sb.append("U+").append(Integer.toHexString(ch | 0x10000).substring(1));
 				}
 				if (chars.length == 1) {
-					sb.append(" - ");
-					sb.append(Character.getName(chars[0]));
+					sb.append(" - ").append(Character.getName(chars[0]));
 				}
 				return sb.toString();
 			}

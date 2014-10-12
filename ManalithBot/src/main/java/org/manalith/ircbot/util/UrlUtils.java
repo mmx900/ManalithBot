@@ -5,10 +5,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -69,12 +67,6 @@ public class UrlUtils {
 				.getSocketFactory());
 
 		// 호스트명을 검증하지 않는다.
-		HostnameVerifier allHostsValid = new HostnameVerifier() {
-			@Override
-			public boolean verify(String hostname, SSLSession session) {
-				return true;
-			}
-		};
-		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 	}
 }

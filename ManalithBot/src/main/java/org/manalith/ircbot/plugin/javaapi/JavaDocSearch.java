@@ -1,6 +1,3 @@
-/*
- * Created on 2005. 8. 8
- */
 package org.manalith.ircbot.plugin.javaapi;
 
 import java.io.IOException;
@@ -11,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +39,9 @@ public class JavaDocSearch implements SearchInterface {
 	}
 
 	private List<JavaDocObject> parseDocObjects(Document doc) {
-		Elements items = doc.select("a");
-
 		List<JavaDocObject> objs = new ArrayList<>();
 
-		for (int i = 0; i < items.size(); i++) {
-			Element element = items.get(i);
+		for (Element element : doc.select("a")) {
 			JavaDocObject o = new JavaDocObject();
 
 			// A 태그 안에 클래스 이름이 있을 경우
@@ -82,7 +75,7 @@ public class JavaDocSearch implements SearchInterface {
 		if (docObjects == null)
 			docObjects = parseDocObjects(getDocument());
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		for (JavaDocObject o : docObjects) {
 			if (o.getName().equalsIgnoreCase(className)) {
@@ -119,14 +112,7 @@ public class JavaDocSearch implements SearchInterface {
 
 		for (JavaDocObject o : docObjects) {
 			if (o.getName().matches(regex)) {
-				StringBuffer sb = new StringBuffer();
-				sb.append("[");
-				sb.append(o.getName());
-				sb.append("]");
-				sb.append(" - ");
-				sb.append(baseUrl);
-				sb.append(o.getURL());
-				classes.add(sb.toString());
+				classes.add("[" + o.getName() + "]" + " - " + baseUrl + o.getURL());
 			}
 		}
 

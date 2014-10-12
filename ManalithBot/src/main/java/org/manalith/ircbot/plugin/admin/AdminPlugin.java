@@ -46,14 +46,16 @@ public class AdminPlugin extends SimplePlugin {
 		User sender = event.getUser();
 		Channel channel = event.getChannel();
 
-		if (message.equals("!나가")) {
+		switch (message) {
+		case "!나가":
 			if (channel.isOp(sender)) {
 				channel.send().part();
 				event.setExecuted(true);
 			} else {
 				event.respond("옵을 가진 사용자만 실행할 수 있습니다.");
 			}
-		} else if (message.equals("!@")) {
+			break;
+		case "!@":
 			if (channel.isOp(sender) || channel.isSuperOp(sender)
 					|| channel.isOwner(sender)) {
 				if (!channel.isOp(event.getBot().getUserBot())) {
@@ -64,7 +66,6 @@ public class AdminPlugin extends SimplePlugin {
 				StringBuilder modeFlag = new StringBuilder("+");
 
 				// 모든 사용자에게 옵을 준다
-
 				for (User user : channel.getUsers()) {
 					if (!channel.isOp(user) && !channel.isSuperOp(user)
 							&& !channel.isOwner(user)) {
@@ -84,10 +85,12 @@ public class AdminPlugin extends SimplePlugin {
 			} else {
 				event.respond("옵을 가진 사용자만 실행할 수 있습니다.");
 			}
-		} else if (message.equals("!uptime")) {
+			break;
+		case "!uptime":
 			RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
 			long upTime = bean.getUptime();
 			event.respond(String.format("Up Time = %d (ms)", upTime));
+			break;
 		}
 
 		if (isAdmin(sender)) {

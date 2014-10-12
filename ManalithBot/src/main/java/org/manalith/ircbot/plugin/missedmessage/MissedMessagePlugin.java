@@ -96,8 +96,6 @@ public class MissedMessagePlugin extends SimplePlugin {
 				// exclude # in the channel name.
 			}
 		}
-
-		return;
 	}
 
 	@Override
@@ -111,8 +109,8 @@ public class MissedMessagePlugin extends SimplePlugin {
 			String[] msgs = runner.getMsg(channel.substring(1) + "." + sender);
 
 			if (msgs != null)
-				for (int i = 0; i < msgs.length; i++) {
-					ManalithBot.getInstance().sendMessage(channel, msgs[i]);
+				for (String msg : msgs) {
+					ManalithBot.getInstance().sendMessage(channel, msg);
 				}
 		}
 	}

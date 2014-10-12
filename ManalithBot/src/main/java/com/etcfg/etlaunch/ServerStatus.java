@@ -7,7 +7,7 @@ public class ServerStatus {
 	private String name;
 	private String mod;
 	private boolean punkbusterEnabled;
-	private List<Player> players = new ArrayList<Player>();
+	private List<Player> players = new ArrayList<>();
 	private int maxPlayers;
 	private int privateSlots;
 	private boolean passwordProtected;

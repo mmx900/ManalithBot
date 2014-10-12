@@ -153,7 +153,7 @@ public class MissedMessageRunner {
 			prop.save();
 
 		} catch (ConfigurationException ce) {
-			; // ignore exception
+			// ignore exception
 		}
 	}
 
@@ -176,7 +176,7 @@ public class MissedMessageRunner {
 				}
 			}
 		} catch (ConfigurationException ce) {
-			;// Ignore.
+			// Ignore.
 		}
 
 		return result;

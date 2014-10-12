@@ -54,8 +54,7 @@ public class UbuntuPackageFinder extends PackageFinder {
 			latestPkgName = getLatestPkgName();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			result = "오류: " + e.getMessage();
-			return result;
+			return "오류: " + e.getMessage();
 		}
 
 		String url = "http://packages.ubuntu.com/search?keywords=" + arg
@@ -72,27 +71,23 @@ public class UbuntuPackageFinder extends PackageFinder {
 			conn.timeout(10000);
 			Elements div = conn.get().select("#psearchres");
 
-			if (div.size() == 0) {
-				result = "[Ubuntu] 결과가 없습니다";
-				return result;
-			}
+			if (div.size() == 0)
+				return "[Ubuntu] 결과가 없습니다";
 
 			Elements hits = div.select("h2");
 			int hsize = hits.size();
 
 			if (hsize == 0)
 				result = "[Ubuntu] 결과가 없습니다";
-			for (int i = 0; i < hsize; i++) {
-				if (hits.get(i).text().equals("Exact hits")) {
+			for (Element e : hits) {
+				if (e.text().equals("Exact hits")) {
 					hasExacthits = true;
 					break;
 				}
 
 			}
-			if (!hasExacthits) {
-				result = "[Ubuntu] 결과가 없습니다";
-				return result;
-			}
+			if (!hasExacthits)
+				return "[Ubuntu] 결과가 없습니다";
 
 			pkgname = div.select("h3").get(0).text().split("\\s")[1];
 
@@ -129,16 +124,13 @@ public class UbuntuPackageFinder extends PackageFinder {
 	private String getLatestPkgName() throws Exception {
 		String result = "";
 		String url = "http://packages.ubuntu.com";
-		String tmp;
 
 		Document doc = Jsoup.connect(url).get();
-		Elements e = doc.select("select#distro>option");
+		Elements elements = doc.select("select#distro>option");
 
-		int esize = e.size();
-		for (int i = 0; i < esize; i++) {
-			tmp = e.get(i).attr("selected");
-			if (tmp.equals("selected")) {
-				result = e.get(i).text();
+		for (Element e : elements) {
+			if (e.attr("selected").equals("selected")) {
+				result = e.text();
 				break;
 			}
 		}
