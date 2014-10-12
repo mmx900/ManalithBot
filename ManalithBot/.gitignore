@@ -1,9 +1,24 @@
-*~
+# Java
+hs_err_pid*
+
+# ManalithBot
+/bin
 /data
-/target
 /log
 /config.xml
+
+# Emacs
+*~
+
+# Gradle
+.gradle
 /build
+
+# Eclipse
 .cache
 .classpath
-/bin
+
+# Idea
+*.iml
+.idea
+.idea_modules
