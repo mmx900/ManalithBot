@@ -33,10 +33,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.sun.istack.internal.NotNull;
+
 @Component
 public class ArchPackageFinder extends PackageFinder {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	private String pkgname;
+	private String description;
 
 	@Override
 	public String getName() {
@@ -49,15 +53,43 @@ public class ArchPackageFinder extends PackageFinder {
 	}
 
 	@BotCommand("ar")
-	public String getResultFromMainPkgDB(@Description("키워드") String arg)
+	public String getResult(@Description("키워드") @NotNull String arg)
 			throws IOException {
+		pkgname = "";
+		description = "";
+
+		String resultMain = getResultFromMainPkgDB(arg);
+		String resultExtra = getResultFromAUR(arg);
+		String result = "[Arch] ";
+
+		if (resultMain.length() == 0 && resultExtra.length() == 0)
+			result += "결과가 없습니다";
+		else {
+			result += "\u0002" + pkgname + "\u0002 - " + description + ", ";
+
+			if (resultMain != null)
+				if (!resultMain.isEmpty() || resultMain.length() > 0)
+					result += resultMain;
+
+			if (resultExtra != null)
+				if (!resultExtra.isEmpty() || resultExtra.length() > 0) {
+					if (resultMain != null)
+						if (!resultMain.isEmpty() || resultMain.length() > 0)
+							result += ", ";
+					result += resultExtra;
+				}
+		}
+
+		return result;
+	}
+
+	public String getResultFromMainPkgDB(String arg) throws IOException {
 
 		String[] arch_keywords = { "any", "i686", "x86_64" };
 		int len = arch_keywords.length;
 		int pages = 100000000;
 
 		String infostr = "";
-		String description = "";
 		String url = "";
 
 		for (int i = 0; i < len; i++) {
@@ -95,19 +127,19 @@ public class ArchPackageFinder extends PackageFinder {
 					if (ee.get(2).select("a").get(0).text().equals(arg)) {
 						if (!infostr.equals(""))
 							infostr += ", ";
-						infostr += "[main-" + ee.get(0).text() + "] ";
-						infostr += ee.get(2).select("a").get(0).text() + "  ";
+						infostr += "\u0002(main-" + ee.get(0).text() + " "
+								+ ee.get(1).text() + ")\u0002 ";
+
+						if (pkgname.length() == 0)
+							pkgname = ee.get(2).select("a").get(0).text();
+						if (description.length() == 0)
+							description = ee.get(4).text();
 
 						if (ee.get(3).select("span.flagged").size() > 0)
 							infostr += ee.get(3).select("span.flagged").get(0)
 									.text();
 						else
 							infostr += ee.get(3).text();
-
-						infostr += "(" + ee.get(1).text() + ")";
-
-						if (description.equals(""))
-							description = ee.get(4).text();
 
 						break;
 					}
@@ -116,14 +148,10 @@ public class ArchPackageFinder extends PackageFinder {
 			pages = 100000000;
 		}
 
-		if (!infostr.equals(""))
-			infostr += " : " + description;
-
 		return infostr;
 	}
 
 	private String getResultFromAUR(String arg) throws IOException {
-
 		String infostr = "";
 		String pageinfo = "";
 		String url = "";
@@ -132,7 +160,7 @@ public class ArchPackageFinder extends PackageFinder {
 
 		for (int i = 0; i < pages; i++) {
 
-			url = "http://aur.archlinux.org/packages.php?K=" + arg
+			url = "http://aur.archlinux.org/packages.php?SeB=x&K=" + arg
 					+ "&PP=50&O=" + (i * 50);
 
 			try {
@@ -162,10 +190,13 @@ public class ArchPackageFinder extends PackageFinder {
 				if (ee.get(1).select("td").get(0).text().equals(arg)) {
 					if (!infostr.equals(""))
 						infostr += " | ";
-					infostr += "[AUR-" + ee.get(0).text() + "] ";
-					infostr += ee.get(1).select("a").text() + "  "
-							+ ee.get(2).text();
-					infostr += " : " + ee.get(4).text();
+					if (pkgname.length() == 0)
+						pkgname = ee.get(1).select("a").text();
+					if (description.length() == 0)
+						description = ee.get(4).text();
+
+					infostr += "\u0002(AUR-" + ee.get(0).text() + ")\u0002 ";
+					infostr += ee.get(2).text();
 					break;
 				}
 			}
