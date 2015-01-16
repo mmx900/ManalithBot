@@ -46,7 +46,8 @@ public class TweetReader {
 	public static enum TwitterUrlType {
 		UserHome(
 				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?([a-zA-Z0-9\\_]{1,15}(\\/)?){1}"), Tweet(
-				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+");
+				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+"), Photo(
+				"http(s)?\\:\\/\\/twitter\\.com\\/(\\#\\!\\/)?[a-zA-Z0-9\\_]{1,15}\\/status\\/[0-9]+/photo/[0-9]{1}(/|(/large))?");
 
 		Pattern pattern;
 
@@ -111,7 +112,7 @@ public class TweetReader {
 	}
 
 	private enum UrlType {
-		TweetURL, UserURL
+		TweetURL, UserURL, PhotoURL
 	}
 
 	private void initWebAutomateObject() {
@@ -174,7 +175,13 @@ public class TweetReader {
 
 		switch (type) {
 		case TweetURL:
-			long tweetId = NumberUtils.toLong(urlArray[urlArray.length - 1]);
+		case PhotoURL:
+			int statusIdIdx = 0;
+			for (; statusIdIdx < urlArray.length; statusIdIdx++)
+				if (urlArray[statusIdIdx++].equals("status"))
+					break;
+
+			long tweetId = NumberUtils.toLong(urlArray[statusIdIdx]);
 			stat = tweet.showStatus(tweetId);
 
 			if (stat == null)
@@ -252,6 +259,9 @@ public class TweetReader {
 
 		if (TwitterUrlType.UserHome.pattern.matcher(url).matches())
 			return UrlType.UserURL;
+
+		if (TwitterUrlType.Photo.pattern.matcher(url).matches())
+			return UrlType.PhotoURL;
 
 		return null;
 	}
