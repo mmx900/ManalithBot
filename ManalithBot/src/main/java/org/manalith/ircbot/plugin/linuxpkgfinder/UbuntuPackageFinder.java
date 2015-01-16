@@ -1,7 +1,7 @@
 /*
  	org.manalith.ircbot.plugin.distopkgfinder/UbuntuPkgFinderRunner.java
  	ManalithBot - An open source IRC bot based on the PircBot Framework.
- 	Copyright (C) 2011, 2012  Seong-ho, Cho <darkcircle.0426@gmail.com>
+ 	Copyright (C) 2011, 2012, 2013, 2014, 2015  Seong-ho, Cho <darkcircle.0426@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
  */
 package org.manalith.ircbot.plugin.linuxpkgfinder;
 
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.annotation.Description;
@@ -47,95 +49,147 @@ public class UbuntuPackageFinder extends PackageFinder {
 	@Override
 	@BotCommand("ubu")
 	public String find(@Description("키워드") String arg) {
-		String result = "";
-		String latestPkgName = "";
-
-		try {
-			latestPkgName = getLatestPkgName();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			return "오류: " + e.getMessage();
-		}
-
+		StringBuilder result = new StringBuilder("");
 		String url = "http://packages.ubuntu.com/search?keywords=" + arg
-				+ "&searchon=names&suite=" + latestPkgName + "&section=all";
-
-		boolean hasExacthits = false;
+				+ "&searchon=names&suite=all&section=all";
 
 		String pkgname = "";
 		String version = "";
 		String description = "";
+
+		boolean isCheckedOfficialPeriodicVersion = false;
+		boolean isCheckedOfficialLTSVersion = false;
 
 		try {
 			Connection conn = Jsoup.connect(url);
 			conn.timeout(10000);
 			Elements div = conn.get().select("#psearchres");
 
-			if (div.size() == 0)
-				return "[Ubuntu] 결과가 없습니다";
-
-			Elements hits = div.select("h2");
-			int hsize = hits.size();
-
-			if (hsize == 0)
-				result = "[Ubuntu] 결과가 없습니다";
-			for (Element e : hits) {
-				if (e.text().equals("Exact hits")) {
-					hasExacthits = true;
-					break;
-				}
-
+			if (div.size() == 0 || !isBeingExactHits(div.select("h2"))) {
+				result.append("[Ubuntu] 결과가 없습니다");
+				return result.toString();
 			}
-			if (!hasExacthits)
-				return "[Ubuntu] 결과가 없습니다";
 
 			pkgname = div.select("h3").get(0).text().split("\\s")[1];
 
-			result = pkgname + "  ";
 			Elements ExactHits = div.select("ul").get(0).select("li");
 			int elemCnt = ExactHits.size();
-			Element latestElement = ExactHits.get(elemCnt - 1);
+			Element elem = ExactHits.get(elemCnt - 1);
 
-			String[] verSplit = latestElement.toString().split("\\<br\\s\\/>")[1]
-					.split("\\:");
-			if (verSplit.length == 2)
-				version = verSplit[0].split("\\s")[0];
-			else if (verSplit.length == 3)
-				version = verSplit[1].split("\\s")[0];
+			// Description
+			description = elem.toString().split("\\<br\\s\\/>")[0].split("\\:")[1]
+					.trim();
 
-			result += version + " : ";
-
-			description = latestElement.toString().split("\\<br\\s\\/>")[0]
-					.split("\\:")[1].trim();
 			int a = description.indexOf("[");
 			if (a != -1)
 				description = description.substring(0, a);
 
-			result += description;
+			result.append("[Ubuntu] ");
+			result.append("\u0002");
+			result.append(pkgname);
+			result.append("\u0002");
+			result.append(" - " + description + ", ");
+
+			ArrayList<String> resultStr = new ArrayList<String>();
+			StringBuilder tStrBdr;
+
+			for (int cnt = elemCnt - 1; cnt >= 0; cnt--) {
+				elem = ExactHits.get(cnt);
+				tStrBdr = new StringBuilder("");
+				String distVerStr = elem.select("a").text();
+				String[] pkgVerSplit = elem.toString().split("\\<br\\s\\/>")[1]
+						.split("\\:");
+
+				if (pkgVerSplit.length == 2)
+					version = pkgVerSplit[0].split("\\s")[0];
+				else if (pkgVerSplit.length == 3)
+					version = pkgVerSplit[1].split("\\s")[0];
+
+				// Periodic, LTS (and Updates)
+				if (isOfficial(distVerStr)) {
+					if (isPeriodic(distVerStr)) {
+						if (isCheckedOfficialPeriodicVersion) {
+							resultStr.remove(resultStr.size() - 1);
+							continue;
+						}
+						isCheckedOfficialPeriodicVersion = true;
+					} else if (isLTS(distVerStr)) {
+						if (isCheckedOfficialLTSVersion) {
+							resultStr.remove(resultStr.size() - 1);
+							continue;
+						}
+						isCheckedOfficialLTSVersion = true;
+					}
+					if (!isUpdates(distVerStr))
+						distVerStr = distVerStr.replace("(", "").replace(")",
+								"");
+
+					tStrBdr = tStrBdr.append("\u0002(").append(distVerStr)
+							.append(")\u0002 ").append(version);
+					resultStr.add(tStrBdr.toString());
+				} else // Unofficial (!)
+				{
+					if (cnt == elemCnt - 1) {
+						tStrBdr = tStrBdr.append("\u0002(").append(distVerStr)
+								.append(")\u0002 ").append(version);
+						resultStr.add(tStrBdr.toString());
+					}
+				}
+
+				if (isCheckedOfficialPeriodicVersion
+						&& isCheckedOfficialLTSVersion)
+					break;
+			}
+
+			elemCnt = resultStr.size();
+
+			for (int cnt = elemCnt - 1; cnt >= 0; cnt--) {
+				if (cnt != elemCnt - 1)
+					result.append(", ");
+				result.append(resultStr.get(cnt));
+			}
+
+			result.append(".");
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			result = "오류: " + e.getMessage();
+			result = new StringBuilder("");
+			result.append("오류: " + e.getMessage());
 		}
 
-		return result;
+		return result.toString();
 	}
 
-	private String getLatestPkgName() throws Exception {
-		String result = "";
-		String url = "http://packages.ubuntu.com";
+	private boolean isBeingExactHits(Elements hit) {
+		Elements hits = hit;
+		int hsize = hits.size();
 
-		Document doc = Jsoup.connect(url).get();
-		Elements elements = doc.select("select#distro>option");
-
-		for (Element e : elements) {
-			if (e.attr("selected").equals("selected")) {
-				result = e.text();
-				break;
+		for (int i = 0; i < hsize; i++) {
+			if (hits.get(i).text().equals("Exact hits")) {
+				return true;
 			}
 		}
 
-		return result;
+		return false;
 	}
 
+	private boolean isOfficial(String distVerStr) {
+		return Pattern
+				.compile(
+						"[a-z]+(\\s\\([0-9]{2}\\.[0-9]{2}(LTS)?\\)|\\-updates)")
+				.matcher(distVerStr).matches();
+	}
+
+	private boolean isLTS(String distVerStr) {
+		return distVerStr.contains("LTS");
+	}
+
+	private boolean isPeriodic(String distVerStr) {
+		return Pattern.compile("[a-z]+\\s\\([0-9]{2}\\.[0-9]{2}\\)")
+				.matcher(distVerStr).matches();
+	}
+
+	private boolean isUpdates(String distVerStr) {
+		return distVerStr.contains("-updates");
+	}
 }
