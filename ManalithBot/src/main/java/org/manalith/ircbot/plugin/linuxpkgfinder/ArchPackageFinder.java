@@ -27,13 +27,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import com.sun.istack.internal.NotNull;
 
 @Component
 public class ArchPackageFinder extends PackageFinder {
@@ -53,7 +51,7 @@ public class ArchPackageFinder extends PackageFinder {
 	}
 
 	@BotCommand("ar")
-	public String getResult(@Description("키워드") @NotNull String arg)
+	public String getResult(@Option(name = "키워드", help = "검색할 단어") String arg)
 			throws IOException {
 		pkgname = "";
 		description = "";

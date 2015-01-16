@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Description {
-	String value();
+public @interface Option {
+	String name();
+
+	String help() default "";
 }

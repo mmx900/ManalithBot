@@ -23,7 +23,7 @@ import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.slf4j.Logger;
@@ -46,7 +46,8 @@ public class WeatherPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("날씨")
-	public String getYahooWeather(@Description("한글/영문 지명") String keyword) {
+	public String getYahooWeather(
+			@Option(name = "지명", help = "한글 혹은 영문 지명") String keyword) {
 		try {
 			// TODO WOEID 로컬 캐싱
 			final String url_woeid = "http://query.yahooapis.com/v1/public/yql"

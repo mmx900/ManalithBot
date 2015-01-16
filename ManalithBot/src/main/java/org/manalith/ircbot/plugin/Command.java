@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.common.stereotype.BotCommand.BotEvent;
 import org.manalith.ircbot.resources.MessageEvent;
@@ -58,8 +58,8 @@ public class Command {
 			}
 
 			for (Annotation a : ann) {
-				if (a instanceof Description)
-					name = ((Description) a).value();
+				if (a instanceof Option)
+					name = ((Option) a).name();
 			}
 
 			if (name == null)

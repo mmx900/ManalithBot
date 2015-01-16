@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -41,8 +41,9 @@ public class PingPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("핑")
-	public String ping(@Description("Domain/IP") String uri) {
-		InetAddress addr = null;
+	public String ping(
+			@Option(name = "대상", help = "핑을 보낼 도메인 혹은 IP 주소") String uri) {
+		InetAddress addr;
 
 		try {
 			addr = InetAddress.getByName(uri);

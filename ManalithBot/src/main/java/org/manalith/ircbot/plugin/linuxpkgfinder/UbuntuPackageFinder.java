@@ -25,7 +25,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,8 @@ public class UbuntuPackageFinder extends PackageFinder {
 
 	@Override
 	@BotCommand("ubu")
-	public String find(@Description("키워드") String arg) {
+	public String find(
+			@Option(name = "키워드", help = "검색할 단어") String arg) {
 		StringBuilder result = new StringBuilder("");
 		String url = "http://packages.ubuntu.com/search?keywords=" + arg
 				+ "&searchon=names&suite=all&section=all";

@@ -6,7 +6,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.slf4j.Logger;
@@ -26,8 +26,9 @@ public class TranslatorPlugin extends SimplePlugin {
 	}
 
 	@BotCommand("번역")
-	public String translate(@Description("ko|en...") String to,
-			@Description("메시지") String message) {
+	public String translate(
+			@Option(name = "ko|en...", help = "번역할 대상 언어") String to,
+			@Option(name = "메시지", help = "번역할 메시지") String message) {
 		final String url = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text='%s'&To='%s'";
 		String login = "USER_ID_IGNORED:" + clientSecret;
 		String base64login = new String(Base64.encodeBase64(login.getBytes()));

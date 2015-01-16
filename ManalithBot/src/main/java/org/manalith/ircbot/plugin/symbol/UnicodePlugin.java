@@ -1,6 +1,6 @@
 package org.manalith.ircbot.plugin.symbol;
 
-import org.manalith.ircbot.annotation.Description;
+import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
 import org.manalith.ircbot.plugin.SimplePlugin;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,8 @@ public class UnicodePlugin extends SimplePlugin {
 	}
 
 	@BotCommand({ "u", "유니코드" })
-	public String unicode(@Description("변환할 문자 혹은 코드") String text) {
+	public String unicode(
+			@Option(name = "대상 문자", help = "변환할 문자 혹은 코드") String text) {
 		try {
 			if (text.startsWith("\\u") || text.startsWith("U+")) {
 				char ch = (char) Integer.parseInt(text.substring(2), 16);
