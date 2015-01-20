@@ -52,14 +52,10 @@ public class DebianPackageFinder extends PackageFinder {
 
 		for (Element e : exactHits) {
 			String dist;
-			try {
-				dist = e.select("a").text().split("[\\(\\)]")[1];
-			} catch (ArrayIndexOutOfBoundsException ex) {
-				dist = e.select("a").text();
-			}
+			dist = e.select("a").text();
 
 			String version = "알 수 없음";
-			String[] versionLines = e.toString().split("\\<br\\s\\/>");
+			String[] versionLines = e.toString().split("<br>");
 
 			for (String line : versionLines) {
 				String v = line.split(": ")[0];
@@ -73,7 +69,7 @@ public class DebianPackageFinder extends PackageFinder {
 
 			if (result.length() != 0)
 				result += ", ";
-			result += "\u0002(" + dist + ")\u0002 " + version;
+			result += "\u0002" + dist + "\u0002: " + version;
 		}
 
 		return result;
@@ -124,7 +120,7 @@ public class DebianPackageFinder extends PackageFinder {
 					.select("li");
 			int elemCnt = exactHits.size();
 			Element latestElement = exactHits.get(elemCnt - 1);
-			String description = latestElement.toString().split("\\<br\\s\\/>")[0]
+			String description = latestElement.toString().split("<br>")[0]
 					.split("\\:")[1].trim();
 
 			result = "[Debian] \u0002" + pkgname + "\u0002 - " + description
