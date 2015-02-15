@@ -47,7 +47,6 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="archPackageFinder" />
 				<ref bean="debianPackageFinder" />
 				<ref bean="fedoraPackageFinder" />
-				<ref bean="ubuntuPackageFinder" />
 				<ref bean="gentooPackageFinder" />
 				<ref bean="weatherPlugin" />
 				<ref bean="nvidiaDriverNewsPlugin" />

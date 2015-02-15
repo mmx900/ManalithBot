@@ -26,12 +26,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.manalith.ircbot.annotation.Option;
 import org.manalith.ircbot.common.stereotype.BotCommand;
+import org.manalith.ircbot.plugin.SimplePlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DebianPackageFinder extends PackageFinder {
+public class DebianPackageFinder extends SimplePlugin {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -75,14 +76,22 @@ public class DebianPackageFinder extends PackageFinder {
 		return result;
 	}
 
-	@Override
 	@BotCommand("deb")
-	public String find(
+	public String findDebian(
 			@Option(name = "키워드", help = "검색할 단어") String keyword) {
-		String result = "";
-		String url = "http://packages.debian.org/search?keywords=" + keyword
-				+ "&searchon=names&suite=all&section=all";
+		String url = "https://packages.debian.org/search?keywords=" + keyword;
+		return find(url, "Debian");
+	}
 
+	@BotCommand("ubu")
+	public String findUbuntu(
+			@Option(name = "키워드", help = "검색할 단어") String keyword) {
+		String url = "http://packages.ubuntu.com/search?keywords=" + keyword;
+		return find(url, "Ubuntu");
+	}
+
+	public String find(String url, String commandName) {
+		String result = "";
 		boolean hasExacthits = false;
 
 		try {
@@ -92,7 +101,7 @@ public class DebianPackageFinder extends PackageFinder {
 			Document doc = conn.get();
 
 			if (doc.select("#psearchres").size() == 0) {
-				result = "[Debian] 결과가 없습니다";
+				result = "[" + commandName + "] 결과가 없습니다";
 				return result;
 			}
 
@@ -100,7 +109,7 @@ public class DebianPackageFinder extends PackageFinder {
 			int hsize = hits.size();
 
 			if (hsize == 0)
-				result = "[Debian] 결과가 없습니다";
+				result = "[" + commandName + "] 결과가 없습니다";
 			for (int i = 0; i < hsize; i++) {
 				if (hits.get(i).text().equals("Exact hits")) {
 					hasExacthits = true;
@@ -109,7 +118,7 @@ public class DebianPackageFinder extends PackageFinder {
 
 			}
 			if (!hasExacthits) {
-				result = "[Debian] 결과가 없습니다";
+				result = "[" + commandName + "] 결과가 없습니다";
 				return result;
 			}
 
@@ -123,7 +132,7 @@ public class DebianPackageFinder extends PackageFinder {
 			String description = latestElement.toString().split("<br>")[0]
 					.split("\\:")[1].trim();
 
-			result = "[Debian] \u0002" + pkgname + "\u0002 - " + description
+			result = "[" + commandName + "] \u0002" + pkgname + "\u0002 - " + description
 					+ ", ";
 			result += parseVersionInfo(doc) + ".";
 		} catch (Exception e) {
