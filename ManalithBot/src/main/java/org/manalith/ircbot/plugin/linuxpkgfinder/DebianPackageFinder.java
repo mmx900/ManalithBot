@@ -132,6 +132,9 @@ public class DebianPackageFinder extends SimplePlugin {
 			String description = latestElement.toString().split("<br>")[0]
 					.split("\\:")[1].trim();
 
+			// Remove HTML tags
+			description = description.replaceAll("</?strong[^>]*>", "");
+
 			result = "[" + commandName + "] \u0002" + pkgname + "\u0002 - " + description
 					+ ", ";
 			result += parseVersionInfo(doc) + ".";
