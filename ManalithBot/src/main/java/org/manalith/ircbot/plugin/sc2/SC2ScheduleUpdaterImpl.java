@@ -134,7 +134,7 @@ public class SC2ScheduleUpdaterImpl implements SC2ScheduleUpdater {
 
 		log.info("Parsing player information: '{}'", url);
 
-		Document doc = Jsoup.connect(url).get();
+		Document doc = connect(url).get();
 
 		String nick = doc.select("#main-title").text();
 		String name = doc.select("#main-title .ko-title").text();
