@@ -141,7 +141,6 @@ public class SC2Player {
 		int index = uri.lastIndexOf("/");
 
 		return uri.substring(index + 1);
-
 	}
 
 	/**
