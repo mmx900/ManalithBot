@@ -91,80 +91,76 @@ public class CalcTokenAnalyzer {
 				result = TokenSubtype.ExpFltPoint;
 			break;
 		case 3: // Operator
-			switch(tokenString) 
-			{
-				case "+":
-					result = TokenSubtype.Plus;
-					break;
-				case "-":
-					result = TokenSubtype.Minus;
-					break;
-				case "*":
-					result = TokenSubtype.Times;
-					break;
-				case "/":
-					result = TokenSubtype.Divide;
-					break;
-				case "%":
-					result = TokenSubtype.Modulus;
-					break;
-				case "^":
-					result = TokenSubtype.Power;
-					break;
-				case "!":
-					result = TokenSubtype.Factorial;
-					break;
+			switch (tokenString) {
+			case "+":
+				result = TokenSubtype.Plus;
+				break;
+			case "-":
+				result = TokenSubtype.Minus;
+				break;
+			case "*":
+				result = TokenSubtype.Times;
+				break;
+			case "/":
+				result = TokenSubtype.Divide;
+				break;
+			case "%":
+				result = TokenSubtype.Modulus;
+				break;
+			case "^":
+				result = TokenSubtype.Power;
+				break;
+			case "!":
+				result = TokenSubtype.Factorial;
+				break;
 			}
 			break;
 		case 4: // Parenthesis
-			switch(tokenString)
-			{
-				case "(":
-					result = TokenSubtype.Left_Parenthesis;
-					break;
-				case ")":
-					result = TokenSubtype.Righ_Parenthesis;
-					break;
+			switch (tokenString) {
+			case "(":
+				result = TokenSubtype.Left_Parenthesis;
+				break;
+			case ")":
+				result = TokenSubtype.Righ_Parenthesis;
+				break;
 			}
 			break;
 		case 5: // Triangular function
-			switch(tokenString)
-			{
-				case "sin":
-					result = TokenSubtype.Sine;
-					break;
-				case "cos":
-					result = TokenSubtype.Cosine;
-					break;
-				case "tan":
-					result = TokenSubtype.Tangent;
-					break;
-				case "arcsin":
-					result = TokenSubtype.ArcSine;
-					break;
-				case "arccos":
-					result = TokenSubtype.ArcCosine;
-					break;
-				case "arctan":
-					result = TokenSubtype.ArcTangent;
-					break;
+			switch (tokenString) {
+			case "sin":
+				result = TokenSubtype.Sine;
+				break;
+			case "cos":
+				result = TokenSubtype.Cosine;
+				break;
+			case "tan":
+				result = TokenSubtype.Tangent;
+				break;
+			case "arcsin":
+				result = TokenSubtype.ArcSine;
+				break;
+			case "arccos":
+				result = TokenSubtype.ArcCosine;
+				break;
+			case "arctan":
+				result = TokenSubtype.ArcTangent;
+				break;
 			}
 			break;
 		case 6: // Base conversion
-			switch(tokenString)
-			{
-				case "tobin":
-					result = TokenSubtype.ToBin;
-					break;
-				case "tooct":
-					result = TokenSubtype.ToOct;
-					break;
-				case "todec":
-					result = TokenSubtype.ToDec;
-					break;
-				case "tohex":
-					result = TokenSubtype.ToHex;
-					break;
+			switch (tokenString) {
+			case "tobin":
+				result = TokenSubtype.ToBin;
+				break;
+			case "tooct":
+				result = TokenSubtype.ToOct;
+				break;
+			case "todec":
+				result = TokenSubtype.ToDec;
+				break;
+			case "tohex":
+				result = TokenSubtype.ToHex;
+				break;
 			}
 			break;
 		case 7: // Mathematical function

@@ -167,6 +167,7 @@ public class CalcParseTreeGenerator {
 					}
 
 					op = sArray.getToken(i++);
+
 					if (!op.getTokenType().equals(TokenType.Operatr))
 						throw new InvalidSequenceTokenException(
 								"Missing operator.");
@@ -177,12 +178,12 @@ public class CalcParseTreeGenerator {
 						throw new InvalidSequenceTokenException(
 								"Missing operand.");
 
-					if (op.getTokenSubtype().equals(TokenSubtype.Factorial)) {
+					if (op.getTokenSubtype().equals(TokenSubtype.Factorial))
 						arg1 = new TokenUnit(TokenType.Integer,
 								TokenSubtype.Decimal, "0");
-					} else {
+
+					if (op.getTokenType().equals(TokenType.Operatr))
 						arg1 = sArray.getToken(i++);
-					}
 
 					pstu_root.setNode(op);
 					pstu_root.setLeftLeapNode(arg0);
@@ -326,18 +327,18 @@ public class CalcParseTreeGenerator {
 				if (!op.getTokenType().equals(TokenType.Operatr))
 					throw new InvalidSequenceTokenException("Missing operator.");
 
-				if (i == size
+				else if (i == size
 						&& !op.getTokenSubtype().equals(TokenSubtype.Factorial))
 					throw new InvalidSequenceTokenException("Missing operand.");
 
-				if (op.getTokenSubtype().equals(TokenSubtype.Factorial))
+				else if (op.getTokenSubtype().equals(TokenSubtype.Factorial))
+					arg1 = new TokenUnit(TokenType.Integer,
+							TokenSubtype.Decimal, "0");
+
+				else if (op.getTokenType().equals(TokenType.Operatr))
 					arg1 = sArray.getToken(i++); // can be integer, floating
 													// point, left parenthesis,
 													// or function
-				else {
-					arg1 = new TokenUnit(TokenType.Integer,
-							TokenSubtype.Decimal, "0");
-				}
 
 				if (pstu_root.getNode().getTokenType()
 						.equals(TokenType.BaseConvFunc)) {
