@@ -104,7 +104,7 @@ public class CurexRunner {
 			show_result *= 100.0;
 		}
 
-		return String.format(Locale.getDefault(), "%s(%s)에 대한 거래기준액: ￦%.2f",
+		return String.format(Locale.getDefault(), "%s(%s) 거래기준액: ￦%.2f",
 				country_name, sourceUnit, show_result);
 	}
 
@@ -123,16 +123,40 @@ public class CurexRunner {
 			result = oer.calc(NumberUtils.toDouble(to.getTokenString()),
 					sourceUnit, targetUnit);
 
+		String val = to.getTokenString();
+
 		if (targetUnit.equals("KRW")) {
 			if (sourceUnit.equals("JPY") || sourceUnit.equals("VND")
 					|| sourceUnit.equals("IDR") || sourceUnit.equals("KHR")) {
-				sourceUnit = "100 " + sourceUnit;
+
+				while (val.charAt(val.length() - 1) == '0') {
+					val = val.substring(0, val.length() - 1);
+				}
+
+				if (val.contains(".")) {
+					String[] varr = val.split("\\.");
+
+					int vl = varr[1].length();
+					switch (vl) {
+					case 1:
+						val = varr[0] + varr[1] + "0";
+						break;
+					case 2:
+						val = varr[0] + varr[1];
+						break;
+					default:
+						val = varr[0] + varr[1].substring(0, 2) + "."
+								+ varr[1].substring(2);
+						break;
+					}
+				}
+
 				result *= 100.0;
 			}
 		}
 
-		return String.format(Locale.getDefault(), to.getTokenString() + " "
-				+ sourceUnit + " => %.2f " + targetUnit, result);
+		return String.format(Locale.getDefault(), val + " " + sourceUnit
+				+ " => %.4f " + targetUnit, result);
 	}
 
 	public String getUnitListResult() {

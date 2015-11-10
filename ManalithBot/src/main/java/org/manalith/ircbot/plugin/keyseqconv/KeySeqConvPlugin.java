@@ -33,7 +33,7 @@ public class KeySeqConvPlugin extends SimplePlugin {
 	private SebeolFinalAutomataEngine sfengine;
 	private Sebeol390AutomataEngine stengine;
 	private SebeolNoSftAutomataEngine snengine;
-	private boolean enableParsingExceptionSyntax;
+	private boolean enableConversionExclusionSyntax;
 
 	public KeySeqConvPlugin() {
 		dengine = new DubeolAutomataEngine();
@@ -42,8 +42,12 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		snengine = new SebeolNoSftAutomataEngine();
 	}
 
-	public void setEnableParsingExceptionSyntax(boolean enable) {
-		enableParsingExceptionSyntax = enable;
+	public void setEnableConversionExclusionSyntax(boolean enable) {
+		enableConversionExclusionSyntax = enable;
+	}
+
+	public boolean isEnableConversionExclusionSyntax() {
+		return enableConversionExclusionSyntax;
 	}
 
 	@Override
@@ -66,13 +70,19 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		String msg = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		dengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		sfengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		stengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		snengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
+		dengine.setEnableConversionExclusionSyntax(enableConversionExclusionSyntax);
+		sfengine.setEnableConversionExclusionSyntax(enableConversionExclusionSyntax);
+		stengine.setEnableConversionExclusionSyntax(enableConversionExclusionSyntax);
+		snengine.setEnableConversionExclusionSyntax(enableConversionExclusionSyntax);
 
-		String cmd = msg.split("\\s")[0];
-		String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
+		String[] args = msg.split("\\s", 2);
+		if (args.length != 2) {
+			event.respond(getHelp());
+			return;
+		}
+
+		String cmd = args[0];
+		String srcmsg = args[1];
 		String dstmsg = "";
 
 		try {

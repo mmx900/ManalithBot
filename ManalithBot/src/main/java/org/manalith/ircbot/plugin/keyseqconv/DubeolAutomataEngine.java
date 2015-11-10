@@ -31,20 +31,20 @@ public class DubeolAutomataEngine implements IAutomataEngine {
 		Null, IConsonant, Vowel, FConsonant, Finish
 	}
 
-	private boolean enableParseExceptionSyntax;
+	private boolean enableConversionExclusionSyntax;
 
 	public DubeolAutomataEngine() {
 
 	}
 
 	@Override
-	public void setEnableParsingExceptionSyntax(boolean enable) {
-		enableParseExceptionSyntax = enable;
+	public void setEnableConversionExclusionSyntax(boolean enable) {
+		enableConversionExclusionSyntax = enable;
 	}
 
 	@Override
-	public boolean isEnableParsingExceptionSyntax() {
-		return enableParseExceptionSyntax;
+	public boolean isEnableConversionExclusionSyntax() {
+		return enableConversionExclusionSyntax;
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class DubeolAutomataEngine implements IAutomataEngine {
 
 		LetterObject syl = new LetterObject(KeyboardLayout.Dubeol);
 
-		if (isEnableParsingExceptionSyntax()
+		if (isEnableConversionExclusionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
 
 			throw new ParseException("Back slashes do not match",
@@ -170,7 +170,7 @@ public class DubeolAutomataEngine implements IAutomataEngine {
 
 			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
 				if (keySequence.charAt(i) == '\\'
-						&& isEnableParsingExceptionSyntax()) {
+						&& isEnableConversionExclusionSyntax()) {
 					if (i < keySequence.length() - 1)
 						if (keySequence.charAt(i + 1) == '\\') {
 							result += "\\";

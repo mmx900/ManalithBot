@@ -308,6 +308,61 @@ public class ParseTreeUnit {
 		double rightVal = 0.0;
 
 		switch (node.getTokenType().value()) {
+		case 1: // integer
+			switch (node.getTokenSubtype().value()) {
+			case 1: // binary
+				data = node.getTokenString();
+				len = data.length();
+
+				// ignore last 'b'
+				for (int i = 0; i < len - 1; i++) {
+					val.multiply(new BigInteger("2"));
+					val.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			case 2: // octal
+				data = node.getTokenString();
+				len = data.length();
+
+				// ignore first '0'
+				for (int i = 1; i < len; i++) {
+					val.multiply(new BigInteger("8"));
+					val.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			case 3: // decimal
+				data = node.getTokenString();
+				result = Double.toString(Integer.parseInt(data));
+				break;
+			case 4: // hex
+				data = node.getTokenString();
+				len = data.length();
+
+				for (int i = 2; i < len; i++) {
+					val.multiply(new BigInteger("16"));
+
+					if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - '0')));
+
+					if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - 'a' + 10)));
+
+					if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - 'A' + 10)));
+				}
+
+				result = Double.toString(val.doubleValue());
+				break;
+			}
 		case 2: // floating-point
 			switch (node.getTokenSubtype().value()) {
 			case 3: // decimal
@@ -321,7 +376,8 @@ public class ParseTreeUnit {
 				// ignore last 'b'
 				for (int i = 0; i < len - 1; i++) {
 					val.multiply(new BigInteger("2"));
-					val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+					val.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
 				}
 
 				result = Double.toString(val.doubleValue());
@@ -333,7 +389,8 @@ public class ParseTreeUnit {
 				// ignore first '0'
 				for (int i = 1; i < len; i++) {
 					val.multiply(new BigInteger("8"));
-					val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+					val.add(new BigInteger(
+							Integer.toString(data.charAt(i) - '0')));
 				}
 
 				result = Double.toString(val.doubleValue());
@@ -346,13 +403,16 @@ public class ParseTreeUnit {
 					val.multiply(new BigInteger("16"));
 
 					if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-						val.add(new BigInteger(Integer.toString(data.charAt(i) - '0')));
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - '0')));
 
 					if (data.charAt(i) >= 'a' && data.charAt(i) <= 'f')
-						val.add(new BigInteger(Integer.toString(data.charAt(i) - 'a' + 10)));
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - 'a' + 10)));
 
 					if (data.charAt(i) >= 'A' && data.charAt(i) <= 'F')
-						val.add(new BigInteger(Integer.toString(data.charAt(i) - 'A' + 10)));
+						val.add(new BigInteger(
+								Integer.toString(data.charAt(i) - 'A' + 10)));
 				}
 
 				result = Double.toString(val.doubleValue());
@@ -443,4 +503,3 @@ public class ParseTreeUnit {
 		return result;
 	}
 }
-
