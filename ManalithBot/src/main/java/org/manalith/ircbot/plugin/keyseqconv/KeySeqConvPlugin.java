@@ -42,7 +42,7 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		snengine = new SebeolNoSftAutomataEngine();
 	}
 
-	public void enableConversionExclusionSyntax(boolean enable) {
+	public void setEnableConversionExclusionSyntax(boolean enable) {
 		enableConversionExclusionSyntax = enable;
 	}
 
