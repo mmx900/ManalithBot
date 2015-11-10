@@ -22,9 +22,9 @@ import java.text.ParseException;
 
 public interface IAutomataEngine {
 
-	public void setEnableParsingExceptionSyntax(boolean enable);
+	public void setEnableConversionExclusionSyntax(boolean enable);
 
-	public boolean isEnableParsingExceptionSyntax();
+	public boolean isEnableConversionExclusionSyntax();
 
 	public boolean isISingleConsonant(String tICon);
 

@@ -4,6 +4,8 @@ import org.manalith.ircbot.plugin.keyseqconv.symboltable.Sebeol390Symbol;
 
 public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 
+	private boolean enableConversionExclusionSyntax;
+
 	public Sebeol390AutomataEngine() {
 		try {
 			syl = new LetterObject(KeyboardLayout.Sebeol390);
@@ -371,5 +373,15 @@ public class Sebeol390AutomataEngine extends SebeolAutomataEngine {
 	@Override
 	public int getSingleCharVal(String keySymbol) {
 		return Sebeol390Symbol.SebeolSingleLetter.valueOf(keySymbol).value();
+	}
+
+	@Override
+	public void setEnableConversionExclusionSyntax(boolean enable) {
+		enableConversionExclusionSyntax = enable;
+	}
+
+	@Override
+	public boolean isEnableConversionExclusionSyntax() {
+		return enableConversionExclusionSyntax;
 	}
 }

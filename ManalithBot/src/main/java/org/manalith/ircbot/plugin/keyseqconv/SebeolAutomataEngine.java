@@ -7,7 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public abstract class SebeolAutomataEngine implements IAutomataEngine {
 
-	protected boolean enableParseExceptionSyntax;
+	protected boolean enableConversionExclusionSyntax;
+
 	protected LetterObject syl;
 
 	public SebeolAutomataEngine() {
@@ -47,13 +48,13 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 	public abstract int getSingleCharVal(String keySymbol);
 
 	@Override
-	public final void setEnableParsingExceptionSyntax(boolean enable) {
-		enableParseExceptionSyntax = enable;
+	public void setEnableConversionExclusionSyntax(boolean enable) {
+		enableConversionExclusionSyntax = enable;
 	}
 
 	@Override
-	public final boolean isEnableParsingExceptionSyntax() {
-		return enableParseExceptionSyntax;
+	public boolean isEnableConversionExclusionSyntax() {
+		return enableConversionExclusionSyntax;
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 		// 기본값은 마지막 위치가 아닌걸로 태깅
 		boolean isLastPosition = false;
 
-		if (isEnableParsingExceptionSyntax()
+		if (isEnableConversionExclusionSyntax()
 				&& StringUtils.countMatches(keySequence, "\\") % 2 == 1)
 			throw new ParseException("Back slashes do not match",
 					keySequence.lastIndexOf("\\", 0));
@@ -81,7 +82,7 @@ public abstract class SebeolAutomataEngine implements IAutomataEngine {
 		for (int i = 0; i < keySequence.length(); i++) {
 			if (!CharUtils.isAsciiAlpha(keySequence.charAt(i))) {
 				if (keySequence.charAt(i) == '\\'
-						&& isEnableParsingExceptionSyntax()) {
+						&& isEnableConversionExclusionSyntax()) {
 					if (i < keySequence.length() - 1)
 						if (keySequence.charAt(i + 1) == '\\') {
 							result += "\\";

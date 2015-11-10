@@ -33,7 +33,7 @@ public class KeySeqConvPlugin extends SimplePlugin {
 	private SebeolFinalAutomataEngine sfengine;
 	private Sebeol390AutomataEngine stengine;
 	private SebeolNoSftAutomataEngine snengine;
-	private boolean enableParsingExceptionSyntax;
+	private boolean enableConvertionExclusionSyntax;
 
 	public KeySeqConvPlugin() {
 		dengine = new DubeolAutomataEngine();
@@ -42,8 +42,8 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		snengine = new SebeolNoSftAutomataEngine();
 	}
 
-	public void setEnableParsingExceptionSyntax(boolean enable) {
-		enableParsingExceptionSyntax = enable;
+	public void enableConvertionExclusionSyntax(boolean enable) {
+		enableConvertionExclusionSyntax = enable;
 	}
 
 	@Override
@@ -66,10 +66,10 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		String msg = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		dengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		sfengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		stengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
-		snengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
+		dengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
+		sfengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
+		stengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
+		snengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
 
 		String[] args = msg.split("\\s", 2);
 		if (args.length != 2) {
