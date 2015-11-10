@@ -33,7 +33,7 @@ public class KeySeqConvPlugin extends SimplePlugin {
 	private SebeolFinalAutomataEngine sfengine;
 	private Sebeol390AutomataEngine stengine;
 	private SebeolNoSftAutomataEngine snengine;
-	private boolean enableParsingExceptionSyntax;
+	private boolean enableConvertionExclusionSyntax;
 
 	public KeySeqConvPlugin() {
 		dengine = new DubeolAutomataEngine();
@@ -43,7 +43,7 @@ public class KeySeqConvPlugin extends SimplePlugin {
 	}
 
 	public void setEnableParsingExceptionSyntax(boolean enable) {
-		enableParsingExceptionSyntax = enable;
+		enableConvertionExclusionSyntax = enable;
 	}
 
 	@Override

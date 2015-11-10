@@ -42,7 +42,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<!-- 사용할 플러그인 목록 -->
 				<!-- <ref bean="relayPlugin" /> -->
 				<!-- <ref bean="adminPlugin" /> -->
-				<ref bean="basicPlugin" />
+				<!-- <ref bean="basicPlugin" /> -->
 				<ref bean="tweetReaderPlugin" />
 				<ref bean="archPackageFinder" />
 				<ref bean="debianPackageFinder" />
@@ -56,13 +56,13 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="uriInfoPlugin" />
 				<ref bean="dictionaryPlugin" />
 				<ref bean="spellCheckerPlugin" />
-				<ref bean="pingPlugin" />
-				<ref bean="googlePlugin" />
-				<ref bean="calendarPlugin" />
+				<!-- <ref bean="pingPlugin" /> -->
+				<!-- <ref bean="googlePlugin" /> -->
+				<!-- <ref bean="calendarPlugin" /> -->
 				<!-- <ref bean="etPlugin" /> -->
-				<ref bean="helloPlugin" />
-				<ref bean="feedReaderPlugin" />
-				<ref bean="urlShortenerPlugin" />
+				<!-- <ref bean="helloPlugin" /> -->
+				<!-- <ref bean="feedReaderPlugin" /> -->
+				<!-- <ref bean="urlShortenerPlugin" /> -->
 				<ref bean="timestampPlugin" />
 				<ref bean="keySeqConvPlugin" />
 				<ref bean="symbolPlugin" />
@@ -71,12 +71,13 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 				<ref bean="regexPlugin" />
 				<ref bean="replacementCharacterDetectPlugin" />
 				<ref bean="cryptoPlugin" />
-				<ref bean="onOffMixPlugin" />
+				<!-- <ref bean="onOffMixPlugin" /> -->
 				<ref bean="timePlugin" />
-				<ref bean="translatorPlugin" />
+				<!-- <ref bean="translatorPlugin" /> -->
 				<!-- <ref bean="replPlugin" /> -->
 				<!-- alias 플러그인은 가능한 가장 나중에 두어야 기존 명령을 덮어쓰지 않습니다. -->
 				<ref bean="aliasPlugin" />
+				<ref bean="sc2Plugin" />
 			</list>
 		</property>
 	</bean>
@@ -170,7 +171,7 @@ http://www.springframework.org/schema/lang http://www.springframework.org/schema
 	<!-- 영타 변환 플러그인 설정 -->
 	<bean id="keySeqConvPlugin" class="org.manalith.ircbot.plugin.keyseqconv.KeySeqConvPlugin">
 		<!-- 영타 변환 제외구역 설정 문법 적용여부 -->
-		<property name="enableParsingExceptionSyntax" value="true" />
+		<property name="enableConvertionExclusionSyntax" value="true" />
 	</bean>
 	
 	<!-- 온오프믹스 플러그인 설정 -->
