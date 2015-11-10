@@ -71,8 +71,14 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		stengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
 		snengine.setEnableParsingExceptionSyntax(enableParsingExceptionSyntax);
 
-		String cmd = msg.split("\\s")[0];
-		String srcmsg = msg.substring(msg.indexOf(' ') + 1, msg.length());
+		String[] args = msg.split("\\s", 2);
+		if (args.length != 2) {
+			event.respond(getHelp());
+			return;
+		}
+
+		String cmd = args[0];
+		String srcmsg = args[1];
 		String dstmsg = "";
 
 		try {
