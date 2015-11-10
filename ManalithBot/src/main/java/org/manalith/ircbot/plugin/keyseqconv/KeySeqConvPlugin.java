@@ -66,10 +66,10 @@ public class KeySeqConvPlugin extends SimplePlugin {
 		String msg = event.getMessage();
 		String sender = event.getUser().getNick();
 
-		dengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
-		sfengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
-		stengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
-		snengine.setEnableConvertionExclusionSyntax(enableConvertionExclusionSyntax);
+		dengine.setEnableConversionExclusionSyntax(enableConvertionExclusionSyntax);
+		sfengine.setEnableConversionExclusionSyntax(enableConvertionExclusionSyntax);
+		stengine.setEnableConversionExclusionSyntax(enableConvertionExclusionSyntax);
+		snengine.setEnableConversionExclusionSyntax(enableConvertionExclusionSyntax);
 
 		String[] args = msg.split("\\s", 2);
 		if (args.length != 2) {
