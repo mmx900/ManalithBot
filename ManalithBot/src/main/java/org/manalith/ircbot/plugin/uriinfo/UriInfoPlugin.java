@@ -99,7 +99,7 @@ public class UriInfoPlugin extends SimplePlugin {
 			return enablePrintContentType ? "[링크 형식] " + e.getMimeType() : null;
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
-			return null;
+			return String.format("URL \"%s\"에 접근할 수 없습니다 ㅠㅠ", uri);
 		}
 
 		String contentType = response.contentType();
